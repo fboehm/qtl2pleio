@@ -1,4 +1,6 @@
 
+[![Travis-CI Build Status](https://travis-ci.org/fboehm/qtl2pleio.svg?branch=master)](https://travis-ci.org/fboehm/qtl2pleio)
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 qtl2pleio
 =========
