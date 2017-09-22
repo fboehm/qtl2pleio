@@ -14,14 +14,15 @@ scan_pvl <- function(probs, pheno, kinship, start_snp1, start_snp2 = start_snp1,
   gemma2::eigen2(kinship) -> e_out
   e_out$vectors -> U
   e_out$values -> eval
-  X1pre <- rep(1, n) %>% as.matrix() %>% t()
+  n_mouse <- nrow(probs)
+  X1pre <- t(rep(1, n_mouse))
   X1 <- X1pre %*% U
   Y <- t(pheno) %*% U
   foo <- gemma2::MphEM(X = X1, Y = Y, eval = eval, V_g = diag(2), V_e = diag(2))
   Vg <- foo[[length(foo)]][[2]]
   Ve <- foo[[length(foo)]][[3]]
   # define Sigma
-  Sigma <- kinship %x% Vg + diag(n) %x% Ve
+  Sigma <- kinship %x% Vg + diag(n_mouse) %x% Ve
   loglik <- matrix(nrow = n_snp, ncol = n_snp)
   rownames(loglik) <- dimnames(probs)[[3]][start_snp1 : (start_snp1 + n_snp - 1)]
   colnames(loglik) <- dimnames(probs)[[3]][start_snp2 : (start_snp2 + n_snp - 1)]
