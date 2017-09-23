@@ -13,5 +13,6 @@ Imports: gemma2,
     pleiotropy,
     mvtnorm,
     tibble,
-    MASS
+    MASS,
+    ggplot2
 RoxygenNote: 6.0.1
