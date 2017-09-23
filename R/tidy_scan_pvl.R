@@ -38,6 +38,8 @@ tidy_scan_pvl <- function(loglik_mat){
   pro2_ll <- dplyr::filter(pro2_ll, .data$ll == max(.data$ll))
   pro2_ll <- dplyr::select(pro2_ll, .data$marker_position, .data$ll, .data$trace)
   # bind 3 tibbles
-  dat <- dplyr::bind_rows(pleio_ll, pro1_ll, pro2_ll)
+  foo <- dplyr::bind_rows(pleio_ll, pro1_ll, pro2_ll)
+  foo$lod <- (foo$ll - max(pleio_ll$ll)) / log(10) # convert from base e to base 10
+  dat <- dplyr::select(foo, .data$marker_position, .data$lod, .data$trace)
   return(dat)
 }
