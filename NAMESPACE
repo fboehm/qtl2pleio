@@ -2,5 +2,6 @@
 
 export(calc_Bhat)
 export(calc_loglik_bvlmm)
+export(pvl_boot)
 export(scan_pvl)
 export(tidy_scan_pvl)
