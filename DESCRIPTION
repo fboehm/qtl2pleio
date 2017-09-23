@@ -14,5 +14,7 @@ Imports: gemma2,
     mvtnorm,
     tibble,
     MASS,
-    ggplot2
+    ggplot2,
+    dplyr,
+    rlang
 RoxygenNote: 6.0.1
