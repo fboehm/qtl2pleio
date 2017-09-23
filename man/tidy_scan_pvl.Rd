@@ -4,10 +4,12 @@
 \alias{tidy_scan_pvl}
 \title{Tidy the matrix of log likelihood values for further analysis & plotting}
 \usage{
-tidy_scan_pvl(loglik_mat)
+tidy_scan_pvl(loglik_mat, pmap)
 }
 \arguments{
 \item{loglik_mat}{a (square) matrix of log likelihood values}
+
+\item{pmap}{physical map (in Mb) for exactly one chromosome, pmap$`5`, for example}
 }
 \description{
 Tidy the matrix of log likelihood values for further analysis & plotting
