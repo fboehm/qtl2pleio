@@ -2,6 +2,7 @@
 
 export(calc_Bhat)
 export(calc_loglik_bvlmm)
+export(calc_lrt)
 export(plot_pvl)
 export(pvl_boot)
 export(scan_pvl)

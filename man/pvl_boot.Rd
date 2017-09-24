@@ -4,10 +4,11 @@
 \alias{pvl_boot}
 \title{Calculate likelihood ratio test statistics for simulated data sets for a single marker}
 \usage{
-pvl_boot(X, B, Vg_initial, Ve_initial, kinship, nboot = 1000)
+pvl_boot(X, B, Vg_initial, Ve_initial, kinship, probs, start_snp, n_snp,
+  nboot = 1000)
 }
 \arguments{
-\item{X}{a genotypes probability matrix for a single marker}
+\item{X}{a genotypes probability matrix for a single marker, ie, the marker that has the peak LOD under pleiotropy}
 
 \item{B}{allele effects matrix, often calculated via calc_Bhat}
 
@@ -16,6 +17,12 @@ pvl_boot(X, B, Vg_initial, Ve_initial, kinship, nboot = 1000)
 \item{Ve_initial}{estimated Ve covariance matrix from true data}
 
 \item{kinship}{a chromosome-specific kinship matrix}
+
+\item{probs}{a single chromosome's genotype probabilities}
+
+\item{start_snp}{index for starting the scan}
+
+\item{n_snp}{number of SNPs to include in the scan}
 
 \item{nboot}{number of bootstrap samples}
 }
