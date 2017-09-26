@@ -4,7 +4,7 @@
 \alias{plot_pvl}
 \title{Plot tidied results of a pvl scan}
 \usage{
-plot_pvl(dat)
+plot_pvl(dat, x1, x2)
 }
 \arguments{
 \item{dat}{a tibble that is the tidied output of a pvl scan}

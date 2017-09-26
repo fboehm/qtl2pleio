@@ -6,7 +6,7 @@
 #' @export
 #' @importFrom rlang .data
 
-plot_pvl <- function(dat){
+plot_pvl <- function(dat, x1, x2){
     # plot
     ggplot2::ggplot(dat, ggplot2::aes(y = dat$lod, x = dat$marker_position, colour = dat$trace)) +
     ggplot2::geom_line() +
