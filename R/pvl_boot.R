@@ -14,9 +14,6 @@
 pvl_boot <- function(X, B, Vg_initial, Ve_initial, kinship, probs, start_snp, n_snp, nboot = 1000){
   boot_stat <- numeric(length = nboot)
   n_mouse <- nrow(X)
-  gemma2::eigen2(kinship) -> e_out
-  e_out$values -> eval
-  e_out$vectors -> U
   for (i in 1:nboot){
     # simulate phenotype data
     Y <- sim1(X = X, B = B, Vg = Vg_initial, Ve = Ve_initial, kinship = kinship)
