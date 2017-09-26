@@ -8,6 +8,10 @@ plot_pvl(dat)
 }
 \arguments{
 \item{dat}{a tibble that is the tidied output of a pvl scan}
+
+\item{x1}{x coordinate where trait 1 has its univariate peak}
+
+\item{x2}{x coordinate where trait 2 has its univariate peak}
 }
 \description{
 Plot tidied results of a pvl scan
