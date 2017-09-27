@@ -4,6 +4,10 @@
 #' @export
 
 calc_lrt <- function(loglik_mat){
+  stopifnot(nrow(loglik_mat) == ncol(loglik_mat),
+            sum(is.na(loglik_mat)) == 0,
+            sum(!is.finite(loglik_mat)) == 0
+            )
   out <- max(loglik_mat) - max(diag(loglik_mat))
   return(out)
 }

@@ -8,6 +8,11 @@
 #' @export
 
 sim1 <- function(X, B, Vg, Ve, kinship){
+  stopifnot(nrow(X) == nrow(kinship), nrow(kinship) == ncol(kinship), nrow(Vg) == nrow(Ve),
+            ncol(Vg) == ncol(Ve),
+            nrow(Vg) == ncol(Vg),
+            nrow(Ve) == ncol(Ve)
+            )
   nrow(X) -> n_mouse
   In <- diag(n_mouse)
   Sigma <- kinship %x% Vg + In %x% Ve

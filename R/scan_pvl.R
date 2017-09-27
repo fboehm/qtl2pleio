@@ -9,6 +9,11 @@
 #' @export
 
 scan_pvl <- function(probs, pheno, kinship, start_snp1, start_snp2 = start_snp1, n_snp){
+  stopifnot(nrow(probs) == nrow(pheno),
+            nrow(probs) == nrow(kinship),
+            nrow(kinship) == ncol(kinship)
+            )
+
   # perform scan over probs[ , , start_snp: stop_snp]
   # first, run gemma2::MphEM() to get Vg and Ve
   gemma2::eigen2(kinship) -> e_out
@@ -32,6 +37,7 @@ scan_pvl <- function(probs, pheno, kinship, start_snp1, start_snp2 = start_snp1,
       index1 <- start_snp1 + i - 1
       index2 <- start_snp2 + j - 1
       X1 <- probs[ , , index1]
+      # note that we overwrite earlier X1 here
       X2 <- probs[ , , index2]
       X <- pleiotropy::stagger_mats(X1, X2)
       Bhat <- calc_Bhat(X = X,
