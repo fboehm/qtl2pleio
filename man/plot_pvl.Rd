@@ -4,7 +4,8 @@
 \alias{plot_pvl}
 \title{Plot tidied results of a pvl scan}
 \usage{
-plot_pvl(dat, x1, x2)
+plot_pvl(dat, x1, x2, phenames, palette = c("#999999", "#E69F00", "#56B4E9",
+  "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7"))
 }
 \arguments{
 \item{dat}{a tibble that is the tidied output of a pvl scan}
@@ -12,6 +13,10 @@ plot_pvl(dat, x1, x2)
 \item{x1}{x coordinate where trait 1 has its univariate peak}
 
 \item{x2}{x coordinate where trait 2 has its univariate peak}
+
+\item{phenames}{vector of names of the two ordered phenotypes}
+
+\item{palette}{a vector containing strings for colors}
 }
 \description{
 Plot tidied results of a pvl scan
