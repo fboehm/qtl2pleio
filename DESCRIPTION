@@ -5,7 +5,6 @@ Version: 0.1.0
 Author: Frederick Boehm
 Maintainer: Frederick Boehm <frederick.boehm@gmail.com>
 Description: The package contains an implementation of Jiang & Zeng's (1995) likelihood ratio test for testing the null hypothesis of pleiotropy against the alternative hypothesis, close linkage. The test differs from that in Jiang & Zeng (1995) in that our test accommodates multiparental populations.
-    
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
