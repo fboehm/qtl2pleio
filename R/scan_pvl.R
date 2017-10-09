@@ -23,6 +23,7 @@ scan_pvl <- function(probs, pheno, kinship, start_snp1, start_snp2 = start_snp1,
   X1pre <- t(rep(1, n_mouse))
   X1 <- X1pre %*% U
   Y <- t(pheno) %*% U
+  # run MphEM with only a design matrix that contains only the intercept term (and not any genotype info)
   foo <- gemma2::MphEM(X = X1, Y = Y, eval = eval, V_g = diag(2), V_e = diag(2))
   Vg <- foo[[length(foo)]][[2]]
   Ve <- foo[[length(foo)]][[3]]
