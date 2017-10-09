@@ -42,7 +42,7 @@ scan_pvl <- function(probs, pheno, kinship, start_snp1, start_snp2 = start_snp1,
       X2 <- as.matrix(probs[ , , index2])
       X <- pleiotropy::stagger_mats(X1, X2)
       Bhat <- calc_Bhat(X = X,
-                        Y = pheno,
+                        Y = as.vector(pheno),
                         Sigma = Sigma)
       loglik[i, j] <- calc_loglik_bvlmm(X = X, Y = pheno, Bhat = Bhat, Sigma = Sigma)
     }
