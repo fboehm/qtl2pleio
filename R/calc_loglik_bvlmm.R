@@ -7,6 +7,7 @@
 #' @export
 
 calc_loglik_bvlmm <- function(X, Bhat, Y, Sigma){
+  stopifnot(det(Sigma) > 0, nrow(Sigma) == nrow(X))
   out<- mvtnorm::dmvnorm(as.vector(Y), mean = X %*% Bhat, sigma = Sigma, log = TRUE)
   return(out)
 }
