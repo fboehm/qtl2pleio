@@ -7,15 +7,15 @@
 sim1(X, B, Vg, Ve, kinship)
 }
 \arguments{
-\item{X}{genotype probabilities matrix for a single marker}
+\item{X}{design matrix (incorporating genotype probabilities from two loci), 2n by 2a}
 
-\item{B}{a matrix of allele effects}
+\item{B}{a matrix of allele effects, a rows by 2 columns}
 
-\item{Vg}{a genetic covariance matrix}
+\item{Vg}{a genetic covariance matrix, 2 by 2}
 
-\item{Ve}{an error covariance matrix}
+\item{Ve}{an error covariance matrix, 2 by 2}
 
-\item{kinship}{a chromosome-specific kinship matrix}
+\item{kinship}{a chromosome-specific kinship matrix, n by n}
 }
 \description{
 Simulate a single data set consisting of n subjects and 2 phenotypes for each
