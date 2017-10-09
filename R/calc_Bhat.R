@@ -5,5 +5,6 @@
 #' @param Y 2n by 2 matrix of 2 phenotypes' measurements
 #' @export
 calc_Bhat <- function(X, Sigma, Y){
+  stopifnot(det(Sigma) > 0, nrow(X) == nrow(Y))
   return(solve(t(X) %*% solve(Sigma) %*% X) %*% t(X) %*% solve(Sigma) %*% as.vector(Y))
 }
