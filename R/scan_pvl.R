@@ -36,9 +36,9 @@ scan_pvl <- function(probs, pheno, kinship, start_snp1, start_snp2 = start_snp1,
     for (j in 1:n_snp){
       index1 <- start_snp1 + i - 1
       index2 <- start_snp2 + j - 1
-      X1 <- probs[ , , index1]
+      X1 <- as.matrix(probs[ , , index1])
       # note that we overwrite earlier X1 here
-      X2 <- probs[ , , index2]
+      X2 <- as.matrix(probs[ , , index2])
       X <- pleiotropy::stagger_mats(X1, X2)
       Bhat <- calc_Bhat(X = X,
                         Y = pheno,

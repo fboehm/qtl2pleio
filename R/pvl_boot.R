@@ -17,7 +17,8 @@ pvl_boot <- function(X, B, Vg_initial, Ve_initial, kinship, probs, start_snp, n_
   X_2 <- pleiotropy::stagger_mats(X, X)
   for (i in 1:nboot){
     # simulate phenotype data
-    Y <- sim1(X = X_2, B = B, Vg = Vg_initial, Ve = Ve_initial, kinship = kinship)
+    Y_pre <- sim1(X = X_2, B = B, Vg = Vg_initial, Ve = Ve_initial, kinship = kinship)
+    Y <- matrix(data = Y_pre, ncol = 2, byrow = FALSE)
     loglik_mat <- scan_pvl(probs = probs, pheno = Y, kinship = kinship, start_snp1 = start_snp, n_snp = n_snp)
     boot_stat[i] <- calc_lrt(loglik_mat)
   }
