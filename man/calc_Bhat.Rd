@@ -11,7 +11,7 @@ calc_Bhat(X, Sigma, Y)
 
 \item{Sigma}{2n by 2n covariance matrix, often composed as \eqn{K \otimes V_g + I_n \otimes V_e}}
 
-\item{Y}{2n by 2 matrix of 2 phenotypes' measurements}
+\item{Y}{2n by 1 matrix, ie, a column vector, of 2 phenotypes' measurements}
 }
 \description{
 Calculate estimated allele effects, B matrix
