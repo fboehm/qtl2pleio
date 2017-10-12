@@ -19,7 +19,7 @@ scan_pvl <- function(probs, pheno, kinship, start_snp1, start_snp2 = start_snp1,
   gemma2::eigen2(kinship) -> e_out
   e_out$vectors -> U
   e_out$values -> eval
-  n_mouse <- nrow(probs)
+  n_mouse <- nrow(kinship)
   X1pre <- t(rep(1, n_mouse))
   X1 <- X1pre %*% U
   Y <- t(pheno) %*% U
@@ -27,6 +27,8 @@ scan_pvl <- function(probs, pheno, kinship, start_snp1, start_snp2 = start_snp1,
   foo <- gemma2::MphEM(X = X1, Y = Y, eval = eval, V_g = diag(2), V_e = diag(2))
   Vg <- foo[[length(foo)]][[2]]
   Ve <- foo[[length(foo)]][[3]]
+  rm(Y)
+  rm(X1)
   # define Sigma
   Sigma <- kinship %x% Vg + diag(n_mouse) %x% Ve
   loglik <- matrix(nrow = n_snp, ncol = n_snp)
