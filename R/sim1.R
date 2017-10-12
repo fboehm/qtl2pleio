@@ -1,7 +1,7 @@
 #' Simulate a single data set consisting of n subjects and 2 phenotypes for each
 #'
-#' @param X design matrix (incorporating genotype probabilities from two loci), 2n by 2a
-#' @param B a matrix of allele effects, a rows by 2 columns
+#' @param X design matrix (incorporating genotype probabilities from two loci), 2n by 2f
+#' @param B a matrix of allele effects, f rows by 2 columns
 #' @param Vg a genetic covariance matrix, 2 by 2
 #' @param Ve an error covariance matrix, 2 by 2
 #' @param kinship a chromosome-specific kinship matrix, n by n
@@ -13,7 +13,7 @@ sim1 <- function(X, B, Vg, Ve, kinship){
             nrow(Vg) == ncol(Vg),
             nrow(Ve) == ncol(Ve)
             )
-  nrow(X) / 2 -> n_mouse
+  nrow(kinship) -> n_mouse
   In <- diag(n_mouse)
   Sigma <- kinship %x% Vg + In %x% Ve
   error_vec <- MASS::mvrnorm(n = 1, mu = rep(0, 2 * n_mouse), Sigma = Sigma)
