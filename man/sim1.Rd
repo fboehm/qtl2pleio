@@ -7,9 +7,9 @@
 sim1(X, B, Vg, Ve, kinship)
 }
 \arguments{
-\item{X}{design matrix (incorporating genotype probabilities from two loci), 2n by 2a}
+\item{X}{design matrix (incorporating genotype probabilities from two loci), 2n by 2f}
 
-\item{B}{a matrix of allele effects, a rows by 2 columns}
+\item{B}{a matrix of allele effects, f rows by 2 columns}
 
 \item{Vg}{a genetic covariance matrix, 2 by 2}
 
