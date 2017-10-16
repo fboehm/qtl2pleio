@@ -23,7 +23,9 @@ scan_pvl <- function(probs, pheno, kinship, start_snp1, start_snp2 = start_snp1,
   Ve <- cc_out$Ve
   # define Sigma
   n_mouse <- nrow(kinship)
-  Sigma <- kinship %x% Vg + diag(n_mouse) %x% Ve
+  Sigma <- calc_Sigma(Vg, Ve, kinship)
+  # define Sigma_inv
+  Sigma_inv <- solve(Sigma)
   loglik <- matrix(nrow = n_snp, ncol = n_snp)
   rownames(loglik) <- dimnames(probs)[[3]][start_snp1 : (start_snp1 + n_snp - 1)]
   colnames(loglik) <- dimnames(probs)[[3]][start_snp2 : (start_snp2 + n_snp - 1)]
@@ -38,7 +40,7 @@ scan_pvl <- function(probs, pheno, kinship, start_snp1, start_snp2 = start_snp1,
       X <- pleiotropy::stagger_mats(X1, X2)
       Bhat <- calc_Bhat(X = X,
                         Y = as.vector(pheno),
-                        Sigma = Sigma)
+                        Sigma_inv = Sigma_inv)
       loglik[i, j] <- calc_loglik_bvlmm(X = X, Y = pheno, Bhat = Bhat, Sigma = Sigma)
     }
   }
