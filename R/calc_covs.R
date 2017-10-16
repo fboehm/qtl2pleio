@@ -13,8 +13,8 @@ calc_covs <- function(pheno, kinship){
   Y <- t(pheno) %*% U
   # run MphEM with only a design matrix that contains only the intercept term (and not any genotype info)
   foo <- gemma2::MphEM(X = X1, Y = Y, eval = eval, V_g = diag(2), V_e = diag(2))
-  Vg <- foo[[2]]
-  Ve <- foo[[3]]
+  Vg <- foo[[length(foo)]][[2]]
+  Ve <- foo[[length(foo)]][[3]]
   out <- list(Vg = Vg, Ve = Ve)
   return(out)
 }

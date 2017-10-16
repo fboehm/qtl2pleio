@@ -6,5 +6,6 @@
 #' @export
 calc_Bhat <- function(X, Sigma, Y){
   stopifnot(det(Sigma) > 0, nrow(X) == nrow(Y))
-  return(solve(t(X) %*% solve(Sigma) %*% X) %*% t(X) %*% solve(Sigma) %*% as.vector(Y))
+  Sig_inv <- solve(Sigma)
+  return(solve(t(X) %*% Sig_inv %*% X) %*% t(X) %*% Sig_inv %*% as.vector(Y))
 }

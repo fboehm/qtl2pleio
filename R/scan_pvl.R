@@ -11,25 +11,18 @@
 scan_pvl <- function(probs, pheno, kinship, start_snp1, start_snp2 = start_snp1, n_snp){
   stopifnot(nrow(probs) == nrow(pheno),
             nrow(probs) == nrow(kinship),
-            nrow(kinship) == ncol(kinship)
+            nrow(kinship) == ncol(kinship),
+            n_snp > 0,
+            start_snp1 > 0
             )
 
   # perform scan over probs[ , , start_snp: stop_snp]
   # first, run gemma2::MphEM() to get Vg and Ve
-  gemma2::eigen2(kinship) -> e_out
-  e_out$vectors -> U
-  e_out$values -> eval
-  n_mouse <- nrow(kinship)
-  X1pre <- t(rep(1, n_mouse))
-  X1 <- X1pre %*% U
-  Y <- t(pheno) %*% U
-  # run MphEM with only a design matrix that contains only the intercept term (and not any genotype info)
-  foo <- gemma2::MphEM(X = X1, Y = Y, eval = eval, V_g = diag(2), V_e = diag(2))
-  Vg <- foo[[length(foo)]][[2]]
-  Ve <- foo[[length(foo)]][[3]]
-  rm(Y)
-  rm(X1)
+  calc_covs(pheno, kinship) -> cc_out
+  Vg <- cc_out$Vg
+  Ve <- cc_out$Ve
   # define Sigma
+  n_mouse <- nrow(kinship)
   Sigma <- kinship %x% Vg + diag(n_mouse) %x% Ve
   loglik <- matrix(nrow = n_snp, ncol = n_snp)
   rownames(loglik) <- dimnames(probs)[[3]][start_snp1 : (start_snp1 + n_snp - 1)]
