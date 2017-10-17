@@ -6,6 +6,6 @@
 #' @export
 calc_Sigma <- function(Vg, Ve, K){
   n_mouse <- nrow(K)
-  out <- K %x% Vg + diag(n_mouse) %x% Ve
+  out <- Vg %x% K  + Ve %x% diag(n_mouse)
   return(out)
 }
