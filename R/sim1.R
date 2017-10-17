@@ -13,9 +13,7 @@ sim1 <- function(X, B, Vg, Ve, kinship){
             nrow(Vg) == ncol(Vg),
             nrow(Ve) == ncol(Ve)
             )
-  nrow(kinship) -> n_mouse
-  In <- diag(n_mouse)
-  Sigma <- kinship %x% Vg + In %x% Ve
+  Sigma <- calc_Sigma(Vg, Ve, kinship)
   error_vec <- MASS::mvrnorm(n = 1, mu = rep(0, 2 * n_mouse), Sigma = Sigma)
   Y <- X %*% as.matrix(as.vector(B)) + error_vec
   return(Y)
