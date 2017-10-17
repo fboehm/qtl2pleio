@@ -2,10 +2,11 @@
 #'
 #' @param loglik_mat a (square) matrix of log likelihood values
 #' @param pmap physical map (in Mb) for exactly one chromosome, pmap$`5`, for example
+#' @param intercepts a vector of length 2 that contains the x coordinate values for the two vertical lines
 #' @export
 #' @importFrom rlang .data
 
-tidy_scan_pvl <- function(loglik_mat, pmap){
+tidy_scan_pvl <- function(loglik_mat, pmap, intercepts){
   # Assumes that we have rownames and columns names assigned to loglik_mat
   marker1 <- rep(rownames(loglik_mat), times = ncol(loglik_mat))
   marker2 <- rep(colnames(loglik_mat), each = nrow(loglik_mat))
@@ -46,5 +47,12 @@ tidy_scan_pvl <- function(loglik_mat, pmap){
   foo <- dplyr::bind_rows(pleio_ll, pro1_ll, pro2_ll)
   foo$lod <- (foo$ll - max(pleio_ll$ll)) / log(10) # convert from base e to base 10
   dat <- dplyr::select(foo, .data$marker_position, .data$lod, .data$trace)
+  # define pleiotropy intercept value
+  pleio_int <- pleio_ll$marker_position[which.max(pleio_ll$ll)]
+  # define intercept column
+  dat$intercept <- NA
+  dat$intercept[dat$trace == "profile1"] <- intercepts[1]
+  dat$intercept[dat$trace == "profile2"] <- intercepts[2]
+  dat$intercept[dat$trace == "pleio"] <- pleio_int
   return(dat)
 }

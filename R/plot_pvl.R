@@ -17,8 +17,7 @@ plot_pvl <- function(dat, x1, x2, phenames, palette = c("#999999", "#E69F00", "#
                                  labels = c("Pleiotropy", phenames[1], phenames[2])
                                  ) +
     ggplot2::labs(y = "LOD", x = "Marker position") +
-    ggplot2::geom_vline(xintercept = x1) +
-    ggplot2::geom_vline(xintercept = x2) +
+    ggplot2::geom_vline(ggplot2::aes(xintercept = dat$intercept, colour = dat$trace)) +
     ggplot2::guides(colour =
                ggplot2::guide_legend(
                  title = "Trace",
