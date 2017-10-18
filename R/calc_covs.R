@@ -15,6 +15,7 @@ calc_covs <- function(pheno, kinship){
   foo <- gemma2::MphEM(X = X1, Y = Y, eval = eval, V_g = diag(2), V_e = diag(2))
   Vg <- foo[[length(foo)]][[2]]
   Ve <- foo[[length(foo)]][[3]]
-  out <- list(Vg = Vg, Ve = Ve)
+  B <- foo[[length(foo)]][[6]]
+  out <- list(Vg = Vg, Ve = Ve, B = B)
   return(out)
 }
