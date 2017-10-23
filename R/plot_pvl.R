@@ -8,7 +8,7 @@
 #' @export
 #' @importFrom rlang .data
 
-plot_pvl <- function(dat, x1, x2, phenames, size = 3, shape = 25, palette = c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")){
+plot_pvl <- function(dat, x1, x2, phenames, size = 3, shape = 17, palette = c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")){
     # plot
     ggplot2::ggplot(dat, ggplot2::aes(y = dat$lod, x = dat$marker_position, colour = dat$trace)) +
     ggplot2::geom_line() +
@@ -30,7 +30,7 @@ plot_pvl <- function(dat, x1, x2, phenames, size = 3, shape = 25, palette = c("#
                )
     ) +
     ggplot2::geom_point(ggplot2::aes(x = dat$intercept,
-                            y = c(rep(0, nrow(dat)))),
+                            y = c(rep(min(dat$lod), nrow(dat)))),
                         shape = shape,
                         size = size
                         )
