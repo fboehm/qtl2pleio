@@ -8,7 +8,7 @@
 #' @export
 #' @importFrom rlang .data
 
-plot_pvl <- function(dat, x1, x2, phenames, palette = c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")){
+plot_pvl <- function(dat, x1, x2, phenames, size = 3, shape1 = 25, palette = c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")){
     # plot
     ggplot2::ggplot(dat, ggplot2::aes(y = dat$lod, x = dat$marker_position, colour = dat$trace)) +
     ggplot2::geom_line() +
@@ -17,7 +17,7 @@ plot_pvl <- function(dat, x1, x2, phenames, palette = c("#999999", "#E69F00", "#
                                  labels = c("Pleiotropy", phenames[1], phenames[2])
                                  ) +
     ggplot2::labs(y = "LOD", x = "Marker position") +
-    ggplot2::geom_vline(ggplot2::aes(xintercept = dat$intercept, colour = dat$trace)) +
+    #ggplot2::geom_vline(ggplot2::aes(xintercept = dat$intercept, colour = dat$trace)) +
     ggplot2::guides(colour =
                ggplot2::guide_legend(
                  title = "Trace",
@@ -28,5 +28,10 @@ plot_pvl <- function(dat, x1, x2, phenames, palette = c("#999999", "#E69F00", "#
                    angle = 0
                  )
                )
-    )
+    ) +
+    ggplot2::geom_point(aes(x = dat$intercept,
+                            y = c(rep(0, nrow(dat)))),
+                        shape = shape,
+                        size = size
+                        )
 }
