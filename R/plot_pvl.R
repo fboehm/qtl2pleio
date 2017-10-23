@@ -29,7 +29,7 @@ plot_pvl <- function(dat, x1, x2, phenames, size = 3, shape1 = 25, palette = c("
                  )
                )
     ) +
-    ggplot2::geom_point(aes(x = dat$intercept,
+    ggplot2::geom_point(ggplot2::aes(x = dat$intercept,
                             y = c(rep(0, nrow(dat)))),
                         shape = shape,
                         size = size
