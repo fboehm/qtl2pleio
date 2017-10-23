@@ -2,7 +2,6 @@
 #'
 #' @param loglik_mat a (square) matrix of log likelihood values
 #' @param pmap physical map (in Mb) for exactly one chromosome, pmap$`5`, for example
-#' @param intercepts a vector of length 2 that contains the x coordinate values for the two vertical lines
 #' @export
 #' @importFrom rlang .data
 
@@ -48,11 +47,39 @@ tidy_scan_pvl <- function(loglik_mat, pmap, intercepts){
   foo$lod <- (foo$ll - max(pleio_ll$ll)) / log(10) # convert from base e to base 10
   dat <- dplyr::select(foo, .data$marker_position, .data$lod, .data$trace)
   # define pleiotropy intercept value
-  pleio_int <- pleio_ll$marker_position[which.max(pleio_ll$ll)]
+  #pleio_int <- pleio_ll$marker_position[which.max(pleio_ll$ll)]
   # define intercept column
-  dat$intercept <- NA
-  dat$intercept[dat$trace == "profile1"] <- intercepts[1]
-  dat$intercept[dat$trace == "profile2"] <- intercepts[2]
-  dat$intercept[dat$trace == "pleio"] <- pleio_int
+  #dat$intercept <- NA
+  #dat$intercept[dat$trace == "profile1"] <- intercepts[1]
+  #dat$intercept[dat$trace == "profile2"] <- intercepts[2]
+  #dat$intercept[dat$trace == "pleio"] <- pleio_int
   return(dat)
 }
+
+#' Add intercepts to tidied loglikelihood tibble
+#'
+#' @param dat a tibble that results from tidy_scan_pvl acting on a log likelihood matrix
+#' @param intercepts_univariate a vector of length 2 that contains the x coordinate values for the ordered univariate peaks
+#' @export
+#' @importFrom rlang .data
+
+add_intercepts <- function(dat, intercepts_univariate){
+  dat$intercept_uni <- NA
+  dat$intercept_uni[dat$trace == "profile1"] <- intercepts_univariate[1]
+  dat$intercept_uni[dat$trace == "profile2"] <- intercepts_univariate[2]
+  # determine pleiotropy peak location
+  pleio_lod <- dplyr::filter(dat, .data$trace == "pleio")
+  pleio_peak <- pleio_lod$marker_position[which.max(pleio_lod$lod)]
+  dat$intercept_pleio <- NA
+  dat$intercept_pleio[dat$trace == "pleio"] <- pleio_peak
+  # determine bivariate peak locations
+  dat$intercept_biv <- NA
+  profile1_lod <- dplyr::filter(dat, .data$trace == "profile1")
+  profile1_peak <- profile1_lod$marker_position[which.max(profile1_lod$lod)]
+  profile2_lod <- dplyr::filter(dat, .data$trace == "profile2")
+  profile2_peak <- profile2_lod$marker_position[which.max(profile2_lod$lod)]
+  dat$intercept_biv[dat$trace == "profile1"] <- profile1_peak
+  dat$intercept_biv[dat$trace == "profile2"] <- profile2_peak
+  return(dat)
+}
+

@@ -1,15 +1,15 @@
 #' Plot tidied results of a pvl scan
 #'
 #' @param dat a tibble that is the tidied output of a pvl scan
-#' @param x1 x coordinate where trait 1 has its univariate peak
-#' @param x2 x coordinate where trait 2 has its univariate peak
 #' @param phenames vector of names of the two ordered phenotypes
 #' @param palette a vector containing strings for colors
 #' @export
 #' @importFrom rlang .data
 
-plot_pvl <- function(dat, x1, x2, phenames, size = 3, shape = 17, palette = c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")){
-    # plot
+plot_pvl <- function(dat, phenames, size = 3, shape = 17, palette = c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")){
+  # find the
+
+  # plot
     ggplot2::ggplot(dat, ggplot2::aes(y = dat$lod, x = dat$marker_position, colour = dat$trace)) +
     ggplot2::geom_line() +
     ggplot2::scale_colour_manual(values = palette[1:3],
@@ -33,5 +33,6 @@ plot_pvl <- function(dat, x1, x2, phenames, size = 3, shape = 17, palette = c("#
                             y = c(rep(min(dat$lod), nrow(dat)))),
                         shape = shape,
                         size = size
-                        )
+                        ) +
+    ggplot2::geom_point(ggplot2::aes(x = ))
 }
