@@ -10,7 +10,24 @@
 #' @export
 #' @importFrom rlang .data
 
-plot_pvl <- function(dat, phenames, size = 3, shape_uni = 17, shape_pleio = 23, shape_biv = 18, palette = c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")){
+plot_pvl <- function(dat, phenames, size = 3, shape_uni = 17, shape_pleio = 16, shape_biv = 18, palette = c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")){
+  n_marker <- nrow(dat) / 3
+  # find coordinates of lod maxes by trace
+  ## first, pleio trace
+  dat_p <- dat[dat$trace == "pleio", ]
+  dat_p_max <- dat_p[dat_p$lod == max(dat_p$lod), ]
+  pleio_x <- dat_p_max$marker_position
+  pleio_y <- dat_p_max$lod
+  ## second, profile1
+  dat_p <- dat[dat$trace == "profile1", ]
+  dat_p_max <- dat_p[dat_p$lod == max(dat_p$lod), ]
+  pro1_x <- dat_p_max$marker_position
+  pro1_y <- dat_p_max$lod
+  ## third, profile2
+  dat_p <- dat[dat$trace == "profile2", ]
+  dat_p_max <- dat_p[dat_p$lod == max(dat_p$lod), ]
+  pro2_x <- dat_p_max$marker_position
+  pro2_y <- dat_p_max$lod
   # plot
     ggplot2::ggplot(dat, ggplot2::aes(y = dat$lod, x = dat$marker_position, colour = dat$trace)) +
     ggplot2::geom_line() +
@@ -32,19 +49,19 @@ plot_pvl <- function(dat, phenames, size = 3, shape_uni = 17, shape_pleio = 23, 
                )
     ) +
     ggplot2::geom_point(ggplot2::aes(x = dat$intercept_uni,
-                            y = c(rep(min(dat$lod), nrow(dat)))),
+                            y = rep(c(pleio_y, pro1_y, pro2_y), each = n_marker)),
                         shape = shape_uni,
                         size = size,
                         na.rm = TRUE
                         ) +
     ggplot2::geom_point(ggplot2::aes(x = dat$intercept_pleio,
-                                     y = c(rep(min(dat$lod), nrow(dat)))),
+                                     y = rep(pleio_y, nrow(dat))),
                         shape = shape_pleio,
                         size = size,
                         na.rm = TRUE
                         ) +
     ggplot2::geom_point(ggplot2::aes(x = dat$intercept_biv,
-                                     y = c(rep(min(dat$lod), nrow(dat)))),
+                                     y = rep(c(pleio_y, pro1_y, pro2_y), each = n_marker)),
                         shape = shape_biv,
                         size = size,
                         na.rm = TRUE
