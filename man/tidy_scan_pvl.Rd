@@ -4,7 +4,7 @@
 \alias{tidy_scan_pvl}
 \title{Tidy the matrix of log likelihood values for further analysis & plotting}
 \usage{
-tidy_scan_pvl(loglik_mat, pmap, intercepts)
+tidy_scan_pvl(loglik_mat, pmap)
 }
 \arguments{
 \item{loglik_mat}{a (square) matrix of log likelihood values}

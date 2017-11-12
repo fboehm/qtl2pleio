@@ -4,7 +4,7 @@
 \alias{plot_pvl}
 \title{Plot tidied results of a pvl scan}
 \usage{
-plot_pvl(dat, phenames, size = 3, shape_uni = 17, shape_pleio = 23,
+plot_pvl(dat, phenames, size = 3, shape_uni = 17, shape_pleio = 16,
   shape_biv = 18, palette = c("#999999", "#E69F00", "#56B4E9", "#009E73",
   "#F0E442", "#0072B2", "#D55E00", "#CC79A7"))
 }

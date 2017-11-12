@@ -5,7 +5,7 @@
 #' @export
 #' @importFrom rlang .data
 
-tidy_scan_pvl <- function(loglik_mat, pmap, intercepts){
+tidy_scan_pvl <- function(loglik_mat, pmap){
   # Assumes that we have rownames and columns names assigned to loglik_mat
   marker1 <- rep(rownames(loglik_mat), times = ncol(loglik_mat))
   marker2 <- rep(colnames(loglik_mat), each = nrow(loglik_mat))
