@@ -66,5 +66,5 @@ plot_pvl <- function(dat, phenames, size = 3, shape_uni = 17, shape_pleio = 16, 
                         size = size,
                         na.rm = TRUE
     ) +
-    ggplot2::ylim(low = -5, high = max(max(pro1_y), 5))
+    ggplot2::ylim(low = -5, high = max(max(pro1_y), 3))
 }
