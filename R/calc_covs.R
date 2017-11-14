@@ -2,14 +2,14 @@
 #'
 #' @param pheno n by 2 matrix of phenotypes
 #' @param kinship a kinship matrix, n by n
+#' @param X1pre n by c design matrix. c = 1 to ignore genotypes
 #' @export
-calc_covs <- function(pheno, kinship){
+calc_covs <- function(pheno, kinship, X1pre = rep(1, nrow(kinship))){
   gemma2::eigen2(kinship) -> e_out
   e_out$vectors -> U
   e_out$values -> eval
   n_mouse <- nrow(kinship)
-  X1pre <- t(rep(1, n_mouse))
-  X1 <- X1pre %*% U
+  X1 <- t(X1pre) %*% U
   Y <- t(pheno) %*% U
   # run MphEM with only a design matrix that contains only the intercept term (and not any genotype info)
   foo <- gemma2::MphEM(X = X1, Y = Y, eval = eval, V_g = diag(2), V_e = diag(2))

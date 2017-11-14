@@ -4,12 +4,14 @@
 \alias{calc_covs}
 \title{Calculate Vg and Ve from Y and kinship}
 \usage{
-calc_covs(pheno, kinship)
+calc_covs(pheno, kinship, X1pre = rep(1, nrow(kinship)))
 }
 \arguments{
 \item{pheno}{n by 2 matrix of phenotypes}
 
 \item{kinship}{a kinship matrix, n by n}
+
+\item{X1pre}{n by c design matrix. c = 1 to ignore genotypes}
 }
 \description{
 Calculate Vg and Ve from Y and kinship
