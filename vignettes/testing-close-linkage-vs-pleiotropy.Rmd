@@ -20,6 +20,21 @@ knitr::opts_chunk$set(
 
 Our setting involves a pair of traits, $Y_1$ and $Y_2$, each of which individually (univariately) associates with a single genomic region. The exact definition of a genomic region is imprecise; in practice, it may be as large as 4 or 5 Mb. We seek to distinguish whether $Y_1$ and $Y_2$ associations (in the genomic region) arise due to a single QTL or whether there are two two distinct loci, each of which associates with exactly one of the two traits. We recognize that more complicated association patterns are possible, but we neglect them in this test.
 
+## Installing `qtl2pleio`
+
+We install `qtl2pleio` from github via the `devtools` R package, which is available from CRAN. 
+
+```{r, eval = FALSE}
+devtools::install_github("fboehm/qtl2pleio")
+```
+
+The above line only needs to be run once on a given computer (unless you wish to install a newer version). 
+
+We then load the library into our R session with the `library` command:
+
+```{r}
+library(qtl2pleio)
+```
 
 
 

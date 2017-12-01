@@ -21,3 +21,6 @@ Suggests: testthat,
     knitr,
     rmarkdown
 VignetteBuilder: knitr
+Remotes: fboehm/pleiotropy,
+    fboehm/gemma2
+    
