@@ -37,6 +37,25 @@ library(qtl2pleio)
 ```
 
 
+We'll work with data from the `qtl2data` R package, which is on github. First, we install and load the `qtl2` package.
+
+```{r, eval = FALSE}
+devtools::install_github("rqtl/qtl2")
+```
+
+We use the above line once to install the package before loading the package with the `library` command.
+
+```{r}
+library(qtl2)
+```
+
+## Reading data from `qtl2data` R package
+
+We read from github.com the data from the `qtl2data` R package.
+
+```{r}
+
+```
 
 
 
