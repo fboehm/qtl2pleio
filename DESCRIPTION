@@ -22,5 +22,6 @@ Suggests: testthat,
     rmarkdown
 VignetteBuilder: knitr
 Remotes: fboehm/pleiotropy,
-    fboehm/gemma2
+    fboehm/gemma2,
+    rqtl/qtl2
     
