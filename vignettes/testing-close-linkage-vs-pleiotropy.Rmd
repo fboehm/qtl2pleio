@@ -95,7 +95,7 @@ We use the model:
 
 $$vec(Y) = X vec(B) + vec(G) + vec(E)$$
 
-where $Y$ is a $n$ by $2$ matrix, where each row is one subject and each column is one quantitative phenotype. $X$ is a $2n$ by $2n$ design matrix containing allele probabilities matrices for each of two (possibly identical) markers. 
+where $Y$ is a $n$ by $2$ matrix, where each row is one subject and each column is one quantitative phenotype. $X$ is a $2n$ by $2f$ design matrix containing $n$ by $f$ allele probabilities matrices for each of two (possibly identical) markers. Thus, $X$ is a block-diagonal matrix, with exactly two $n$ by $f$ blocks on the diagonal. 
 
 
 
