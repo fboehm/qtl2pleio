@@ -51,15 +51,51 @@ library(qtl2)
 
 ## Reading data from `qtl2data` R package
 
-We read from github.com the data from the `qtl2data` R package.
+We read from github.com data from the `qtl2data` R package.
 
 ```{r}
-
+tmpfile <- tempfile()
+file <- paste0("https://raw.githubusercontent.com/rqtl/",
+               "qtl2data/master/DOex/DOex_alleleprobs.rds")
+download.file(file, tmpfile)
+pr <- readRDS(tmpfile)
+unlink(tmpfile)
 ```
 
+We now have an allele probabilities object stored in `pr`.
+
+```{r}
+names(pr)
+dim(pr$`2`)
+```
+
+We see that `pr` is a list of 3 three-dimensional arrays - one array for each of 3 chromosomes.
+
+## Kinship calculations
+
+For our statistical model, we need a kinship matrix. Although we don't have genome-wide data - since we have allele probabilities for only 3 chromosomes - let's calculate a kinship matrix using "leave-one-chromosome-out". In practice, one would want to use allele probabilities from a full genome-wide set of markers.
+
+```{r}
+calc_kinship(probs = pr, type = "loco") -> kinship
+```
+
+```{r}
+str(kinship)
+```
+
+We see that `kinship` is a list containing 3 matrices. Each matrix is 261 by 261 - where the number of subjects is 261 - and symmetric.
 
 
 
+## Simulating phenotypes
+
+Before we simulate phenotype data, we first specify our statistical model.
+
+We use the model:
+
+$$vec(Y) = X vec(B) + vec(G) + vec(E)$$
+
+where $Y$ is a $n$ by $2$ matrix, where each row is one subject and each column is one quantitative phenotype. $X$ is a $2n$ by $2n$ design matrix containing allele probabilities matrices for each of two (possibly identical) markers. 
 
 
 

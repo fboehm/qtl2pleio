@@ -15,7 +15,8 @@ Imports: gemma2,
     MASS,
     ggplot2,
     dplyr,
-    rlang
+    rlang,
+    qtl2
 RoxygenNote: 6.0.1
 Suggests: testthat,
     knitr,
@@ -24,4 +25,3 @@ VignetteBuilder: knitr
 Remotes: fboehm/pleiotropy,
     fboehm/gemma2,
     rqtl/qtl2
-    
