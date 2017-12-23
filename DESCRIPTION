@@ -9,7 +9,6 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports: gemma2,
-    pleiotropy,
     mvtnorm,
     tibble,
     MASS,
@@ -22,6 +21,5 @@ Suggests: testthat,
     knitr,
     rmarkdown
 VignetteBuilder: knitr
-Remotes: fboehm/pleiotropy,
-    fboehm/gemma2,
+Remotes: fboehm/gemma2,
     rqtl/qtl2
