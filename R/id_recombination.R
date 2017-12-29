@@ -15,7 +15,9 @@ probs_equal <- function(g1, g2){
 #' @details Checks genotype probability vector (at each marker in probs) for equality with the left-hand marker's genotype probabilities vector.
 #' @export
 id_recombination <- function(probs){
-  stopifnot(nrow(probs) > 1)
+  stopifnot(nrow(probs) > 1,
+            apply(FUN = sum, X = probs, MARGIN = 1) == rep(1, nrow(probs))
+            )
   foo <- logical(length = nrow(probs) - 1)
   for (i in 2:nrow(probs)){
     probs_equal(probs[1, ], probs[i, ]) -> foo[i - 1]
