@@ -2,15 +2,20 @@
 % Please edit documentation in R/id_recombination.R
 \name{id_recombination}
 \alias{id_recombination}
-\title{Determine if a single subject's lineage had a recombination (historically) between two markers}
+\title{Determine if all genotype probability vectors for markers in an interval are the same for one subject.}
 \usage{
-id_recombination(g1, g2)
+id_recombination(index1, index2, probs)
 }
 \arguments{
-\item{g1}{a vector of genotype probabilities for a single subject at marker one}
+\item{index1}{an integer denoting the left-hand marker.}
 
-\item{g2}{a vector of genotype probabilities for the same subject at marker two}
+\item{index2}{an integer denoting the right-hand marker.}
+
+\item{probs}{a genotype probabilities 2-dimensional array for the appropriate chromosome and a single subject}
 }
 \description{
-Determine if a single subject's lineage had a recombination (historically) between two markers
+Determine if all genotype probability vectors for markers in an interval are the same for one subject.
+}
+\details{
+Checks genotype probability vector (at each marker in interval) for equality with the left-hand marker's genotype probabilities vector.
 }
