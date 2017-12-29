@@ -4,6 +4,8 @@ output: github_document
 
 [![Travis-CI Build Status](https://travis-ci.org/fboehm/qtl2pleio.svg?branch=master)](https://travis-ci.org/fboehm/qtl2pleio)
 
+[![Github All Releases](https://img.shields.io/github/downloads/atom/atom/total.svg)]()
+
 
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
