@@ -3,7 +3,7 @@ context("Check inputs to calc_Bhat")
 
 # setup
 X1 <- as.matrix(rbinom(n = 100, size = 1, prob = 1 / 2))
-X <- pleiotropy::stagger_mats(X1, X1)
+X <- gemma2::stagger_mats(X1, X1)
 Sigma <- matrix(data = rep(1, 200 * 200), nrow = 200)
 Y <- runif(200)
 
