@@ -4,18 +4,14 @@
 \alias{id_recombination}
 \title{Determine if all genotype probability vectors for markers in an interval are the same for one subject.}
 \usage{
-id_recombination(index1, index2, probs)
+id_recombination(probs)
 }
 \arguments{
-\item{index1}{an integer denoting the left-hand marker.}
-
-\item{index2}{an integer denoting the right-hand marker.}
-
 \item{probs}{a genotype probabilities 2-dimensional array for the appropriate chromosome and a single subject}
 }
 \description{
 Determine if all genotype probability vectors for markers in an interval are the same for one subject.
 }
 \details{
-Checks genotype probability vector (at each marker in interval) for equality with the left-hand marker's genotype probabilities vector.
+Checks genotype probability vector (at each marker in probs) for equality with the left-hand marker's genotype probabilities vector.
 }
