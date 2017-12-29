@@ -11,17 +11,14 @@ probs_equal <- function(g1, g2){
 
 #' Determine if all genotype probability vectors for markers in an interval are the same for one subject.
 #'
-#' @param index1 an integer denoting the left-hand marker.
-#' @param index2 an integer denoting the right-hand marker.
 #' @param probs a genotype probabilities 2-dimensional array for the appropriate chromosome and a single subject
-#' @details Checks genotype probability vector (at each marker in interval) for equality with the left-hand marker's genotype probabilities vector.
+#' @details Checks genotype probability vector (at each marker in probs) for equality with the left-hand marker's genotype probabilities vector.
 #' @export
-id_recombination <- function(index1, index2, probs){
-  foo <- logical(length = index2 - index1)
-  i <- 1
-  for (index in (index1 + 1): index2){
-    probs_equal(probs[index1, ], probs[index, ]) -> foo[i]
-    i <- i + 1
+id_recombination <- function(probs){
+  stopifnot(nrow(probs) > 1)
+  foo <- logical(length = nrow(probs) - 1)
+  for (i in 2:nrow(probs)){
+    probs_equal(probs[1, ], probs[i, ]) -> foo[i - 1]
   }
   prod(foo) -> out
   return(!as.logical(out))
