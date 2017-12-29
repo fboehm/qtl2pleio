@@ -16,6 +16,7 @@ probs_equal <- function(g1, g2){
 #' @export
 id_recombination <- function(probs){
   stopifnot(nrow(probs) > 1,
+            ncol(probs) > 1,
             apply(FUN = sum, X = probs, MARGIN = 1) == rep(1, nrow(probs))
             )
   foo <- logical(length = nrow(probs) - 1)
