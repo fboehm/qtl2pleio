@@ -4,7 +4,9 @@
 #' @param g2 a vector of genotype probabilities for the same subject at marker two
 #' @export
 probs_equal <- function(g1, g2){
-  prod(g1 == g2) -> out
+  rg1 <- round(g1, digits = 3)
+  rg2 <- round(g2, digits = 3)
+  prod(rg1 == rg2) -> out
   return(as.logical(out))
 }
 
@@ -16,8 +18,7 @@ probs_equal <- function(g1, g2){
 #' @export
 id_recombination <- function(probs){
   stopifnot(nrow(probs) > 1,
-            ncol(probs) > 1,
-            apply(FUN = sum, X = probs, MARGIN = 1) == rep(1, nrow(probs))
+            ncol(probs) > 1
             )
   foo <- logical(length = nrow(probs) - 1)
   for (i in 2:nrow(probs)){
