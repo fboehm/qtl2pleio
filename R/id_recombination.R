@@ -18,9 +18,8 @@ probs_equal <- function(g1, g2){
 #' @export
 id_recombination <- function(probs){
   stopifnot(nrow(probs) > 1,
-            ncol(probs) > 1
+            ncol(probs) == 8
             )
-  if (ncol(probs) != 8) stop
   foo <- logical(length = nrow(probs) - 1)
   for (i in 2:nrow(probs)){
     probs_equal(probs[1, ], probs[i, ]) -> foo[i - 1]
