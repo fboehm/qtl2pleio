@@ -5,10 +5,10 @@
 
 calc_lrt_dir <- function(directory){
   dir(directory) -> fns
-  lrt <- numeric(length = 400)
+  lrt <- numeric()
   i <- 1
   for (fn in fns){
-    read.table(file.path(PVL_DIR, fn)) -> scan_out
+    read.table(file.path(directory, fn)) -> scan_out
     calc_lrt(as.matrix(scan_out)) -> lrt[i]
     i <- i + 1
   }
