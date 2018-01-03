@@ -7,6 +7,7 @@
 #' @param Vg genetic covariance matrix
 #' @param Ve error covariance matrix
 #' @param B vectorized allele effect matrix, ie, vec(Bmatrix)
+#' @param kinship a LOCO kinship matrix
 #' @param DIR directory where trait files will be written
 #' @param nsim number of trait files to create
 #' @export
@@ -15,7 +16,9 @@ sim400 <- function(run_num, index1, index2, probs = pp2,
                    Vg = matrix(data = c(1, 0, 0, 1), nrow = 2),
                    Ve = Vg,
                    B = rep(c(-3, -3, -3, -3, 3, 3, 3, 3), times = 2),
-                   DIR = paste0("sim_data/run", run_num, "-400sims"), nsim = 400
+                   kinship,
+                   DIR = paste0("sim_data/run", run_num, "-400sims"),
+                   nsim = 400
 ){
   X1 <- probs[ , , index1] #index is from command line args
   X2 <- probs[ , , index2]
