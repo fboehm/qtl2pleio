@@ -6,7 +6,7 @@
 \usage{
 sim400(run_num, index1, index2, probs = pp2, Vg = matrix(data = c(1, 0, 0,
   1), nrow = 2), Ve = Vg, B = rep(c(-3, -3, -3, -3, 3, 3, 3, 3), times = 2),
-  DIR = paste0("sim_data/run", run_num, "-400sims"), nsim = 400)
+  kinship, DIR = paste0("sim_data/run", run_num, "-400sims"), nsim = 400)
 }
 \arguments{
 \item{run_num}{run number, an integer}
@@ -22,6 +22,8 @@ sim400(run_num, index1, index2, probs = pp2, Vg = matrix(data = c(1, 0, 0,
 \item{Ve}{error covariance matrix}
 
 \item{B}{vectorized allele effect matrix, ie, vec(Bmatrix)}
+
+\item{kinship}{a LOCO kinship matrix}
 
 \item{DIR}{directory where trait files will be written}
 
