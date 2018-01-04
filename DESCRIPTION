@@ -15,7 +15,8 @@ Imports: gemma2,
     ggplot2,
     dplyr,
     rlang,
-    qtl2
+    qtl2,
+    stringr
 RoxygenNote: 6.0.1
 Suggests: testthat,
     knitr,
