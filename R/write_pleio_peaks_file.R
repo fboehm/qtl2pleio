@@ -28,5 +28,5 @@ write_pleio_peaks_file <- function(run_num, map = pm,
   Yfns <- paste0("Ysim-run", run_num, "_", jobnum, ".txt")
   tibble::tibble(pleio_indices, rsid, fns, jobnum, Yfns) -> tib
   # save tib
-  write_csv(x = tib, paste0("pleio-peak-indices-table-run", run_num, ".csv"))
+  readr::write_csv(x = tib, paste0("pleio-peak-indices-table-run", run_num, ".csv"))
 }
