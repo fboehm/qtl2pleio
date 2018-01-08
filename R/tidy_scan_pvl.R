@@ -1,3 +1,53 @@
+#' Assemble tibble from matrix of log-likelihood values
+#'
+#' @param loglik_mat a square matrix of log-likelihood values
+#' @export
+transform_loglik_mat <- function(loglik_mat){
+  marker1 <- rep(rownames(loglik_mat), times = ncol(loglik_mat))
+  marker2 <- rep(colnames(loglik_mat), each = nrow(loglik_mat))
+  ll <- as.vector(loglik_mat)
+  dat <- tibble::tibble(marker1, marker2, ll)
+  return(dat)
+}
+
+#' Add physical map contents to tibble
+#'
+#' @param tib a tibble with 3 columns: marker1 name, marker2 name and log-likelihood values
+#' @param pmap a physical map for a single chromosome
+#' @export
+add_pmap <- function(tib, pmap){
+  pmap_tib <- tibble::tibble(marker = names(pmap), marker_position = pmap)
+  # now join
+  tib2 <- dplyr::left_join(tib, pmap_tib, by = c("marker1" = "marker"))
+  #  rename(marker1_position = marker_position
+  dplyr::rename(tib2, marker1_position = marker_position) -> tib3
+  tib4 <- dplyr::left_join(tib3, pmap_tib, by = c("marker2" = "marker"))
+  tib5 <- dplyr::rename(tib4, marker2_position = marker_position)
+  return(tib5)
+}
+
+#' Assemble a profile ll tibble
+#'
+#' @param tib a tibble, derived from loglik_mat and with pmap info
+#' @param trace character vector to identify which profile log likelihood to calculate. Takes values "profile1" or "profile2"
+#' @export
+assemble_profile_tib <- function(tib, trace = "profile1"){
+  if (trace == "profile1") tib2 <- dplyr::group_by(tib, .data$marker1)
+  if (trace == "profile2") tib2 <- dplyr::group_by(tib, .data$marker2)
+  tib3 <- dplyr::filter(tib2, .data$ll == max(.data$ll))
+  tib4 <- dplyr::ungroup(tib3)
+  if (trace == "profile1"){
+    tib4$trace <- "profile1"
+    tib4$marker_position <- tib4$marker1_position
+  }
+  if (trace == "profile2"){
+    tib4$trace <- "profile2"
+    tib4$marker_position <- tib4$marker2_position
+  }
+  tib5 <- dplyr::select(tib4, .data$marker_position, .data$ll, .data$trace)
+  return(tib5)
+}
+
 #' Tidy the matrix of log likelihood values for further analysis & plotting
 #'
 #' @param loglik_mat a (square) matrix of log likelihood values
@@ -6,53 +56,21 @@
 #' @importFrom rlang .data
 
 tidy_scan_pvl <- function(loglik_mat, pmap){
-  # Assumes that we have rownames and columns names assigned to loglik_mat
-  marker1 <- rep(rownames(loglik_mat), times = ncol(loglik_mat))
-  marker2 <- rep(colnames(loglik_mat), each = nrow(loglik_mat))
-  ll <- as.vector(loglik_mat)
-  dat <- tibble::tibble(marker1, marker2, ll)
-  pmap_tib <- tibble::tibble(marker = names(pmap), marker_position = pmap)
-  # now join
-  foo <- dplyr::left_join(dat, pmap_tib, by = c("marker1" = "marker"))
-  #  rename(marker1_position = marker_position
-  foo$marker1_position <- foo$marker_position
-  foo <- foo[, -4]
-  foo <- dplyr::left_join(foo, pmap_tib, by = c("marker2" = "marker"))
-  #  rename(marker2_position = marker_position)
-  foo$marker2_position <- foo$marker_position
-  dat <- foo[, -5]
-  pleio_ll <- dplyr::filter(dat, .data$marker1 == .data$marker2)
+  mytib <- transform_loglik_mat(loglik_mat)
+  add_pmap(mytib, pmap) -> dat
+  pl <- dplyr::filter(dat, .data$marker1 == .data$marker2)
   #pleio_ll <- dplyr::rename(pleio_ll, marker_position = .data$marker1_position)
-  pleio_ll$marker_position <- pleio_ll$marker1_position
-  pleio_ll <- pleio_ll[ , -c(4, 5)]
+  dplyr::rename(pl, marker_position = marker1_position) -> pl2
   #pleio_ll <- dplyr::mutate(pleio_ll, trace = "pleio")
-  pleio_ll$trace <- "pleio"
-  pleio_ll <- dplyr::select(pleio_ll, .data$marker_position, .data$ll, .data$trace)
+  pl2$trace <- "pleio"
+  pleio_ll <- dplyr::select(pl2, .data$marker_position, .data$ll, .data$trace)
   # assemble pro1_ll
-  pro1_ll <- dplyr::group_by(dat, .data$marker1_position)
-  pro1_ll <- dplyr::filter(pro1_ll, .data$ll == max(.data$ll))
-  pro1_ll <- dplyr::ungroup(pro1_ll)
-  pro1_ll$trace <- "profile1"
-  pro1_ll$marker_position <- pro1_ll$marker1_position
-  pro1_ll <- dplyr::select(pro1_ll, .data$marker_position, .data$ll, .data$trace)
-  # assemble pro2_ll
-  pro2_ll <- dplyr::group_by(dat, .data$marker2_position)
-  pro2_ll <- dplyr::filter(pro2_ll, .data$ll == max(.data$ll))
-  pro2_ll <- dplyr::ungroup(pro2_ll)
-  pro2_ll$trace <- "profile2"
-  pro2_ll$marker_position <- pro2_ll$marker2_position
-  pro2_ll <- dplyr::select(pro2_ll, .data$marker_position, .data$ll, .data$trace)
+  assemble_profile_tib(dat, "profile1") -> pro1
+  assemble_profile_tib(dat, "profile2") -> pro2
   # bind 3 tibbles
-  foo <- dplyr::bind_rows(pleio_ll, pro1_ll, pro2_ll)
+  foo <- dplyr::bind_rows(pleio_ll, pro1, pro2)
   foo$lod <- (foo$ll - max(pleio_ll$ll)) / log(10) # convert from base e to base 10
   dat <- dplyr::select(foo, .data$marker_position, .data$lod, .data$trace)
-  # define pleiotropy intercept value
-  #pleio_int <- pleio_ll$marker_position[which.max(pleio_ll$ll)]
-  # define intercept column
-  #dat$intercept <- NA
-  #dat$intercept[dat$trace == "profile1"] <- intercepts[1]
-  #dat$intercept[dat$trace == "profile2"] <- intercepts[2]
-  #dat$intercept[dat$trace == "pleio"] <- pleio_int
   return(dat)
 }
 
