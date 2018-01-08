@@ -8,7 +8,7 @@
 find_missing_jobs <- function(DIR = "results-chtc/boot400-run1", njobs = 16000, outfile = "bad-jobs-boot400-run1.txt"){
   dir(DIR) -> fns
   stringr::str_split(fns, pattern = "_") -> foo
-  sapply(FUN = function(x)x[1], foo) -> foo2
+  sapply(FUN = function(x)x[2], foo) -> foo2
   stringr::str_split(foo2, pattern = ".txt") -> foo3
   unlist(foo3) -> foo4
   as.numeric(foo4) -> bar
