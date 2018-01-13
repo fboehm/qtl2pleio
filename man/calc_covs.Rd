@@ -7,7 +7,7 @@
 calc_covs(pheno, kinship, X1pre = rep(1, nrow(kinship)))
 }
 \arguments{
-\item{pheno}{n by 2 matrix of phenotypes}
+\item{pheno}{n by d matrix of phenotypes}
 
 \item{kinship}{a kinship matrix, n by n}
 
