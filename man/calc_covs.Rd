@@ -13,6 +13,12 @@ calc_covs(pheno, kinship, X1pre = rep(1, nrow(kinship)))
 
 \item{X1pre}{n by c design matrix. c = 1 to ignore genotypes}
 }
+\value{
+a list with 2 named components, Vg and Ve.
+}
 \description{
 Calculate Vg and Ve from Y and kinship
+}
+\examples{
+calc_covs(pheno = matrix(data = rnorm(100), nrow = 50, ncol = 2), kinship = diag(50))
 }

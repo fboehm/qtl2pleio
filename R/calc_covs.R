@@ -3,6 +3,9 @@
 #' @param pheno n by d matrix of phenotypes
 #' @param kinship a kinship matrix, n by n
 #' @param X1pre n by c design matrix. c = 1 to ignore genotypes
+#' @return a list with 2 named components, Vg and Ve.
+#' @examples
+#' calc_covs(pheno = matrix(data = rnorm(100), nrow = 50, ncol = 2), kinship = diag(50))
 #' @export
 calc_covs <- function(pheno, kinship, X1pre = rep(1, nrow(kinship))){
   gemma2::eigen2(kinship) -> e_out

@@ -1,5 +1,5 @@
 library(qtl2pleio)
-context("Check inputs to calc_Bhat")
+context("Check calc_Bhat")
 
 # setup
 X1 <- as.matrix(rbinom(n = 100, size = 1, prob = 1 / 2))
@@ -9,5 +9,9 @@ Y <- runif(200)
 
 
 test_that("error is returned when inputted Sigma is not positive definite", {
-  expect_error(calc_Bhat(X = X, Sigma = Sigma, Y = Y))
+  expect_error(calc_Bhat(X = X, Sigma_inv = Sigma, Y = Y))
+})
+test_that("dimensions of returned object are correct", {
+  expect_equal(nrow(calc_Bhat(X = X, Sigma_inv = diag(200), Y = Y)), 2)
+  expect_equal(ncol(calc_Bhat(X = X, Sigma_inv = diag(200), Y = Y)), 1)
 })
