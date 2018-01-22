@@ -11,6 +11,14 @@ assemble_profile_tib(tib, trace = "profile1")
 
 \item{trace}{character vector to identify which profile log likelihood to calculate. Takes values "profile1" or "profile2"}
 }
+\value{
+a tibble with 3 columns: marker position, profile log-likelihood, and trace (profile1 or profile2)
+}
 \description{
 Assemble a profile ll tibble
+}
+\seealso{
+Other profile log-likelihood tibble functions: \code{\link{add_intercepts}},
+  \code{\link{add_pmap}}, \code{\link{tidy_scan_pvl}},
+  \code{\link{transform_loglik_mat}}
 }

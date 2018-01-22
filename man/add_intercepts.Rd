@@ -14,3 +14,9 @@ add_intercepts(dat, intercepts_univariate)
 \description{
 Add intercepts to tidied loglikelihood tibble
 }
+\seealso{
+Other profile log-likelihood tibble functions: \code{\link{add_pmap}},
+  \code{\link{assemble_profile_tib}},
+  \code{\link{tidy_scan_pvl}},
+  \code{\link{transform_loglik_mat}}
+}

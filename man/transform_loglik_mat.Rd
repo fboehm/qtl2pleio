@@ -9,6 +9,18 @@ transform_loglik_mat(loglik_mat)
 \arguments{
 \item{loglik_mat}{a square matrix of log-likelihood values}
 }
+\value{
+tibble with 3 columns: marker1, marker2 and log-likelihood
+}
 \description{
 Assemble tibble from matrix of log-likelihood values
+}
+\examples{
+transform_loglik_mat(matrix(nrow = 3, ncol = 3, data = rgamma(9, 5)))
+}
+\seealso{
+Other profile log-likelihood tibble functions: \code{\link{add_intercepts}},
+  \code{\link{add_pmap}},
+  \code{\link{assemble_profile_tib}},
+  \code{\link{tidy_scan_pvl}}
 }

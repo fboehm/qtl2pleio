@@ -14,3 +14,9 @@ tidy_scan_pvl(loglik_mat, pmap)
 \description{
 Tidy the matrix of log likelihood values for further analysis & plotting
 }
+\seealso{
+Other profile log-likelihood tibble functions: \code{\link{add_intercepts}},
+  \code{\link{add_pmap}},
+  \code{\link{assemble_profile_tib}},
+  \code{\link{transform_loglik_mat}}
+}

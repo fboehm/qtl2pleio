@@ -11,6 +11,24 @@ add_pmap(tib, pmap)
 
 \item{pmap}{a physical map for a single chromosome}
 }
+\value{
+a tibble with 5 columns: marker1, marker2, log-likelihood, marker1_position, marker2_position
+}
 \description{
 Add physical map contents to tibble
+}
+\examples{
+pm <- 1:3
+names(pm) <- paste0("m", 1:3)
+expand.grid(paste0("m", 1:3), paste0("m", 1:3)) -> foo
+names(foo) <- c("marker1", "marker2")
+foo$ll <- rgamma(9, 5)
+as.tibble(foo) -> tib
+add_pmap(tib, pm)
+}
+\seealso{
+Other profile log-likelihood tibble functions: \code{\link{add_intercepts}},
+  \code{\link{assemble_profile_tib}},
+  \code{\link{tidy_scan_pvl}},
+  \code{\link{transform_loglik_mat}}
 }
