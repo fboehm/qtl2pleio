@@ -7,7 +7,7 @@
 transform_loglik_mat(loglik_mat)
 }
 \arguments{
-\item{loglik_mat}{a square matrix of log-likelihood values}
+\item{loglik_mat}{a square matrix of log-likelihood values with rownames and colnames matching}
 }
 \value{
 tibble with 3 columns: marker1, marker2 and log-likelihood
@@ -16,7 +16,10 @@ tibble with 3 columns: marker1, marker2 and log-likelihood
 Assemble tibble from matrix of log-likelihood values
 }
 \examples{
-transform_loglik_mat(matrix(nrow = 3, ncol = 3, data = rgamma(9, 5)))
+llmat <- matrix(nrow = 3, ncol = 3, data = rgamma(9, 5))
+rownames(llmat) <- paste0("m", 1:3)
+colnames(llmat) <- paste0("m", 1:3)
+transform_loglik_mat(llmat)
 }
 \seealso{
 Other profile log-likelihood tibble functions: \code{\link{add_intercepts}},

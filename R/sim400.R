@@ -11,8 +11,9 @@
 #' @param DIR directory where trait files will be written
 #' @param nsim number of trait files to create
 #' @export
+#' @importFrom utils write.table
 
-sim400 <- function(run_num, index1, index2, probs = pp2,
+sim400 <- function(run_num, index1, index2, probs,
                    Vg = matrix(data = c(1, 0, 0, 1), nrow = 2),
                    Ve = Vg,
                    B = rep(c(-3, -3, -3, -3, 3, 3, 3, 3), times = 2),

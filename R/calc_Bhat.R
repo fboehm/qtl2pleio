@@ -7,7 +7,7 @@
 #' @examples
 #' X1 <- as.matrix(rbinom(n = 100, size = 1, prob = 1 / 2))
 #' X <- gemma2::stagger_mats(X1, X1)
-#' Sigma_inv <- diag(100)
+#' Sigma_inv <- diag(200)
 #' Y <- runif(200)
 #' calc_Bhat(X, Sigma_inv, Y)
 #' @export

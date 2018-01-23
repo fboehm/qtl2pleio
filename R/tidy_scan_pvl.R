@@ -1,10 +1,13 @@
 #' Assemble tibble from matrix of log-likelihood values
 #'
 #' @family profile log-likelihood tibble functions
-#' @param loglik_mat a square matrix of log-likelihood values
+#' @param loglik_mat a square matrix of log-likelihood values with rownames and colnames matching
 #' @return tibble with 3 columns: marker1, marker2 and log-likelihood
 #' @examples
-#' transform_loglik_mat(matrix(nrow = 3, ncol = 3, data = rgamma(9, 5)))
+#' llmat <- matrix(nrow = 3, ncol = 3, data = rgamma(9, 5))
+#' rownames(llmat) <- paste0("m", 1:3)
+#' colnames(llmat) <- paste0("m", 1:3)
+#' transform_loglik_mat(llmat)
 #' @export
 transform_loglik_mat <- function(loglik_mat){
   marker1 <- rep(rownames(loglik_mat), times = ncol(loglik_mat))
