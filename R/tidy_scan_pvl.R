@@ -26,7 +26,7 @@ transform_loglik_mat <- function(loglik_mat){
 #' expand.grid(paste0("m", 1:3), paste0("m", 1:3)) -> foo
 #' names(foo) <- c("marker1", "marker2")
 #' foo$ll <- rgamma(9, 5)
-#' as.tibble(foo) -> tib
+#' tibble::as_tibble(foo) -> tib
 #' add_pmap(tib, pm)
 #' @export
 #' @importFrom rlang .data
