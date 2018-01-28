@@ -18,11 +18,20 @@ knitr::opts_chunk$set(
 
 ## Setting for close linkage v pleiotropy likelihood ratio test
 
-Our setting involves a pair of traits, $Y_1$ and $Y_2$, each of which individually (univariately) associates with a single genomic region. The exact definition of a genomic region is imprecise; in practice, it may be as large as 4 or 5 Mb. We seek to distinguish whether $Y_1$ and $Y_2$ associations (in the genomic region) arise due to a single QTL or whether there are two two distinct loci, each of which associates with exactly one of the two traits. We recognize that more complicated association patterns are possible, but we neglect them in this test.
+Our setting involves a pair of traits, $Y_1$ and $Y_2$, each of which individually (univariately) associates with a single genomic region. $Y_1$ and $Y_2$ are both measured on the same subjects. The exact definition of a genomic region is imprecise; in practice, it may be as large as 4 or 5 Mb. We seek to distinguish whether $Y_1$ and $Y_2$ associations (in the genomic region) arise due to a single QTL or whether there are two two distinct loci, each of which associates with exactly one of the two traits. We recognize that more complicated association patterns are possible, but we neglect them in this test.
 
 ## Installing `qtl2pleio`
 
 We install `qtl2pleio` from github via the `devtools` R package, which is available from CRAN. 
+
+If you haven't installed `devtools` R package, you can do so with this line of code:
+
+```{r, eval = FALSE}
+install.packages("devtools")
+```
+
+Now that you have installed `devtools`, you can install `qtl2pleio` from its Github repository with this line of code:
+
 
 ```{r, eval = FALSE}
 devtools::install_github("fboehm/qtl2pleio")
