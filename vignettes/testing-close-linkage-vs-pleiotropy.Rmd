@@ -69,6 +69,20 @@ file <- paste0("https://raw.githubusercontent.com/rqtl/",
 download.file(file, tmpfile)
 pr <- readRDS(tmpfile)
 unlink(tmpfile)
+tmpfile <- tempfile()
+file <- paste0("https://raw.githubusercontent.com/rqtl/",
+               "qtl2data/master/DOex/DOex_pmap.csv")
+download.file(file, tmpfile)
+pmap_pre <- read.csv(tmpfile)
+unlink(tmpfile)
+pm2 <- pmap_pre[pmap_pre$chr == 2, 3]
+names(pm2) <- pmap_pre[pmap_pre$chr == 2, 1]
+pm3 <- pmap_pre[pmap_pre$chr == 3, 3]
+names(pm3) <- pmap_pre[pmap_pre$chr == 3, 1]
+pmX <- pmap_pre[pmap_pre$chr == "X", 3]
+names(pmX) <- pmap_pre[pmap_pre$chr == "X", 1]
+list(pm2, pm3, pmX) -> pm
+names(pm) <- c("`2`", "`3`", "X")
 ```
 
 We now have an allele probabilities object stored in `pr`.
@@ -133,10 +147,49 @@ B
 # set.seed to ensure reproducibility
 set.seed(2018-01-30)
 # call to sim1
-sim1(X = X, B = B, Vg = diag(2), Ve = diag(2), kinship = kinship[[1]])
+Ypre <- sim1(X = X, B = B, Vg = diag(2), Ve = diag(2), kinship = kinship[[1]])
+Y <- matrix(Ypre, nrow = 261, ncol = 2, byrow = FALSE)
+rownames(Y) <- rownames(pp)
+colnames(Y) <- c("tr1", "tr2")
+```
+
+Let's perform univariate QTL mapping for each of the two traits in the Y matrix.
+
+```{r}
+scan1(genoprobs = pr, pheno = Y[ , 1], kinship = kinship) -> s1
+scan1(genoprobs = pr, pheno = Y[ , 2], kinship = kinship) -> s2
+```
+
+```{r}
+plot(s1, pm)
+```
+
+```{r}
+plot(s2, pm)
 ```
 
 
+```{r}
+find_peaks(s1, map = pm)
+find_peaks(s2, map = pm)
+```
 
+```{r, cache = TRUE}
+out <- scan_pvl(probs = pp, pheno = Y, kinship = kinship$`2`, start_snp1 = 1, n_snp = 125)
+```
+
+```{r}
+library(dplyr)
+out %>% 
+  tidy_scan_pvl(pm2) %>%
+  add_intercepts(intercepts_univariate = c(69.6, 69.6)) %>%
+  plot_pvl(phenames = c("tr1", "tr2"))
+
+```
+
+
+```{r}
+calc_lrt(out)
+```
 
 
