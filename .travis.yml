@@ -1,11 +1,11 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 
-install: 
-- travis_wait 
-- R -e 'devtools::install_deps(dep = T)'
+# avoid timeout (see <https://github.com/travis-ci/travis-ci/issues/3849#issuecomment-255096774>)
 script:
-- R CMD build .
-- R CMD check *tar.gz
+  - |
+    R CMD build .
+    travis_wait 30 R CMD check --as-cran qtl2*.tar.gz
+
 
 language: R
 sudo: false
