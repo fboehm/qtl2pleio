@@ -22,5 +22,5 @@ branches:
 # avoid timeout (see <https://github.com/travis-ci/travis-ci/issues/3849#issuecomment-255096774>)
 script:
   - |
-    R CMD build .
-    travis_wait 30 R CMD check --as-cran *.tar.gz
+    R CMD build --no-build-vignettes .
+    R CMD check --no--vignettes *.tar.gz
