@@ -14,7 +14,7 @@ calc_Bhat(X, Sigma_inv, Y)
 \item{Y}{dn by 1 matrix, ie, a column vector, of d phenotypes' measurements}
 }
 \value{
-a dn by 1 matrix of GLS-estimated allele effects
+a df by 1 matrix of GLS-estimated allele effects
 }
 \description{
 Calculate estimated allele effects, B matrix
