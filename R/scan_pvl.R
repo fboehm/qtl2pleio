@@ -1,6 +1,6 @@
 #' Perform model fitting for all ordered pairs of markers in a genomic region of interest
 #'
-#' @param probs a matrix of genotype probabilities for a single chromosome (before eigenrotation)
+#' @param probs an array of genotype probabilities for a single chromosome (before eigenrotation)
 #' @param pheno a matrix of phenotypes (before eigenrotation)
 #' @param kinship a kinship matrix for one chromosome
 #' @param start_snp1 index of where to start the first coordinate of the ordered pair

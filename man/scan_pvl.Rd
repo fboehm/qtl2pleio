@@ -7,7 +7,7 @@
 scan_pvl(probs, pheno, kinship, start_snp1, start_snp2 = start_snp1, n_snp)
 }
 \arguments{
-\item{probs}{a matrix of genotype probabilities for a single chromosome (before eigenrotation)}
+\item{probs}{an array of genotype probabilities for a single chromosome (before eigenrotation)}
 
 \item{pheno}{a matrix of phenotypes (before eigenrotation)}
 
