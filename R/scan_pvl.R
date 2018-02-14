@@ -3,12 +3,13 @@
 #' @param probs an array of genotype probabilities for a single chromosome (before eigenrotation)
 #' @param pheno a matrix of phenotypes (before eigenrotation)
 #' @param kinship a kinship matrix for one chromosome
+#' @param covariates a matrix, n by n.covariates, where each column is one covariate
 #' @param start_snp1 index of where to start the first coordinate of the ordered pair
 #' @param start_snp2 index of where to start the second coordinate of the ordered pair. Typically the same value as start_snp1
 #' @param n_snp the number of (consecutive) snps to include in the scan
 #' @export
 
-scan_pvl <- function(probs, pheno, kinship, start_snp1, start_snp2 = start_snp1, n_snp){
+scan_pvl <- function(probs, pheno, kinship, covariates = NULL, start_snp1, start_snp2 = start_snp1, n_snp){
   stopifnot(nrow(probs) == nrow(pheno),
             nrow(probs) == nrow(kinship),
             nrow(kinship) == ncol(kinship),
@@ -34,9 +35,15 @@ scan_pvl <- function(probs, pheno, kinship, start_snp1, start_snp2 = start_snp1,
     for (j in 1:n_snp){
       index1 <- start_snp1 + i - 1
       index2 <- start_snp2 + j - 1
-      X1 <- as.matrix(probs[ , , index1])
-      # note that we overwrite earlier X1 here
-      X2 <- as.matrix(probs[ , , index2])
+      if (!is.null(covariates)){
+        X1 <- cbind(as.matrix(probs[ , , index1]), covariates)
+        # note that we overwrite earlier X1 here
+        X2 <- cbind(as.matrix(probs[ , , index2]), covariates)
+      } else {
+        X1 <- as.matrix(probs[ , , index1])
+        # note that we overwrite earlier X1 here
+        X2 <- as.matrix(probs[ , , index2])
+      }
       X <- gemma2::stagger_mats(X1, X2)
       Bhat <- calc_Bhat(X = X,
                         Y = as.vector(pheno),

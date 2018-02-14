@@ -15,13 +15,13 @@ Imports: gemma2,
     ggplot2,
     dplyr,
     rlang,
-    qtl2,
     stringr,
     readr
 RoxygenNote: 6.0.1
 Suggests: testthat,
     knitr,
-    rmarkdown
+    rmarkdown,
+    qtl2
 VignetteBuilder: knitr
 Remotes: fboehm/gemma2,
     rqtl/qtl2

@@ -4,7 +4,8 @@
 \alias{scan_pvl}
 \title{Perform model fitting for all ordered pairs of markers in a genomic region of interest}
 \usage{
-scan_pvl(probs, pheno, kinship, start_snp1, start_snp2 = start_snp1, n_snp)
+scan_pvl(probs, pheno, kinship, covariates = NULL, start_snp1,
+  start_snp2 = start_snp1, n_snp)
 }
 \arguments{
 \item{probs}{an array of genotype probabilities for a single chromosome (before eigenrotation)}
@@ -12,6 +13,8 @@ scan_pvl(probs, pheno, kinship, start_snp1, start_snp2 = start_snp1, n_snp)
 \item{pheno}{a matrix of phenotypes (before eigenrotation)}
 
 \item{kinship}{a kinship matrix for one chromosome}
+
+\item{covariates}{a matrix, n by n.covariates, where each column is one covariate}
 
 \item{start_snp1}{index of where to start the first coordinate of the ordered pair}
 
