@@ -174,8 +174,8 @@ find_peaks(s1, map = pm)
 find_peaks(s2, map = pm)
 ```
 
-```{r, cache = TRUE}
-out <- scan_pvl(probs = pp, pheno = Y, kinship = kinship$`2`, start_snp1 = 1, n_snp = 125)
+```{r, cache = FALSE}
+out <- scan_pvl(probs = pp, pheno = Y, kinship = kinship$`2`, start_snp1 = 38, n_snp = 25)
 ```
 
 ```{r}
