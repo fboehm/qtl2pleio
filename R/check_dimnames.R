@@ -1,7 +1,7 @@
 #' Arrange rows of a matrix or data frame so that its rownames match those of another matrix or data frame
 #'
 #' @param df the object whose rows will be reordered
-#' @param ref the object whose rows will not be reordered\
+#' @param ref the object whose rows will not be reordered
 #' @return df, but with rows in different order, so that the rownames match those of ref
 #' @export
 arrange_by_rownames <- function(df, ref){
