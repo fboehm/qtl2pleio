@@ -3,7 +3,7 @@
 #' @param probs an array of genotype probabilities for a single chromosome (before eigenrotation)
 #' @param pheno a matrix of phenotypes (before eigenrotation)
 #' @param kinship a kinship matrix for one chromosome
-#' @param covariates a matrix, n by n.covariates, where each column is one covariate
+#' @param covariates a matrix, n subjects by n.cov covariates, where each column is one covariate
 #' @param start_snp1 index of where to start the first coordinate of the ordered pair
 #' @param start_snp2 index of where to start the second coordinate of the ordered pair. Typically the same value as start_snp1
 #' @param n_snp the number of (consecutive) snps to include in the scan

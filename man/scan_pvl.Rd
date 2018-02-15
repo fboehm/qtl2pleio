@@ -14,7 +14,7 @@ scan_pvl(probs, pheno, kinship, covariates = NULL, start_snp1,
 
 \item{kinship}{a kinship matrix for one chromosome}
 
-\item{covariates}{a matrix, n by n.covariates, where each column is one covariate}
+\item{covariates}{a matrix, n subjects by n.cov covariates, where each column is one covariate}
 
 \item{start_snp1}{index of where to start the first coordinate of the ordered pair}
 
