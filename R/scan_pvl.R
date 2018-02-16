@@ -7,19 +7,28 @@
 #' @param start_snp1 index of where to start the first coordinate of the ordered pair
 #' @param start_snp2 index of where to start the second coordinate of the ordered pair. Typically the same value as start_snp1
 #' @param n_snp the number of (consecutive) snps to include in the scan
+#' @param max_iter maximum number of iterations for EM algorithm
+#' @param max_prec stepwise precision for EM algorithm. EM stops once incremental difference in log likelihood is less than max_prec
 #' @export
 
-scan_pvl <- function(probs, pheno, kinship, covariates = NULL, start_snp1, start_snp2 = start_snp1, n_snp){
-  stopifnot(nrow(probs) == nrow(pheno),
-            nrow(probs) == nrow(kinship),
-            nrow(kinship) == ncol(kinship),
+scan_pvl <- function(probs, pheno, kinship, covariates = NULL, start_snp1,
+                     start_snp2 = start_snp1, n_snp, max_iter = 100000, max_prec = 1 / 1e06){
+  stopifnot(identical(nrow(probs), nrow(pheno)), identical(rownames(probs), rownames(pheno)),
+            identical(rownames(kinship), rownames(pheno)),
             n_snp > 0,
-            start_snp1 > 0
+            start_snp1 > 0,
+            start_snp1 + n_snp - 1 <= dim(probs)[3]
             )
+  # remove mice with missing values of phenotype
 
+  missing_indic <- t(apply(FUN = is.na, X = pheno, MARGIN = 1))
+  missing2 <- apply(FUN = function(x)identical(as.logical(x), rep(FALSE, ncol(pheno))), MARGIN = 1, X = missing_indic)
+  pheno <- pheno[missing2, , drop = FALSE]
+  kinship <- kinship[missing2, missing2, drop = FALSE]
+  probs <- probs[missing2, , , drop = FALSE]
   # perform scan over probs[ , , start_snp: stop_snp]
   # first, run gemma2::MphEM() to get Vg and Ve
-  calc_covs(pheno, kinship) -> cc_out
+  calc_covs(pheno, kinship, max_iter = max_iter, max_prec = max_prec) -> cc_out
   Vg <- cc_out$Vg
   Ve <- cc_out$Ve
   # define Sigma
@@ -36,9 +45,9 @@ scan_pvl <- function(probs, pheno, kinship, covariates = NULL, start_snp1, start
       index1 <- start_snp1 + i - 1
       index2 <- start_snp2 + j - 1
       if (!is.null(covariates)){
-        X1 <- cbind(as.matrix(probs[ , , index1]), covariates)
+        X1 <- cbind(as.matrix(probs[ , , index1]), covariates[missing2, ])
         # note that we overwrite earlier X1 here
-        X2 <- cbind(as.matrix(probs[ , , index2]), covariates)
+        X2 <- cbind(as.matrix(probs[ , , index2]), covariates[missing2, ])
       } else {
         X1 <- as.matrix(probs[ , , index1])
         # note that we overwrite earlier X1 here

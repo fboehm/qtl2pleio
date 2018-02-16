@@ -4,7 +4,8 @@
 \alias{calc_covs}
 \title{Calculate Vg and Ve from Y and kinship}
 \usage{
-calc_covs(pheno, kinship, X1pre = rep(1, nrow(kinship)))
+calc_covs(pheno, kinship, X1pre = rep(1, nrow(kinship)), max_iter = 1e+05,
+  max_prec = 1/1e+06)
 }
 \arguments{
 \item{pheno}{n by d matrix of phenotypes}
@@ -12,6 +13,10 @@ calc_covs(pheno, kinship, X1pre = rep(1, nrow(kinship)))
 \item{kinship}{a kinship matrix, n by n}
 
 \item{X1pre}{n by c design matrix. c = 1 to ignore genotypes}
+
+\item{max_iter}{maximum number of EM iterations}
+
+\item{max_prec}{maximum precision for stepwise increments in EM algorithm}
 }
 \value{
 a list with 2 named components, Vg and Ve.

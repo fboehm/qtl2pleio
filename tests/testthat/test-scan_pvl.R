@@ -11,4 +11,5 @@ Y <- matrix(data = Y_pre, nrow = 100)
 
 test_that("pvl_scan returns a log-likelihood matrix", {
   expect_lte(scan_pvl(probs = probs, pheno = Y, kinship = diag(100), start_snp1 = 1, n_snp = 10)[1, 2], 0)
+  expect_equal(class(scan_pvl(probs = probs, pheno = Y, kinship = diag(100), start_snp1 = 1, n_snp = 10)), "matrix")
 })
