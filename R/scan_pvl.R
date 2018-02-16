@@ -57,7 +57,7 @@ scan_pvl <- function(probs, pheno, kinship, covariates = NULL, start_snp1,
       Bhat <- calc_Bhat(X = X,
                         Y = as.vector(pheno),
                         Sigma_inv = Sigma_inv)
-      loglik[i, j] <- calc_loglik_bvlmm(X = X, Y = pheno, Bhat = Bhat, Sigma = Sigma)
+      loglik[i, j] <- calc_loglik_bvlmm(X = X, Y = as.vector(as.matrix(pheno)), Bhat = Bhat, Sigma = Sigma)
     }
   }
   return(loglik)

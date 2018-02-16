@@ -12,6 +12,6 @@
 #' calc_Bhat(X, Sigma_inv, Y)
 #' @export
 calc_Bhat <- function(X, Sigma_inv, Y){
-  out <- solve(t(X) %*% Sigma_inv %*% X) %*% t(X) %*% Sigma_inv %*% as.vector(Y)
+  out <- solve(t(X) %*% Sigma_inv %*% X) %*% t(X) %*% Sigma_inv %*% as.vector(as.matrix(Y))
   return(out)
 }
