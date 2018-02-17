@@ -24,9 +24,15 @@ scan_pvl <- function(probs, pheno, kinship, covariates = NULL, start_snp1,
     format = " scanning [:bar] :percent eta: :eta",
     total = n_snp * n_snp, clear = FALSE, width= 80)
   pb$tick(0)
-  # remove mice with missing values of phenotype
+  # remove mice with missing values of phenotype or missing value(s) in covariates
   missing_indic <- t(!apply(FUN = is.finite, X = pheno, MARGIN = 1))
   missing2 <- apply(FUN = function(x)identical(as.logical(x), rep(FALSE, ncol(pheno))), MARGIN = 1, X = missing_indic)
+  if (!is.null(covariates)){
+    miss_cov <- t(!apply(FUN = is.finite, X = covariates, MARGIN = 1))
+    miss_cov2 <- apply(FUN = function(x)identical(as.logical(x), rep(FALSE, ncol(covariates))), MARGIN = 1, X = miss_cov)
+    missing2 <- missing2 & miss_cov2
+
+  }
   pheno <- pheno[missing2, , drop = FALSE]
   kinship <- kinship[missing2, missing2, drop = FALSE]
   probs <- probs[missing2, , , drop = FALSE]
