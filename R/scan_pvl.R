@@ -12,7 +12,8 @@
 #' @export
 
 scan_pvl <- function(probs, pheno, kinship, covariates = NULL, start_snp1,
-                     start_snp2 = start_snp1, n_snp, max_iter = 100000, max_prec = 1 / 1e06){
+                     start_snp2 = start_snp1, n_snp, max_iter = 100000,
+                     max_prec = 1 / 1e06){
   stopifnot(identical(nrow(probs), nrow(pheno)), identical(rownames(probs), rownames(pheno)),
             identical(rownames(kinship), rownames(pheno)),
             n_snp > 0,
@@ -25,14 +26,14 @@ scan_pvl <- function(probs, pheno, kinship, covariates = NULL, start_snp1,
     total = n_snp * n_snp, clear = FALSE, width= 80)
   pb$tick(0)
   # remove mice with missing values of phenotype or missing value(s) in covariates
-  missing_indic <- t(!apply(FUN = is.finite, X = pheno, MARGIN = 1))
+  missing_indic <- matrix(!apply(FUN = is.finite, X = pheno, MARGIN = 1), nrow = nrow(pheno), ncol = ncol(pheno))
   missing2 <- apply(FUN = function(x)identical(as.logical(x), rep(FALSE, ncol(pheno))), MARGIN = 1, X = missing_indic)
   if (!is.null(covariates)){
-    miss_cov <- t(!apply(FUN = is.finite, X = covariates, MARGIN = 1))
+    miss_cov <- matrix(!apply(FUN = is.finite, X = covariates, MARGIN = 1), nrow = nrow(covariates), ncol = ncol(covariates))
     miss_cov2 <- apply(FUN = function(x)identical(as.logical(x), rep(FALSE, ncol(covariates))), MARGIN = 1, X = miss_cov)
     missing2 <- missing2 & miss_cov2
-
   }
+  if (sum(!missing2) > 0){message(paste0(sum(!missing2), " subjects dropped due to missing values"))}
   pheno <- pheno[missing2, , drop = FALSE]
   kinship <- kinship[missing2, missing2, drop = FALSE]
   probs <- probs[missing2, , , drop = FALSE]
@@ -56,9 +57,9 @@ scan_pvl <- function(probs, pheno, kinship, covariates = NULL, start_snp1,
       index1 <- start_snp1 + i - 1
       index2 <- start_snp2 + j - 1
       if (!is.null(covariates)){
-        X1 <- cbind(as.matrix(probs[ , , index1]), covariates[missing2, ])
+        X1 <- cbind(as.matrix(probs[ , , index1]), covariates[missing2, , drop = FALSE])
         # note that we overwrite earlier X1 here
-        X2 <- cbind(as.matrix(probs[ , , index2]), covariates[missing2, ])
+        X2 <- cbind(as.matrix(probs[ , , index2]), covariates[missing2, , drop = FALSE])
       } else {
         X1 <- as.matrix(probs[ , , index1])
         # note that we overwrite earlier X1 here

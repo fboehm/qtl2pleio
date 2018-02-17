@@ -7,9 +7,9 @@
 calc_Sigma(Vg, Ve, K)
 }
 \arguments{
-\item{Vg}{2 by 2 genetic covariance matrix for the two phenotypes}
+\item{Vg}{d by d genetic covariance matrix for the d phenotypes}
 
-\item{Ve}{2 by 2 error covariance matrix for the two phenotypes}
+\item{Ve}{d by d error covariance matrix for the d phenotypes}
 
 \item{K}{n by n kinship matrix}
 }
