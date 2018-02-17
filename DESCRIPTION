@@ -16,7 +16,8 @@ Imports: gemma2,
     dplyr,
     rlang,
     stringr,
-    readr
+    readr,
+    progress
 RoxygenNote: 6.0.1
 Suggests: testthat,
     knitr,

@@ -1,7 +1,7 @@
 #' Calculate the phenotypes covariance matrix Sigma
 #'
-#' @param Vg 2 by 2 genetic covariance matrix for the two phenotypes
-#' @param Ve 2 by 2 error covariance matrix for the two phenotypes
+#' @param Vg d by d genetic covariance matrix for the d phenotypes
+#' @param Ve d by d error covariance matrix for the d phenotypes
 #' @param K n by n kinship matrix
 #' @export
 calc_Sigma <- function(Vg, Ve, K){

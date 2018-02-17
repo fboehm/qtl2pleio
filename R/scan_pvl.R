@@ -19,9 +19,13 @@ scan_pvl <- function(probs, pheno, kinship, covariates = NULL, start_snp1,
             start_snp1 > 0,
             start_snp1 + n_snp - 1 <= dim(probs)[3]
             )
+  # start progress bar
+  pb <- progress::progress_bar$new(
+    format = " scanning [:bar] :percent eta: :eta",
+    total = n_snp * n_snp, clear = FALSE, width= 80)
+  pb$tick(0)
   # remove mice with missing values of phenotype
-
-  missing_indic <- t(apply(FUN = is.na, X = pheno, MARGIN = 1))
+  missing_indic <- t(!apply(FUN = is.finite, X = pheno, MARGIN = 1))
   missing2 <- apply(FUN = function(x)identical(as.logical(x), rep(FALSE, ncol(pheno))), MARGIN = 1, X = missing_indic)
   pheno <- pheno[missing2, , drop = FALSE]
   kinship <- kinship[missing2, missing2, drop = FALSE]
@@ -42,6 +46,7 @@ scan_pvl <- function(probs, pheno, kinship, covariates = NULL, start_snp1,
 
   for (i in 1:n_snp){
     for (j in 1:n_snp){
+      pb$tick()
       index1 <- start_snp1 + i - 1
       index2 <- start_snp2 + j - 1
       if (!is.null(covariates)){
