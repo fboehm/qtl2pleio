@@ -13,4 +13,5 @@ test_that("check_dimnames works as expected", {
   expect_false(check_dimnames(y, x))
   expect_equal(arrange_by_rownames(y, x), x)
   expect_equal(class(arrange_by_rownames(z, x)), "matrix")
+  expect_equal(dim(arrange_by_rownames(z, x)), c(10, 1))
 })
