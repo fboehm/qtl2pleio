@@ -8,7 +8,7 @@ arrange_by_rownames <- function(df, ref){
   stopifnot(
     nrow(df) == nrow(ref)
   )
-  df[match(x = dimnames(ref)[[1]], table = dimnames(df)[[1]]), ] -> foo
+  df[match(x = dimnames(ref)[[1]], table = dimnames(df)[[1]]), , drop = FALSE] -> foo
   return(foo)
 }
 
