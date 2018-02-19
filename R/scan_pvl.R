@@ -42,6 +42,10 @@ scan_pvl <- function(probs, pheno, kinship, covariates = NULL, start_snp1,
   pheno2 -> pheno
   kinship <- kinship[missing2, missing2, drop = FALSE]
   probs <- probs[missing2, , , drop = FALSE]
+  if (!is.null(covariates)){
+    covariates <- covariates[missing2, , drop = FALSE]
+  }
+
   # perform scan over probs[ , , start_snp: stop_snp]
   # first, run gemma2::MphEM() to get Vg and Ve
   calc_covs(pheno, kinship, max_iter = max_iter, max_prec = max_prec) -> cc_out
@@ -62,9 +66,9 @@ scan_pvl <- function(probs, pheno, kinship, covariates = NULL, start_snp1,
       index1 <- start_snp1 + i - 1
       index2 <- start_snp2 + j - 1
       if (!is.null(covariates)){
-        X1 <- cbind(as.matrix(probs[ , , index1]), covariates[missing2, , drop = FALSE])
+        X1 <- cbind(as.matrix(probs[ , , index1]), covariates)
         # note that we overwrite earlier X1 here
-        X2 <- cbind(as.matrix(probs[ , , index2]), covariates[missing2, , drop = FALSE])
+        X2 <- cbind(as.matrix(probs[ , , index2]), covariates)
       } else {
         X1 <- as.matrix(probs[ , , index1])
         # note that we overwrite earlier X1 here
