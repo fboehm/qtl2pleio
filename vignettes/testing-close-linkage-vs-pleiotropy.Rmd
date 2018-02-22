@@ -174,13 +174,13 @@ find_peaks(s1, map = pm)
 find_peaks(s2, map = pm)
 ```
 
-```{r, cache = FALSE}
+```{r}
 out <- scan_pvl(probs = pp, pheno = Y, kinship = kinship$`2`, start_snp1 = 38, n_snp = 25)
 ```
 
 ```{r}
 library(dplyr)
-out %>% 
+out$loglik %>% 
   tidy_scan_pvl(pm2) %>%
   add_intercepts(intercepts_univariate = c(69.6, 69.6)) %>%
   plot_pvl(phenames = c("tr1", "tr2"))

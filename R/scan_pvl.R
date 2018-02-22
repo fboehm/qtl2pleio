@@ -5,14 +5,13 @@
 #' @param kinship a kinship matrix for one chromosome
 #' @param covariates a matrix, n subjects by n.cov covariates, where each column is one covariate
 #' @param start_snp1 index of where to start the first coordinate of the ordered pair
-#' @param start_snp2 index of where to start the second coordinate of the ordered pair. Typically the same value as start_snp1
 #' @param n_snp the number of (consecutive) snps to include in the scan
 #' @param max_iter maximum number of iterations for EM algorithm
 #' @param max_prec stepwise precision for EM algorithm. EM stops once incremental difference in log likelihood is less than max_prec
 #' @export
 
 scan_pvl <- function(probs, pheno, kinship, covariates = NULL, start_snp1,
-                     start_snp2 = start_snp1, n_snp, max_iter = 100000,
+                     n_snp, max_iter = 100000,
                      max_prec = 1 / 1e06){
   stopifnot(identical(nrow(probs), nrow(pheno)), identical(rownames(probs), rownames(pheno)),
             identical(rownames(kinship), rownames(pheno)),
@@ -25,6 +24,8 @@ scan_pvl <- function(probs, pheno, kinship, covariates = NULL, start_snp1,
     format = " scanning [:bar] :percent eta: :eta",
     total = n_snp * n_snp, clear = FALSE, width= 80)
   pb$tick(0)
+  ## define number of dimensions, d_size
+  d_size <- ncol(pheno)
   # remove mice with missing values of phenotype or missing value(s) in covariates
   missing_indic <- matrix(!apply(FUN = is.finite, X = pheno, MARGIN = 1),
                           nrow = nrow(pheno), ncol = ncol(pheno),
@@ -56,30 +57,29 @@ scan_pvl <- function(probs, pheno, kinship, covariates = NULL, start_snp1,
   Sigma <- calc_Sigma(Vg, Ve, kinship)
   # define Sigma_inv
   Sigma_inv <- solve(Sigma)
-  loglik <- matrix(nrow = n_snp, ncol = n_snp)
-  rownames(loglik) <- dimnames(probs)[[3]][start_snp1 : (start_snp1 + n_snp - 1)]
-  colnames(loglik) <- dimnames(probs)[[3]][start_snp2 : (start_snp2 + n_snp - 1)]
-
-  for (i in 1:n_snp){
-    for (j in 1:n_snp){
-      pb$tick()
-      index1 <- start_snp1 + i - 1
-      index2 <- start_snp2 + j - 1
-      if (!is.null(covariates)){
-        X1 <- cbind(as.matrix(probs[ , , index1]), covariates)
-        # note that we overwrite earlier X1 here
-        X2 <- cbind(as.matrix(probs[ , , index2]), covariates)
-      } else {
-        X1 <- as.matrix(probs[ , , index1])
-        # note that we overwrite earlier X1 here
-        X2 <- as.matrix(probs[ , , index2])
-      }
-      X <- gemma2::stagger_mats(X1, X2)
-      Bhat <- calc_Bhat(X = X,
-                        Y = as.vector(pheno),
-                        Sigma_inv = Sigma_inv)
-      loglik[i, j] <- calc_loglik_bvlmm(X = X, Y = as.vector(as.matrix(pheno)), Bhat = Bhat, Sigma = Sigma)
-    }
+  for (d in 1:d_size){
+    assign(paste0("Var", d), value = 1:n_snp, pos = 1)
   }
-  return(loglik)
+  mytab <- expand.grid(lapply(FUN = get, X = as.list(paste0("Var", 1:d_size))))
+  mytab$loglik <- NA
+  for (rownum in 1:nrow(mytab)){
+  #  pb$tick()
+    indices <- unlist(mytab[rownum, ])
+    for (d in 1:d_size){
+      assign(paste0("index", d), value = indices[d] + start_snp1 - 1, pos = 1)
+      if (!is.null(covariates)){
+        assign(paste0("X", d), value =
+                 cbind(as.matrix(probs[ , , get(paste0("index", d))]), covariates), pos = 1)
+      }else {
+        assign(paste0("X", d), value =
+                 as.matrix(probs[ , , get(paste0("index", d))]), pos = 1)
+      }
+    } # end of for loop
+    X <- gemma2::stagger_mats(lapply(FUN = get, X = as.list(paste0("X", 1:d_size))))
+    Bhat <- calc_Bhat(X = X,
+                      Y = as.vector(pheno),
+                      Sigma_inv = Sigma_inv)
+    mytab$loglik[rownum] <- calc_loglik_bvlmm(X = X, Y = as.vector(as.matrix(pheno)), Bhat = Bhat, Sigma = Sigma)
+  }
+  return(mytab)
 }
