@@ -4,13 +4,15 @@
 #' @param pheno a matrix of phenotypes (before eigenrotation)
 #' @param kinship a kinship matrix for one chromosome
 #' @param covariates a matrix, n subjects by n.cov covariates, where each column is one covariate
-#' @param start_snp1 index of where to start the first coordinate of the ordered pair
+#' @param start_snp1 index of where to start the scan within probs
 #' @param n_snp the number of (consecutive) snps to include in the scan
 #' @param max_iter maximum number of iterations for EM algorithm
 #' @param max_prec stepwise precision for EM algorithm. EM stops once incremental difference in log likelihood is less than max_prec
 #' @export
+#' @importFrom rlang .data
+#' @return a tibble with d + 1 columns. First d columns indicate the genetic data used in the design matrix; last is log likelihood
 
-scan_pvl <- function(probs, pheno, kinship, covariates = NULL, start_snp1,
+scan_pvl <- function(probs, pheno, kinship, covariates = NULL, start_snp1 = 1,
                      n_snp, max_iter = 100000,
                      max_prec = 1 / 1e06){
   stopifnot(identical(nrow(probs), nrow(pheno)), identical(rownames(probs), rownames(pheno)),
@@ -57,29 +59,34 @@ scan_pvl <- function(probs, pheno, kinship, covariates = NULL, start_snp1,
   Sigma <- calc_Sigma(Vg, Ve, kinship)
   # define Sigma_inv
   Sigma_inv <- solve(Sigma)
+  new.env() -> myenv
   for (d in 1:d_size){
-    assign(paste0("Var", d), value = 1:n_snp, pos = 1)
+    assign(paste0("Var", d), value = 1:n_snp, envir = myenv)
   }
-  mytab <- expand.grid(lapply(FUN = get, X = as.list(paste0("Var", 1:d_size))))
+  mytab <- expand.grid(lapply(FUN = get, X = as.list(paste0("Var", 1:d_size)), envir = myenv))
   mytab$loglik <- NA
   for (rownum in 1:nrow(mytab)){
-  #  pb$tick()
+    pb$tick()
     indices <- unlist(mytab[rownum, ])
     for (d in 1:d_size){
-      assign(paste0("index", d), value = indices[d] + start_snp1 - 1, pos = 1)
+      assign(paste0("index", d), value = indices[d] + start_snp1 - 1, envir = myenv)
       if (!is.null(covariates)){
         assign(paste0("X", d), value =
-                 cbind(as.matrix(probs[ , , get(paste0("index", d))]), covariates), pos = 1)
+                 cbind(as.matrix(probs[ , , get(paste0("index", d),
+                                                envir = myenv)]), covariates))
       }else {
         assign(paste0("X", d), value =
-                 as.matrix(probs[ , , get(paste0("index", d))]), pos = 1)
+                 as.matrix(probs[ , , get(paste0("index", d), envir = myenv)]))
       }
     } # end of for loop
-    X <- gemma2::stagger_mats(lapply(FUN = get, X = as.list(paste0("X", 1:d_size))))
+    X <- gemma2::stagger_mats(lapply(FUN = get, X = as.list(paste0("X", 1:d_size)), envir = myenv))
     Bhat <- calc_Bhat(X = X,
                       Y = as.vector(pheno),
                       Sigma_inv = Sigma_inv)
     mytab$loglik[rownum] <- calc_loglik_bvlmm(X = X, Y = as.vector(as.matrix(pheno)), Bhat = Bhat, Sigma = Sigma)
   }
-  return(mytab)
+  marker_id <- dimnames(probs)[[3]][start_snp1:(start_snp1 + n_snp - 1)]
+  tibble::as_tibble(apply(FUN = function(x)marker_id[x], X = mytab[, - ncol(mytab)], MARGIN = 2)) -> mytab2
+  mytab2$loglik <- mytab$loglik
+  return(mytab2)
 }

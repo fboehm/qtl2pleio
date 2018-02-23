@@ -4,7 +4,7 @@
 \alias{scan_pvl}
 \title{Perform model fitting for all ordered pairs of markers in a genomic region of interest}
 \usage{
-scan_pvl(probs, pheno, kinship, covariates = NULL, start_snp1, n_snp,
+scan_pvl(probs, pheno, kinship, covariates = NULL, start_snp1 = 1, n_snp,
   max_iter = 1e+05, max_prec = 1/1e+06)
 }
 \arguments{
@@ -16,13 +16,16 @@ scan_pvl(probs, pheno, kinship, covariates = NULL, start_snp1, n_snp,
 
 \item{covariates}{a matrix, n subjects by n.cov covariates, where each column is one covariate}
 
-\item{start_snp1}{index of where to start the first coordinate of the ordered pair}
+\item{start_snp1}{index of where to start the scan within probs}
 
 \item{n_snp}{the number of (consecutive) snps to include in the scan}
 
 \item{max_iter}{maximum number of iterations for EM algorithm}
 
 \item{max_prec}{stepwise precision for EM algorithm. EM stops once incremental difference in log likelihood is less than max_prec}
+}
+\value{
+a tibble with d + 1 columns. First d columns indicate the genetic data used in the design matrix; last is log likelihood
 }
 \description{
 Perform model fitting for all ordered pairs of markers in a genomic region of interest
