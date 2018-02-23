@@ -2,17 +2,17 @@
 % Please edit documentation in R/tidy_scan_pvl.R
 \name{tidy_scan_pvl}
 \alias{tidy_scan_pvl}
-\title{Tidy the matrix of log likelihood values for further analysis & plotting}
+\title{Tidy the data frame outputted by scan_pvl for further analysis & plotting}
 \usage{
-tidy_scan_pvl(loglik_mat, pmap)
+tidy_scan_pvl(mytib, pmap)
 }
 \arguments{
-\item{loglik_mat}{a (square) matrix of log likelihood values}
+\item{mytib}{outputted dataframe from scan_pvl}
 
 \item{pmap}{physical map (in Mb) for exactly one chromosome, pmap$`5`, for example}
 }
 \description{
-Tidy the matrix of log likelihood values for further analysis & plotting
+Tidy the data frame outputted by scan_pvl for further analysis & plotting
 }
 \seealso{
 Other profile log-likelihood tibble functions: \code{\link{add_intercepts}},

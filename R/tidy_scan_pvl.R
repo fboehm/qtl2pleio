@@ -72,16 +72,17 @@ assemble_profile_tib <- function(tib, trace = "profile1"){
   return(tib5)
 }
 
-#' Tidy the matrix of log likelihood values for further analysis & plotting
+#' Tidy the data frame outputted by scan_pvl for further analysis & plotting
 #'
 #' @family profile log-likelihood tibble functions
-#' @param loglik_mat a (square) matrix of log likelihood values
+#' @param mytib outputted dataframe from scan_pvl
 #' @param pmap physical map (in Mb) for exactly one chromosome, pmap$`5`, for example
 #' @export
 #' @importFrom rlang .data
 
-tidy_scan_pvl <- function(loglik_mat, pmap){
-  mytib <- transform_loglik_mat(loglik_mat)
+tidy_scan_pvl <- function(mytib, pmap){
+  mytib <- tibble::as_tibble(mytib)
+  mytib <- dplyr::rename(mytib, marker1 = .data$Var1, marker2 = .data$Var2, ll = .data$loglik)
   add_pmap(mytib, pmap) -> dat
   pl <- dplyr::filter(dat, .data$marker1 == .data$marker2)
   #pleio_ll <- dplyr::rename(pleio_ll, marker_position = .data$marker1_position)
