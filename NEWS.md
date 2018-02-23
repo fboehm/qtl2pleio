@@ -4,5 +4,6 @@
 
 # qtl2pleio 0.1.1
 
-* restructured `scan_pvl` to allow for more than two phenotypes.
+* restructured `scan_pvl` to allow for more than two phenotypes. Now output is a dataframe.
+
 
