@@ -180,7 +180,7 @@ out <- scan_pvl(probs = pp, pheno = Y, kinship = kinship$`2`, start_snp1 = 38, n
 
 ```{r}
 library(dplyr)
-out$loglik %>% 
+out %>% 
   tidy_scan_pvl(pm2) %>%
   add_intercepts(intercepts_univariate = c(69.6, 69.6)) %>%
   plot_pvl(phenames = c("tr1", "tr2"))
@@ -189,7 +189,7 @@ out$loglik %>%
 
 
 ```{r}
-calc_lrt(out)
+#calc_lrt(out)
 ```
 
 
