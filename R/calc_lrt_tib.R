@@ -15,5 +15,5 @@ calc_lrt_tib <- function(tib){
   # define an indicator vector for which rows to keep when making pleio_tib
   pleio_ind <- apply(FUN = function(x) {names(x) <- NULL; identical(x, rep(x[1], nc - 1))}, X = smat, MARGIN = 1)
   pleio_tib <- tib[pleio_ind, ]
-  return(max(tib$ll) - max(pleio_tib$ll))
+  return(max(tib[ , nc]) - max(pleio_tib[ , nc]))
 }
