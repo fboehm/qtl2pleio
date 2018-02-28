@@ -10,7 +10,7 @@
 #' @param max_prec stepwise precision for EM algorithm. EM stops once incremental difference in log likelihood is less than max_prec
 #' @export
 #' @importFrom rlang .data
-#' @return a tibble with d + 1 columns. First d columns indicate the genetic data used in the design matrix; last is log likelihood
+#' @return a tibble with d + 1 columns. First d columns indicate the genetic data (by listing the marker ids) used in the design matrix; last is log likelihood
 
 scan_pvl <- function(probs, pheno, kinship, covariates = NULL, start_snp1 = 1,
                      n_snp, max_iter = 100000,

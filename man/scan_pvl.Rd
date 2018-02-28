@@ -25,7 +25,7 @@ scan_pvl(probs, pheno, kinship, covariates = NULL, start_snp1 = 1, n_snp,
 \item{max_prec}{stepwise precision for EM algorithm. EM stops once incremental difference in log likelihood is less than max_prec}
 }
 \value{
-a tibble with d + 1 columns. First d columns indicate the genetic data used in the design matrix; last is log likelihood
+a tibble with d + 1 columns. First d columns indicate the genetic data (by listing the marker ids) used in the design matrix; last is log likelihood
 }
 \description{
 Perform model fitting for all ordered pairs of markers in a genomic region of interest
