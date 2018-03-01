@@ -15,7 +15,7 @@ boot_n <- function(pp, pleio_peak_index, phe, covariates = NULL, kinship, nboot_
   X1 <- pp[ , , pleio_peak_index]
   if (!is.null(covariates)){cbind(X1, covariates) -> Xpre} else {X1 -> Xpre}
   ## remove subjects with missing values of phenotype
-  is.na(phe[ , 1]) | is.na(phe[ , 2]) -> missing_indic
+  apply(FUN = function(x)identical(x, rep(TRUE, length(x))), X = !is.na(phe), MARGIN = 1) -> missing_indic
   phe_nona <- phe[!missing_indic, ]
   Xpre_nona <- Xpre[!missing_indic, ]
   k_nona <- k[!missing_indic, !missing_indic]
