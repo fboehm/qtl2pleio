@@ -21,7 +21,6 @@ boot_n <- function(pp, pleio_peak_index, phe, covariates = NULL, kinship, nboot_
   k_nona <- k[!missing_indic, !missing_indic]
   ##
   gemma2::stagger_mats(Xpre_nona, Xpre_nona) -> X
-  set.seed(proc_num)
   calc_covs(pheno = phe_nona, kinship = k_nona) -> cc_out
   (cc_out$Vg -> Vg)
   (cc_out$Ve -> Ve)
