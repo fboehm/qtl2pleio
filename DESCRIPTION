@@ -1,7 +1,7 @@
 Package: qtl2pleio
 Type: Package
 Title: Hypothesis test of close linkage vs pleiotropy in multiparental populations
-Version: 0.1.1
+Version: 0.1.2
 Author: Frederick Boehm
 Maintainer: Frederick Boehm <frederick.boehm@gmail.com>
 Description: The package contains code that implements an adaptation of Jiang & Zeng's (1995) likelihood ratio test for testing the null hypothesis of pleiotropy against the alternative hypothesis, close linkage. The test differs from that in Jiang & Zeng (1995) in that our test accommodates multiparental populations.
