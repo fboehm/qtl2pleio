@@ -17,6 +17,6 @@ find_pleio_peak_tib <- function(tib, start_snp = 650){
   # define an indicator vector for which rows to keep when making pleio_tib
   pleio_ind <- apply(FUN = function(x) {names(x) <- NULL; identical(x, rep(x[1], nc - 1))}, X = smat, MARGIN = 1)
   pleio_tib <- tib[pleio_ind, ]
-  pleio_tib[, nc] -> ll
+  unlist(pleio_tib[, nc]) -> ll
   return(which.max(ll) + start_snp - 1)
 }
