@@ -6,10 +6,12 @@
 #' @param covariates n by n.cov matrix of covariates
 #' @param kinship a kinship MATRIX, not a list
 #' @param nboot_per_job number of bootstrap samples to call per invocation of function
+#' @param start_snp1 positive integer indicating index within pp for start of scan
+#' @param n_snp number of markers to use in scan
 #' @export
 #' @return numerical vector of lrt statistics from one or more bootstrap samples
 #'
-boot_n <- function(pp, pleio_peak_index, phe, covariates = NULL, kinship, nboot_per_job = 1){
+boot_n <- function(pp, pleio_peak_index, phe, covariates = NULL, kinship, nboot_per_job = 1, start_snp1, n_snp){
   X1 <- pp[ , , pleio_peak_index]
   if (!is.null(covariates)){cbind(X1, covariates) -> Xpre} else {X1 -> Xpre}
   ## remove subjects with missing values of phenotype
@@ -35,7 +37,13 @@ boot_n <- function(pp, pleio_peak_index, phe, covariates = NULL, kinship, nboot_
     matrix(foo, ncol = 2, byrow = FALSE) -> Ysim
     rownames(Ysim) <- rownames(phe_nona)
     colnames(Ysim) <- c("t1", "t2")
-    scan_pvl(probs = pp[!missing_indic, , ], pheno = Ysim, covariates = sex[!missing_indic, drop = FALSE], kinship = k_nona, start_snp1 = s1, n_snp = nsnp) -> loglik
+    if (!is.null(covariates)){
+      scan_pvl(probs = pp[!missing_indic, , ], pheno = Ysim, covariates = covariates[!missing_indic, , drop = FALSE],
+             kinship = k_nona, start_snp1 = s1, n_snp = nsnp) -> loglik
+    } else {
+      scan_pvl(probs = pp[!missing_indic, , ], pheno = Ysim,
+               kinship = k_nona, start_snp1 = s1, n_snp = nsnp) -> loglik
+    }
     # in above call, s1 & nsnp come from command line args
     calc_lrt_tib(loglik) -> lrt[i]
   }

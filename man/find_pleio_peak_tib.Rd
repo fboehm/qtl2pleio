@@ -17,3 +17,10 @@ positive integer indicating marker index for maximum value of log lik under plei
 \description{
 Find the marker index corresponding to the peak of the pleiotropy trace in a tibble where the last column contains log likelihood values and the first d columns contain marker ids
 }
+\examples{
+marker1 <- rep(paste0("SNP", 1:3), times = 3)
+marker2 <- rep(paste0("SNP", 1:3), each = 3)
+loglik <- runif(9, -5, 0)
+tibble::tibble(marker1, marker2, loglik) -> tib
+find_pleio_peak_tib(tib)
+}
