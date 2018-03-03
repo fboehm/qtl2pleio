@@ -5,7 +5,7 @@
 \title{Perform model fitting for all ordered pairs of markers in a genomic region of interest}
 \usage{
 scan_pvl(probs, pheno, kinship, covariates = NULL, start_snp1 = 1, n_snp,
-  max_iter = 1e+05, max_prec = 1/1e+06)
+  max_iter = 1e+06, max_prec = 1/1e+08)
 }
 \arguments{
 \item{probs}{an array of genotype probabilities for a single chromosome (before eigenrotation)}

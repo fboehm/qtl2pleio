@@ -28,8 +28,8 @@
 #' @return a tibble with d + 1 columns. First d columns indicate the genetic data (by listing the marker ids) used in the design matrix; last is log likelihood
 
 scan_pvl <- function(probs, pheno, kinship, covariates = NULL, start_snp1 = 1,
-                     n_snp, max_iter = 100000,
-                     max_prec = 1 / 1e06){
+                     n_snp, max_iter = 1000000,
+                     max_prec = 1 / 1e08){
   stopifnot(identical(nrow(probs), nrow(pheno)), identical(rownames(probs), rownames(pheno)),
             identical(rownames(kinship), rownames(pheno)),
             n_snp > 0,
@@ -66,7 +66,8 @@ scan_pvl <- function(probs, pheno, kinship, covariates = NULL, start_snp1 = 1,
 
   # perform scan over probs[ , , start_snp: stop_snp]
   # first, run gemma2::MphEM() to get Vg and Ve
-  calc_covs(pheno, kinship, max_iter = max_iter, max_prec = max_prec) -> cc_out
+  calc_covs(pheno, kinship, max_iter = max_iter, max_prec = max_prec,
+            covariates = covariates) -> cc_out
   Vg <- cc_out$Vg
   Ve <- cc_out$Ve
   # define Sigma
@@ -78,7 +79,8 @@ scan_pvl <- function(probs, pheno, kinship, covariates = NULL, start_snp1 = 1,
   for (d in 1:d_size){
     assign(paste0("Var", d), value = 1:n_snp, envir = myenv)
   }
-  mytab <- expand.grid(lapply(FUN = get, X = as.list(paste0("Var", 1:d_size)), envir = myenv))
+  mytab <- expand.grid(lapply(FUN = get,
+                              X = as.list(paste0("Var", 1:d_size)), envir = myenv))
   mytab$loglik <- NA
   for (rownum in 1:nrow(mytab)){
     pb$tick()
@@ -101,7 +103,8 @@ scan_pvl <- function(probs, pheno, kinship, covariates = NULL, start_snp1 = 1,
     mytab$loglik[rownum] <- calc_loglik_bvlmm(X = X, Y = as.vector(as.matrix(pheno)), Bhat = Bhat, Sigma = Sigma)
   }
   marker_id <- dimnames(probs)[[3]][start_snp1:(start_snp1 + n_snp - 1)]
-  tibble::as_tibble(apply(FUN = function(x)marker_id[x], X = mytab[, - ncol(mytab)], MARGIN = 2)) -> mytab2
+  tibble::as_tibble(apply(FUN = function(x)marker_id[x],
+                          X = mytab[, - ncol(mytab)], MARGIN = 2)) -> mytab2
   mytab2$loglik <- mytab$loglik
   return(mytab2)
 }
