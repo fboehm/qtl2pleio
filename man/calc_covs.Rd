@@ -21,7 +21,7 @@ calc_covs(pheno, kinship, X1pre = rep(1, nrow(kinship)), max_iter = 1e+06,
 \item{covariates}{a n by n.cov matrix of numeric covariates}
 }
 \value{
-a list with 2 named components, Vg and Ve.
+a list with 2 named components, Vg and Ve. Each is a d by d covariance matrix.
 }
 \description{
 Calculate Vg and Ve from d-variate phenotype and kinship

@@ -18,8 +18,22 @@ test_that("calc_covs returns different answers when covariates are used vs. not 
 })
 
 
-test_that("calc_covs accommodates d-variate phenotype for d more than 2", {
+test_that("calc_covs accommodates d-variate phenotype for d more than 2 & Vg = Ve when kinship is identity", {
   expect_equal(calc_covs(phe3, diag(100))$Vg, calc_covs(phe3, diag(100))$Ve)
   expect_equal(calc_covs(phe5, diag(100))$Vg, calc_covs(phe5, diag(100))$Ve)
   expect_equal(calc_covs(phe5, diag(100), covariates = sex)$Vg, calc_covs(phe5, diag(100), covariates = sex)$Ve)
+})
+
+test_that("calc_covs outputs are full rank matrices", {
+  expect_equal(qr(calc_covs(phe3, diag(100))$Vg)$rank, 3)
+  expect_equal(qr(calc_covs(phe3, diag(100))$Ve)$rank, 3)
+  expect_equal(qr(calc_covs(phe5, diag(100))$Ve)$rank, 5)
+  expect_equal(qr(calc_covs(phe5, diag(100))$Vg)$rank, 5)
+})
+
+test_that("calc_covs outputs are symmetric", {
+  expect_true(isSymmetric(calc_covs(phe3, diag(100))$Vg))
+  expect_true(isSymmetric(calc_covs(phe3, diag(100))$Ve))
+  expect_true(isSymmetric(calc_covs(phe5, diag(100))$Vg))
+  expect_true(isSymmetric(calc_covs(phe5, diag(100))$Ve))
 })

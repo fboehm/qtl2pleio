@@ -6,7 +6,7 @@
 #' @param max_iter maximum number of EM iterations
 #' @param max_prec maximum precision for stepwise increments in EM algorithm
 #' @param covariates a n by n.cov matrix of numeric covariates
-#' @return a list with 2 named components, Vg and Ve.
+#' @return a list with 2 named components, Vg and Ve. Each is a d by d covariance matrix.
 #' @examples
 #' calc_covs(pheno = matrix(data = rnorm(100), nrow = 50, ncol = 2), kinship = diag(50))
 #' @export
