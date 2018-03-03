@@ -19,5 +19,4 @@ test_that("calc_lrt returns a number (vector of length 1)", {
 test_that("calc_lrt gives an error when input contains a NA value", {
   expect_error(calc_lrt(diag(NA, 2)))
   expect_error(calc_lrt(diag(c(NA, 2))))
-
 })
