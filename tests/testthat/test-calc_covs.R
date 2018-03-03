@@ -9,6 +9,7 @@ calc_covs(phe, kinship = diag(100)) -> cc1
 calc_covs(phe, kinship = diag(100), covariates = sex) -> cc2
 
 phe3 <- matrix(runif(300), ncol = 3)
+phe5 <- matrix(runif(500), ncol = 3)
 
 
 test_that("calc_covs returns different answers when covariates are used vs. not used", {
@@ -19,4 +20,5 @@ test_that("calc_covs returns different answers when covariates are used vs. not 
 
 test_that("calc_covs accommodates d-variate phenotype for d more than 2", {
   expect_equal(calc_covs(phe3, diag(100))$Vg, calc_covs(phe3, diag(100))$Ve)
+  expect_equal(calc_covs(phe5, diag(100))$Vg, calc_covs(phe5, diag(100))$Ve)
 })
