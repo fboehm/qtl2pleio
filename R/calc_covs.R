@@ -1,4 +1,4 @@
-#' Calculate Vg and Ve from Y and kinship
+#' Calculate Vg and Ve from d-variate phenotype and kinship
 #'
 #' @param pheno n by d matrix of phenotypes
 #' @param kinship a kinship matrix, n by n
@@ -24,7 +24,7 @@ calc_covs <- function(pheno, kinship, X1pre = rep(1, nrow(kinship)),
   }
   Y <- t(pheno) %*% U
   ncol(pheno) -> d
-  # run MphEM with only a design matrix that contains only the intercept term (and not any genotype info)
+  # run MphEM with only a design matrix that contains only the intercept term & covariates, if any(and not any genotype info)
   foo <- gemma2::MphEM(max_iter = max_iter, max_prec = max_prec, X = X1, Y = Y, eval = eval, V_g = diag(d), V_e = diag(d))
   Vg <- foo[[length(foo)]][[2]]
   Ve <- foo[[length(foo)]][[3]]
