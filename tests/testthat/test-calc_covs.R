@@ -29,6 +29,10 @@ test_that("calc_covs outputs are full rank matrices", {
   expect_equal(qr(calc_covs(phe3, diag(100))$Ve)$rank, 3)
   expect_equal(qr(calc_covs(phe5, diag(100))$Ve)$rank, 5)
   expect_equal(qr(calc_covs(phe5, diag(100))$Vg)$rank, 5)
+  expect_equal(qr(calc_covs(phe3, diag(100), covariates = sex)$Vg)$rank, 3)
+  expect_equal(qr(calc_covs(phe3, diag(100), covariates = sex)$Ve)$rank, 3)
+  expect_equal(qr(calc_covs(phe5, diag(100), covariates = sex)$Ve)$rank, 5)
+  expect_equal(qr(calc_covs(phe5, diag(100), covariates = sex)$Vg)$rank, 5)
 })
 
 test_that("calc_covs outputs are symmetric", {
