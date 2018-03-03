@@ -5,16 +5,23 @@
 #' @param X1pre n by c design matrix. c = 1 to ignore genotypes
 #' @param max_iter maximum number of EM iterations
 #' @param max_prec maximum precision for stepwise increments in EM algorithm
+#' @param covariates a n by n.cov matrix of numeric covariates
 #' @return a list with 2 named components, Vg and Ve.
 #' @examples
 #' calc_covs(pheno = matrix(data = rnorm(100), nrow = 50, ncol = 2), kinship = diag(50))
 #' @export
-calc_covs <- function(pheno, kinship, X1pre = rep(1, nrow(kinship)), max_iter = 100000, max_prec = 1 / 1e06){
+calc_covs <- function(pheno, kinship, X1pre = rep(1, nrow(kinship)),
+                      max_iter = 1000000, max_prec = 1 / 1e08,
+                      covariates = NULL){
   gemma2::eigen2(kinship) -> e_out
   e_out$vectors -> U
   e_out$values -> eval
   n_mouse <- nrow(kinship)
-  X1 <- t(X1pre) %*% U
+  if (is.null(covariates)){
+    X1 <- t(X1pre) %*% U
+  } else {
+    X1 <- t(cbind(X1pre, covariates)) %*% U
+  }
   Y <- t(pheno) %*% U
   ncol(pheno) -> d
   # run MphEM with only a design matrix that contains only the intercept term (and not any genotype info)
