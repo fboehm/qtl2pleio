@@ -17,6 +17,9 @@ test_that("calc_covs returns different answers when covariates are used vs. not 
   expect_false(identical(cc1$Ve, cc2$Ve))
 })
 
+test_that("calc_covs, when kinship is identity, has output that sums to give same result as cov()", {
+  expect_equal(round(cc1$Vg + cc1$Ve, 5), round(cov(phe), 5))
+})
 
 test_that("calc_covs accommodates d-variate phenotype for d more than 2 & Vg = Ve when kinship is identity", {
   expect_equal(calc_covs(phe3, diag(100))$Vg, calc_covs(phe3, diag(100))$Ve)
