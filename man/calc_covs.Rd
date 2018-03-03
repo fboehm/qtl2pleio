@@ -2,7 +2,7 @@
 % Please edit documentation in R/calc_covs.R
 \name{calc_covs}
 \alias{calc_covs}
-\title{Calculate Vg and Ve from Y and kinship}
+\title{Calculate Vg and Ve from d-variate phenotype and kinship}
 \usage{
 calc_covs(pheno, kinship, X1pre = rep(1, nrow(kinship)), max_iter = 1e+06,
   max_prec = 1/1e+08, covariates = NULL)
@@ -24,7 +24,7 @@ calc_covs(pheno, kinship, X1pre = rep(1, nrow(kinship)), max_iter = 1e+06,
 a list with 2 named components, Vg and Ve.
 }
 \description{
-Calculate Vg and Ve from Y and kinship
+Calculate Vg and Ve from d-variate phenotype and kinship
 }
 \examples{
 calc_covs(pheno = matrix(data = rnorm(100), nrow = 50, ncol = 2), kinship = diag(50))
