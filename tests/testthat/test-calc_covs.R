@@ -36,4 +36,8 @@ test_that("calc_covs outputs are symmetric", {
   expect_true(isSymmetric(calc_covs(phe3, diag(100))$Ve))
   expect_true(isSymmetric(calc_covs(phe5, diag(100))$Vg))
   expect_true(isSymmetric(calc_covs(phe5, diag(100))$Ve))
+  expect_true(isSymmetric(calc_covs(phe3, diag(100), covariates = sex)$Vg))
+  expect_true(isSymmetric(calc_covs(phe3, diag(100), covariates = sex)$Ve))
+  expect_true(isSymmetric(calc_covs(phe5, diag(100), covariates = sex)$Vg))
+  expect_true(isSymmetric(calc_covs(phe5, diag(100), covariates = sex)$Ve))
 })
