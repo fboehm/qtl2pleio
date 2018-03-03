@@ -10,4 +10,5 @@
 
 * added tests & examples for `scan_pvl`  
 * changed output of `scan_pvl` to a tibble  
-* added `boot_n` function for use in bootstrap analyses
+* added `boot_n` function for use in bootstrap analyses  
+* started using covariates in calls to `calc_covs`. Note that we still don't use genetic data when calling `calc_covs`.  
