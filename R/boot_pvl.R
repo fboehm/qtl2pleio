@@ -12,6 +12,16 @@
 #' @return numerical vector of lrt statistics from one or more bootstrap samples
 #'
 boot_pvl <- function(pp, pleio_peak_index, phe, covariates = NULL, kinship, nboot_per_job = 1, start_snp1, n_snp){
+  stopifnot(identical(nrow(kinship), nrow(pp)),
+            identical(nrow(pp), nrow(phe)),
+            check_dimnames(kinship, pp),
+            check_dimnames(pp, phe)
+            )
+  if (!is.null(covariates)){
+    stopifnot(check_dimnames(kinship, covariates),
+              identical(nrow(pp), nrow(covariates))
+              )
+  }
   X1 <- pp[ , , pleio_peak_index]
   if (!is.null(covariates)){cbind(X1, covariates) -> Xpre} else {X1 -> Xpre}
   ## remove subjects with missing values of phenotype
