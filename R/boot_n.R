@@ -11,7 +11,7 @@
 #' @export
 #' @return numerical vector of lrt statistics from one or more bootstrap samples
 #'
-boot_n <- function(pp, pleio_peak_index, phe, covariates = NULL, kinship, nboot_per_job = 1, start_snp1, n_snp){
+boot_pvl <- function(pp, pleio_peak_index, phe, covariates = NULL, kinship, nboot_per_job = 1, start_snp1, n_snp){
   X1 <- pp[ , , pleio_peak_index]
   if (!is.null(covariates)){cbind(X1, covariates) -> Xpre} else {X1 -> Xpre}
   ## remove subjects with missing values of phenotype
@@ -21,7 +21,7 @@ boot_n <- function(pp, pleio_peak_index, phe, covariates = NULL, kinship, nboot_
   k_nona <- k[!missing_indic, !missing_indic]
   ##
   gemma2::stagger_mats(Xpre_nona, Xpre_nona) -> X
-  calc_covs(pheno = phe_nona, kinship = k_nona) -> cc_out
+  calc_covs(pheno = phe_nona, kinship = k_nona, covariates = covariates) -> cc_out
   (cc_out$Vg -> Vg)
   (cc_out$Ve -> Ve)
   # calculate Sigma
