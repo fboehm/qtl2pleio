@@ -100,7 +100,9 @@ scan_pvl <- function(probs, pheno, kinship, covariates = NULL, start_snp1 = 1,
     Bhat <- calc_Bhat(X = X,
                       Y = as.vector(pheno),
                       Sigma_inv = Sigma_inv)
-    mytab$loglik[rownum] <- calc_loglik_bvlmm(X = X, Y = as.vector(as.matrix(pheno)), Bhat = Bhat, Sigma = Sigma)
+    mytab$loglik[rownum] <- mvtnorm::dmvnorm(x = as.vector(as.matrix(pheno)),
+                                             mean = X %*% Bhat, sigma = Sigma,
+                                             log = TRUE)
   }
   marker_id <- dimnames(probs)[[3]][start_snp1:(start_snp1 + n_snp - 1)]
   tibble::as_tibble(apply(FUN = function(x)marker_id[x],
