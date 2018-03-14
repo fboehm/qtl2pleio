@@ -6,6 +6,17 @@
 
 using namespace Rcpp;
 
+// rcppeigen_invert_matrix
+Eigen::MatrixXd rcppeigen_invert_matrix(const Eigen::Map<Eigen::MatrixXd>& A);
+RcppExport SEXP _qtl2pleio_rcppeigen_invert_matrix(SEXP ASEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::Map<Eigen::MatrixXd>& >::type A(ASEXP);
+    rcpp_result_gen = Rcpp::wrap(rcppeigen_invert_matrix(A));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rcppeigen_get_diag
 Eigen::MatrixXd rcppeigen_get_diag(const Eigen::Map<Eigen::MatrixXd>& A);
 RcppExport SEXP _qtl2pleio_rcppeigen_get_diag(SEXP ASEXP) {
@@ -16,4 +27,63 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(rcppeigen_get_diag(A));
     return rcpp_result_gen;
 END_RCPP
+}
+// rcppeigen_get_det
+double rcppeigen_get_det(const Eigen::Map<Eigen::MatrixXd>& A);
+RcppExport SEXP _qtl2pleio_rcppeigen_get_det(SEXP ASEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::Map<Eigen::MatrixXd>& >::type A(ASEXP);
+    rcpp_result_gen = Rcpp::wrap(rcppeigen_get_det(A));
+    return rcpp_result_gen;
+END_RCPP
+}
+// rcppeigen_get_chol
+Eigen::MatrixXd rcppeigen_get_chol(const Eigen::Map<Eigen::MatrixXd>& A);
+RcppExport SEXP _qtl2pleio_rcppeigen_get_chol(SEXP ASEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::Map<Eigen::MatrixXd>& >::type A(ASEXP);
+    rcpp_result_gen = Rcpp::wrap(rcppeigen_get_chol(A));
+    return rcpp_result_gen;
+END_RCPP
+}
+// rcppeigen_get_chol_stable
+Eigen::MatrixXd rcppeigen_get_chol_stable(const Eigen::Map<Eigen::MatrixXd>& A);
+RcppExport SEXP _qtl2pleio_rcppeigen_get_chol_stable(SEXP ASEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::Map<Eigen::MatrixXd>& >::type A(ASEXP);
+    rcpp_result_gen = Rcpp::wrap(rcppeigen_get_chol_stable(A));
+    return rcpp_result_gen;
+END_RCPP
+}
+// rcppeigen_get_chol_diag
+Eigen::VectorXd rcppeigen_get_chol_diag(const Eigen::Map<Eigen::MatrixXd>& A);
+RcppExport SEXP _qtl2pleio_rcppeigen_get_chol_diag(SEXP ASEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::Map<Eigen::MatrixXd>& >::type A(ASEXP);
+    rcpp_result_gen = Rcpp::wrap(rcppeigen_get_chol_diag(A));
+    return rcpp_result_gen;
+END_RCPP
+}
+
+static const R_CallMethodDef CallEntries[] = {
+    {"_qtl2pleio_rcppeigen_invert_matrix", (DL_FUNC) &_qtl2pleio_rcppeigen_invert_matrix, 1},
+    {"_qtl2pleio_rcppeigen_get_diag", (DL_FUNC) &_qtl2pleio_rcppeigen_get_diag, 1},
+    {"_qtl2pleio_rcppeigen_get_det", (DL_FUNC) &_qtl2pleio_rcppeigen_get_det, 1},
+    {"_qtl2pleio_rcppeigen_get_chol", (DL_FUNC) &_qtl2pleio_rcppeigen_get_chol, 1},
+    {"_qtl2pleio_rcppeigen_get_chol_stable", (DL_FUNC) &_qtl2pleio_rcppeigen_get_chol_stable, 1},
+    {"_qtl2pleio_rcppeigen_get_chol_diag", (DL_FUNC) &_qtl2pleio_rcppeigen_get_chol_diag, 1},
+    {NULL, NULL, 0}
+};
+
+RcppExport void R_init_qtl2pleio(DllInfo *dll) {
+    R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
+    R_useDynamicSymbols(dll, FALSE);
 }

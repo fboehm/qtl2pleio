@@ -16,7 +16,7 @@ boot_pvl(pp, pleio_peak_index, phe, covariates = NULL, kinship,
 
 \item{covariates}{n by n.cov matrix of covariates}
 
-\item{kinship}{a kinship MATRIX, not a list}
+\item{kinship}{a kinship matrix, not a list}
 
 \item{nboot_per_job}{number of bootstrap samples to call per invocation of function}
 
