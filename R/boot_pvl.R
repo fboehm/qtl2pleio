@@ -4,7 +4,7 @@
 #' @param pleio_peak_index positive integer index indicating design matrix for simulation
 #' @param phe n by d matrix of phenotypes
 #' @param covariates n by n.cov matrix of covariates
-#' @param kinship a kinship MATRIX, not a list
+#' @param kinship a kinship matrix, not a list
 #' @param nboot_per_job number of bootstrap samples to call per invocation of function
 #' @param start_snp1 positive integer indicating index within pp for start of scan
 #' @param n_snp number of markers to use in scan

@@ -20,7 +20,10 @@ Imports: gemma2,
     rlang,
     stringr,
     readr,
-    progress
+    progress,
+    Rcpp
+LinkingTo: Rcpp, RcppEigen
+NeedsCompilation: yes
 RoxygenNote: 6.0.1
 Suggests: testthat,
     knitr,
