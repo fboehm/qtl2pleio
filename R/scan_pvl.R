@@ -56,8 +56,7 @@ scan_pvl <- function(probs, pheno, kinship, covariates = NULL, start_snp1 = 1,
     missing2 <- missing2 & miss_cov2
   }
   if (sum(!missing2) > 0){message(paste0(sum(!missing2), " subjects dropped due to missing values"))}
-  pheno2 <- pheno[missing2, , drop = FALSE]
-  pheno2 -> pheno
+  pheno <- pheno[missing2, , drop = FALSE]
   kinship <- kinship[missing2, missing2, drop = FALSE]
   probs <- probs[missing2, , , drop = FALSE]
   if (!is.null(covariates)){
@@ -101,16 +100,14 @@ scan_pvl <- function(probs, pheno, kinship, covariates = NULL, start_snp1 = 1,
                       Y = as.vector(pheno),
                       Sigma_inv = Sigma_inv)
     as.vector(X %*% Bhat) -> mymu
-    mytab$loglik[rownum] <- rcpp_log_dmvnorm2(inv_S = Sigma_inv, mu = mymu,
+    mytab$loglik[rownum] <- as.numeric(rcpp_log_dmvnorm2(inv_S = Sigma_inv, mu = mymu,
                                              x = as.vector(as.matrix(pheno)),
                                              S = Sigma
-                                             )
-
-
+                                             ))
   }
   marker_id <- dimnames(probs)[[3]][start_snp1:(start_snp1 + n_snp - 1)]
   tibble::as_tibble(apply(FUN = function(x)marker_id[x],
-                          X = mytab[, - ncol(mytab)], MARGIN = 2)) -> mytab2
+                          X = mytab[ , - ncol(mytab)], MARGIN = 2)) -> mytab2
   mytab2$loglik <- mytab$loglik
   return(mytab2)
 }
