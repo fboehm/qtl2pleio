@@ -36,13 +36,13 @@ scan_pvl <- function(probs, pheno, kinship, covariates = NULL, start_snp1 = 1,
             start_snp1 > 0,
             start_snp1 + n_snp - 1 <= dim(probs)[3]
             )
+  d_size <- ncol(pheno)
   # start progress bar
   pb <- progress::progress_bar$new(
     format = " scanning [:bar] :percent eta: :eta",
-    total = n_snp * n_snp, clear = FALSE, width= 80)
+    total = n_snp ^ d_size, clear = FALSE, width= 80)
   pb$tick(0)
   ## define number of dimensions, d_size
-  d_size <- ncol(pheno)
   # remove mice with missing values of phenotype or missing value(s) in covariates
   missing_indic <- matrix(!apply(FUN = is.finite, X = pheno, MARGIN = 1),
                           nrow = nrow(pheno), ncol = ncol(pheno),
