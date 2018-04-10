@@ -6,12 +6,12 @@
 #' @param covariates n by n.cov matrix of covariates
 #' @param kinship a kinship matrix, not a list
 #' @param nboot_per_job number of bootstrap samples to call per invocation of function
-#' @param start_snp1 positive integer indicating index within pp for start of scan
+#' @param s1 positive integer indicating index within pp for start of scan
 #' @param n_snp number of markers to use in scan
 #' @export
 #' @return numerical vector of lrt statistics from one or more bootstrap samples
 #'
-boot_pvl <- function(pp, pleio_peak_index, phe, covariates = NULL, kinship, nboot_per_job = 1, start_snp1, n_snp){
+boot_pvl <- function(pp, pleio_peak_index, phe, covariates = NULL, kinship, nboot_per_job = 1, s1, n_snp){
   stopifnot(identical(nrow(kinship), nrow(pp)),
             identical(nrow(pp), nrow(phe)),
             check_dimnames(kinship, pp),
@@ -28,7 +28,7 @@ boot_pvl <- function(pp, pleio_peak_index, phe, covariates = NULL, kinship, nboo
   apply(FUN = function(x)identical(x, rep(TRUE, length(x))), X = !is.na(phe), MARGIN = 1) -> missing_indic
   phe_nona <- phe[!missing_indic, ]
   Xpre_nona <- Xpre[!missing_indic, ]
-  k_nona <- k[!missing_indic, !missing_indic]
+  k_nona <- kinship[!missing_indic, !missing_indic]
   ##
   gemma2::stagger_mats(Xpre_nona, Xpre_nona) -> X
   calc_covs(pheno = phe_nona, kinship = k_nona, covariates = covariates) -> cc_out
@@ -48,12 +48,11 @@ boot_pvl <- function(pp, pleio_peak_index, phe, covariates = NULL, kinship, nboo
     colnames(Ysim) <- c("t1", "t2")
     if (!is.null(covariates)){
       scan_pvl(probs = pp[!missing_indic, , ], pheno = Ysim, covariates = covariates[!missing_indic, , drop = FALSE],
-             kinship = k_nona, start_snp1 = s1, n_snp = nsnp) -> loglik
+             kinship = k_nona, start_snp1 = s1, n_snp = n_snp) -> loglik
     } else {
       scan_pvl(probs = pp[!missing_indic, , ], pheno = Ysim,
-               kinship = k_nona, start_snp1 = s1, n_snp = nsnp) -> loglik
+               kinship = k_nona, start_snp1 = s1, n_snp = n_snp) -> loglik
     }
-    # in above call, s1 & nsnp come from command line args
     calc_lrt_tib(loglik) -> lrt[i]
   }
   return(lrt)

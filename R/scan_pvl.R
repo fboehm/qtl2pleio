@@ -9,7 +9,7 @@
 #' @param max_iter maximum number of iterations for EM algorithm
 #' @param max_prec stepwise precision for EM algorithm. EM stops once incremental difference in log likelihood is less than max_prec
 #' @param use_limmbo2 logical indicating whether to use limmbo2::limbbo2() in covariance matrices estimation. Default is to use gemma2 R package.
-#' @param limmbo2_subset_size positive integer denoting the number of phenotypes for each bootstrap sample with limmbo2.
+#' @param limmbo2_subset_size positive integer denoting the number of phenotypes for each bootstrap sample with limmbo2. Only used when `use_limmbo2` is TRUE
 #' @export
 #' @examples
 #' ## define probs
@@ -32,7 +32,7 @@
 scan_pvl <- function(probs, pheno, kinship, covariates = NULL, start_snp1 = 1,
                      n_snp, max_iter = 1000000,
                      max_prec = 1 / 1e08, use_limmbo2 = FALSE,
-                     limmbo_subset_size = NULL){
+                     limmbo2_subset_size = NULL){
   stopifnot(identical(nrow(probs), nrow(pheno)), identical(rownames(probs), rownames(pheno)),
             identical(rownames(kinship), rownames(pheno)),
             n_snp > 0,
