@@ -5,7 +5,7 @@
 \title{Create a bootstrap sample and perform multivariate QTL scan}
 \usage{
 boot_pvl(pp, pleio_peak_index, phe, covariates = NULL, kinship,
-  nboot_per_job = 1, start_snp1, n_snp)
+  nboot_per_job = 1, s1, n_snp)
 }
 \arguments{
 \item{pp}{allele probabilities object for one chromosome only, like aprobs$`8`. Not a list}
@@ -20,7 +20,7 @@ boot_pvl(pp, pleio_peak_index, phe, covariates = NULL, kinship,
 
 \item{nboot_per_job}{number of bootstrap samples to call per invocation of function}
 
-\item{start_snp1}{positive integer indicating index within pp for start of scan}
+\item{s1}{positive integer indicating index within pp for start of scan}
 
 \item{n_snp}{number of markers to use in scan}
 }

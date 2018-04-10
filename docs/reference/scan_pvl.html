@@ -113,7 +113,8 @@
     
 
     <pre class="usage"><span class='fu'>scan_pvl</span>(<span class='no'>probs</span>, <span class='no'>pheno</span>, <span class='no'>kinship</span>, <span class='kw'>covariates</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>start_snp1</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='no'>n_snp</span>,
-  <span class='kw'>max_iter</span> <span class='kw'>=</span> <span class='fl'>1e+06</span>, <span class='kw'>max_prec</span> <span class='kw'>=</span> <span class='fl'>1</span>/<span class='fl'>1e+08</span>)</pre>
+  <span class='kw'>max_iter</span> <span class='kw'>=</span> <span class='fl'>1e+06</span>, <span class='kw'>max_prec</span> <span class='kw'>=</span> <span class='fl'>1</span>/<span class='fl'>1e+08</span>, <span class='kw'>use_limmbo2</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>limmbo2_subset_size</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -149,6 +150,14 @@
     <tr>
       <th>max_prec</th>
       <td><p>stepwise precision for EM algorithm. EM stops once incremental difference in log likelihood is less than max_prec</p></td>
+    </tr>
+    <tr>
+      <th>use_limmbo2</th>
+      <td><p>logical indicating whether to use limmbo2::limbbo2() in covariance matrices estimation. Default is to use gemma2 R package.</p></td>
+    </tr>
+    <tr>
+      <th>limmbo2_subset_size</th>
+      <td><p>positive integer denoting the number of phenotypes for each bootstrap sample with limmbo2. Only used when `use_limmbo2` is TRUE</p></td>
     </tr>
     </table>
     

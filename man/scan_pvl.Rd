@@ -6,7 +6,7 @@
 \usage{
 scan_pvl(probs, pheno, kinship, covariates = NULL, start_snp1 = 1, n_snp,
   max_iter = 1e+06, max_prec = 1/1e+08, use_limmbo2 = FALSE,
-  limmbo_subset_size = NULL)
+  limmbo2_subset_size = NULL)
 }
 \arguments{
 \item{probs}{an array of genotype probabilities for a single chromosome (before eigenrotation)}
@@ -27,7 +27,7 @@ scan_pvl(probs, pheno, kinship, covariates = NULL, start_snp1 = 1, n_snp,
 
 \item{use_limmbo2}{logical indicating whether to use limmbo2::limbbo2() in covariance matrices estimation. Default is to use gemma2 R package.}
 
-\item{limmbo2_subset_size}{positive integer denoting the number of phenotypes for each bootstrap sample with limmbo2.}
+\item{limmbo2_subset_size}{positive integer denoting the number of phenotypes for each bootstrap sample with limmbo2. Only used when `use_limmbo2` is TRUE}
 }
 \value{
 a tibble with d + 1 columns. First d columns indicate the genetic data (by listing the marker ids) used in the design matrix; last is log likelihood
