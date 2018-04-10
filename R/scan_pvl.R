@@ -8,6 +8,8 @@
 #' @param n_snp the number of (consecutive) snps to include in the scan
 #' @param max_iter maximum number of iterations for EM algorithm
 #' @param max_prec stepwise precision for EM algorithm. EM stops once incremental difference in log likelihood is less than max_prec
+#' @param use_limmbo2 logical indicating whether to use limmbo2::limbbo2() in covariance matrices estimation. Default is to use gemma2 R package.
+#' @param limmbo2_subset_size positive integer denoting the number of phenotypes for each bootstrap sample with limmbo2.
 #' @export
 #' @examples
 #' ## define probs
@@ -29,7 +31,8 @@
 
 scan_pvl <- function(probs, pheno, kinship, covariates = NULL, start_snp1 = 1,
                      n_snp, max_iter = 1000000,
-                     max_prec = 1 / 1e08){
+                     max_prec = 1 / 1e08, use_limmbo2 = FALSE,
+                     limmbo_subset_size = NULL){
   stopifnot(identical(nrow(probs), nrow(pheno)), identical(rownames(probs), rownames(pheno)),
             identical(rownames(kinship), rownames(pheno)),
             n_snp > 0,
@@ -64,11 +67,18 @@ scan_pvl <- function(probs, pheno, kinship, covariates = NULL, start_snp1 = 1,
   }
 
   # perform scan over probs[ , , start_snp: stop_snp]
-  # first, run gemma2::MphEM() to get Vg and Ve
-  calc_covs(pheno, kinship, max_iter = max_iter, max_prec = max_prec,
-            covariates = covariates) -> cc_out
-  Vg <- cc_out$Vg
-  Ve <- cc_out$Ve
+  if (!use_limmbo2){
+    # first, run gemma2::MphEM() to get Vg and Ve
+    calc_covs(pheno, kinship, max_iter = max_iter, max_prec = max_prec,
+              covariates = covariates) -> cc_out
+    Vg <- cc_out$Vg
+    Ve <- cc_out$Ve
+  }
+  else {
+    limmbo2::limmbo2(kinship = kinship, pheno = pheno, S = limmbo2_subset_size) -> li_out
+    Vg <- li_out$Vg
+    Ve <- li_out$Ve
+  }
   # define Sigma
   n_mouse <- nrow(kinship)
   Sigma <- calc_Sigma(Vg, Ve, kinship)
