@@ -1,0 +1,98 @@
+---
+title: "Comparing covariance estimates between `limmbo2` and `gemma2`"
+author: "Frederick Boehm"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Comparing covariance estimates between `limmbo2` and `gemma2`}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Background
+
+[`gemma2`](https://github.com/fboehm/gemma2) is an R implementation of the C++ code for EM-based estimation of Vg and Ve. `limmbo2` is a R wrapper to the [`limmbo`](https://github.com/HannahVMeyer/limmbo) python module. 
+
+## Goals
+
+I want to see how similar the variance component estimates are for the two methods. Recall that it's the function `qtl2pleio::calc_covs` that I want to use to get the estimates based on gemma2's EM algorithm. limmbo2() in the limmbo2 R package will provide both Vg and Ve.
+
+## First, `gemma2` method:
+
+```{r}
+library(qtl2pleio)
+pheno <- matrix(rnorm(300), nrow = 100)
+kinship <- diag(100)
+calc_covs(pheno, kinship)
+```
+
+```{r}
+library(limmbo2)
+limmbo2(kinship = kinship, pheno = pheno, seed = 1)
+```
+
+## 5-dimensional phenotype comparison of `calc_covs()` and `limmbo2()`
+
+```{r}
+pheno <- matrix(rnorm(500), nrow = 100)
+system.time(calc_covs(pheno, kinship))
+```
+
+```{r}
+system.time(limmbo2(kinship = kinship, pheno = pheno, seed = 1))
+```
+
+## Increase sample size to 500
+
+```{r}
+pheno <- matrix(rnorm(2500), nrow = 500)
+kinship <- diag(500)
+system.time(calc_covs(pheno, kinship) -> cc_out)
+cc_out
+```
+
+```{r}
+system.time(limmbo2(kinship = kinship, pheno = pheno, seed = 1) -> li_out)
+li_out
+```
+
+
+## 15 phenotypes
+
+```{r}
+pheno <- matrix(rnorm(7500), nrow = 500)
+system.time(calc_covs(pheno, kinship) -> cc_out)
+cc_out
+```
+
+```{r}
+system.time(limmbo2(kinship = kinship, pheno = pheno, S = 3, seed = 1) -> li_out)
+li_out
+```
+
+## Use nontrivial kinship with trivariate phenotype
+
+
+```{r}
+n <- 500
+A <- matrix(runif(n ^ 2), ncol = n) 
+kinship <- round(t(A) %*% A, 6)
+pheno <- matrix(rnorm(1500), nrow = 500)
+
+system.time(calc_covs(pheno, kinship) -> cc_out)
+cc_out
+```
+
+```{r}
+system.time(limmbo2(kinship = kinship, pheno = pheno, S = 3, seed = 1) -> li_out)
+li_out
+```
+
+
