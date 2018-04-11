@@ -34,3 +34,5 @@ VignetteBuilder: knitr
 Remotes: fboehm/gemma2,
     rqtl/qtl2,
     fboehm/limmbo2
+URL: https://github.com/fboehm/qtl2pleio
+BugReports: https://github.com/fboehm/qtl2pleio/issues
