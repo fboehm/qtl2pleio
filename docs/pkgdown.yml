@@ -2,5 +2,6 @@ pandoc: 1.19.2.1
 pkgdown: 0.1.0.9000
 pkgdown_sha: cc081c30e20c69ad54a4f9fc9d4d42faba0bf1e5
 articles:
+  Comparing_limmbo2_covariance_estimates_with_those_of_gemma2: Comparing_limmbo2_covariance_estimates_with_those_of_gemma2.html
   testing-close-linkage-vs-pleiotropy: testing-close-linkage-vs-pleiotropy.html
 
