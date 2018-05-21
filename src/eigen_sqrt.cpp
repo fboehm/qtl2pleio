@@ -1,5 +1,6 @@
 #include <Rcpp.h>
-#include <unsupported/Eigen/MatrixFunctions>
+#include <Eigen/Eigenvalues>
+
 using namespace Rcpp;
 using namespace Eigen;
 
@@ -16,7 +17,9 @@ using namespace Eigen;
 
 // [[Rcpp::export]]
 Eigen::MatrixXd rcppeigen_sqrt(const Eigen::Map<Eigen::MatrixXd> & A){
-  return A.sqrt();
+  SelfAdjointEigenSolver<MatrixXd> es(A);
+  MatrixXd sqrtA = es.operatorSqrt();
+  return sqrtA;
 }
 
 // [[Rcpp::export]]
@@ -32,4 +35,5 @@ NumericVector timesTwo(NumericVector x) {
 
 /*** R
 timesTwo(42)
+rcppeigen_sqrt(diag(c(2, 2)))
 */

@@ -6,6 +6,28 @@
 
 using namespace Rcpp;
 
+// rcppeigen_sqrt
+Eigen::MatrixXd rcppeigen_sqrt(const Eigen::Map<Eigen::MatrixXd>& A);
+RcppExport SEXP _qtl2pleio_rcppeigen_sqrt(SEXP ASEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::Map<Eigen::MatrixXd>& >::type A(ASEXP);
+    rcpp_result_gen = Rcpp::wrap(rcppeigen_sqrt(A));
+    return rcpp_result_gen;
+END_RCPP
+}
+// timesTwo
+NumericVector timesTwo(NumericVector x);
+RcppExport SEXP _qtl2pleio_timesTwo(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(timesTwo(x));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rcppeigen_invert_matrix
 Eigen::MatrixXd rcppeigen_invert_matrix(const Eigen::Map<Eigen::MatrixXd>& A);
 RcppExport SEXP _qtl2pleio_rcppeigen_invert_matrix(SEXP ASEXP) {
@@ -74,6 +96,8 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_qtl2pleio_rcppeigen_sqrt", (DL_FUNC) &_qtl2pleio_rcppeigen_sqrt, 1},
+    {"_qtl2pleio_timesTwo", (DL_FUNC) &_qtl2pleio_timesTwo, 1},
     {"_qtl2pleio_rcppeigen_invert_matrix", (DL_FUNC) &_qtl2pleio_rcppeigen_invert_matrix, 1},
     {"_qtl2pleio_rcppeigen_get_diag", (DL_FUNC) &_qtl2pleio_rcppeigen_get_diag, 1},
     {"_qtl2pleio_rcppeigen_get_det", (DL_FUNC) &_qtl2pleio_rcppeigen_get_det, 1},

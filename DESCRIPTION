@@ -22,7 +22,8 @@ Imports: gemma2,
     readr,
     progress,
     Rcpp,
-    limmbo2
+    limmbo2,
+    RcppEigen
 LinkingTo: Rcpp, RcppEigen
 NeedsCompilation: yes
 RoxygenNote: 6.0.1
