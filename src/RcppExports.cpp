@@ -17,6 +17,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// rcppeigen_invsqrt
+Eigen::MatrixXd rcppeigen_invsqrt(const Eigen::Map<Eigen::MatrixXd>& A);
+RcppExport SEXP _qtl2pleio_rcppeigen_invsqrt(SEXP ASEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::Map<Eigen::MatrixXd>& >::type A(ASEXP);
+    rcpp_result_gen = Rcpp::wrap(rcppeigen_invsqrt(A));
+    return rcpp_result_gen;
+END_RCPP
+}
 // timesTwo
 NumericVector timesTwo(NumericVector x);
 RcppExport SEXP _qtl2pleio_timesTwo(SEXP xSEXP) {
@@ -25,6 +36,31 @@ BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
     rcpp_result_gen = Rcpp::wrap(timesTwo(x));
+    return rcpp_result_gen;
+END_RCPP
+}
+// rcpp_ols
+Eigen::MatrixXd rcpp_ols(const Eigen::Map<Eigen::MatrixXd>& X, const Eigen::Map<Eigen::MatrixXd>& Y);
+RcppExport SEXP _qtl2pleio_rcpp_ols(SEXP XSEXP, SEXP YSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::Map<Eigen::MatrixXd>& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< const Eigen::Map<Eigen::MatrixXd>& >::type Y(YSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcpp_ols(X, Y));
+    return rcpp_result_gen;
+END_RCPP
+}
+// rcpp_gls
+Eigen::MatrixXd rcpp_gls(const Eigen::Map<Eigen::MatrixXd>& X, const Eigen::Map<Eigen::MatrixXd>& Y, const Eigen::Map<Eigen::MatrixXd>& Sigma_inv);
+RcppExport SEXP _qtl2pleio_rcpp_gls(SEXP XSEXP, SEXP YSEXP, SEXP Sigma_invSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::Map<Eigen::MatrixXd>& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< const Eigen::Map<Eigen::MatrixXd>& >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< const Eigen::Map<Eigen::MatrixXd>& >::type Sigma_inv(Sigma_invSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcpp_gls(X, Y, Sigma_inv));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -97,7 +133,10 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_qtl2pleio_rcppeigen_sqrt", (DL_FUNC) &_qtl2pleio_rcppeigen_sqrt, 1},
+    {"_qtl2pleio_rcppeigen_invsqrt", (DL_FUNC) &_qtl2pleio_rcppeigen_invsqrt, 1},
     {"_qtl2pleio_timesTwo", (DL_FUNC) &_qtl2pleio_timesTwo, 1},
+    {"_qtl2pleio_rcpp_ols", (DL_FUNC) &_qtl2pleio_rcpp_ols, 2},
+    {"_qtl2pleio_rcpp_gls", (DL_FUNC) &_qtl2pleio_rcpp_gls, 3},
     {"_qtl2pleio_rcppeigen_invert_matrix", (DL_FUNC) &_qtl2pleio_rcppeigen_invert_matrix, 1},
     {"_qtl2pleio_rcppeigen_get_diag", (DL_FUNC) &_qtl2pleio_rcppeigen_get_diag, 1},
     {"_qtl2pleio_rcppeigen_get_det", (DL_FUNC) &_qtl2pleio_rcppeigen_get_det, 1},

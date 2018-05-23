@@ -5,8 +5,20 @@ rcppeigen_sqrt <- function(A) {
     .Call('_qtl2pleio_rcppeigen_sqrt', PACKAGE = 'qtl2pleio', A)
 }
 
+rcppeigen_invsqrt <- function(A) {
+    .Call('_qtl2pleio_rcppeigen_invsqrt', PACKAGE = 'qtl2pleio', A)
+}
+
 timesTwo <- function(x) {
     .Call('_qtl2pleio_timesTwo', PACKAGE = 'qtl2pleio', x)
+}
+
+rcpp_ols <- function(X, Y) {
+    .Call('_qtl2pleio_rcpp_ols', PACKAGE = 'qtl2pleio', X, Y)
+}
+
+rcpp_gls <- function(X, Y, Sigma_inv) {
+    .Call('_qtl2pleio_rcpp_gls', PACKAGE = 'qtl2pleio', X, Y, Sigma_inv)
 }
 
 rcppeigen_invert_matrix <- function(A) {

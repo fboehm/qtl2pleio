@@ -1,8 +1,8 @@
 #include <Rcpp.h>
-#include <Eigen/Eigenvalues>
-
+#include <RcppEigen.h>
 using namespace Rcpp;
 using namespace Eigen;
+
 
 // This is a simple example of exporting a C++ function to R. You can
 // source this function into an R session using the Rcpp::sourceCpp
@@ -14,29 +14,21 @@ using namespace Eigen;
 //   http://gallery.rcpp.org/
 //
 
-
 // [[Rcpp::export]]
-Eigen::MatrixXd rcppeigen_sqrt(const Eigen::Map<Eigen::MatrixXd> & A){
-  SelfAdjointEigenSolver<MatrixXd> es(A);
-  MatrixXd sqrtA = es.operatorSqrt();
-  return sqrtA;
+Eigen::MatrixXd rcpp_ols(const Eigen::Map<Eigen::MatrixXd> & X, const Eigen::Map<Eigen::MatrixXd> & Y) {
+  return (X.transpose() * X).ldlt().solve(X.transpose() * Y);
 }
 
+
 // [[Rcpp::export]]
-Eigen::MatrixXd rcppeigen_invsqrt(const Eigen::Map<Eigen::MatrixXd> & A){
-  SelfAdjointEigenSolver<MatrixXd> es(A);
-  MatrixXd invsqrtA = es.operatorInverseSqrt();
-  return invsqrtA;
+Eigen::MatrixXd rcpp_gls(const Eigen::Map<Eigen::MatrixXd> & X, const Eigen::Map<Eigen::MatrixXd> & Y, const Eigen::Map<Eigen::MatrixXd> & Sigma_inv) {
+  Eigen::MatrixXd pre = X.transpose() * Sigma_inv * X;
+  return pre.inverse() * X.transpose() * Sigma_inv * Y;
 }
 
 
 
 
-
-// [[Rcpp::export]]
-NumericVector timesTwo(NumericVector x) {
-  return x * 2;
-}
 
 
 // You can include R code blocks in C++ files processed with sourceCpp
@@ -44,7 +36,3 @@ NumericVector timesTwo(NumericVector x) {
 // run after the compilation.
 //
 
-/*** R
-timesTwo(42)
-rcppeigen_sqrt(diag(c(2, 2)))
-*/
