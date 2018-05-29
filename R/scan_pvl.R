@@ -106,7 +106,7 @@ scan_pvl <- function(probs, pheno, kinship, covariates = NULL, start_snp1 = 1,
       }
     } # end of for loop
     X <- gemma2::stagger_mats(lapply(FUN = get, X = as.list(paste0("X", 1:d_size)), envir = myenv))
-    Bhat <- calc_Bhat(X = X,
+    Bhat <- rcpp_calc_Bhat2(X = X,
                       Y = as.vector(pheno),
                       Sigma_inv = Sigma_inv)
     as.vector(X %*% Bhat) -> mymu
