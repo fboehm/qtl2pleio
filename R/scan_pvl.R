@@ -84,28 +84,12 @@ scan_pvl <- function(probs, pheno, kinship, covariates = NULL, start_snp1 = 1,
   Sigma <- calc_Sigma(Vg, Ve, kinship)
   # define Sigma_inv
   Sigma_inv <- solve(Sigma)
-  new.env() -> myenv
-  for (d in 1:d_size){
-    assign(paste0("Var", d), value = 1:n_snp, envir = myenv)
-  }
-  mytab <- expand.grid(lapply(FUN = get,
-                              X = as.list(paste0("Var", 1:d_size)), envir = myenv))
-  mytab$loglik <- NA
+  mytab <- prep_mytab(d_size = d_size, n_snp = n_snp)
   for (rownum in 1:nrow(mytab)){
     pb$tick()
     indices <- unlist(mytab[rownum, ])
-    for (d in 1:d_size){
-      assign(paste0("index", d), value = indices[d] + start_snp1 - 1, envir = myenv)
-      if (!is.null(covariates)){
-        assign(paste0("X", d), value =
-                 cbind(as.matrix(probs[ , , get(paste0("index", d),
-                                                envir = myenv)]), covariates))
-      }else {
-        assign(paste0("X", d), value =
-                 as.matrix(probs[ , , get(paste0("index", d), envir = myenv)]))
-      }
-    } # end of for loop
-    X <- gemma2::stagger_mats(lapply(FUN = get, X = as.list(paste0("X", 1:d_size)), envir = myenv))
+    X_list <- prep_X_list(indices = indices[ - length(indices)], start_snp1 = start_snp1, probs = probs, covariates = covariates)
+    X <- gemma2::stagger_mats(X_list)
     Bhat <- rcpp_calc_Bhat2(X = X,
                       Y = as.vector(pheno),
                       Sigma_inv = Sigma_inv)
