@@ -1,10 +1,10 @@
 ---
-title: "Testing close linkage v. pleiotropy"
+title: "Testing pleiotropy v separate QTL in multiparental populations"
 author: "Frederick Boehm"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Testing pleiotropy v separate QTL in multiparental populations}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
