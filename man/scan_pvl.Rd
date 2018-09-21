@@ -4,8 +4,8 @@
 \alias{scan_pvl}
 \title{Perform model fitting for all ordered pairs of markers in a genomic region of interest}
 \usage{
-scan_pvl(probs, pheno, kinship, covariates = NULL, start_snp1 = 1, n_snp,
-  max_iter = 1e+06, max_prec = 1/1e+08, use_limmbo2 = FALSE,
+scan_pvl(probs, pheno, kinship, covariates = NULL, start_snp1 = 1,
+  n_snp, max_iter = 1e+06, max_prec = 1/1e+08, use_limmbo2 = FALSE,
   limmbo2_subset_size = NULL)
 }
 \arguments{

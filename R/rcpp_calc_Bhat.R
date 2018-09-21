@@ -18,7 +18,7 @@ rcpp_calc_Bhat <- function(X, Sigma, Y){
 #'
 #' @param X dn by df block-diagonal design matrix that incorporates genetic info for two markers. Note that we can use the same marker data twice.
 #' @param Y dn by 1 matrix, ie, a column vector, of d phenotypes' measurements
-#' @param Sigma_inv dn by dn inverse covariance matrix, often composed as inverse of \eqn{K \otimes V_g + I_n \otimes V_e}
+#' @param Sigma_inv dn by dn inverse covariance matrix, often composed as inverse of \eqn{K \otimes V_g + I_n \otimes V_g}
 #' @return a df by 1 matrix of GLS-estimated allele effects
 #' @export
 #'

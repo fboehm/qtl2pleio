@@ -4,9 +4,10 @@
 \alias{sim400}
 \title{Simulate many bivariate phenotype files and write them to a new directory}
 \usage{
-sim400(run_num, index1, index2, probs, Vg = matrix(data = c(1, 0, 0, 1), nrow
-  = 2), Ve = Vg, B = rep(c(-3, -3, -3, -3, 3, 3, 3, 3), times = 2), kinship,
-  DIR = paste0("sim_data/run", run_num, "-400sims"), nsim = 400)
+sim400(run_num, index1, index2, probs, Vg = matrix(data = c(1, 0, 0, 1),
+  nrow = 2), Ve = Vg, B = rep(c(-3, -3, -3, -3, 3, 3, 3, 3), times =
+  2), kinship, DIR = paste0("sim_data/run", run_num, "-400sims"),
+  nsim = 400)
 }
 \arguments{
 \item{run_num}{run number, an integer}

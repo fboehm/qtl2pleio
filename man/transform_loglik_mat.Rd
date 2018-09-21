@@ -27,3 +27,4 @@ Other profile log-likelihood tibble functions: \code{\link{add_intercepts}},
   \code{\link{assemble_profile_tib}},
   \code{\link{tidy_scan_pvl}}
 }
+\concept{profile log-likelihood tibble functions}

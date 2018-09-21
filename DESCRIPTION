@@ -26,7 +26,7 @@ Imports: gemma2,
     RcppEigen
 LinkingTo: Rcpp, RcppEigen
 NeedsCompilation: yes
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0
 Suggests: testthat,
     knitr,
     rmarkdown,

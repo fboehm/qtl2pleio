@@ -5,8 +5,8 @@
 \title{Plot tidied results of a pvl scan}
 \usage{
 plot_pvl(dat, phenames, size = 3, shape_uni = 17, shape_pleio = 16,
-  shape_biv = 18, palette = c("#999999", "#E69F00", "#56B4E9", "#009E73",
-  "#F0E442", "#0072B2", "#D55E00", "#CC79A7"))
+  shape_biv = 18, palette = c("#999999", "#E69F00", "#56B4E9",
+  "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7"))
 }
 \arguments{
 \item{dat}{a tibble that is the tidied output of a pvl scan}

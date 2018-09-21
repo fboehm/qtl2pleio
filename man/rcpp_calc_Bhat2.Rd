@@ -11,7 +11,7 @@ rcpp_calc_Bhat2(X, Y, Sigma_inv)
 
 \item{Y}{dn by 1 matrix, ie, a column vector, of d phenotypes' measurements}
 
-\item{Sigma_inv}{dn by dn inverse covariance matrix, often composed as inverse of \eqn{K \otimes V_g + I_n \otimes V_e}}
+\item{Sigma_inv}{dn by dn inverse covariance matrix, often composed as inverse of \eqn{K \otimes V_g + I_n \otimes V_g}}
 }
 \value{
 a df by 1 matrix of GLS-estimated allele effects
