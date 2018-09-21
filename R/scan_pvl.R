@@ -90,9 +90,10 @@ scan_pvl <- function(probs, pheno, kinship, covariates = NULL, start_snp1 = 1,
     indices <- unlist(mytab[rownum, ])
     X_list <- prep_X_list(indices = indices[ - length(indices)], start_snp1 = start_snp1, probs = probs, covariates = covariates)
     X <- gemma2::stagger_mats(X_list)
-    Bhat <- rcpp_calc_Bhat2(X = X,
-                      Y = as.vector(pheno),
-                      Sigma_inv = Sigma_inv)
+    #Bhat <- rcpp_calc_Bhat2(X = X,
+    #                  Y = as.vector(pheno),
+    #                  Sigma_inv = Sigma_inv)
+    Bhat <- rcpp_calc_Bhat(X = X, Sigma = Sigma, Y = as.vector(as.matrix(pheno)))
     as.vector(X %*% Bhat) -> mymu
     mytab$loglik[rownum] <- as.numeric(rcpp_log_dmvnorm2(inv_S = Sigma_inv, mu = mymu,
                                              x = as.vector(as.matrix(pheno)),
