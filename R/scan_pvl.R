@@ -37,7 +37,8 @@ scan_pvl <- function(probs, pheno, kinship, covariates = NULL, start_snp1 = 1,
             identical(rownames(kinship), rownames(pheno)),
             n_snp > 0,
             start_snp1 > 0,
-            start_snp1 + n_snp - 1 <= dim(probs)[3]
+            start_snp1 + n_snp - 1 <= dim(probs)[3],
+            if(!is.null(covariates)){identical(rownames(covariates), rownames(probs))}
             )
   d_size <- ncol(pheno)
   # start progress bar
