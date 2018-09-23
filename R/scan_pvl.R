@@ -52,12 +52,14 @@ scan_pvl <- function(probs, pheno, kinship, covariates = NULL, start_snp1 = 1,
   missing_indic <- matrix(!apply(FUN = is.finite, X = pheno, MARGIN = 1),
                           nrow = nrow(pheno), ncol = ncol(pheno),
                           byrow = TRUE)
-  missing2 <- apply(FUN = function(x)identical(as.logical(x), rep(FALSE, ncol(pheno))), MARGIN = 1, X = missing_indic)
+  missing2 <- apply(FUN = function(x)identical(as.logical(x), rep(FALSE, ncol(pheno))),
+                    MARGIN = 1, X = missing_indic)
   if (!is.null(covariates)){
     miss_cov <- matrix(!apply(FUN = is.finite, X = covariates, MARGIN = 1),
                        nrow = nrow(covariates), ncol = ncol(covariates),
                        byrow = TRUE)
-    miss_cov2 <- apply(FUN = function(x)identical(as.logical(x), rep(FALSE, ncol(covariates))), MARGIN = 1, X = miss_cov)
+    miss_cov2 <- apply(FUN = function(x)identical(as.logical(x), rep(FALSE, ncol(covariates))),
+                       MARGIN = 1, X = miss_cov)
     missing2 <- missing2 & miss_cov2
   }
   if (sum(!missing2) > 0){message(paste0(sum(!missing2), " subjects dropped due to missing values"))}
@@ -72,6 +74,7 @@ scan_pvl <- function(probs, pheno, kinship, covariates = NULL, start_snp1 = 1,
     covs_identical <- apply(FUN = check_identical, X = covariates, MARGIN = 2)
     covariates <- covariates[ , !covs_identical]
     if(ncol(covariates) == 0){covariates <- NULL}
+    if (sum(covs_identical) > 0){message(paste0(sum(covs_identical), " covariates dropped due to no variation in covariates"))}
     # remove those covariate columns
     # for which all subjects have the same value
   }
