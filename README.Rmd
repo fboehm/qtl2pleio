@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 
 # qtl2pleio
 
-The goal of qtl2pleio is to perform a likelihood ratio test that distinguishes between competing hypotheses of close linkage of two QTL (alternative hypothesis) and pleiotropy (null hypothesis) in QTL studies in multiparental populations, such as the Diversity Outbred mouse population. `qtl2pleio` data structures are those used in the `rqtl/qtl2` package. 
+The goal of qtl2pleio is to perform a likelihood ratio test that distinguishes between competing hypotheses of presence of two separate QTL (alternative hypothesis) and pleiotropy (null hypothesis) in QTL studies in multiparental populations, such as the Diversity Outbred mouse population. `qtl2pleio` data structures are those used in the `rqtl/qtl2` package. 
 
 ## Installation
 

@@ -75,11 +75,9 @@ scan_pvl <- function(probs, pheno, kinship, covariates = NULL, start_snp1 = 1,
     covariates <- covariates[ , !covs_identical]
     if(ncol(covariates) == 0){covariates <- NULL}
     if (sum(covs_identical) > 0){message(paste0(sum(covs_identical), " covariates dropped due to no variation in covariates"))}
-    # remove those covariate columns
-    # for which all subjects have the same value
+    # remove those covariate columns for which all subjects have the same value
   }
 
-  # perform scan over probs[ , , start_snp: stop_snp]
   if (!use_limmbo2){
     # first, run gemma2::MphEM() to get Vg and Ve
     calc_covs(pheno, kinship, max_iter = max_iter, max_prec = max_prec,

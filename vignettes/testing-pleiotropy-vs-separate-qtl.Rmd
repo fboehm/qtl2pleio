@@ -58,9 +58,9 @@ We use the above line once to install the package on our computer before loading
 library(qtl2)
 ```
 
-## Reading data from `qtl2data` R package
+## Reading data from `qtl2data` repository on github
 
-We read from github.com data from the `qtl2data` R package.
+We read from github.com data from the `qtl2data` repository.
 
 ```{r}
 tmpfile <- tempfile()
@@ -189,7 +189,7 @@ out %>%
 
 
 ```{r}
-#calc_lrt(out)
+calc_lrt_tib(out)
 ```
 
 
