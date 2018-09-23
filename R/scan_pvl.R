@@ -33,7 +33,8 @@ scan_pvl <- function(probs, pheno, kinship, covariates = NULL, start_snp1 = 1,
                      n_snp, max_iter = 1000000,
                      max_prec = 1 / 1e08, use_limmbo2 = FALSE,
                      limmbo2_subset_size = NULL){
-  stopifnot(identical(nrow(probs), nrow(pheno)), identical(rownames(probs), rownames(pheno)),
+  stopifnot(identical(nrow(probs), nrow(pheno)),
+            identical(rownames(probs), rownames(pheno)),
             identical(rownames(kinship), rownames(pheno)),
             n_snp > 0,
             start_snp1 > 0,
@@ -64,7 +65,15 @@ scan_pvl <- function(probs, pheno, kinship, covariates = NULL, start_snp1 = 1,
   kinship <- kinship[missing2, missing2, drop = FALSE]
   probs <- probs[missing2, , , drop = FALSE]
   if (!is.null(covariates)){
+    # remove subjects with missing data
     covariates <- covariates[missing2, , drop = FALSE]
+    # check for any covariates that have the same value for all subjects
+    # note that we do this AFTER removing subjects with missing values
+    covs_identical <- apply(FUN = check_identical, X = covariates, MARGIN = 2)
+    covariates <- covariates[ , !covs_identical]
+    if(ncol(covariates) == 0){covariates <- NULL}
+    # remove those covariate columns
+    # for which all subjects have the same value
   }
 
   # perform scan over probs[ , , start_snp: stop_snp]
@@ -89,7 +98,9 @@ scan_pvl <- function(probs, pheno, kinship, covariates = NULL, start_snp1 = 1,
   for (rownum in 1:nrow(mytab)){
     pb$tick()
     indices <- unlist(mytab[rownum, ])
-    X_list <- prep_X_list(indices = indices[ - length(indices)], start_snp1 = start_snp1, probs = probs, covariates = covariates)
+    X_list <- prep_X_list(indices = indices[ - length(indices)],
+                          start_snp1 = start_snp1, probs = probs,
+                          covariates = covariates)
     X <- gemma2::stagger_mats(X_list)
     #Bhat <- rcpp_calc_Bhat2(X = X,
     #                  Y = as.vector(pheno),
