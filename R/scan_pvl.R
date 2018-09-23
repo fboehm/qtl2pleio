@@ -33,14 +33,25 @@ scan_pvl <- function(probs, pheno, kinship, covariates = NULL, start_snp1 = 1,
                      n_snp, max_iter = 1000000,
                      max_prec = 1 / 1e08, use_limmbo2 = FALSE,
                      limmbo2_subset_size = NULL){
-  stopifnot(identical(nrow(probs), nrow(pheno)),
-            identical(rownames(probs), rownames(pheno)),
-            identical(rownames(kinship), rownames(pheno)),
+  stopifnot(
+            !is.null(rownames(probs)),
+            !is.null(colnames(probs)),
+            !is.null(dimnames(probs)[[3]]),
+            !is.null(rownames(pheno)),
+            !is.null(colnames(pheno)),
+            !is.null(rownames(kinship)),
+            !is.null(colnames(kinship)),
             n_snp > 0,
             start_snp1 > 0,
-            start_snp1 + n_snp - 1 <= dim(probs)[3],
-            if(!is.null(covariates)){identical(rownames(covariates), rownames(probs))}
+            start_snp1 + n_snp - 1 <= dim(probs)[3]
             )
+  # check additional conditions when covariates is not NULL
+  if(!is.null(covariates)){
+    stopifnot(
+      !is.null(rownames(covariates)),
+      !is.null(colnames(covariates))
+      )}
+
   d_size <- ncol(pheno)
   # start progress bar
   pb <- progress::progress_bar$new(
@@ -72,8 +83,8 @@ scan_pvl <- function(probs, pheno, kinship, covariates = NULL, start_snp1 = 1,
     # check for any covariates that have the same value for all subjects
     # note that we do this AFTER removing subjects with missing values
     covs_identical <- apply(FUN = check_identical, X = covariates, MARGIN = 2)
-    covariates <- covariates[ , !covs_identical]
-    if(ncol(covariates) == 0){covariates <- NULL}
+    covariates <- covariates[ , !covs_identical, drop = FALSE]
+    if (ncol(covariates) == 0){covariates <- NULL}
     if (sum(covs_identical) > 0){message(paste0(sum(covs_identical), " covariates dropped due to no variation in covariates"))}
     # remove those covariate columns for which all subjects have the same value
   }
