@@ -126,7 +126,7 @@ scan_pvl <- function(probs, pheno, kinship, covariates = NULL, start_snp1 = 1,
   # start progress bar
   pb <- progress::progress_bar$new(
     format = " scanning [:bar] :percent eta: :eta",
-    total = n_snp ^ d_size, clear = FALSE, width= 80)
+    total = n_snp ^ d_size, clear = FALSE, width = 80)
   pb$tick(0)
 
   for (rownum in 1:nrow(mytab)){
