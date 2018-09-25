@@ -52,13 +52,12 @@ scan_pvl <- function(probs, pheno, kinship, covariates = NULL, start_snp1 = 1,
       !is.null(colnames(covariates))
       )}
 
-  d_size <- ncol(pheno)
+  d_size <- ncol(pheno) # d_size is the number of univariate phenotypes
   # start progress bar
   pb <- progress::progress_bar$new(
     format = " scanning [:bar] :percent eta: :eta",
     total = n_snp ^ d_size, clear = FALSE, width= 80)
   pb$tick(0)
-  ## define number of dimensions, d_size
   # remove mice with missing values of phenotype or missing value(s) in covariates
   missing_indic <- matrix(!apply(FUN = is.finite, X = pheno, MARGIN = 1),
                           nrow = nrow(pheno), ncol = ncol(pheno),
@@ -66,6 +65,8 @@ scan_pvl <- function(probs, pheno, kinship, covariates = NULL, start_snp1 = 1,
   missing2 <- apply(FUN = function(x)identical(as.logical(x), rep(FALSE, ncol(pheno))),
                     MARGIN = 1, X = missing_indic)
   if (!is.null(covariates)){
+    covariates <- subset_input(input = covariates, id2keep = intersect(rownames(pheno), rownames(covariates)))
+    pheno <- subset_input(input = pheno, id2keep = intersect(rownames(pheno), rownames(covariates)))
     miss_cov <- matrix(!apply(FUN = is.finite, X = covariates, MARGIN = 1),
                        nrow = nrow(covariates), ncol = ncol(covariates),
                        byrow = TRUE)
@@ -73,7 +74,9 @@ scan_pvl <- function(probs, pheno, kinship, covariates = NULL, start_snp1 = 1,
                        MARGIN = 1, X = miss_cov)
     missing2 <- missing2 & miss_cov2
   }
-  if (sum(!missing2) > 0){message(paste0(sum(!missing2), " subjects dropped due to missing values"))}
+  if (sum(!missing2) > 0){
+    message(paste0(sum(!missing2), " subjects dropped due to missing values"))
+  }
   pheno <- pheno[missing2, , drop = FALSE]
   kinship <- kinship[missing2, missing2, drop = FALSE]
   probs <- probs[missing2, , , drop = FALSE]
@@ -84,11 +87,26 @@ scan_pvl <- function(probs, pheno, kinship, covariates = NULL, start_snp1 = 1,
     # note that we do this AFTER removing subjects with missing values
     covs_identical <- apply(FUN = check_identical, X = covariates, MARGIN = 2)
     covariates <- covariates[ , !covs_identical, drop = FALSE]
-    if (ncol(covariates) == 0){covariates <- NULL}
-    if (sum(covs_identical) > 0){message(paste0(sum(covs_identical), " covariates dropped due to no variation in covariates"))}
+    if (ncol(covariates) == 0){
+      covariates <- NULL
+    }
+    if (sum(covs_identical) > 0){
+      message(paste0(sum(covs_identical), " covariates dropped due to no variation in covariates"))
+    }
     # remove those covariate columns for which all subjects have the same value
   }
+  # create id2keep and subset all four input objects to include only those subjects that are in id2keep
+  # we've already removed subjects that have missing values from both phenotypes matrix and covariates matrix
+  id2keep <- make_id2keep(probs = probs,
+                          pheno = pheno,
+                          covar = covariates,
+                          kinship = kinship)
+  probs <- subset_input(input = probs, id2keep = id2keep)
+  pheno <- subset_input(input = pheno, id2keep = id2keep)
+  covariates <- subset_input(input = covariates, id2keep = id2keep)
+  kinship <- subset_kinship(kinship = kinship, id2keep = id2keep)
 
+  # covariance matrix estimation
   if (!use_limmbo2){
     # first, run gemma2::MphEM() to get Vg and Ve
     calc_covs(pheno, kinship, max_iter = max_iter, max_prec = max_prec,
@@ -102,7 +120,7 @@ scan_pvl <- function(probs, pheno, kinship, covariates = NULL, start_snp1 = 1,
     Ve <- li_out$Ve
   }
   # define Sigma
-  n_mouse <- nrow(kinship)
+  n_mouse <- nrow(kinship) # define n_mouse as the number of mice that actually have no missing data
   Sigma <- calc_Sigma(Vg, Ve, kinship)
   # define Sigma_inv
   Sigma_inv <- solve(Sigma)
