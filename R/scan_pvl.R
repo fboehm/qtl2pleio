@@ -53,11 +53,6 @@ scan_pvl <- function(probs, pheno, kinship, covariates = NULL, start_snp1 = 1,
       )}
 
   d_size <- ncol(pheno) # d_size is the number of univariate phenotypes
-  # start progress bar
-  pb <- progress::progress_bar$new(
-    format = " scanning [:bar] :percent eta: :eta",
-    total = n_snp ^ d_size, clear = FALSE, width= 80)
-  pb$tick(0)
   # remove mice with missing values of phenotype or missing value(s) in covariates
   missing_indic <- matrix(!apply(FUN = is.finite, X = pheno, MARGIN = 1),
                           nrow = nrow(pheno), ncol = ncol(pheno),
@@ -107,6 +102,7 @@ scan_pvl <- function(probs, pheno, kinship, covariates = NULL, start_snp1 = 1,
   kinship <- subset_kinship(kinship = kinship, id2keep = id2keep)
 
   # covariance matrix estimation
+  message("starting covariance matrices estimation.")
   if (!use_limmbo2){
     # first, run gemma2::MphEM() to get Vg and Ve
     calc_covs(pheno, kinship, max_iter = max_iter, max_prec = max_prec,
@@ -119,12 +115,20 @@ scan_pvl <- function(probs, pheno, kinship, covariates = NULL, start_snp1 = 1,
     Vg <- li_out$Vg
     Ve <- li_out$Ve
   }
+  message("covariance matrices estimation completed.")
+
   # define Sigma
   n_mouse <- nrow(kinship) # define n_mouse as the number of mice that actually have no missing data
   Sigma <- calc_Sigma(Vg, Ve, kinship)
   # define Sigma_inv
   Sigma_inv <- solve(Sigma)
   mytab <- prep_mytab(d_size = d_size, n_snp = n_snp)
+  # start progress bar
+  pb <- progress::progress_bar$new(
+    format = " scanning [:bar] :percent eta: :eta",
+    total = n_snp ^ d_size, clear = FALSE, width= 80)
+  pb$tick(0)
+
   for (rownum in 1:nrow(mytab)){
     pb$tick()
     indices <- unlist(mytab[rownum, ])
