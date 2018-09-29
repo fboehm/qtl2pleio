@@ -144,7 +144,8 @@ scan_pvl <- function(probs, pheno, kinship,
     pb$tick()
     indices <- unlist(mytab[rownum, ])
     X_list <- prep_X_list(indices = indices[ - length(indices)],
-                          start_snp1 = start_snp1, probs = probs,
+                          start_snp1 = start_snp1,
+                          probs = probs,
                           covariates = covariates)
     X <- gemma2::stagger_mats(X_list)
     #Bhat <- rcpp_calc_Bhat2(X = X,

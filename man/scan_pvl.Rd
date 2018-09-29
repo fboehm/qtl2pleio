@@ -39,14 +39,22 @@ Perform model fitting for all ordered pairs of markers in a genomic region of in
 ## define probs
 probs_pre <- rbinom(n = 100 * 10, size = 1, prob = 1 / 2)
 probs <- array(data = probs_pre, dim = c(100, 1, 10))
+s_id <- paste0("s", 1:100)
+rownames(probs) <- s_id
+colnames(probs) <- "A"
 dimnames(probs)[[3]] <- paste0("Marker", 1:10)
 # define Y
 Y_pre <- runif(200)
 Y <- matrix(data = Y_pre, nrow = 100)
+rownames(Y) <- s_id
+colnames(Y) <- paste0("t", 1:2)
 covariates <- matrix(c(runif(99), NA), nrow = 100, ncol = 1)
-cov2 <- matrix(c(covariates[1:99], 10), nrow = 100, ncol = 1)
+rownames(covariates) <- s_id
+colnames(covariates) <- "c1"
 Y2 <- Y
 Y2[1, 2] <- NA
-scan_pvl(probs = probs, pheno = Y, kinship = diag(100), start_snp1 = 1, n_snp = 10)
-scan_pvl(probs = probs, pheno = Y2, kinship = diag(100), start_snp1 = 1, n_snp = 10)
+scan_pvl(probs = probs, pheno = Y, kinship = diag(100),
+        start_snp1 = 1, n_snp = 10)
+scan_pvl(probs = probs, pheno = Y2, kinship = diag(100),
+        start_snp1 = 1, n_snp = 10)
 }
