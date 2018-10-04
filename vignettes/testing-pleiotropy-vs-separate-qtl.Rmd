@@ -174,9 +174,15 @@ find_peaks(s1, map = pm)
 find_peaks(s2, map = pm)
 ```
 
+# Perform two-dimensional scan as first step in pleiotropy v separate QTL hypothesis test
+
+
 ```{r}
 out <- scan_pvl(probs = pp, pheno = Y, kinship = kinship$`2`, start_snp1 = 38, n_snp = 25)
 ```
+
+
+### Create a profile LOD plot to visualize results of two-dimensional scan
 
 ```{r}
 library(dplyr)
@@ -188,8 +194,56 @@ out %>%
 ```
 
 
+### Calculate the likelihood ratio test statistic for pleiotropy v separate QTL
+
+We use the function `calc_lrt_tib` to calculate the likelihood ratio test statistic value for the specified traits and specified genomic region.
+
 ```{r}
-calc_lrt_tib(out)
+(calc_lrt_tib(out) -> lrt)
+```
+
+## Bootstrap analysis to get p-values
+
+The calibration of test statistic values to get p-values uses bootstrap methods because we don't know the theoretical distribution of the test statistic under the null hypothesis. Thus, we use a bootstrap approach to obtain an empirical distribution of test statistic values under the null hypothesis of the presence of one pleiotropic locus. 
+
+We will use the function `boot_pvl` from our package `qtl2pleio`.
+
+We use a parametric bootstrap strategy in which we first use the studied phenotypes to infer the values of model parameters. Once we have the inferred values of the model parameters, we simulate phenotypes from the pleiotropy model (with the inferred parameter values). 
+
+
+A natural question that arises is "which marker's allele probabilities do we use when simulating phenotypes?" We use the marker that, under the null hypothesis, ie, under the pleiotropy constraint, yields the greatest value of the log-likelihood.
+
+Before we call `boot_pvl`, we need to identify the index (on the chromosome under study) of the marker that maximizes the likelihood under the pleiotropy constraint. To do this, we use the `qtl2pleio` function `find_pleio_peak_tib`. 
+
+```{r}
+(pleio_index <- find_pleio_peak_tib(out, start_snp = 38))
 ```
 
 
+
+
+```{r}
+set.seed(2018-10-03)
+system.time(b_out <- boot_pvl(pp = pp,
+         phe = Y, 
+         pleio_peak_index = pleio_index, 
+         kinship = kinship$`2`, 
+         nboot_per_job = 10, 
+         s1 = 38, 
+         n_snp = 25
+         ))
+
+```
+
+
+The argument `nboot_per_job` indicates the number of bootstrap samples that will be created and analyzed. Here, we set `nboot_per_job = 10`, so we expect to see returned a numeric vector of length 10, where each entry is a LRT statistic value from a distinct bootstrap sample.
+
+Finally, we determine a bootstrap p-value in the usual method. We treat the bootstrap samples' test statistics as an empirical distribution of the test statistic under the null hypothesis of pleiotropy. Thus, to get a p-value, we want to ask "What is the probability, under the null hypothesis, of observing a test statistic value that is at least as extreme as that which we observed?"
+
+```{r}
+(pvalue <- mean(b_out >= lrt))
+```
+
+In practice, one would want to use many more bootstrap samples to achieve an empirical distribution that is closer to the theoretical distribution of the test statistic under the null hypothesis.
+
+However, if one wants to perform analyses with a reasonable number - say 400 - bootstrap samples, this will take a very long time - many days - on a single laptop computer. We have used a series of computer clusters that are coordinated by the University of Wisconsin-Madison's Center for High-throughput Computing (http://chtc.cs.wisc.edu). We typically are able to analyze 1000 bootstrap samples in less than 12 hours with this service.
