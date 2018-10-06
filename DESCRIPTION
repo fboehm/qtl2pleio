@@ -23,7 +23,8 @@ Imports: gemma2,
     progress,
     Rcpp,
     limmbo2,
-    RcppEigen
+    RcppEigen,
+    microbenchmark
 LinkingTo: Rcpp, RcppEigen
 NeedsCompilation: yes
 RoxygenNote: 6.1.0
