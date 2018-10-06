@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Frederick Boehm" />
+
+<meta name="date" content="2018-10-04" />
+
+<title>Comparing covariance estimates between limmbo2 and gemma2</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#header {
+text-align: center;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Comparing covariance estimates between <code>limmbo2</code> and <code>gemma2</code></h1>
+<h4 class="author"><em>Frederick Boehm</em></h4>
+<h4 class="date"><em>2018-10-04</em></h4>
+
+
+
+<div id="background" class="section level2">
+<h2>Background</h2>
+<p><a href="https://github.com/fboehm/gemma2"><code>gemma2</code></a> is an R implementation of the C++ code for EM-based estimation of Vg and Ve. <code>limmbo2</code> is a R wrapper to the <a href="https://github.com/HannahVMeyer/limmbo"><code>limmbo</code></a> python module.</p>
+</div>
+<div id="goals" class="section level2">
+<h2>Goals</h2>
+<p>I want to see how similar the variance component estimates are for the two methods. Recall that it’s the function <code>qtl2pleio::calc_covs</code> that I want to use to get the estimates based on gemma2’s EM algorithm. limmbo2() in the limmbo2 R package will provide both Vg and Ve.</p>
+</div>
+<div id="first-gemma2-method" class="section level2">
+<h2>First, <code>gemma2</code> method:</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(qtl2pleio)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">pheno &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">rnorm</span>(<span class="dv">300</span>), <span class="dt">nrow =</span> <span class="dv">100</span>)</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">kinship &lt;-<span class="st"> </span><span class="kw">diag</span>(<span class="dv">100</span>)</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="kw">calc_covs</span>(pheno, kinship)</a>
+<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="co">#&gt; $Vg</span></a>
+<a class="sourceLine" id="cb1-6" data-line-number="6"><span class="co">#&gt;              [,1]         [,2]        [,3]</span></a>
+<a class="sourceLine" id="cb1-7" data-line-number="7"><span class="co">#&gt; [1,]  0.514522498 -0.003759085 -0.02929899</span></a>
+<a class="sourceLine" id="cb1-8" data-line-number="8"><span class="co">#&gt; [2,] -0.003759085  0.535616595  0.06850043</span></a>
+<a class="sourceLine" id="cb1-9" data-line-number="9"><span class="co">#&gt; [3,] -0.029298986  0.068500435  0.52492944</span></a>
+<a class="sourceLine" id="cb1-10" data-line-number="10"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb1-11" data-line-number="11"><span class="co">#&gt; $Ve</span></a>
+<a class="sourceLine" id="cb1-12" data-line-number="12"><span class="co">#&gt;              [,1]         [,2]        [,3]</span></a>
+<a class="sourceLine" id="cb1-13" data-line-number="13"><span class="co">#&gt; [1,]  0.514522498 -0.003759085 -0.02929899</span></a>
+<a class="sourceLine" id="cb1-14" data-line-number="14"><span class="co">#&gt; [2,] -0.003759085  0.535616595  0.06850043</span></a>
+<a class="sourceLine" id="cb1-15" data-line-number="15"><span class="co">#&gt; [3,] -0.029298986  0.068500435  0.52492944</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">library</span>(limmbo2)</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw">limmbo2</span>(<span class="dt">kinship =</span> kinship, <span class="dt">pheno =</span> pheno, <span class="dt">seed =</span> <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">#&gt; $Vg</span></a>
+<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co">#&gt;              [,1]         [,2]        [,3]</span></a>
+<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="co">#&gt; [1,]  0.526090426 -0.003534632 -0.03048412</span></a>
+<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="co">#&gt; [2,] -0.003534632  0.530281508  0.06778660</span></a>
+<a class="sourceLine" id="cb2-7" data-line-number="7"><span class="co">#&gt; [3,] -0.030484115  0.067786604  0.51979339</span></a>
+<a class="sourceLine" id="cb2-8" data-line-number="8"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb2-9" data-line-number="9"><span class="co">#&gt; $Ve</span></a>
+<a class="sourceLine" id="cb2-10" data-line-number="10"><span class="co">#&gt;              [,1]         [,2]        [,3]</span></a>
+<a class="sourceLine" id="cb2-11" data-line-number="11"><span class="co">#&gt; [1,]  0.526090426 -0.003534632 -0.03048412</span></a>
+<a class="sourceLine" id="cb2-12" data-line-number="12"><span class="co">#&gt; [2,] -0.003534632  0.530281508  0.06778660</span></a>
+<a class="sourceLine" id="cb2-13" data-line-number="13"><span class="co">#&gt; [3,] -0.030484115  0.067786604  0.51979339</span></a></code></pre></div>
+</div>
+<div id="dimensional-phenotype-comparison-of-calc_covs-and-limmbo2" class="section level2">
+<h2>5-dimensional phenotype comparison of <code>calc_covs()</code> and <code>limmbo2()</code></h2>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">pheno &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">rnorm</span>(<span class="dv">500</span>), <span class="dt">nrow =</span> <span class="dv">100</span>)</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw">system.time</span>(<span class="kw">calc_covs</span>(pheno, kinship))</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="co">#&gt;    user  system elapsed </span></a>
+<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="co">#&gt;   0.149   0.036   0.186</span></a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">system.time</span>(<span class="kw">limmbo2</span>(<span class="dt">kinship =</span> kinship, <span class="dt">pheno =</span> pheno, <span class="dt">seed =</span> <span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="co">#&gt;    user  system elapsed </span></a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="co">#&gt;   0.446   0.104   9.629</span></a></code></pre></div>
+</div>
+<div id="increase-sample-size-to-500" class="section level2">
+<h2>Increase sample size to 500</h2>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">pheno &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">rnorm</span>(<span class="dv">2500</span>), <span class="dt">nrow =</span> <span class="dv">500</span>)</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">kinship &lt;-<span class="st"> </span><span class="kw">diag</span>(<span class="dv">500</span>)</a>
+<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="kw">system.time</span>(<span class="kw">calc_covs</span>(pheno, kinship) -&gt;<span class="st"> </span>cc_out)</a>
+<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="co">#&gt;    user  system elapsed </span></a>
+<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="co">#&gt;   0.758   0.106   0.877</span></a>
+<a class="sourceLine" id="cb5-6" data-line-number="6">cc_out</a>
+<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="co">#&gt; $Vg</span></a>
+<a class="sourceLine" id="cb5-8" data-line-number="8"><span class="co">#&gt;              [,1]         [,2]         [,3]        [,4]         [,5]</span></a>
+<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co">#&gt; [1,]  0.479947670 -0.027126140 -0.004673049  0.01519845  0.009029006</span></a>
+<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="co">#&gt; [2,] -0.027126140  0.482757218  0.009867246 -0.01271984  0.010730915</span></a>
+<a class="sourceLine" id="cb5-11" data-line-number="11"><span class="co">#&gt; [3,] -0.004673049  0.009867246  0.497789839 -0.04145195  0.001315239</span></a>
+<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co">#&gt; [4,]  0.015198452 -0.012719843 -0.041451949  0.39757042 -0.048390136</span></a>
+<a class="sourceLine" id="cb5-13" data-line-number="13"><span class="co">#&gt; [5,]  0.009029006  0.010730915  0.001315239 -0.04839014  0.506636377</span></a>
+<a class="sourceLine" id="cb5-14" data-line-number="14"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb5-15" data-line-number="15"><span class="co">#&gt; $Ve</span></a>
+<a class="sourceLine" id="cb5-16" data-line-number="16"><span class="co">#&gt;              [,1]         [,2]         [,3]        [,4]         [,5]</span></a>
+<a class="sourceLine" id="cb5-17" data-line-number="17"><span class="co">#&gt; [1,]  0.479947670 -0.027126140 -0.004673049  0.01519845  0.009029006</span></a>
+<a class="sourceLine" id="cb5-18" data-line-number="18"><span class="co">#&gt; [2,] -0.027126140  0.482757218  0.009867246 -0.01271984  0.010730915</span></a>
+<a class="sourceLine" id="cb5-19" data-line-number="19"><span class="co">#&gt; [3,] -0.004673049  0.009867246  0.497789839 -0.04145195  0.001315239</span></a>
+<a class="sourceLine" id="cb5-20" data-line-number="20"><span class="co">#&gt; [4,]  0.015198452 -0.012719843 -0.041451949  0.39757042 -0.048390136</span></a>
+<a class="sourceLine" id="cb5-21" data-line-number="21"><span class="co">#&gt; [5,]  0.009029006  0.010730915  0.001315239 -0.04839014  0.506636377</span></a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">system.time</span>(<span class="kw">limmbo2</span>(<span class="dt">kinship =</span> kinship, <span class="dt">pheno =</span> pheno, <span class="dt">seed =</span> <span class="dv">1</span>) -&gt;<span class="st"> </span>li_out)</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="co">#&gt;    user  system elapsed </span></a>
+<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">#&gt;   1.341   0.583  10.760</span></a>
+<a class="sourceLine" id="cb6-4" data-line-number="4">li_out</a>
+<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">#&gt; $Vg</span></a>
+<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt;              [,1]        [,2]         [,3]        [,4]         [,5]</span></a>
+<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co">#&gt; [1,]  0.479721577 -0.02553682 -0.004624789  0.01566645  0.009343894</span></a>
+<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="co">#&gt; [2,] -0.025536825  0.48503926  0.009925280 -0.01162821  0.011416755</span></a>
+<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co">#&gt; [3,] -0.004624789  0.00992528  0.496752628 -0.04133161  0.001329814</span></a>
+<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="co">#&gt; [4,]  0.015666448 -0.01162821 -0.041331615  0.39712300 -0.048049383</span></a>
+<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="co">#&gt; [5,]  0.009343894  0.01141675  0.001329814 -0.04804938  0.505767719</span></a>
+<a class="sourceLine" id="cb6-12" data-line-number="12"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb6-13" data-line-number="13"><span class="co">#&gt; $Ve</span></a>
+<a class="sourceLine" id="cb6-14" data-line-number="14"><span class="co">#&gt;              [,1]        [,2]         [,3]        [,4]         [,5]</span></a>
+<a class="sourceLine" id="cb6-15" data-line-number="15"><span class="co">#&gt; [1,]  0.479721577 -0.02553682 -0.004624789  0.01566645  0.009343894</span></a>
+<a class="sourceLine" id="cb6-16" data-line-number="16"><span class="co">#&gt; [2,] -0.025536825  0.48503926  0.009925280 -0.01162821  0.011416755</span></a>
+<a class="sourceLine" id="cb6-17" data-line-number="17"><span class="co">#&gt; [3,] -0.004624789  0.00992528  0.496752628 -0.04133161  0.001329814</span></a>
+<a class="sourceLine" id="cb6-18" data-line-number="18"><span class="co">#&gt; [4,]  0.015666448 -0.01162821 -0.041331615  0.39712300 -0.048049383</span></a>
+<a class="sourceLine" id="cb6-19" data-line-number="19"><span class="co">#&gt; [5,]  0.009343894  0.01141675  0.001329814 -0.04804938  0.505767719</span></a></code></pre></div>
+</div>
+<div id="phenotypes" class="section level2">
+<h2>15 phenotypes</h2>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">pheno &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">rnorm</span>(<span class="dv">7500</span>), <span class="dt">nrow =</span> <span class="dv">500</span>)</a>
+<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="kw">system.time</span>(<span class="kw">calc_covs</span>(pheno, kinship) -&gt;<span class="st"> </span>cc_out)</a>
+<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="co">#&gt;    user  system elapsed </span></a>
+<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="co">#&gt;   1.147   0.128   1.282</span></a>
+<a class="sourceLine" id="cb7-5" data-line-number="5">cc_out</a>
+<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="co">#&gt; $Vg</span></a>
+<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="co">#&gt;               [,1]         [,2]         [,3]         [,4]         [,5]</span></a>
+<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="co">#&gt;  [1,]  0.507130860  0.016258066  0.023739844  0.002152856 -0.030503178</span></a>
+<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="co">#&gt;  [2,]  0.016258066  0.526206551  0.017559971  0.005035695  0.003038353</span></a>
+<a class="sourceLine" id="cb7-10" data-line-number="10"><span class="co">#&gt;  [3,]  0.023739844  0.017559971  0.534381450 -0.071798937  0.045818166</span></a>
+<a class="sourceLine" id="cb7-11" data-line-number="11"><span class="co">#&gt;  [4,]  0.002152856  0.005035695 -0.071798937  0.480351078 -0.007492794</span></a>
+<a class="sourceLine" id="cb7-12" data-line-number="12"><span class="co">#&gt;  [5,] -0.030503178  0.003038353  0.045818166 -0.007492794  0.527532807</span></a>
+<a class="sourceLine" id="cb7-13" data-line-number="13"><span class="co">#&gt;  [6,] -0.005662989 -0.027727600  0.016670106  0.017226416  0.021155932</span></a>
+<a class="sourceLine" id="cb7-14" data-line-number="14"><span class="co">#&gt;  [7,] -0.023196587 -0.012591801 -0.016128856  0.032424923 -0.003670995</span></a>
+<a class="sourceLine" id="cb7-15" data-line-number="15"><span class="co">#&gt;  [8,] -0.003500757 -0.003263187 -0.029024304 -0.009340361  0.023737732</span></a>
+<a class="sourceLine" id="cb7-16" data-line-number="16"><span class="co">#&gt;  [9,]  0.012042535 -0.024551753 -0.009763668  0.006930790 -0.038549394</span></a>
+<a class="sourceLine" id="cb7-17" data-line-number="17"><span class="co">#&gt; [10,]  0.004355963 -0.026886305 -0.011169600  0.023511698  0.006354296</span></a>
+<a class="sourceLine" id="cb7-18" data-line-number="18"><span class="co">#&gt; [11,] -0.029427623 -0.006040661  0.024839330  0.008687042 -0.008547669</span></a>
+<a class="sourceLine" id="cb7-19" data-line-number="19"><span class="co">#&gt; [12,]  0.006007620 -0.015216888  0.013403921 -0.011939694 -0.004818211</span></a>
+<a class="sourceLine" id="cb7-20" data-line-number="20"><span class="co">#&gt; [13,]  0.014152894  0.001775086  0.026062908 -0.011050882  0.038996595</span></a>
+<a class="sourceLine" id="cb7-21" data-line-number="21"><span class="co">#&gt; [14,]  0.074796571 -0.041990177  0.021113682  0.011480432 -0.009208492</span></a>
+<a class="sourceLine" id="cb7-22" data-line-number="22"><span class="co">#&gt; [15,] -0.022677833  0.017004125 -0.013172271 -0.026215628  0.034814628</span></a>
+<a class="sourceLine" id="cb7-23" data-line-number="23"><span class="co">#&gt;                [,6]          [,7]          [,8]         [,9]        [,10]</span></a>
+<a class="sourceLine" id="cb7-24" data-line-number="24"><span class="co">#&gt;  [1,] -0.0056629890 -0.0231965875 -0.0035007569  0.012042535  0.004355963</span></a>
+<a class="sourceLine" id="cb7-25" data-line-number="25"><span class="co">#&gt;  [2,] -0.0277275998 -0.0125918012 -0.0032631871 -0.024551753 -0.026886305</span></a>
+<a class="sourceLine" id="cb7-26" data-line-number="26"><span class="co">#&gt;  [3,]  0.0166701062 -0.0161288558 -0.0290243037 -0.009763668 -0.011169600</span></a>
+<a class="sourceLine" id="cb7-27" data-line-number="27"><span class="co">#&gt;  [4,]  0.0172264164  0.0324249229 -0.0093403613  0.006930790  0.023511698</span></a>
+<a class="sourceLine" id="cb7-28" data-line-number="28"><span class="co">#&gt;  [5,]  0.0211559321 -0.0036709948  0.0237377323 -0.038549394  0.006354296</span></a>
+<a class="sourceLine" id="cb7-29" data-line-number="29"><span class="co">#&gt;  [6,]  0.4962461762 -0.0009046718  0.0007007663  0.036817744  0.043490966</span></a>
+<a class="sourceLine" id="cb7-30" data-line-number="30"><span class="co">#&gt;  [7,] -0.0009046718  0.4695282482  0.0131875613 -0.008166714 -0.017705193</span></a>
+<a class="sourceLine" id="cb7-31" data-line-number="31"><span class="co">#&gt;  [8,]  0.0007007663  0.0131875613  0.5468205507  0.034321562 -0.025016256</span></a>
+<a class="sourceLine" id="cb7-32" data-line-number="32"><span class="co">#&gt;  [9,]  0.0368177444 -0.0081667136  0.0343215624  0.552836526  0.020666644</span></a>
+<a class="sourceLine" id="cb7-33" data-line-number="33"><span class="co">#&gt; [10,]  0.0434909662 -0.0177051928 -0.0250162564  0.020666644  0.488795301</span></a>
+<a class="sourceLine" id="cb7-34" data-line-number="34"><span class="co">#&gt; [11,]  0.0426437809  0.0204373792 -0.0097670562  0.010702930  0.026692397</span></a>
+<a class="sourceLine" id="cb7-35" data-line-number="35"><span class="co">#&gt; [12,] -0.0358612980 -0.0056052468  0.0407581427  0.031863757  0.008334353</span></a>
+<a class="sourceLine" id="cb7-36" data-line-number="36"><span class="co">#&gt; [13,] -0.0028857274  0.0038992743 -0.0109217557 -0.028684602 -0.021427592</span></a>
+<a class="sourceLine" id="cb7-37" data-line-number="37"><span class="co">#&gt; [14,]  0.0086471217 -0.0250008758 -0.0217648957  0.024708961  0.004349895</span></a>
+<a class="sourceLine" id="cb7-38" data-line-number="38"><span class="co">#&gt; [15,]  0.0332593745 -0.0056129476  0.0132852368  0.003844141 -0.019199677</span></a>
+<a class="sourceLine" id="cb7-39" data-line-number="39"><span class="co">#&gt;              [,11]        [,12]         [,13]         [,14]        [,15]</span></a>
+<a class="sourceLine" id="cb7-40" data-line-number="40"><span class="co">#&gt;  [1,] -0.029427623  0.006007620  0.0141528938  0.0747965706 -0.022677833</span></a>
+<a class="sourceLine" id="cb7-41" data-line-number="41"><span class="co">#&gt;  [2,] -0.006040661 -0.015216888  0.0017750860 -0.0419901771  0.017004125</span></a>
+<a class="sourceLine" id="cb7-42" data-line-number="42"><span class="co">#&gt;  [3,]  0.024839330  0.013403921  0.0260629076  0.0211136822 -0.013172271</span></a>
+<a class="sourceLine" id="cb7-43" data-line-number="43"><span class="co">#&gt;  [4,]  0.008687042 -0.011939694 -0.0110508818  0.0114804319 -0.026215628</span></a>
+<a class="sourceLine" id="cb7-44" data-line-number="44"><span class="co">#&gt;  [5,] -0.008547669 -0.004818211  0.0389965951 -0.0092084916  0.034814628</span></a>
+<a class="sourceLine" id="cb7-45" data-line-number="45"><span class="co">#&gt;  [6,]  0.042643781 -0.035861298 -0.0028857274  0.0086471217  0.033259374</span></a>
+<a class="sourceLine" id="cb7-46" data-line-number="46"><span class="co">#&gt;  [7,]  0.020437379 -0.005605247  0.0038992743 -0.0250008758 -0.005612948</span></a>
+<a class="sourceLine" id="cb7-47" data-line-number="47"><span class="co">#&gt;  [8,] -0.009767056  0.040758143 -0.0109217557 -0.0217648957  0.013285237</span></a>
+<a class="sourceLine" id="cb7-48" data-line-number="48"><span class="co">#&gt;  [9,]  0.010702930  0.031863757 -0.0286846019  0.0247089613  0.003844141</span></a>
+<a class="sourceLine" id="cb7-49" data-line-number="49"><span class="co">#&gt; [10,]  0.026692397  0.008334353 -0.0214275925  0.0043498946 -0.019199677</span></a>
+<a class="sourceLine" id="cb7-50" data-line-number="50"><span class="co">#&gt; [11,]  0.516592244  0.020577292 -0.0147292073  0.0015680482  0.022409541</span></a>
+<a class="sourceLine" id="cb7-51" data-line-number="51"><span class="co">#&gt; [12,]  0.020577292  0.561744588  0.0111588204  0.0241111088  0.020508594</span></a>
+<a class="sourceLine" id="cb7-52" data-line-number="52"><span class="co">#&gt; [13,] -0.014729207  0.011158820  0.4805002579 -0.0007486801 -0.011031672</span></a>
+<a class="sourceLine" id="cb7-53" data-line-number="53"><span class="co">#&gt; [14,]  0.001568048  0.024111109 -0.0007486801  0.5198244015  0.018815939</span></a>
+<a class="sourceLine" id="cb7-54" data-line-number="54"><span class="co">#&gt; [15,]  0.022409541  0.020508594 -0.0110316717  0.0188159389  0.532339377</span></a>
+<a class="sourceLine" id="cb7-55" data-line-number="55"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb7-56" data-line-number="56"><span class="co">#&gt; $Ve</span></a>
+<a class="sourceLine" id="cb7-57" data-line-number="57"><span class="co">#&gt;               [,1]         [,2]         [,3]         [,4]         [,5]</span></a>
+<a class="sourceLine" id="cb7-58" data-line-number="58"><span class="co">#&gt;  [1,]  0.507130860  0.016258066  0.023739844  0.002152856 -0.030503178</span></a>
+<a class="sourceLine" id="cb7-59" data-line-number="59"><span class="co">#&gt;  [2,]  0.016258066  0.526206551  0.017559971  0.005035695  0.003038353</span></a>
+<a class="sourceLine" id="cb7-60" data-line-number="60"><span class="co">#&gt;  [3,]  0.023739844  0.017559971  0.534381450 -0.071798937  0.045818166</span></a>
+<a class="sourceLine" id="cb7-61" data-line-number="61"><span class="co">#&gt;  [4,]  0.002152856  0.005035695 -0.071798937  0.480351078 -0.007492794</span></a>
+<a class="sourceLine" id="cb7-62" data-line-number="62"><span class="co">#&gt;  [5,] -0.030503178  0.003038353  0.045818166 -0.007492794  0.527532807</span></a>
+<a class="sourceLine" id="cb7-63" data-line-number="63"><span class="co">#&gt;  [6,] -0.005662989 -0.027727600  0.016670106  0.017226416  0.021155932</span></a>
+<a class="sourceLine" id="cb7-64" data-line-number="64"><span class="co">#&gt;  [7,] -0.023196587 -0.012591801 -0.016128856  0.032424923 -0.003670995</span></a>
+<a class="sourceLine" id="cb7-65" data-line-number="65"><span class="co">#&gt;  [8,] -0.003500757 -0.003263187 -0.029024304 -0.009340361  0.023737732</span></a>
+<a class="sourceLine" id="cb7-66" data-line-number="66"><span class="co">#&gt;  [9,]  0.012042535 -0.024551753 -0.009763668  0.006930790 -0.038549394</span></a>
+<a class="sourceLine" id="cb7-67" data-line-number="67"><span class="co">#&gt; [10,]  0.004355963 -0.026886305 -0.011169600  0.023511698  0.006354296</span></a>
+<a class="sourceLine" id="cb7-68" data-line-number="68"><span class="co">#&gt; [11,] -0.029427623 -0.006040661  0.024839330  0.008687042 -0.008547669</span></a>
+<a class="sourceLine" id="cb7-69" data-line-number="69"><span class="co">#&gt; [12,]  0.006007620 -0.015216888  0.013403921 -0.011939694 -0.004818211</span></a>
+<a class="sourceLine" id="cb7-70" data-line-number="70"><span class="co">#&gt; [13,]  0.014152894  0.001775086  0.026062908 -0.011050882  0.038996595</span></a>
+<a class="sourceLine" id="cb7-71" data-line-number="71"><span class="co">#&gt; [14,]  0.074796571 -0.041990177  0.021113682  0.011480432 -0.009208492</span></a>
+<a class="sourceLine" id="cb7-72" data-line-number="72"><span class="co">#&gt; [15,] -0.022677833  0.017004125 -0.013172271 -0.026215628  0.034814628</span></a>
+<a class="sourceLine" id="cb7-73" data-line-number="73"><span class="co">#&gt;                [,6]          [,7]          [,8]         [,9]        [,10]</span></a>
+<a class="sourceLine" id="cb7-74" data-line-number="74"><span class="co">#&gt;  [1,] -0.0056629890 -0.0231965875 -0.0035007569  0.012042535  0.004355963</span></a>
+<a class="sourceLine" id="cb7-75" data-line-number="75"><span class="co">#&gt;  [2,] -0.0277275998 -0.0125918012 -0.0032631871 -0.024551753 -0.026886305</span></a>
+<a class="sourceLine" id="cb7-76" data-line-number="76"><span class="co">#&gt;  [3,]  0.0166701062 -0.0161288558 -0.0290243037 -0.009763668 -0.011169600</span></a>
+<a class="sourceLine" id="cb7-77" data-line-number="77"><span class="co">#&gt;  [4,]  0.0172264164  0.0324249229 -0.0093403613  0.006930790  0.023511698</span></a>
+<a class="sourceLine" id="cb7-78" data-line-number="78"><span class="co">#&gt;  [5,]  0.0211559321 -0.0036709948  0.0237377323 -0.038549394  0.006354296</span></a>
+<a class="sourceLine" id="cb7-79" data-line-number="79"><span class="co">#&gt;  [6,]  0.4962461762 -0.0009046718  0.0007007663  0.036817744  0.043490966</span></a>
+<a class="sourceLine" id="cb7-80" data-line-number="80"><span class="co">#&gt;  [7,] -0.0009046718  0.4695282482  0.0131875613 -0.008166714 -0.017705193</span></a>
+<a class="sourceLine" id="cb7-81" data-line-number="81"><span class="co">#&gt;  [8,]  0.0007007663  0.0131875613  0.5468205507  0.034321562 -0.025016256</span></a>
+<a class="sourceLine" id="cb7-82" data-line-number="82"><span class="co">#&gt;  [9,]  0.0368177444 -0.0081667136  0.0343215624  0.552836526  0.020666644</span></a>
+<a class="sourceLine" id="cb7-83" data-line-number="83"><span class="co">#&gt; [10,]  0.0434909662 -0.0177051928 -0.0250162564  0.020666644  0.488795301</span></a>
+<a class="sourceLine" id="cb7-84" data-line-number="84"><span class="co">#&gt; [11,]  0.0426437809  0.0204373792 -0.0097670562  0.010702930  0.026692397</span></a>
+<a class="sourceLine" id="cb7-85" data-line-number="85"><span class="co">#&gt; [12,] -0.0358612980 -0.0056052468  0.0407581427  0.031863757  0.008334353</span></a>
+<a class="sourceLine" id="cb7-86" data-line-number="86"><span class="co">#&gt; [13,] -0.0028857274  0.0038992743 -0.0109217557 -0.028684602 -0.021427592</span></a>
+<a class="sourceLine" id="cb7-87" data-line-number="87"><span class="co">#&gt; [14,]  0.0086471217 -0.0250008758 -0.0217648957  0.024708961  0.004349895</span></a>
+<a class="sourceLine" id="cb7-88" data-line-number="88"><span class="co">#&gt; [15,]  0.0332593745 -0.0056129476  0.0132852368  0.003844141 -0.019199677</span></a>
+<a class="sourceLine" id="cb7-89" data-line-number="89"><span class="co">#&gt;              [,11]        [,12]         [,13]         [,14]        [,15]</span></a>
+<a class="sourceLine" id="cb7-90" data-line-number="90"><span class="co">#&gt;  [1,] -0.029427623  0.006007620  0.0141528938  0.0747965706 -0.022677833</span></a>
+<a class="sourceLine" id="cb7-91" data-line-number="91"><span class="co">#&gt;  [2,] -0.006040661 -0.015216888  0.0017750860 -0.0419901771  0.017004125</span></a>
+<a class="sourceLine" id="cb7-92" data-line-number="92"><span class="co">#&gt;  [3,]  0.024839330  0.013403921  0.0260629076  0.0211136822 -0.013172271</span></a>
+<a class="sourceLine" id="cb7-93" data-line-number="93"><span class="co">#&gt;  [4,]  0.008687042 -0.011939694 -0.0110508818  0.0114804319 -0.026215628</span></a>
+<a class="sourceLine" id="cb7-94" data-line-number="94"><span class="co">#&gt;  [5,] -0.008547669 -0.004818211  0.0389965951 -0.0092084916  0.034814628</span></a>
+<a class="sourceLine" id="cb7-95" data-line-number="95"><span class="co">#&gt;  [6,]  0.042643781 -0.035861298 -0.0028857274  0.0086471217  0.033259374</span></a>
+<a class="sourceLine" id="cb7-96" data-line-number="96"><span class="co">#&gt;  [7,]  0.020437379 -0.005605247  0.0038992743 -0.0250008758 -0.005612948</span></a>
+<a class="sourceLine" id="cb7-97" data-line-number="97"><span class="co">#&gt;  [8,] -0.009767056  0.040758143 -0.0109217557 -0.0217648957  0.013285237</span></a>
+<a class="sourceLine" id="cb7-98" data-line-number="98"><span class="co">#&gt;  [9,]  0.010702930  0.031863757 -0.0286846019  0.0247089613  0.003844141</span></a>
+<a class="sourceLine" id="cb7-99" data-line-number="99"><span class="co">#&gt; [10,]  0.026692397  0.008334353 -0.0214275925  0.0043498946 -0.019199677</span></a>
+<a class="sourceLine" id="cb7-100" data-line-number="100"><span class="co">#&gt; [11,]  0.516592244  0.020577292 -0.0147292073  0.0015680482  0.022409541</span></a>
+<a class="sourceLine" id="cb7-101" data-line-number="101"><span class="co">#&gt; [12,]  0.020577292  0.561744588  0.0111588204  0.0241111088  0.020508594</span></a>
+<a class="sourceLine" id="cb7-102" data-line-number="102"><span class="co">#&gt; [13,] -0.014729207  0.011158820  0.4805002579 -0.0007486801 -0.011031672</span></a>
+<a class="sourceLine" id="cb7-103" data-line-number="103"><span class="co">#&gt; [14,]  0.001568048  0.024111109 -0.0007486801  0.5198244015  0.018815939</span></a>
+<a class="sourceLine" id="cb7-104" data-line-number="104"><span class="co">#&gt; [15,]  0.022409541  0.020508594 -0.0110316717  0.0188159389  0.532339377</span></a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">system.time</span>(<span class="kw">limmbo2</span>(<span class="dt">kinship =</span> kinship, <span class="dt">pheno =</span> pheno, <span class="dt">S =</span> <span class="dv">3</span>, <span class="dt">seed =</span> <span class="dv">1</span>) -&gt;<span class="st"> </span>li_out)</a>
+<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="co">#&gt;    user  system elapsed </span></a>
+<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="co">#&gt;   4.841   1.503  28.412</span></a>
+<a class="sourceLine" id="cb8-4" data-line-number="4">li_out</a>
+<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="co">#&gt; $Vg</span></a>
+<a class="sourceLine" id="cb8-6" data-line-number="6"><span class="co">#&gt;               [,1]         [,2]         [,3]         [,4]         [,5]</span></a>
+<a class="sourceLine" id="cb8-7" data-line-number="7"><span class="co">#&gt;  [1,]  0.506160403  0.016322011  0.023064644  0.001914652 -0.030707154</span></a>
+<a class="sourceLine" id="cb8-8" data-line-number="8"><span class="co">#&gt;  [2,]  0.016322011  0.525321014  0.016417587  0.004610828  0.002550754</span></a>
+<a class="sourceLine" id="cb8-9" data-line-number="9"><span class="co">#&gt;  [3,]  0.023064644  0.016417587  0.540185679 -0.069062528  0.048714539</span></a>
+<a class="sourceLine" id="cb8-10" data-line-number="10"><span class="co">#&gt;  [4,]  0.001914652  0.004610828 -0.069062528  0.480358289 -0.006352811</span></a>
+<a class="sourceLine" id="cb8-11" data-line-number="11"><span class="co">#&gt;  [5,] -0.030707154  0.002550754  0.048714539 -0.006352811  0.527779651</span></a>
+<a class="sourceLine" id="cb8-12" data-line-number="12"><span class="co">#&gt;  [6,] -0.005601387 -0.027579715  0.016090833  0.016985159  0.020873183</span></a>
+<a class="sourceLine" id="cb8-13" data-line-number="13"><span class="co">#&gt;  [7,] -0.023010369 -0.012324764 -0.017584652  0.031794515 -0.004312673</span></a>
+<a class="sourceLine" id="cb8-14" data-line-number="14"><span class="co">#&gt;  [8,] -0.003769735 -0.003746403 -0.025905126 -0.008174371  0.025017323</span></a>
+<a class="sourceLine" id="cb8-15" data-line-number="15"><span class="co">#&gt;  [9,]  0.012307379 -0.023981021 -0.012961509  0.005708661 -0.039867314</span></a>
+<a class="sourceLine" id="cb8-16" data-line-number="16"><span class="co">#&gt; [10,]  0.004223793 -0.027044146 -0.009791349  0.023967296  0.006930100</span></a>
+<a class="sourceLine" id="cb8-17" data-line-number="17"><span class="co">#&gt; [11,] -0.029607009 -0.006459118  0.027475085  0.009676449 -0.007357193</span></a>
+<a class="sourceLine" id="cb8-18" data-line-number="18"><span class="co">#&gt; [12,]  0.005911815 -0.015329885  0.014286729 -0.011571590 -0.004410241</span></a>
+<a class="sourceLine" id="cb8-19" data-line-number="19"><span class="co">#&gt; [13,]  0.014322951  0.002128320  0.023779558 -0.011860837  0.037940612</span></a>
+<a class="sourceLine" id="cb8-20" data-line-number="20"><span class="co">#&gt; [14,]  0.074724965 -0.041729822  0.020023829  0.011063992 -0.009642738</span></a>
+<a class="sourceLine" id="cb8-21" data-line-number="21"><span class="co">#&gt; [15,] -0.022701562  0.016836556 -0.012331206 -0.025853742  0.035092510</span></a>
+<a class="sourceLine" id="cb8-22" data-line-number="22"><span class="co">#&gt;                [,6]          [,7]          [,8]         [,9]        [,10]</span></a>
+<a class="sourceLine" id="cb8-23" data-line-number="23"><span class="co">#&gt;  [1,] -0.0056013871 -0.0230103694 -0.0037697352  0.012307379  0.004223793</span></a>
+<a class="sourceLine" id="cb8-24" data-line-number="24"><span class="co">#&gt;  [2,] -0.0275797148 -0.0123247640 -0.0037464030 -0.023981021 -0.027044146</span></a>
+<a class="sourceLine" id="cb8-25" data-line-number="25"><span class="co">#&gt;  [3,]  0.0160908328 -0.0175846520 -0.0259051264 -0.012961509 -0.009791349</span></a>
+<a class="sourceLine" id="cb8-26" data-line-number="26"><span class="co">#&gt;  [4,]  0.0169851588  0.0317945148 -0.0081743713  0.005708661  0.023967296</span></a>
+<a class="sourceLine" id="cb8-27" data-line-number="27"><span class="co">#&gt;  [5,]  0.0208731833 -0.0043126729  0.0250173229 -0.039867314  0.006930100</span></a>
+<a class="sourceLine" id="cb8-28" data-line-number="28"><span class="co">#&gt;  [6,]  0.4953090711 -0.0007850014  0.0004580325  0.036991232  0.043288750</span></a>
+<a class="sourceLine" id="cb8-29" data-line-number="29"><span class="co">#&gt;  [7,] -0.0007850014  0.4689179479  0.0124962267 -0.007450792 -0.017959637</span></a>
+<a class="sourceLine" id="cb8-30" data-line-number="30"><span class="co">#&gt;  [8,]  0.0004580325  0.0124962267  0.5470882271  0.032816206 -0.024360020</span></a>
+<a class="sourceLine" id="cb8-31" data-line-number="31"><span class="co">#&gt;  [9,]  0.0369912322 -0.0074507921  0.0328162062  0.553224190  0.019987469</span></a>
+<a class="sourceLine" id="cb8-32" data-line-number="32"><span class="co">#&gt; [10,]  0.0432887504 -0.0179596369 -0.0243600202  0.019987469  0.488079613</span></a>
+<a class="sourceLine" id="cb8-33" data-line-number="33"><span class="co">#&gt; [11,]  0.0423394021  0.0198098624 -0.0085510381  0.009420779  0.027163566</span></a>
+<a class="sourceLine" id="cb8-34" data-line-number="34"><span class="co">#&gt; [12,] -0.0358552447 -0.0057907336  0.0410746559  0.031367036  0.008495574</span></a>
+<a class="sourceLine" id="cb8-35" data-line-number="35"><span class="co">#&gt; [13,] -0.0027037132  0.0043732118 -0.0118865775 -0.027579336 -0.021818148</span></a>
+<a class="sourceLine" id="cb8-36" data-line-number="36"><span class="co">#&gt; [14,]  0.0087104466 -0.0247194676 -0.0221805726  0.025142632  0.004134961</span></a>
+<a class="sourceLine" id="cb8-37" data-line-number="37"><span class="co">#&gt; [15,]  0.0331229397 -0.0057768009  0.0136172533  0.003455520 -0.018997721</span></a>
+<a class="sourceLine" id="cb8-38" data-line-number="38"><span class="co">#&gt;              [,11]        [,12]         [,13]         [,14]        [,15]</span></a>
+<a class="sourceLine" id="cb8-39" data-line-number="39"><span class="co">#&gt;  [1,] -0.029607009  0.005911815  0.0143229505  0.0747249649 -0.022701562</span></a>
+<a class="sourceLine" id="cb8-40" data-line-number="40"><span class="co">#&gt;  [2,] -0.006459118 -0.015329885  0.0021283199 -0.0417298219  0.016836556</span></a>
+<a class="sourceLine" id="cb8-41" data-line-number="41"><span class="co">#&gt;  [3,]  0.027475085  0.014286729  0.0237795585  0.0200238292 -0.012331206</span></a>
+<a class="sourceLine" id="cb8-42" data-line-number="42"><span class="co">#&gt;  [4,]  0.009676449 -0.011571590 -0.0118608374  0.0110639922 -0.025853742</span></a>
+<a class="sourceLine" id="cb8-43" data-line-number="43"><span class="co">#&gt;  [5,] -0.007357193 -0.004410241  0.0379406125 -0.0096427376  0.035092510</span></a>
+<a class="sourceLine" id="cb8-44" data-line-number="44"><span class="co">#&gt;  [6,]  0.042339402 -0.035855245 -0.0027037132  0.0087104466  0.033122940</span></a>
+<a class="sourceLine" id="cb8-45" data-line-number="45"><span class="co">#&gt;  [7,]  0.019809862 -0.005790734  0.0043732118 -0.0247194676 -0.005776801</span></a>
+<a class="sourceLine" id="cb8-46" data-line-number="46"><span class="co">#&gt;  [8,] -0.008551038  0.041074656 -0.0118865775 -0.0221805726  0.013617253</span></a>
+<a class="sourceLine" id="cb8-47" data-line-number="47"><span class="co">#&gt;  [9,]  0.009420779  0.031367036 -0.0275793361  0.0251426316  0.003455520</span></a>
+<a class="sourceLine" id="cb8-48" data-line-number="48"><span class="co">#&gt; [10,]  0.027163566  0.008495574 -0.0218181484  0.0041349608 -0.018997721</span></a>
+<a class="sourceLine" id="cb8-49" data-line-number="49"><span class="co">#&gt; [11,]  0.516634900  0.020889478 -0.0155674053  0.0011566661  0.022678761</span></a>
+<a class="sourceLine" id="cb8-50" data-line-number="50"><span class="co">#&gt; [12,]  0.020889478  0.560740863  0.0108390846  0.0239197367  0.020571685</span></a>
+<a class="sourceLine" id="cb8-51" data-line-number="51"><span class="co">#&gt; [13,] -0.015567405  0.010839085  0.4802507680 -0.0004094596 -0.011270262</span></a>
+<a class="sourceLine" id="cb8-52" data-line-number="52"><span class="co">#&gt; [14,]  0.001156666  0.023919737 -0.0004094596  0.5189275712  0.018651420</span></a>
+<a class="sourceLine" id="cb8-53" data-line-number="53"><span class="co">#&gt; [15,]  0.022678761  0.020571685 -0.0112702621  0.0186514204  0.531376892</span></a>
+<a class="sourceLine" id="cb8-54" data-line-number="54"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb8-55" data-line-number="55"><span class="co">#&gt; $Ve</span></a>
+<a class="sourceLine" id="cb8-56" data-line-number="56"><span class="co">#&gt;               [,1]         [,2]         [,3]         [,4]         [,5]</span></a>
+<a class="sourceLine" id="cb8-57" data-line-number="57"><span class="co">#&gt;  [1,]  0.506160403  0.016322011  0.023064644  0.001914652 -0.030707154</span></a>
+<a class="sourceLine" id="cb8-58" data-line-number="58"><span class="co">#&gt;  [2,]  0.016322011  0.525321014  0.016417587  0.004610828  0.002550754</span></a>
+<a class="sourceLine" id="cb8-59" data-line-number="59"><span class="co">#&gt;  [3,]  0.023064644  0.016417587  0.540185679 -0.069062528  0.048714539</span></a>
+<a class="sourceLine" id="cb8-60" data-line-number="60"><span class="co">#&gt;  [4,]  0.001914652  0.004610828 -0.069062528  0.480358289 -0.006352811</span></a>
+<a class="sourceLine" id="cb8-61" data-line-number="61"><span class="co">#&gt;  [5,] -0.030707154  0.002550754  0.048714539 -0.006352811  0.527779651</span></a>
+<a class="sourceLine" id="cb8-62" data-line-number="62"><span class="co">#&gt;  [6,] -0.005601387 -0.027579715  0.016090833  0.016985159  0.020873183</span></a>
+<a class="sourceLine" id="cb8-63" data-line-number="63"><span class="co">#&gt;  [7,] -0.023010369 -0.012324764 -0.017584652  0.031794515 -0.004312673</span></a>
+<a class="sourceLine" id="cb8-64" data-line-number="64"><span class="co">#&gt;  [8,] -0.003769735 -0.003746403 -0.025905126 -0.008174371  0.025017323</span></a>
+<a class="sourceLine" id="cb8-65" data-line-number="65"><span class="co">#&gt;  [9,]  0.012307379 -0.023981021 -0.012961509  0.005708661 -0.039867314</span></a>
+<a class="sourceLine" id="cb8-66" data-line-number="66"><span class="co">#&gt; [10,]  0.004223793 -0.027044146 -0.009791349  0.023967296  0.006930100</span></a>
+<a class="sourceLine" id="cb8-67" data-line-number="67"><span class="co">#&gt; [11,] -0.029607009 -0.006459118  0.027475085  0.009676449 -0.007357193</span></a>
+<a class="sourceLine" id="cb8-68" data-line-number="68"><span class="co">#&gt; [12,]  0.005911815 -0.015329885  0.014286729 -0.011571590 -0.004410241</span></a>
+<a class="sourceLine" id="cb8-69" data-line-number="69"><span class="co">#&gt; [13,]  0.014322951  0.002128320  0.023779558 -0.011860837  0.037940612</span></a>
+<a class="sourceLine" id="cb8-70" data-line-number="70"><span class="co">#&gt; [14,]  0.074724965 -0.041729822  0.020023829  0.011063992 -0.009642738</span></a>
+<a class="sourceLine" id="cb8-71" data-line-number="71"><span class="co">#&gt; [15,] -0.022701562  0.016836556 -0.012331206 -0.025853742  0.035092510</span></a>
+<a class="sourceLine" id="cb8-72" data-line-number="72"><span class="co">#&gt;                [,6]          [,7]          [,8]         [,9]        [,10]</span></a>
+<a class="sourceLine" id="cb8-73" data-line-number="73"><span class="co">#&gt;  [1,] -0.0056013871 -0.0230103694 -0.0037697352  0.012307379  0.004223793</span></a>
+<a class="sourceLine" id="cb8-74" data-line-number="74"><span class="co">#&gt;  [2,] -0.0275797148 -0.0123247640 -0.0037464030 -0.023981021 -0.027044146</span></a>
+<a class="sourceLine" id="cb8-75" data-line-number="75"><span class="co">#&gt;  [3,]  0.0160908328 -0.0175846520 -0.0259051264 -0.012961509 -0.009791349</span></a>
+<a class="sourceLine" id="cb8-76" data-line-number="76"><span class="co">#&gt;  [4,]  0.0169851588  0.0317945148 -0.0081743713  0.005708661  0.023967296</span></a>
+<a class="sourceLine" id="cb8-77" data-line-number="77"><span class="co">#&gt;  [5,]  0.0208731833 -0.0043126729  0.0250173229 -0.039867314  0.006930100</span></a>
+<a class="sourceLine" id="cb8-78" data-line-number="78"><span class="co">#&gt;  [6,]  0.4953090711 -0.0007850014  0.0004580325  0.036991232  0.043288750</span></a>
+<a class="sourceLine" id="cb8-79" data-line-number="79"><span class="co">#&gt;  [7,] -0.0007850014  0.4689179479  0.0124962267 -0.007450792 -0.017959637</span></a>
+<a class="sourceLine" id="cb8-80" data-line-number="80"><span class="co">#&gt;  [8,]  0.0004580325  0.0124962267  0.5470882271  0.032816206 -0.024360020</span></a>
+<a class="sourceLine" id="cb8-81" data-line-number="81"><span class="co">#&gt;  [9,]  0.0369912322 -0.0074507921  0.0328162062  0.553224190  0.019987469</span></a>
+<a class="sourceLine" id="cb8-82" data-line-number="82"><span class="co">#&gt; [10,]  0.0432887504 -0.0179596369 -0.0243600202  0.019987469  0.488079613</span></a>
+<a class="sourceLine" id="cb8-83" data-line-number="83"><span class="co">#&gt; [11,]  0.0423394021  0.0198098624 -0.0085510381  0.009420779  0.027163566</span></a>
+<a class="sourceLine" id="cb8-84" data-line-number="84"><span class="co">#&gt; [12,] -0.0358552447 -0.0057907336  0.0410746559  0.031367036  0.008495574</span></a>
+<a class="sourceLine" id="cb8-85" data-line-number="85"><span class="co">#&gt; [13,] -0.0027037132  0.0043732118 -0.0118865775 -0.027579336 -0.021818148</span></a>
+<a class="sourceLine" id="cb8-86" data-line-number="86"><span class="co">#&gt; [14,]  0.0087104466 -0.0247194676 -0.0221805726  0.025142632  0.004134961</span></a>
+<a class="sourceLine" id="cb8-87" data-line-number="87"><span class="co">#&gt; [15,]  0.0331229397 -0.0057768009  0.0136172533  0.003455520 -0.018997721</span></a>
+<a class="sourceLine" id="cb8-88" data-line-number="88"><span class="co">#&gt;              [,11]        [,12]         [,13]         [,14]        [,15]</span></a>
+<a class="sourceLine" id="cb8-89" data-line-number="89"><span class="co">#&gt;  [1,] -0.029607009  0.005911815  0.0143229505  0.0747249649 -0.022701562</span></a>
+<a class="sourceLine" id="cb8-90" data-line-number="90"><span class="co">#&gt;  [2,] -0.006459118 -0.015329885  0.0021283199 -0.0417298219  0.016836556</span></a>
+<a class="sourceLine" id="cb8-91" data-line-number="91"><span class="co">#&gt;  [3,]  0.027475085  0.014286729  0.0237795585  0.0200238292 -0.012331206</span></a>
+<a class="sourceLine" id="cb8-92" data-line-number="92"><span class="co">#&gt;  [4,]  0.009676449 -0.011571590 -0.0118608374  0.0110639922 -0.025853742</span></a>
+<a class="sourceLine" id="cb8-93" data-line-number="93"><span class="co">#&gt;  [5,] -0.007357193 -0.004410241  0.0379406125 -0.0096427376  0.035092510</span></a>
+<a class="sourceLine" id="cb8-94" data-line-number="94"><span class="co">#&gt;  [6,]  0.042339402 -0.035855245 -0.0027037132  0.0087104466  0.033122940</span></a>
+<a class="sourceLine" id="cb8-95" data-line-number="95"><span class="co">#&gt;  [7,]  0.019809862 -0.005790734  0.0043732118 -0.0247194676 -0.005776801</span></a>
+<a class="sourceLine" id="cb8-96" data-line-number="96"><span class="co">#&gt;  [8,] -0.008551038  0.041074656 -0.0118865775 -0.0221805726  0.013617253</span></a>
+<a class="sourceLine" id="cb8-97" data-line-number="97"><span class="co">#&gt;  [9,]  0.009420779  0.031367036 -0.0275793361  0.0251426316  0.003455520</span></a>
+<a class="sourceLine" id="cb8-98" data-line-number="98"><span class="co">#&gt; [10,]  0.027163566  0.008495574 -0.0218181484  0.0041349608 -0.018997721</span></a>
+<a class="sourceLine" id="cb8-99" data-line-number="99"><span class="co">#&gt; [11,]  0.516634900  0.020889478 -0.0155674053  0.0011566661  0.022678761</span></a>
+<a class="sourceLine" id="cb8-100" data-line-number="100"><span class="co">#&gt; [12,]  0.020889478  0.560740863  0.0108390846  0.0239197367  0.020571685</span></a>
+<a class="sourceLine" id="cb8-101" data-line-number="101"><span class="co">#&gt; [13,] -0.015567405  0.010839085  0.4802507680 -0.0004094596 -0.011270262</span></a>
+<a class="sourceLine" id="cb8-102" data-line-number="102"><span class="co">#&gt; [14,]  0.001156666  0.023919737 -0.0004094596  0.5189275712  0.018651420</span></a>
+<a class="sourceLine" id="cb8-103" data-line-number="103"><span class="co">#&gt; [15,]  0.022678761  0.020571685 -0.0112702621  0.0186514204  0.531376892</span></a></code></pre></div>
+</div>
+<div id="use-nontrivial-kinship-with-trivariate-phenotype" class="section level2">
+<h2>Use nontrivial kinship with trivariate phenotype</h2>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">n &lt;-<span class="st"> </span><span class="dv">500</span></a>
+<a class="sourceLine" id="cb9-2" data-line-number="2">A &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">runif</span>(n <span class="op">^</span><span class="st"> </span><span class="dv">2</span>), <span class="dt">ncol =</span> n) </a>
+<a class="sourceLine" id="cb9-3" data-line-number="3">kinship &lt;-<span class="st"> </span><span class="kw">round</span>(<span class="kw">t</span>(A) <span class="op">%*%</span><span class="st"> </span>A, <span class="dv">6</span>)</a>
+<a class="sourceLine" id="cb9-4" data-line-number="4">pheno &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">rnorm</span>(<span class="dv">1500</span>), <span class="dt">nrow =</span> <span class="dv">500</span>)</a>
+<a class="sourceLine" id="cb9-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb9-6" data-line-number="6"><span class="kw">system.time</span>(<span class="kw">calc_covs</span>(pheno, kinship) -&gt;<span class="st"> </span>cc_out)</a>
+<a class="sourceLine" id="cb9-7" data-line-number="7"><span class="co">#&gt;     user   system  elapsed </span></a>
+<a class="sourceLine" id="cb9-8" data-line-number="8"><span class="co">#&gt; 5158.346   99.416 7148.782</span></a>
+<a class="sourceLine" id="cb9-9" data-line-number="9">cc_out</a>
+<a class="sourceLine" id="cb9-10" data-line-number="10"><span class="co">#&gt; $Vg</span></a>
+<a class="sourceLine" id="cb9-11" data-line-number="11"><span class="co">#&gt;               [,1]         [,2]          [,3]</span></a>
+<a class="sourceLine" id="cb9-12" data-line-number="12"><span class="co">#&gt; [1,]  8.712469e-05  1.29697e-05 -0.0001558717</span></a>
+<a class="sourceLine" id="cb9-13" data-line-number="13"><span class="co">#&gt; [2,]  1.296970e-05  3.06223e-06 -0.0000242323</span></a>
+<a class="sourceLine" id="cb9-14" data-line-number="14"><span class="co">#&gt; [3,] -1.558717e-04 -2.42323e-05  0.0002862207</span></a>
+<a class="sourceLine" id="cb9-15" data-line-number="15"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb9-16" data-line-number="16"><span class="co">#&gt; $Ve</span></a>
+<a class="sourceLine" id="cb9-17" data-line-number="17"><span class="co">#&gt;             [,1]        [,2]      [,3]</span></a>
+<a class="sourceLine" id="cb9-18" data-line-number="18"><span class="co">#&gt; [1,]  0.99823046 -0.02710635 0.0168752</span></a>
+<a class="sourceLine" id="cb9-19" data-line-number="19"><span class="co">#&gt; [2,] -0.02710635  1.03961887 0.1020966</span></a>
+<a class="sourceLine" id="cb9-20" data-line-number="20"><span class="co">#&gt; [3,]  0.01687520  0.10209663 1.0191965</span></a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw">system.time</span>(<span class="kw">limmbo2</span>(<span class="dt">kinship =</span> kinship, <span class="dt">pheno =</span> pheno, <span class="dt">S =</span> <span class="dv">3</span>, <span class="dt">seed =</span> <span class="dv">1</span>) -&gt;<span class="st"> </span>li_out)</a>
+<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="co">#&gt;    user  system elapsed </span></a>
+<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="co">#&gt;   0.590   0.349   4.632</span></a>
+<a class="sourceLine" id="cb10-4" data-line-number="4">li_out</a>
+<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="co">#&gt; $Vg</span></a>
+<a class="sourceLine" id="cb10-6" data-line-number="6"><span class="co">#&gt;               [,1]          [,2]          [,3]</span></a>
+<a class="sourceLine" id="cb10-7" data-line-number="7"><span class="co">#&gt; [1,]  2.000000e-04 -1.258810e-17 -1.123354e-15</span></a>
+<a class="sourceLine" id="cb10-8" data-line-number="8"><span class="co">#&gt; [2,] -1.258810e-17  2.000000e-04 -1.810596e-16</span></a>
+<a class="sourceLine" id="cb10-9" data-line-number="9"><span class="co">#&gt; [3,] -1.123354e-15 -1.810596e-16  2.000000e-04</span></a>
+<a class="sourceLine" id="cb10-10" data-line-number="10"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb10-11" data-line-number="11"><span class="co">#&gt; $Ve</span></a>
+<a class="sourceLine" id="cb10-12" data-line-number="12"><span class="co">#&gt;             [,1]        [,2]       [,3]</span></a>
+<a class="sourceLine" id="cb10-13" data-line-number="13"><span class="co">#&gt; [1,]  0.99780272 -0.02650356 0.01054944</span></a>
+<a class="sourceLine" id="cb10-14" data-line-number="14"><span class="co">#&gt; [2,] -0.02650356  1.03630196 0.10131932</span></a>
+<a class="sourceLine" id="cb10-15" data-line-number="15"><span class="co">#&gt; [3,]  0.01054944  0.10131932 1.02683268</span></a></code></pre></div>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

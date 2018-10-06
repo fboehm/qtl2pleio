@@ -1,13 +1,21 @@
 ---
 title: "Benchmarking"
 author: "Frederick Boehm"
-date: "5/22/2018"
-output: html_document
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Benchmarking}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
 ```
+
 
 The goal here is to compare the computational time for `calc_Bhat`, where the calculations are done in R, with that of `rcpp_calc_Bhat`, where the calculations are done in C++.
 
