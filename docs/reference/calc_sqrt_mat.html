@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Changelog • qtl2pleio</title>
+<title>Calculate matrix square root for a covariance matrix — calc_sqrt_mat • qtl2pleio</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,7 +30,10 @@
 
 
 
-<meta property="og:title" content="Changelog" />
+<meta property="og:title" content="Calculate matrix square root for a covariance matrix — calc_sqrt_mat" />
+
+<meta property="og:description" content="Calculate matrix square root for a covariance matrix" />
+<meta name="twitter:card" content="summary" />
 
 
 
@@ -46,7 +49,7 @@
   </head>
 
   <body>
-    <div class="container template-news">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -116,53 +119,37 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Changelog <small></small></h1>
-      <small>Source: <a href='https://github.com/fboehm/qtl2pleio/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
+    <h1>Calculate matrix square root for a covariance matrix</h1>
+    <small class="dont-index">Source: <a href='https://github.com/fboehm/qtl2pleio/blob/master/R/calc_sqrt_mat.R'><code>R/calc_sqrt_mat.R</code></a></small>
+    <div class="hidden name"><code>calc_sqrt_mat.Rd</code></div>
     </div>
 
-    <div id="qtl2pleio-0-1-0" class="section level1">
-<h1 class="page-header">
-<a href="#qtl2pleio-0-1-0" class="anchor"></a>qtl2pleio 0.1.0</h1>
-<ul>
-<li>Added a <code>NEWS.md</code> file to track changes to the package.</li>
-</ul>
-</div>
-    <div id="qtl2pleio-0-1-1" class="section level1">
-<h1 class="page-header">
-<a href="#qtl2pleio-0-1-1" class="anchor"></a>qtl2pleio 0.1.1</h1>
-<ul>
-<li>restructured <code>scan_pvl</code> to allow for more than two phenotypes. Now output is a dataframe.</li>
-</ul>
-</div>
-    <div id="qtl2pleio-0-1-2" class="section level1">
-<h1 class="page-header">
-<a href="#qtl2pleio-0-1-2" class="anchor"></a>qtl2pleio 0.1.2</h1>
-<ul>
-<li>added tests &amp; examples for <code>scan_pvl</code><br>
-</li>
-<li>changed output of <code>scan_pvl</code> to a tibble<br>
-</li>
-<li>added <code>boot_n</code> function for use in bootstrap analyses<br>
-</li>
-<li>started using covariates in calls to <code>calc_covs</code>. Note that we still don’t use genetic data when calling <code>calc_covs</code>.<br>
-</li>
-<li>deprecated <code>calc_loglik_bvlmm</code>
-</li>
-</ul>
-</div>
-  </div>
+    <div class="ref-description">
+    
+    <p>Calculate matrix square root for a covariance matrix</p>
+    
+    </div>
 
+    <pre class="usage"><span class='fu'>calc_sqrt_mat</span>(<span class='no'>A</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>A</th>
+      <td><p>covariance matrix</p></td>
+    </tr>
+    </table>
+    
+
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <div id="tocnav">
-      <h2>Contents</h2>
-      <ul class="nav nav-pills nav-stacked">
-        <li><a href="#qtl2pleio-0-1-0">0.1.0</a></li>
-        <li><a href="#qtl2pleio-0-1-1">0.1.1</a></li>
-        <li><a href="#qtl2pleio-0-1-2">0.1.2</a></li>
-      </ul>
-    </div>
-  </div>
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
+                </ul>
 
+  </div>
 </div>
 
       <footer>
