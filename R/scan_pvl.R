@@ -1,11 +1,48 @@
 #' Perform model fitting for all ordered pairs of markers in a genomic region of interest
 #'
-#' @param probs an array of genotype probabilities for a single chromosome (before eigenrotation)
-#' @param pheno a matrix of phenotypes (before eigenrotation)
+#' `scan_pvl` calculates log likelihood for d-variate phenotype model fits. Inputted parameter `start_snp1` indicates where in the `probs` object to start the scan.
+#'
+#' The function first discards individuals with missing phenotypes or missing covariates.
+#' It also discards covariates that have the same value for all remaining subjects.
+#' It then uses one of two methods to infer variance components, Vg and Ve. Both Vg and Ve
+#' are d by d covariance matrices.
+#' The first method, the default, uses an expectation maximization algorithm, as
+#' implemented in the `gemma2` R package. `gemma2` R package is an R implementation of the
+#' GEMMA algorithm (Zhou & Stephens 2012 Nature Genetics).
+#' The alternative method for inferring variance components, which is useful for more than two
+#' phenotypes, ie, when d > 2, uses the LiMMBo method to infer variance components (Meyer et al. 2018).
+#' Specifically, with input `use_limmbo2 = TRUE`, `scan_pvl` calls the function
+#' `limmbo2::limmbo2` to infer d by d variance components.
+#' Note that variance components, when inferred via
+#' `gemma2`, are fitted on a model that uses the d-variate phenotype
+#' but contains no genetic information. This model does, however, use the specified covariates.
+#' Current implementation of `limmbo2` doesn't use covariates.
+#' These inferred covariance matrices, \eqn{\hat{Vg}} and \eqn{\hat{Ve}}, are then used in subsequent model fitting via
+#' generalized least squares. Generalized least squares model fitting is applied to every d-tuple of
+#' markers within the specified genomic region for `scan_pvl`.
+#' A progress bar appears *after* inferring Vg and Ve and records progress through the
+#' d-tuples of markers that constitute the d-variate scan.
+#' For a single d-tuple of markers, we fit the model:
+#' \deqn{vec(Y) = Xvec(B) + vec(G) + vec(E)} where
+#' \deqn{G \sim MN(0, K, \hat{Vg})} and \deqn{E \sim MN(0, I, \hat{Ve})} where \eqn{MN} denotes the matrix-variate
+#' normal distribution with three parameters: mean matrix, covariance among rows, and
+#' covariance among columns. \eqn{vec} denotes the vectorization operation, ie, stacking by columns.
+#' \eqn{K} is a kinship matrix, typically calculated by leave-one-chromosome-out methods.
+#' \eqn{Y} is the n by d phenotypes matrix. \eqn{X} is a block-diagonal nd by fd matrix consisting of
+#' d blocks each of dimension n by f. Each n by f block (on the diagonal) contains a matrix of
+#' founder allele probabilities for the n subjects at a single marker. The off-diagonal blocks
+#' have only zero entries.
+#' The log-likelihood is returned for each model. The outputted object is a tibble with
+#' d + 1 columns. The first d columns specify the markers used in the corresponding model fit, while
+#' the last column specifies the log-likelihood value at that d-tuple of markers.
+#'
+#'
+#' @param probs an array of founder allele probabilities for a single chromosome
+#' @param pheno a matrix of phenotypes
 #' @param kinship a kinship matrix for one chromosome
 #' @param covariates a matrix, n subjects by n.cov covariates, where each column is one covariate
 #' @param start_snp1 index of where to start the scan within probs
-#' @param n_snp the number of (consecutive) snps to include in the scan
+#' @param n_snp the number of (consecutive) markers to include in the scan
 #' @param max_iter maximum number of iterations for EM algorithm
 #' @param max_prec stepwise precision for EM algorithm. EM stops once incremental difference in log likelihood is less than max_prec
 #' @param use_limmbo2 logical indicating whether to use limmbo2::limbbo2() in covariance matrices estimation. Default is to use gemma2 R package.
