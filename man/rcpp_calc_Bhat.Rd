@@ -2,14 +2,14 @@
 % Please edit documentation in R/rcpp_calc_Bhat.R
 \name{rcpp_calc_Bhat}
 \alias{rcpp_calc_Bhat}
-\title{Estimate allele effects matrix, B hat, with Rcpp}
+\title{Estimate allele effects matrix, B hat, with Rcpp functions}
 \usage{
-rcpp_calc_Bhat(X, Sigma, Y)
+rcpp_calc_Bhat(X, Sigma_inv, Y)
 }
 \arguments{
 \item{X}{dn by df block-diagonal design matrix that incorporates genetic info for two markers. Note that we can use the same marker data twice.}
 
-\item{Sigma}{dn by dn covariance matrix, often composed as \eqn{K \otimes V_g + I_n \otimes V_e}}
+\item{Sigma_inv}{dn by dn inverse covariance matrix, where its inverse, ie, Sigma, is often composed as \eqn{K \otimes V_g + I_n \otimes V_e}}
 
 \item{Y}{dn by 1 matrix, ie, a column vector, of d phenotypes' measurements}
 }
@@ -17,5 +17,5 @@ rcpp_calc_Bhat(X, Sigma, Y)
 a df by 1 matrix of GLS-estimated allele effects
 }
 \description{
-Estimate allele effects matrix, B hat, with Rcpp
+Estimate allele effects matrix, B hat, with Rcpp functions
 }

@@ -16,8 +16,8 @@ a number, the LRT statistic
 Calculate a LRT statistic from the (new) output from scan_pvl
 }
 \examples{
-rep(paste0("Marker", 1:3), times = 3) -> marker1
-rep(paste0("Marker", 1:3), each = 3) -> marker2
+rep(paste0('Marker', 1:3), times = 3) -> marker1
+rep(paste0('Marker', 1:3), each = 3) -> marker2
 runif(9, -1, 0) -> ll
 tibble::tibble(marker1, marker2, ll) -> scan_out
 calc_lrt_tib(scan_out)

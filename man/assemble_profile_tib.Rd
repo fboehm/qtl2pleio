@@ -9,7 +9,7 @@ assemble_profile_tib(tib, trace = "profile1")
 \arguments{
 \item{tib}{a tibble, derived from loglik_mat and with pmap info}
 
-\item{trace}{character vector to identify which profile log likelihood to calculate. Takes values "profile1" or "profile2"}
+\item{trace}{character vector to identify which profile log likelihood to calculate. Takes values 'profile1' or 'profile2'}
 }
 \value{
 a tibble with 3 columns: marker position, profile log-likelihood, and trace (profile1 or profile2)

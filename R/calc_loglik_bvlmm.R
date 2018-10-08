@@ -17,8 +17,8 @@ NULL
 #'
 #' @export
 
-calc_loglik_bvlmm <- function(X, Bhat, Y, Sigma){
-  .Deprecated(new = "dmvnorm", package = "mvtnorm")
-  out<- mvtnorm::dmvnorm(as.vector(Y), mean = X %*% Bhat, sigma = Sigma, log = TRUE)
-  return(out)
+calc_loglik_bvlmm <- function(X, Bhat, Y, Sigma) {
+    .Deprecated(new = "dmvnorm", package = "mvtnorm")
+    out <- mvtnorm::dmvnorm(as.vector(Y), mean = X %*% Bhat, sigma = Sigma, log = TRUE)
+    return(out)
 }

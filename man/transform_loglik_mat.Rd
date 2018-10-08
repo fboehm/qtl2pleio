@@ -17,8 +17,8 @@ Assemble tibble from matrix of log-likelihood values
 }
 \examples{
 llmat <- matrix(nrow = 3, ncol = 3, data = rgamma(9, 5))
-rownames(llmat) <- paste0("m", 1:3)
-colnames(llmat) <- paste0("m", 1:3)
+rownames(llmat) <- paste0('m', 1:3)
+colnames(llmat) <- paste0('m', 1:3)
 transform_loglik_mat(llmat)
 }
 \seealso{

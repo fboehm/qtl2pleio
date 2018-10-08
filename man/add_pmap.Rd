@@ -19,9 +19,9 @@ Add physical map contents to tibble
 }
 \examples{
 pm <- 1:3
-names(pm) <- paste0("m", 1:3)
-expand.grid(paste0("m", 1:3), paste0("m", 1:3)) -> foo
-names(foo) <- c("marker1", "marker2")
+names(pm) <- paste0('m', 1:3)
+expand.grid(paste0('m', 1:3), paste0('m', 1:3)) -> foo
+names(foo) <- c('marker1', 'marker2')
 foo$ll <- rgamma(9, 5)
 tibble::as_tibble(foo) -> tib
 add_pmap(tib, pm)

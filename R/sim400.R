@@ -13,22 +13,17 @@
 #' @export
 #' @importFrom utils write.table
 
-sim400 <- function(run_num, index1, index2, probs,
-                   Vg = matrix(data = c(1, 0, 0, 1), nrow = 2),
-                   Ve = Vg,
-                   B = rep(c(-3, -3, -3, -3, 3, 3, 3, 3), times = 2),
-                   kinship,
-                   DIR = paste0("sim_data/run", run_num, "-400sims"),
-                   nsim = 400
-){
-  X1 <- probs[ , , index1] #index is from command line args
-  X2 <- probs[ , , index2]
-  gemma2::stagger_mats(X1, X2) -> X
-  for (i in 0:(nsim - 1)){
-    sim1(X = X, B = B, Vg = Vg, Ve = Ve, kinship = kinship) -> foo
-    matrix(foo, ncol = 2, byrow = FALSE) -> Ysim
-    rownames(Ysim) <- rownames(probs)
-    fn <- paste0("Ysim-run", run_num, "_", i, ".txt")
-    write.table(x = Ysim, file = file.path(DIR, fn))
-  }
+sim400 <- function(run_num, index1, index2, probs, Vg = matrix(data = c(1, 0, 0, 1), nrow = 2), Ve = Vg, 
+    B = rep(c(-3, -3, -3, -3, 3, 3, 3, 3), times = 2), kinship, DIR = paste0("sim_data/run", run_num, 
+        "-400sims"), nsim = 400) {
+    X1 <- probs[, , index1]  #index is from command line args
+    X2 <- probs[, , index2]
+    X <- gemma2::stagger_mats(X1, X2)
+    for (i in 0:(nsim - 1)) {
+        foo <- sim1(X = X, B = B, Vg = Vg, Ve = Ve, kinship = kinship)
+        Ysim <- matrix(foo, ncol = 2, byrow = FALSE)
+        rownames(Ysim) <- rownames(probs)
+        fn <- paste0("Ysim-run", run_num, "_", i, ".txt")
+        write.table(x = Ysim, file = file.path(DIR, fn))
+    }
 }

@@ -4,15 +4,15 @@
 \alias{boot_pvl}
 \title{Create a bootstrap sample and perform multivariate QTL scan}
 \usage{
-boot_pvl(pp, pleio_peak_index, phe, covariates = NULL, kinship,
-  nboot_per_job = 1, s1, n_snp)
+boot_pvl(probs, pleio_peak_index, pheno, covariates = NULL,
+  kinship = NULL, nboot_per_job = 1, start_snp, n_snp)
 }
 \arguments{
-\item{pp}{allele probabilities object for one chromosome only, like aprobs$`8`. Not a list}
+\item{probs}{allele probabilities object for one chromosome only, like aprobs$`8`. Not a list}
 
-\item{pleio_peak_index}{positive integer index indicating design matrix for simulation}
+\item{pleio_peak_index}{positive integer index indicating design matrix for simulation. Typically acquired by using `find_pleio_peak_tib`.}
 
-\item{phe}{n by d matrix of phenotypes}
+\item{pheno}{n by d matrix of phenotypes}
 
 \item{covariates}{n by n.cov matrix of covariates}
 
@@ -20,12 +20,12 @@ boot_pvl(pp, pleio_peak_index, phe, covariates = NULL, kinship,
 
 \item{nboot_per_job}{number of bootstrap samples to call per invocation of function}
 
-\item{s1}{positive integer indicating index within pp for start of scan}
+\item{start_snp}{positive integer indicating index within probs for start of scan}
 
-\item{n_snp}{number of markers to use in scan}
+\item{n_snp}{number of (consecutive) markers to use in scan}
 }
 \value{
-numerical vector of lrt statistics from one or more bootstrap samples
+numerical vector of lrt statistics from `nboot_per_job` bootstrap samples
 }
 \description{
 Create a bootstrap sample and perform multivariate QTL scan

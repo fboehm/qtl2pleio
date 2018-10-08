@@ -15,7 +15,7 @@ calc_lrt(loglik_mat)
 The functions listed below are deprecated and will be defunct in
   the near future. When possible, alternative functions with similar
   functionality are also mentioned. Help pages for deprecated functions are
-  available at \code{help("-deprecated")}.
+  available at \code{help('-deprecated')}.
 }
 \section{\code{calc_loglik_bvlmm}}{
 

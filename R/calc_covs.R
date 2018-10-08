@@ -10,24 +10,25 @@
 #' @examples
 #' calc_covs(pheno = matrix(data = rnorm(100), nrow = 50, ncol = 2), kinship = diag(50))
 #' @export
-calc_covs <- function(pheno, kinship, X1pre = rep(1, nrow(kinship)),
-                      max_iter = 1000000, max_prec = 1 / 1e08,
-                      covariates = NULL){
-  gemma2::eigen2(kinship) -> e_out
-  e_out$vectors -> U
-  e_out$values -> eval
-  n_mouse <- nrow(kinship)
-  if (is.null(covariates)){
-    X1 <- t(X1pre) %*% U
-  } else {
-    X1 <- t(cbind(X1pre, covariates)) %*% U
-  }
-  Y <- t(pheno) %*% U
-  ncol(pheno) -> d
-  # run MphEM with only a design matrix that contains only the intercept term & covariates, if any(and not any genotype info)
-  foo <- gemma2::MphEM(max_iter = max_iter, max_prec = max_prec, X = X1, Y = Y, eval = eval, V_g = diag(d), V_e = diag(d))
-  Vg <- foo[[length(foo)]][[2]]
-  Ve <- foo[[length(foo)]][[3]]
-  out <- list(Vg = Vg, Ve = Ve)
-  return(out)
+calc_covs <- function(pheno, kinship, X1pre = rep(1, nrow(kinship)), max_iter = 1e+06, max_prec = 1/1e+08, 
+    covariates = NULL) {
+    e_out <- gemma2::eigen2(kinship)
+    U <- e_out$vectors
+    eval <- e_out$values
+    n_mouse <- nrow(kinship)
+    if (is.null(covariates)) {
+        X1 <- t(X1pre) %*% U
+    } else {
+        X1 <- t(cbind(X1pre, covariates)) %*% U
+    }
+    Y <- t(pheno) %*% U
+    d <- ncol(pheno)
+    # run MphEM with only a design matrix that contains only the intercept term & covariates, if any(and
+    # not any genotype info)
+    foo <- gemma2::MphEM(max_iter = max_iter, max_prec = max_prec, X = X1, Y = Y, eval = eval, V_g = diag(d), 
+        V_e = diag(d))
+    Vg <- foo[[length(foo)]][[2]]
+    Ve <- foo[[length(foo)]][[3]]
+    out <- list(Vg = Vg, Ve = Ve)
+    return(out)
 }

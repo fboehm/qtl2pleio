@@ -3,8 +3,8 @@
 #' @param A covariance matrix
 #' @export
 #'
-calc_sqrt_mat <- function(A){
-  rcppeigen_sqrt(A)
+calc_sqrt_mat <- function(A) {
+    rcppeigen_sqrt(A)
 }
 
 
@@ -13,13 +13,13 @@ calc_sqrt_mat <- function(A){
 #' @param A covariance matrix
 #' @export
 #'
-calc_invsqrt_mat <- function(A){
-  rcppeigen_invsqrt(A)
+calc_invsqrt_mat <- function(A) {
+    rcppeigen_invsqrt(A)
 }
 
 
 
 
-.onUnload <- function (libpath) {
-  library.dynam.unload("qtl2pleio", libpath)
+.onUnload <- function(libpath) {
+    library.dynam.unload("qtl2pleio", libpath)
 }

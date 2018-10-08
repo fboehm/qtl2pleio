@@ -4,10 +4,10 @@
 \alias{find_pleio_peak_tib}
 \title{Find the marker index corresponding to the peak of the pleiotropy trace in a tibble where the last column contains log likelihood values and the first d columns contain marker ids}
 \usage{
-find_pleio_peak_tib(tib, start_snp = 650)
+find_pleio_peak_tib(tib, start_snp)
 }
 \arguments{
-\item{tib}{a (d+1) column tibble with first d columns containing marker ids and the last containing log likelihood values}
+\item{tib}{a (d+1) column tibble with first d columns containing marker ids and the last containing log likelihood values. Typically this is the output from `scan_pvl`.}
 
 \item{start_snp}{positive integer, from the pvl scan, that indicates where the scan started on the chromosome}
 }
@@ -18,8 +18,8 @@ positive integer indicating marker index for maximum value of log lik under plei
 Find the marker index corresponding to the peak of the pleiotropy trace in a tibble where the last column contains log likelihood values and the first d columns contain marker ids
 }
 \examples{
-marker1 <- rep(paste0("SNP", 1:3), times = 3)
-marker2 <- rep(paste0("SNP", 1:3), each = 3)
+marker1 <- rep(paste0('SNP', 1:3), times = 3)
+marker2 <- rep(paste0('SNP', 1:3), each = 3)
 loglik <- runif(9, -5, 0)
 tibble::tibble(marker1, marker2, loglik) -> tib
 find_pleio_peak_tib(tib)

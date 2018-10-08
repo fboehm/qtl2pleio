@@ -1,6 +1,6 @@
 #' Perform model fitting for all ordered pairs of markers in a genomic region of interest
 #'
-#' `scan_pvl` calculates log likelihood for d-variate phenotype model fits. Inputted parameter `start_snp1` indicates where in the `probs` object to start the scan.
+#' `scan_pvl` calculates log likelihood for d-variate phenotype model fits. Inputted parameter `start_snp` indicates where in the `probs` object to start the scan.
 #'
 #' The function first discards individuals with missing phenotypes or missing covariates.
 #' It also discards covariates that have the same value for all remaining subjects.
@@ -41,7 +41,7 @@
 #' @param pheno a matrix of phenotypes
 #' @param kinship a kinship matrix for one chromosome
 #' @param covariates a matrix, n subjects by n.cov covariates, where each column is one covariate
-#' @param start_snp1 index of where to start the scan within probs
+#' @param start_snp index of where to start the scan within probs
 #' @param n_snp the number of (consecutive) markers to include in the scan
 #' @param max_iter maximum number of iterations for EM algorithm
 #' @param max_prec stepwise precision for EM algorithm. EM stops once incremental difference in log likelihood is less than max_prec
@@ -52,152 +52,121 @@
 #' ## define probs
 #'probs_pre <- rbinom(n = 100 * 10, size = 1, prob = 1 / 2)
 #'probs <- array(data = probs_pre, dim = c(100, 1, 10))
-#'s_id <- paste0("s", 1:100)
+#'s_id <- paste0('s', 1:100)
 #'rownames(probs) <- s_id
-#'colnames(probs) <- "A"
-#'dimnames(probs)[[3]] <- paste0("Marker", 1:10)
+#'colnames(probs) <- 'A'
+#'dimnames(probs)[[3]] <- paste0('Marker', 1:10)
 #'# define Y
 #'Y_pre <- runif(200)
 #'Y <- matrix(data = Y_pre, nrow = 100)
 #'rownames(Y) <- s_id
-#'colnames(Y) <- paste0("t", 1:2)
+#'colnames(Y) <- paste0('t', 1:2)
 #'covariates <- matrix(c(runif(99), NA), nrow = 100, ncol = 1)
 #'rownames(covariates) <- s_id
-#'colnames(covariates) <- "c1"
+#'colnames(covariates) <- 'c1'
 #'Y2 <- Y
 #'Y2[1, 2] <- NA
 #'scan_pvl(probs = probs, pheno = Y, kinship = diag(100),
-#'         start_snp1 = 1, n_snp = 10)
+#'         start_snp = 1, n_snp = 10)
 #'scan_pvl(probs = probs, pheno = Y2, kinship = diag(100),
-#'         start_snp1 = 1, n_snp = 10)
+#'         start_snp = 1, n_snp = 10)
 #' @importFrom rlang .data
 #' @return a tibble with d + 1 columns. First d columns indicate the genetic data (by listing the marker ids) used in the design matrix; last is log likelihood
 
-scan_pvl <- function(probs, pheno, kinship,
-                     covariates = NULL,
-                     start_snp1 = 1,
-                     n_snp,
-                     max_iter = 1000000,
-                     max_prec = 1 / 1e08,
-                     use_limmbo2 = FALSE,
-                     limmbo2_subset_size = NULL){
-  stopifnot(
-            !is.null(rownames(probs)),
-            !is.null(colnames(probs)),
-            !is.null(dimnames(probs)[[3]]),
-            !is.null(rownames(pheno)),
-            !is.null(colnames(pheno)),
-            !is.null(rownames(kinship)),
-            !is.null(colnames(kinship)),
-            n_snp > 0,
-            start_snp1 > 0,
-            start_snp1 + n_snp - 1 <= dim(probs)[3]
-            )
-  # check additional conditions when covariates is not NULL
-  if(!is.null(covariates)){
-    stopifnot(
-      !is.null(rownames(covariates)),
-      !is.null(colnames(covariates))
-      )}
-
-  d_size <- ncol(pheno) # d_size is the number of univariate phenotypes
-  # remove mice with missing values of phenotype or missing value(s) in covariates
-  missing_indic <- matrix(!apply(FUN = is.finite, X = pheno, MARGIN = 1),
-                          nrow = nrow(pheno), ncol = ncol(pheno),
-                          byrow = TRUE)
-  missing2 <- apply(FUN = function(x)identical(as.logical(x), rep(FALSE, ncol(pheno))),
-                    MARGIN = 1, X = missing_indic)
-  if (!is.null(covariates)){
-    covariates <- subset_input(input = covariates, id2keep = intersect(rownames(pheno), rownames(covariates)))
-    pheno <- subset_input(input = pheno, id2keep = intersect(rownames(pheno), rownames(covariates)))
-    miss_cov <- matrix(!apply(FUN = is.finite, X = covariates, MARGIN = 1),
-                       nrow = nrow(covariates), ncol = ncol(covariates),
-                       byrow = TRUE)
-    miss_cov2 <- apply(FUN = function(x)identical(as.logical(x), rep(FALSE, ncol(covariates))),
-                       MARGIN = 1, X = miss_cov)
-    missing2 <- missing2 & miss_cov2
-  }
-  if (sum(!missing2) > 0){
-    message(paste0(sum(!missing2), " subjects dropped due to missing values"))
-  }
-  pheno <- pheno[missing2, , drop = FALSE]
-  kinship <- kinship[missing2, missing2, drop = FALSE]
-  probs <- probs[missing2, , , drop = FALSE]
-  if (!is.null(covariates)){
-    # remove subjects with missing data
-    covariates <- covariates[missing2, , drop = FALSE]
-    # check for any covariates that have the same value for all subjects
-    # note that we do this AFTER removing subjects with missing values
-    covs_identical <- apply(FUN = check_identical, X = covariates, MARGIN = 2)
-    covariates <- covariates[ , !covs_identical, drop = FALSE]
-    if (ncol(covariates) == 0){
-      covariates <- NULL
+scan_pvl <- function(probs, pheno, kinship, covariates = NULL, start_snp = 1, n_snp, max_iter = 1e+06, 
+    max_prec = 1/1e+08, use_limmbo2 = FALSE, limmbo2_subset_size = NULL) {
+    stopifnot(!is.null(rownames(probs)), !is.null(colnames(probs)), !is.null(dimnames(probs)[[3]]), !is.null(rownames(pheno)), 
+        !is.null(colnames(pheno)), !is.null(rownames(kinship)), !is.null(colnames(kinship)), n_snp > 0, 
+        is.integer(n_snp), start_snp > 0, is.integer(start_snp), start_snp + n_snp - 1 <= dim(probs)[3])
+    # check additional conditions when covariates is not NULL
+    if (!is.null(covariates)) {
+        stopifnot(!is.null(rownames(covariates)), !is.null(colnames(covariates)))
     }
-    if (sum(covs_identical) > 0){
-      message(paste0(sum(covs_identical), " covariates dropped due to no variation in covariates"))
+    
+    d_size <- ncol(pheno)  # d_size is the number of univariate phenotypes
+    # remove mice with missing values of phenotype or missing value(s) in covariates
+    missing_indic <- matrix(!apply(FUN = is.finite, X = pheno, MARGIN = 1), nrow = nrow(pheno), ncol = ncol(pheno), 
+        byrow = TRUE)
+    missing2 <- apply(FUN = function(x) identical(as.logical(x), rep(FALSE, ncol(pheno))), MARGIN = 1, 
+        X = missing_indic)
+    if (!is.null(covariates)) {
+        covariates <- subset_input(input = covariates, id2keep = intersect(rownames(pheno), rownames(covariates)))
+        pheno <- subset_input(input = pheno, id2keep = intersect(rownames(pheno), rownames(covariates)))
+        miss_cov <- matrix(!apply(FUN = is.finite, X = covariates, MARGIN = 1), nrow = nrow(covariates), 
+            ncol = ncol(covariates), byrow = TRUE)
+        miss_cov2 <- apply(FUN = function(x) identical(as.logical(x), rep(FALSE, ncol(covariates))), MARGIN = 1, 
+            X = miss_cov)
+        missing2 <- missing2 & miss_cov2
     }
-    # remove those covariate columns for which all subjects have the same value
-  }
-  # create id2keep and subset all four input objects to include only those subjects that are in id2keep
-  # we've already removed subjects that have missing values from both phenotypes matrix and covariates matrix
-  id2keep <- make_id2keep(probs = probs,
-                          pheno = pheno,
-                          covar = covariates,
-                          kinship = kinship)
-  probs <- subset_input(input = probs, id2keep = id2keep)
-  pheno <- subset_input(input = pheno, id2keep = id2keep)
-  covariates <- subset_input(input = covariates, id2keep = id2keep)
-  kinship <- subset_kinship(kinship = kinship, id2keep = id2keep)
-
-  # covariance matrix estimation
-  message("starting covariance matrices estimation.")
-  if (!use_limmbo2){
-    # first, run gemma2::MphEM() to get Vg and Ve
-    calc_covs(pheno, kinship, max_iter = max_iter, max_prec = max_prec,
-              covariates = covariates) -> cc_out
-    Vg <- cc_out$Vg
-    Ve <- cc_out$Ve
-  }
-  else {
-    limmbo2::limmbo2(kinship = kinship, pheno = pheno, S = limmbo2_subset_size) -> li_out
-    Vg <- li_out$Vg
-    Ve <- li_out$Ve
-  }
-  message("covariance matrices estimation completed.")
-
-  # define Sigma
-  n_mouse <- nrow(kinship) # define n_mouse as the number of mice that actually have no missing data
-  Sigma <- calc_Sigma(Vg, Ve, kinship)
-  # define Sigma_inv
-  Sigma_inv <- solve(Sigma)
-  mytab <- prep_mytab(d_size = d_size, n_snp = n_snp)
-  # start progress bar
-  pb <- progress::progress_bar$new(
-    format = " scanning [:bar] :percent eta: :eta",
-    total = n_snp ^ d_size, clear = FALSE, width = 80)
-  pb$tick(0)
-
-  for (rownum in 1:nrow(mytab)){
-    pb$tick()
-    indices <- unlist(mytab[rownum, ])
-    X_list <- prep_X_list(indices = indices[ - length(indices)],
-                          start_snp1 = start_snp1,
-                          probs = probs,
-                          covariates = covariates)
-    X <- gemma2::stagger_mats(X_list)
-    #Bhat <- rcpp_calc_Bhat2(X = X,
-    #                  Y = as.vector(pheno),
-    #                  Sigma_inv = Sigma_inv)
-    Bhat <- rcpp_calc_Bhat(X = X, Sigma = Sigma, Y = as.vector(as.matrix(pheno)))
-    as.vector(X %*% Bhat) -> mymu
-    mytab$loglik[rownum] <- as.numeric(rcpp_log_dmvnorm2(inv_S = Sigma_inv, mu = mymu,
-                                             x = as.vector(as.matrix(pheno)),
-                                             S = Sigma
-                                             ))
-  }
-  marker_id <- dimnames(probs)[[3]][start_snp1:(start_snp1 + n_snp - 1)]
-  tibble::as_tibble(apply(FUN = function(x)marker_id[x],
-                          X = mytab[ , - ncol(mytab)], MARGIN = 2)) -> mytab2
-  mytab2$loglik <- mytab$loglik
-  return(mytab2)
+    if (sum(!missing2) > 0) {
+        message(paste0(sum(!missing2), " subjects dropped due to missing values"))
+    }
+    pheno <- pheno[missing2, , drop = FALSE]
+    kinship <- kinship[missing2, missing2, drop = FALSE]
+    probs <- probs[missing2, , , drop = FALSE]
+    if (!is.null(covariates)) {
+        # remove subjects with missing data
+        covariates <- covariates[missing2, , drop = FALSE]
+        # check for any covariates that have the same value for all subjects note that we do this AFTER
+        # removing subjects with missing values
+        covs_identical <- apply(FUN = check_identical, X = covariates, MARGIN = 2)
+        covariates <- covariates[, !covs_identical, drop = FALSE]
+        if (ncol(covariates) == 0) {
+            covariates <- NULL
+        }
+        if (sum(covs_identical) > 0) {
+            message(paste0(sum(covs_identical), " covariates dropped due to no variation in covariates"))
+        }
+        # remove those covariate columns for which all subjects have the same value
+    }
+    # create id2keep and subset all four input objects to include only those subjects that are in id2keep
+    # we've already removed subjects that have missing values from both phenotypes matrix and covariates
+    # matrix
+    id2keep <- make_id2keep(probs = probs, pheno = pheno, covar = covariates, kinship = kinship)
+    probs <- subset_input(input = probs, id2keep = id2keep)
+    pheno <- subset_input(input = pheno, id2keep = id2keep)
+    covariates <- subset_input(input = covariates, id2keep = id2keep)
+    kinship <- subset_kinship(kinship = kinship, id2keep = id2keep)
+    
+    # covariance matrix estimation
+    message("starting covariance matrices estimation.")
+    if (!use_limmbo2) {
+        # first, run gemma2::MphEM() to get Vg and Ve
+        cc_out <- calc_covs(pheno, kinship, max_iter = max_iter, max_prec = max_prec, covariates = covariates)
+        Vg <- cc_out$Vg
+        Ve <- cc_out$Ve
+    } else {
+        li_out <- limmbo2::limmbo2(kinship = kinship, pheno = pheno, S = limmbo2_subset_size)
+        Vg <- li_out$Vg
+        Ve <- li_out$Ve
+    }
+    message("covariance matrices estimation completed.")
+    
+    # define Sigma
+    Sigma <- calc_Sigma(Vg, Ve, kinship)
+    # define Sigma_inv
+    Sigma_inv <- solve(Sigma)
+    # prepare table of marker indices for each call of scan_pvl
+    mytab <- prep_mytab(d_size = d_size, n_snp = n_snp)
+    # start progress bar
+    pb <- progress::progress_bar$new(format = " scanning [:bar] :percent eta: :eta", total = n_snp^d_size, 
+        clear = FALSE, width = 80)
+    pb$tick(0)
+    
+    for (rownum in 1:nrow(mytab)) {
+        pb$tick()
+        indices <- unlist(mytab[rownum, ])
+        X_list <- prep_X_list(indices = indices[-length(indices)], start_snp = start_snp, probs = probs, 
+            covariates = covariates)
+        X <- gemma2::stagger_mats(X_list)
+        # Bhat <- rcpp_calc_Bhat2(X = X, Y = as.vector(pheno), Sigma_inv = Sigma_inv)
+        Bhat <- rcpp_calc_Bhat(X = X, Sigma = Sigma, Y = as.vector(as.matrix(pheno)))
+        mymu <- as.vector(X %*% Bhat)
+        mytab$loglik[rownum] <- as.numeric(rcpp_log_dmvnorm2(inv_S = Sigma_inv, mu = mymu, x = as.vector(as.matrix(pheno)), 
+            S = Sigma))
+    }
+    marker_id <- dimnames(probs)[[3]][start_snp:(start_snp + n_snp - 1)]
+    mytab2 <- tibble::as_tibble(apply(FUN = function(x) marker_id[x], X = mytab[, -ncol(mytab)], MARGIN = 2))
+    mytab2$loglik <- mytab$loglik
+    return(mytab2)
 }

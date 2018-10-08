@@ -2,7 +2,7 @@
 % Please edit documentation in R/rcpp_calc_Bhat.R
 \name{rcpp_calc_Bhat2}
 \alias{rcpp_calc_Bhat2}
-\title{Estimate allele effects matrix, B hat, with Rcpp}
+\title{Estimate allele effects matrix, B hat, with Rcpp functions}
 \usage{
 rcpp_calc_Bhat2(X, Y, Sigma_inv)
 }
@@ -17,5 +17,5 @@ rcpp_calc_Bhat2(X, Y, Sigma_inv)
 a df by 1 matrix of GLS-estimated allele effects
 }
 \description{
-Estimate allele effects matrix, B hat, with Rcpp
+Estimate allele effects matrix, B hat, with Rcpp functions
 }

@@ -4,12 +4,12 @@
 \alias{prep_X_list}
 \title{Create a list of component X matrices for input to stagger_mats, to ultimately create design matrix}
 \usage{
-prep_X_list(indices, start_snp1, probs, covariates)
+prep_X_list(indices, start_snp, probs, covariates)
 }
 \arguments{
 \item{indices}{a vector of integers}
 
-\item{start_snp1}{a vector of integers of length 1}
+\item{start_snp}{an integer}
 
 \item{probs}{a three-dimensional array of genotype probabilities for a single chromosome}
 

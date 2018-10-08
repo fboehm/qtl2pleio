@@ -2,15 +2,15 @@
 % Please edit documentation in R/prep_mytab.R
 \name{prep_mytab}
 \alias{prep_mytab}
-\title{Prepare mytab object}
+\title{Prepare mytab object for use within scan_pvl R code}
 \usage{
 prep_mytab(d_size, n_snp)
 }
 \arguments{
 \item{d_size}{an integer, the number of traits}
 
-\item{n_snp}{an integer, the number of snps}
+\item{n_snp}{an integer, the number of markers}
 }
 \description{
-Prepare mytab object
+Prepare mytab object for use within scan_pvl R code
 }
