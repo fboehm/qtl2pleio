@@ -3,7 +3,11 @@ Type: Package
 Title: Hypothesis test of close linkage vs pleiotropy in multiparental populations
 Version: 0.1.2
 Authors@R: c(
-    person("Frederick", "Boehm", ,"frederick.boehm@gmail.com", role = c("aut", "cre") 
+    person(given = "Frederick", 
+    family = "Boehm", 
+    email = "frederick.boehm@gmail.com", 
+    role = c("aut", "cre"),
+    comment = c(ORCID = "0000-0002-1644-5931")
     )
     )
 Maintainer: Frederick Boehm <frederick.boehm@gmail.com>

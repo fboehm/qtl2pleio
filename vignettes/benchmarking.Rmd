@@ -30,7 +30,8 @@ calc_Bhat(X, Sigma_inv, Y)
 
 microbenchmark::microbenchmark(
   calc_Bhat(X = X, Sigma_inv = Sigma_inv, Y = Y), 
-  rcpp_calc_Bhat2(X = X, Y = Y, Sigma_inv = Sigma_inv)
+  rcpp_calc_Bhat2(X = X, Y = Y, Sigma_inv = Sigma_inv),
+  rcpp_calc_Bhat(X = X, Sigma = Sigma_inv, Y = Y)
 )
 
 ```
