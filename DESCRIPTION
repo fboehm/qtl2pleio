@@ -35,7 +35,8 @@ RoxygenNote: 6.1.0
 Suggests: testthat,
     knitr,
     rmarkdown,
-    qtl2
+    qtl2,
+    covr
 VignetteBuilder: knitr
 Remotes: fboehm/gemma2,
     rqtl/qtl2,

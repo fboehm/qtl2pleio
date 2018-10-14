@@ -1,14 +1,20 @@
 library(qtl2pleio)
-context("testing rcpp_calc_Bhat")
+context("testing rcpp_calc_Bhat against calc_Bhat")
 
-X <- matrix(data = rbinom(size = 1, n = 800, prob = 0.5), nrow = 100, ncol = 8)
-Y <- matrix(data = rnorm(200), nrow = 100, ncol = 2)
-Sigma <- diag(100)
+# setup
+X1 <- as.matrix(rbinom(n = 100, size = 1, prob = 1 / 2))
+X <- gemma2::stagger_mats(X1, X1)
+Sigma_inv <- diag(200)
+Y <- runif(200)
+# more complicated covariance matrix
+Spre <- matrix(data = runif(200 * 200), nrow = 200, ncol = 200)
+S <- Spre %*% t(Spre)
+solve(S) -> S2_inv
 
-test_that("rcpp_calc_Bhat returns same values as GLS with calculations in R", {
+test_that("rcpp_calc_Bhat and calc_Bhat give equal results", {
   expect_equal(
-    rcpp_calc_Bhat(X = X, Sigma = Sigma, Y = Y),
-    solve(t(X) %*% solve(Sigma) %*% X) %*% t(X) %*% solve(Sigma) %*% Y
+    rcpp_calc_Bhat(X = X, Sigma_inv = Sigma_inv, Y = Y),
+    calc_Bhat(X = X, Sigma_inv = Sigma_inv, Y = Y)
   )
 })
 

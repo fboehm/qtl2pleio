@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 ```
 
 
-The goal here is to compare the computational time for `calc_Bhat`, where the calculations are done in R, with that of `rcpp_calc_Bhat`, where the calculations are done in C++.
+The goal here is to compare the computational time for `calc_Bhat`, where the calculations are done in R, with that of `rcpp_calc_Bhat` &   `rcpp_calc_Bhat2`, where the calculations are done in C++.
 
 ```{r}
 library(qtl2pleio)

@@ -2,6 +2,9 @@
 [![Travis-CI Build
 Status](https://travis-ci.org/fboehm/qtl2pleio.svg?branch=master)](https://travis-ci.org/fboehm/qtl2pleio)
 
+[![Coverage
+Status](https://img.shields.io/codecov/c/github/fboehm/qtl2pleio/master.svg)](https://codecov.io/github/fboehm/qtl2pleio?branch=master)
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 # qtl2pleio
