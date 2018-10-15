@@ -9,7 +9,7 @@
 #' marker2 <- rep(paste0('SNP', 1:3), each = 3)
 #' loglik <- runif(9, -5, 0)
 #' tibble::tibble(marker1, marker2, loglik) -> tib
-#' find_pleio_peak_tib(tib)
+#' find_pleio_peak_tib(tib, start_snp = 1)
 
 find_pleio_peak_tib <- function(tib, start_snp) {
     nc <- ncol(tib)

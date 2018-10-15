@@ -2,7 +2,7 @@
 % Please edit documentation in R/boot_pvl.R
 \name{boot_pvl}
 \alias{boot_pvl}
-\title{Create a bootstrap sample and perform multivariate QTL scan}
+\title{Create a bootstrap sample, perform multivariate QTL scan, and calculate LRT statistic}
 \usage{
 boot_pvl(probs, pleio_peak_index, pheno, covariates = NULL,
   kinship = NULL, nboot_per_job = 1, start_snp, n_snp)
@@ -28,5 +28,5 @@ boot_pvl(probs, pleio_peak_index, pheno, covariates = NULL,
 numerical vector of lrt statistics from `nboot_per_job` bootstrap samples
 }
 \description{
-Create a bootstrap sample and perform multivariate QTL scan
+Create a bootstrap sample, perform multivariate QTL scan, and calculate LRT statistic
 }

@@ -32,7 +32,7 @@
 
 <meta property="og:title" content="Perform model fitting for all ordered pairs of markers in a genomic region of interest — scan_pvl" />
 
-<meta property="og:description" content="Perform model fitting for all ordered pairs of markers in a genomic region of interest" />
+<meta property="og:description" content="`scan_pvl` calculates log likelihood for d-variate phenotype model fits. Inputted parameter `start_snp` indicates where in the `probs` object to start the scan." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -62,7 +62,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">qtl2pleio</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2.9000</span>
       </span>
     </div>
 
@@ -126,11 +126,11 @@
 
     <div class="ref-description">
     
-    <p>Perform model fitting for all ordered pairs of markers in a genomic region of interest</p>
+    <p>`scan_pvl` calculates log likelihood for d-variate phenotype model fits. Inputted parameter `start_snp` indicates where in the `probs` object to start the scan.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>scan_pvl</span>(<span class='no'>probs</span>, <span class='no'>pheno</span>, <span class='no'>kinship</span>, <span class='kw'>covariates</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>start_snp1</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+    <pre class="usage"><span class='fu'>scan_pvl</span>(<span class='no'>probs</span>, <span class='no'>pheno</span>, <span class='no'>kinship</span>, <span class='kw'>covariates</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>start_snp</span> <span class='kw'>=</span> <span class='fl'>1</span>,
   <span class='no'>n_snp</span>, <span class='kw'>max_iter</span> <span class='kw'>=</span> <span class='fl'>1e+06</span>, <span class='kw'>max_prec</span> <span class='kw'>=</span> <span class='fl'>1</span>/<span class='fl'>1e+08</span>, <span class='kw'>use_limmbo2</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>limmbo2_subset_size</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
@@ -139,11 +139,11 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>probs</th>
-      <td><p>an array of genotype probabilities for a single chromosome (before eigenrotation)</p></td>
+      <td><p>an array of founder allele probabilities for a single chromosome</p></td>
     </tr>
     <tr>
       <th>pheno</th>
-      <td><p>a matrix of phenotypes (before eigenrotation)</p></td>
+      <td><p>a matrix of phenotypes</p></td>
     </tr>
     <tr>
       <th>kinship</th>
@@ -154,12 +154,12 @@
       <td><p>a matrix, n subjects by n.cov covariates, where each column is one covariate</p></td>
     </tr>
     <tr>
-      <th>start_snp1</th>
+      <th>start_snp</th>
       <td><p>index of where to start the scan within probs</p></td>
     </tr>
     <tr>
       <th>n_snp</th>
-      <td><p>the number of (consecutive) snps to include in the scan</p></td>
+      <td><p>the number of (consecutive) markers to include in the scan</p></td>
     </tr>
     <tr>
       <th>max_iter</th>
@@ -183,28 +183,93 @@
 
     <p>a tibble with d + 1 columns. First d columns indicate the genetic data (by listing the marker ids) used in the design matrix; last is log likelihood</p>
     
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The function first discards individuals with missing phenotypes or missing covariates.
+It also discards covariates that have the same value for all remaining subjects.
+It then uses one of two methods to infer variance components, Vg and Ve. Both Vg and Ve
+are d by d covariance matrices.
+The first method, the default, uses an expectation maximization algorithm, as
+implemented in the `gemma2` R package. `gemma2` R package is an R implementation of the
+GEMMA algorithm (Zhou &amp; Stephens 2012 Nature Genetics).
+The alternative method for inferring variance components, which is useful for more than two
+phenotypes, ie, when d &gt; 2, uses the LiMMBo method to infer variance components (Meyer et al. 2018).
+Specifically, with input `use_limmbo2 = TRUE`, `scan_pvl` calls the function
+`limmbo2::limmbo2` to infer d by d variance components.
+Note that variance components, when inferred via
+`gemma2`, are fitted on a model that uses the d-variate phenotype
+but contains no genetic information. This model does, however, use the specified covariates.
+Current implementation of `limmbo2` doesn't use covariates.
+These inferred covariance matrices, \(\hat{Vg}\) and \(\hat{Ve}\), are then used in subsequent model fitting via
+generalized least squares. Generalized least squares model fitting is applied to every d-tuple of
+markers within the specified genomic region for `scan_pvl`.
+A progress bar appears *after* inferring Vg and Ve and records progress through the
+d-tuples of markers that constitute the d-variate scan.
+For a single d-tuple of markers, we fit the model:
+$$vec(Y) = Xvec(B) + vec(G) + vec(E)$$ where
+$$G \sim MN(0, K, \hat{Vg})$$ and $$E \sim MN(0, I, \hat{Ve})$$ where \(MN\) denotes the matrix-variate
+normal distribution with three parameters: mean matrix, covariance among rows, and
+covariance among columns. \(vec\) denotes the vectorization operation, ie, stacking by columns.
+\(K\) is a kinship matrix, typically calculated by leave-one-chromosome-out methods.
+\(Y\) is the n by d phenotypes matrix. \(X\) is a block-diagonal nd by fd matrix consisting of
+d blocks each of dimension n by f. Each n by f block (on the diagonal) contains a matrix of
+founder allele probabilities for the n subjects at a single marker. The off-diagonal blocks
+have only zero entries.
+The log-likelihood is returned for each model. The outputted object is a tibble with
+d + 1 columns. The first d columns specify the markers used in the corresponding model fit, while
+the last column specifies the log-likelihood value at that d-tuple of markers.</p>
+    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'>## define probs</span>
 <span class='no'>probs_pre</span> <span class='kw'>&lt;-</span> <span class='fu'>rbinom</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span> * <span class='fl'>10</span>, <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>prob</span> <span class='kw'>=</span> <span class='fl'>1</span> / <span class='fl'>2</span>)
 <span class='no'>probs</span> <span class='kw'>&lt;-</span> <span class='fu'>array</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>probs_pre</span>, <span class='kw'>dim</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>100</span>, <span class='fl'>1</span>, <span class='fl'>10</span>))
-<span class='no'>s_id</span> <span class='kw'>&lt;-</span> <span class='fu'>paste0</span>(<span class='st'>"s"</span>, <span class='fl'>1</span>:<span class='fl'>100</span>)
+<span class='no'>s_id</span> <span class='kw'>&lt;-</span> <span class='fu'>paste0</span>(<span class='st'>'s'</span>, <span class='fl'>1</span>:<span class='fl'>100</span>)
 <span class='fu'>rownames</span>(<span class='no'>probs</span>) <span class='kw'>&lt;-</span> <span class='no'>s_id</span>
-<span class='fu'>colnames</span>(<span class='no'>probs</span>) <span class='kw'>&lt;-</span> <span class='st'>"A"</span>
-<span class='fu'>dimnames</span>(<span class='no'>probs</span>)<span class='kw'>[[</span><span class='fl'>3</span>]] <span class='kw'>&lt;-</span> <span class='fu'>paste0</span>(<span class='st'>"Marker"</span>, <span class='fl'>1</span>:<span class='fl'>10</span>)
+<span class='fu'>colnames</span>(<span class='no'>probs</span>) <span class='kw'>&lt;-</span> <span class='st'>'A'</span>
+<span class='fu'>dimnames</span>(<span class='no'>probs</span>)<span class='kw'>[[</span><span class='fl'>3</span>]] <span class='kw'>&lt;-</span> <span class='fu'>paste0</span>(<span class='st'>'Marker'</span>, <span class='fl'>1</span>:<span class='fl'>10</span>)
 <span class='co'># define Y</span>
 <span class='no'>Y_pre</span> <span class='kw'>&lt;-</span> <span class='fu'>runif</span>(<span class='fl'>200</span>)
 <span class='no'>Y</span> <span class='kw'>&lt;-</span> <span class='fu'>matrix</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>Y_pre</span>, <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>100</span>)
 <span class='fu'>rownames</span>(<span class='no'>Y</span>) <span class='kw'>&lt;-</span> <span class='no'>s_id</span>
-<span class='fu'>colnames</span>(<span class='no'>Y</span>) <span class='kw'>&lt;-</span> <span class='fu'>paste0</span>(<span class='st'>"t"</span>, <span class='fl'>1</span>:<span class='fl'>2</span>)
+<span class='fu'>colnames</span>(<span class='no'>Y</span>) <span class='kw'>&lt;-</span> <span class='fu'>paste0</span>(<span class='st'>'t'</span>, <span class='fl'>1</span>:<span class='fl'>2</span>)
 <span class='no'>covariates</span> <span class='kw'>&lt;-</span> <span class='fu'>matrix</span>(<span class='fu'>c</span>(<span class='fu'>runif</span>(<span class='fl'>99</span>), <span class='fl'>NA</span>), <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>1</span>)
 <span class='fu'>rownames</span>(<span class='no'>covariates</span>) <span class='kw'>&lt;-</span> <span class='no'>s_id</span>
-<span class='fu'>colnames</span>(<span class='no'>covariates</span>) <span class='kw'>&lt;-</span> <span class='st'>"c1"</span>
+<span class='fu'>colnames</span>(<span class='no'>covariates</span>) <span class='kw'>&lt;-</span> <span class='st'>'c1'</span>
+<span class='no'>kin</span> <span class='kw'>&lt;-</span> <span class='fu'>diag</span>(<span class='fl'>100</span>)
+<span class='fu'>rownames</span>(<span class='no'>kin</span>) <span class='kw'>&lt;-</span> <span class='no'>s_id</span>
+<span class='fu'>colnames</span>(<span class='no'>kin</span>) <span class='kw'>&lt;-</span> <span class='no'>s_id</span>
 <span class='no'>Y2</span> <span class='kw'>&lt;-</span> <span class='no'>Y</span>
 <span class='no'>Y2</span>[<span class='fl'>1</span>, <span class='fl'>2</span>] <span class='kw'>&lt;-</span> <span class='fl'>NA</span>
-<span class='fu'>scan_pvl</span>(<span class='kw'>probs</span> <span class='kw'>=</span> <span class='no'>probs</span>, <span class='kw'>pheno</span> <span class='kw'>=</span> <span class='no'>Y</span>, <span class='kw'>kinship</span> <span class='kw'>=</span> <span class='fu'>diag</span>(<span class='fl'>100</span>),
-        <span class='kw'>start_snp1</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>n_snp</span> <span class='kw'>=</span> <span class='fl'>10</span>)</div><div class='output co'>#&gt; <span class='error'>Error in scan_pvl(probs = probs, pheno = Y, kinship = diag(100), start_snp1 = 1,     n_snp = 10): !is.null(rownames(kinship)) is not TRUE</span></div><div class='input'><span class='fu'>scan_pvl</span>(<span class='kw'>probs</span> <span class='kw'>=</span> <span class='no'>probs</span>, <span class='kw'>pheno</span> <span class='kw'>=</span> <span class='no'>Y2</span>, <span class='kw'>kinship</span> <span class='kw'>=</span> <span class='fu'>diag</span>(<span class='fl'>100</span>),
-        <span class='kw'>start_snp1</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>n_snp</span> <span class='kw'>=</span> <span class='fl'>10</span>)</div><div class='output co'>#&gt; <span class='error'>Error in scan_pvl(probs = probs, pheno = Y2, kinship = diag(100), start_snp1 = 1,     n_snp = 10): !is.null(rownames(kinship)) is not TRUE</span></div></pre>
+<span class='fu'>scan_pvl</span>(<span class='kw'>probs</span> <span class='kw'>=</span> <span class='no'>probs</span>, <span class='kw'>pheno</span> <span class='kw'>=</span> <span class='no'>Y</span>, <span class='kw'>kinship</span> <span class='kw'>=</span> <span class='no'>kin</span>,
+        <span class='kw'>start_snp</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>n_snp</span> <span class='kw'>=</span> <span class='fl'>10</span>)</div><div class='output co'>#&gt; <span class='message'>starting covariance matrices estimation.</span></div><div class='output co'>#&gt; <span class='message'>covariance matrices estimation completed.</span></div><div class='output co'>#&gt; [90m# A tibble: 100 x 3[39m
+#&gt;    Var1     Var2    loglik
+#&gt;    [3m[90m&lt;chr&gt;[39m[23m    [3m[90m&lt;chr&gt;[39m[23m    [3m[90m&lt;dbl&gt;[39m[23m
+#&gt; [90m 1[39m Marker1  Marker1  -[31m159[39m[31m.[39m
+#&gt; [90m 2[39m Marker2  Marker1  -[31m160[39m[31m.[39m
+#&gt; [90m 3[39m Marker3  Marker1  -[31m156[39m[31m.[39m
+#&gt; [90m 4[39m Marker4  Marker1  -[31m158[39m[31m.[39m
+#&gt; [90m 5[39m Marker5  Marker1  -[31m143[39m[31m.[39m
+#&gt; [90m 6[39m Marker6  Marker1  -[31m183[39m[31m.[39m
+#&gt; [90m 7[39m Marker7  Marker1  -[31m162[39m[31m.[39m
+#&gt; [90m 8[39m Marker8  Marker1  -[31m162[39m[31m.[39m
+#&gt; [90m 9[39m Marker9  Marker1  -[31m169[39m[31m.[39m
+#&gt; [90m10[39m Marker10 Marker1  -[31m159[39m[31m.[39m
+#&gt; [90m# ... with 90 more rows[39m</div><div class='input'><span class='fu'>scan_pvl</span>(<span class='kw'>probs</span> <span class='kw'>=</span> <span class='no'>probs</span>, <span class='kw'>pheno</span> <span class='kw'>=</span> <span class='no'>Y2</span>, <span class='kw'>kinship</span> <span class='kw'>=</span> <span class='no'>kin</span>,
+        <span class='kw'>start_snp</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>n_snp</span> <span class='kw'>=</span> <span class='fl'>10</span>)</div><div class='output co'>#&gt; <span class='message'>1 subjects dropped due to missing values</span></div><div class='output co'>#&gt; <span class='message'>starting covariance matrices estimation.</span></div><div class='output co'>#&gt; <span class='message'>covariance matrices estimation completed.</span></div><div class='output co'>#&gt; [90m# A tibble: 100 x 3[39m
+#&gt;    Var1     Var2    loglik
+#&gt;    [3m[90m&lt;chr&gt;[39m[23m    [3m[90m&lt;chr&gt;[39m[23m    [3m[90m&lt;dbl&gt;[39m[23m
+#&gt; [90m 1[39m Marker1  Marker1  -[31m156[39m[31m.[39m
+#&gt; [90m 2[39m Marker2  Marker1  -[31m160[39m[31m.[39m
+#&gt; [90m 3[39m Marker3  Marker1  -[31m154[39m[31m.[39m
+#&gt; [90m 4[39m Marker4  Marker1  -[31m158[39m[31m.[39m
+#&gt; [90m 5[39m Marker5  Marker1  -[31m144[39m[31m.[39m
+#&gt; [90m 6[39m Marker6  Marker1  -[31m183[39m[31m.[39m
+#&gt; [90m 7[39m Marker7  Marker1  -[31m159[39m[31m.[39m
+#&gt; [90m 8[39m Marker8  Marker1  -[31m162[39m[31m.[39m
+#&gt; [90m 9[39m Marker9  Marker1  -[31m166[39m[31m.[39m
+#&gt; [90m10[39m Marker10 Marker1  -[31m157[39m[31m.[39m
+#&gt; [90m# ... with 90 more rows[39m</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -212,6 +277,8 @@
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>

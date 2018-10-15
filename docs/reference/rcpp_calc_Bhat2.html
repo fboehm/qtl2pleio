@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Estimate allele effects matrix, B hat, with Rcpp — rcpp_calc_Bhat2 • qtl2pleio</title>
+<title>Estimate allele effects matrix, B hat, with Rcpp functions — rcpp_calc_Bhat2 • qtl2pleio</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Estimate allele effects matrix, B hat, with Rcpp — rcpp_calc_Bhat2" />
+<meta property="og:title" content="Estimate allele effects matrix, B hat, with Rcpp functions — rcpp_calc_Bhat2" />
 
-<meta property="og:description" content="Estimate allele effects matrix, B hat, with Rcpp" />
+<meta property="og:description" content="Estimate allele effects matrix, B hat, with Rcpp functions" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -62,7 +62,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">qtl2pleio</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2.9000</span>
       </span>
     </div>
 
@@ -119,14 +119,14 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Estimate allele effects matrix, B hat, with Rcpp</h1>
+    <h1>Estimate allele effects matrix, B hat, with Rcpp functions</h1>
     <small class="dont-index">Source: <a href='https://github.com/fboehm/qtl2pleio/blob/master/R/rcpp_calc_Bhat.R'><code>R/rcpp_calc_Bhat.R</code></a></small>
     <div class="hidden name"><code>rcpp_calc_Bhat2.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Estimate allele effects matrix, B hat, with Rcpp</p>
+    <p>Estimate allele effects matrix, B hat, with Rcpp functions</p>
     
     </div>
 
@@ -154,6 +154,14 @@
     <p>a df by 1 matrix of GLS-estimated allele effects</p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='no'>X1</span> <span class='kw'>&lt;-</span> <span class='fu'>as.matrix</span>(<span class='fu'>rbinom</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>prob</span> <span class='kw'>=</span> <span class='fl'>1</span> / <span class='fl'>2</span>))
+<span class='no'>X</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>gemma2</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/gemma2/topics/stagger_mats'>stagger_mats</a></span>(<span class='no'>X1</span>, <span class='no'>X1</span>)
+<span class='no'>Sigma_inv</span> <span class='kw'>&lt;-</span> <span class='fu'>diag</span>(<span class='fl'>200</span>)
+<span class='no'>Y</span> <span class='kw'>&lt;-</span> <span class='fu'>runif</span>(<span class='fl'>200</span>)
+<span class='fu'>rcpp_calc_Bhat2</span>(<span class='kw'>X</span> <span class='kw'>=</span> <span class='no'>X</span>, <span class='kw'>Y</span> <span class='kw'>=</span> <span class='no'>Y</span>, <span class='kw'>Sigma_inv</span> <span class='kw'>=</span> <span class='no'>Sigma_inv</span>)</div><div class='output co'>#&gt;           [,1]
+#&gt; [1,] 0.4783884
+#&gt; [2,] 0.5150632</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -161,7 +169,9 @@
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

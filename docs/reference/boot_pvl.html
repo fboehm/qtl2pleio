@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create a bootstrap sample and perform multivariate QTL scan — boot_pvl • qtl2pleio</title>
+<title>Create a bootstrap sample, perform multivariate QTL scan, and calculate LRT statistic — boot_pvl • qtl2pleio</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Create a bootstrap sample and perform multivariate QTL scan — boot_pvl" />
+<meta property="og:title" content="Create a bootstrap sample, perform multivariate QTL scan, and calculate LRT statistic — boot_pvl" />
 
-<meta property="og:description" content="Create a bootstrap sample and perform multivariate QTL scan" />
+<meta property="og:description" content="Create a bootstrap sample, perform multivariate QTL scan, and calculate LRT statistic" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -62,7 +62,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">qtl2pleio</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2.9000</span>
       </span>
     </div>
 
@@ -119,33 +119,33 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Create a bootstrap sample and perform multivariate QTL scan</h1>
+    <h1>Create a bootstrap sample, perform multivariate QTL scan, and calculate LRT statistic</h1>
     <small class="dont-index">Source: <a href='https://github.com/fboehm/qtl2pleio/blob/master/R/boot_pvl.R'><code>R/boot_pvl.R</code></a></small>
     <div class="hidden name"><code>boot_pvl.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Create a bootstrap sample and perform multivariate QTL scan</p>
+    <p>Create a bootstrap sample, perform multivariate QTL scan, and calculate LRT statistic</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>boot_pvl</span>(<span class='no'>pp</span>, <span class='no'>pleio_peak_index</span>, <span class='no'>phe</span>, <span class='kw'>covariates</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>kinship</span>,
-  <span class='kw'>nboot_per_job</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='no'>s1</span>, <span class='no'>n_snp</span>)</pre>
+    <pre class="usage"><span class='fu'>boot_pvl</span>(<span class='no'>probs</span>, <span class='no'>pleio_peak_index</span>, <span class='no'>pheno</span>, <span class='kw'>covariates</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>kinship</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>nboot_per_job</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='no'>start_snp</span>, <span class='no'>n_snp</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>pp</th>
+      <th>probs</th>
       <td><p>allele probabilities object for one chromosome only, like aprobs$`8`. Not a list</p></td>
     </tr>
     <tr>
       <th>pleio_peak_index</th>
-      <td><p>positive integer index indicating design matrix for simulation</p></td>
+      <td><p>positive integer index indicating design matrix for simulation. Typically acquired by using `find_pleio_peak_tib`.</p></td>
     </tr>
     <tr>
-      <th>phe</th>
+      <th>pheno</th>
       <td><p>n by d matrix of phenotypes</p></td>
     </tr>
     <tr>
@@ -161,18 +161,18 @@
       <td><p>number of bootstrap samples to call per invocation of function</p></td>
     </tr>
     <tr>
-      <th>s1</th>
-      <td><p>positive integer indicating index within pp for start of scan</p></td>
+      <th>start_snp</th>
+      <td><p>positive integer indicating index within probs for start of scan</p></td>
     </tr>
     <tr>
       <th>n_snp</th>
-      <td><p>number of markers to use in scan</p></td>
+      <td><p>number of (consecutive) markers to use in scan</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>numerical vector of lrt statistics from one or more bootstrap samples</p>
+    <p>numerical vector of lrt statistics from `nboot_per_job` bootstrap samples</p>
     
 
   </div>

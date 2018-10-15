@@ -62,7 +62,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">qtl2pleio</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2.9000</span>
       </span>
     </div>
 
@@ -155,20 +155,20 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>llmat</span> <span class='kw'>&lt;-</span> <span class='fu'>matrix</span>(<span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='fu'>rgamma</span>(<span class='fl'>9</span>, <span class='fl'>5</span>))
-<span class='fu'>rownames</span>(<span class='no'>llmat</span>) <span class='kw'>&lt;-</span> <span class='fu'>paste0</span>(<span class='st'>"m"</span>, <span class='fl'>1</span>:<span class='fl'>3</span>)
-<span class='fu'>colnames</span>(<span class='no'>llmat</span>) <span class='kw'>&lt;-</span> <span class='fu'>paste0</span>(<span class='st'>"m"</span>, <span class='fl'>1</span>:<span class='fl'>3</span>)
+<span class='fu'>rownames</span>(<span class='no'>llmat</span>) <span class='kw'>&lt;-</span> <span class='fu'>paste0</span>(<span class='st'>'m'</span>, <span class='fl'>1</span>:<span class='fl'>3</span>)
+<span class='fu'>colnames</span>(<span class='no'>llmat</span>) <span class='kw'>&lt;-</span> <span class='fu'>paste0</span>(<span class='st'>'m'</span>, <span class='fl'>1</span>:<span class='fl'>3</span>)
 <span class='fu'>transform_loglik_mat</span>(<span class='no'>llmat</span>)</div><div class='output co'>#&gt; [90m# A tibble: 9 x 3[39m
 #&gt;   marker1 marker2    ll
 #&gt;   [3m[90m&lt;chr&gt;[39m[23m   [3m[90m&lt;chr&gt;[39m[23m   [3m[90m&lt;dbl&gt;[39m[23m
-#&gt; [90m1[39m m1      m1       6.12
-#&gt; [90m2[39m m2      m1       3.31
-#&gt; [90m3[39m m3      m1       4.32
-#&gt; [90m4[39m m1      m2       2.83
-#&gt; [90m5[39m m2      m2       7.99
-#&gt; [90m6[39m m3      m2       3.72
-#&gt; [90m7[39m m1      m3       5.15
-#&gt; [90m8[39m m2      m3       4.62
-#&gt; [90m9[39m m3      m3       4.28</div></pre>
+#&gt; [90m1[39m m1      m1       5.30
+#&gt; [90m2[39m m2      m1       6.15
+#&gt; [90m3[39m m3      m1       4.76
+#&gt; [90m4[39m m1      m2       3.09
+#&gt; [90m5[39m m2      m2       4.65
+#&gt; [90m6[39m m3      m2       5.01
+#&gt; [90m7[39m m1      m3       9.70
+#&gt; [90m8[39m m2      m3       2.71
+#&gt; [90m9[39m m3      m3       8.49</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

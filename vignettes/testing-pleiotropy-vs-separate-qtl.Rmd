@@ -178,7 +178,7 @@ find_peaks(s2, map = pm)
 
 
 ```{r}
-out <- scan_pvl(probs = pp, pheno = Y, kinship = kinship$`2`, start_snp1 = 38, n_snp = 25)
+out <- scan_pvl(probs = pp, pheno = Y, kinship = kinship$`2`, start_snp = 38, n_snp = 5)
 ```
 
 
@@ -224,13 +224,13 @@ Before we call `boot_pvl`, we need to identify the index (on the chromosome unde
 
 ```{r}
 set.seed(2018-10-03)
-system.time(b_out <- boot_pvl(pp = pp,
-         phe = Y, 
+system.time(b_out <- boot_pvl(probs = pp,
+         pheno = Y, 
          pleio_peak_index = pleio_index, 
          kinship = kinship$`2`, 
-         nboot_per_job = 10, 
-         s1 = 38, 
-         n_snp = 25
+         nboot_per_job = 3, 
+         start_snp = 38, 
+         n_snp = 5
          ))
 
 ```

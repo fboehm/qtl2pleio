@@ -86,10 +86,13 @@ colnames(Y) <- paste0('t', 1:2)
 covariates <- matrix(c(runif(99), NA), nrow = 100, ncol = 1)
 rownames(covariates) <- s_id
 colnames(covariates) <- 'c1'
+kin <- diag(100)
+rownames(kin) <- s_id
+colnames(kin) <- s_id
 Y2 <- Y
 Y2[1, 2] <- NA
-scan_pvl(probs = probs, pheno = Y, kinship = diag(100),
+scan_pvl(probs = probs, pheno = Y, kinship = kin,
         start_snp = 1, n_snp = 10)
-scan_pvl(probs = probs, pheno = Y2, kinship = diag(100),
+scan_pvl(probs = probs, pheno = Y2, kinship = kin,
         start_snp = 1, n_snp = 10)
 }

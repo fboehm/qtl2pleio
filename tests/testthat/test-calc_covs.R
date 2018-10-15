@@ -18,7 +18,7 @@ test_that("calc_covs returns different answers when covariates are used vs. not 
 })
 
 test_that("calc_covs, when kinship is identity, has output that sums to give same result as cov()", {
-  expect_equal(round(cc1$Vg + cc1$Ve, 5), round(cov(phe), 5))
+  expect_equal(round(cc1$Vg + cc1$Ve, 4), round(cov(phe), 4), )
 })
 
 test_that("calc_covs accommodates d-variate phenotype for d more than 2 & Vg = Ve when kinship is identity", {
@@ -39,12 +39,12 @@ test_that("calc_covs outputs are full rank matrices", {
 })
 
 test_that("calc_covs outputs are symmetric", {
-  expect_true(isSymmetric(calc_covs(phe3, diag(100))$Vg))
-  expect_true(isSymmetric(calc_covs(phe3, diag(100))$Ve))
-  expect_true(isSymmetric(calc_covs(phe5, diag(100))$Vg))
-  expect_true(isSymmetric(calc_covs(phe5, diag(100))$Ve))
-  expect_true(isSymmetric(calc_covs(phe3, diag(100), covariates = sex)$Vg))
-  expect_true(isSymmetric(calc_covs(phe3, diag(100), covariates = sex)$Ve))
-  expect_true(isSymmetric(calc_covs(phe5, diag(100), covariates = sex)$Vg))
-  expect_true(isSymmetric(calc_covs(phe5, diag(100), covariates = sex)$Ve))
+  expect_true(isSymmetric(calc_covs(phe3, diag(100))$Vg, tol = 0.001))
+  expect_true(isSymmetric(calc_covs(phe3, diag(100))$Ve, tol = 0.001))
+  expect_true(isSymmetric(calc_covs(phe5, diag(100))$Vg, tol = 0.001))
+  expect_true(isSymmetric(calc_covs(phe5, diag(100))$Ve, tol = 0.001))
+  expect_true(isSymmetric(calc_covs(phe3, diag(100), covariates = sex)$Vg, tol = 0.001))
+  expect_true(isSymmetric(calc_covs(phe3, diag(100), covariates = sex)$Ve, tol = 0.001))
+  expect_true(isSymmetric(calc_covs(phe5, diag(100), covariates = sex)$Vg, tol = 0.001))
+  expect_true(isSymmetric(calc_covs(phe5, diag(100), covariates = sex)$Ve, tol = 0.001))
 })

@@ -49,34 +49,6 @@ system.time(calc_covs(pheno, kinship))
 system.time(limmbo2(kinship = kinship, pheno = pheno, seed = 1))
 ```
 
-## Increase sample size to 500
-
-```{r}
-pheno <- matrix(rnorm(2500), nrow = 500)
-kinship <- diag(500)
-system.time(calc_covs(pheno, kinship) -> cc_out)
-cc_out
-```
-
-```{r}
-system.time(limmbo2(kinship = kinship, pheno = pheno, seed = 1) -> li_out)
-li_out
-```
-
-
-## 15 phenotypes
-
-```{r}
-pheno <- matrix(rnorm(7500), nrow = 500)
-system.time(calc_covs(pheno, kinship) -> cc_out)
-cc_out
-```
-
-```{r}
-system.time(limmbo2(kinship = kinship, pheno = pheno, S = 3, seed = 1) -> li_out)
-li_out
-```
-
 ## Use nontrivial kinship with trivariate phenotype
 
 
@@ -86,12 +58,18 @@ A <- matrix(runif(n ^ 2), ncol = n)
 kinship <- round(t(A) %*% A, 6)
 pheno <- matrix(rnorm(1500), nrow = 500)
 
-system.time(calc_covs(pheno, kinship) -> cc_out)
+system.time(calc_covs(pheno, 
+                      kinship, 
+                      max_iter = 1000,
+                      max_prec = 1 / 10000) -> cc_out)
 cc_out
 ```
 
 ```{r}
-system.time(limmbo2(kinship = kinship, pheno = pheno, S = 3, seed = 1) -> li_out)
+system.time(limmbo2(kinship = kinship, 
+                    pheno = pheno, 
+                    S = 3, 
+                    seed = 1) -> li_out)
 li_out
 ```
 

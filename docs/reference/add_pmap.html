@@ -62,7 +62,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">qtl2pleio</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2.9000</span>
       </span>
     </div>
 
@@ -159,9 +159,9 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>pm</span> <span class='kw'>&lt;-</span> <span class='fl'>1</span>:<span class='fl'>3</span>
-<span class='fu'>names</span>(<span class='no'>pm</span>) <span class='kw'>&lt;-</span> <span class='fu'>paste0</span>(<span class='st'>"m"</span>, <span class='fl'>1</span>:<span class='fl'>3</span>)
-<span class='fu'>expand.grid</span>(<span class='fu'>paste0</span>(<span class='st'>"m"</span>, <span class='fl'>1</span>:<span class='fl'>3</span>), <span class='fu'>paste0</span>(<span class='st'>"m"</span>, <span class='fl'>1</span>:<span class='fl'>3</span>)) <span class='kw'>-&gt;</span> <span class='no'>foo</span>
-<span class='fu'>names</span>(<span class='no'>foo</span>) <span class='kw'>&lt;-</span> <span class='fu'>c</span>(<span class='st'>"marker1"</span>, <span class='st'>"marker2"</span>)
+<span class='fu'>names</span>(<span class='no'>pm</span>) <span class='kw'>&lt;-</span> <span class='fu'>paste0</span>(<span class='st'>'m'</span>, <span class='fl'>1</span>:<span class='fl'>3</span>)
+<span class='fu'>expand.grid</span>(<span class='fu'>paste0</span>(<span class='st'>'m'</span>, <span class='fl'>1</span>:<span class='fl'>3</span>), <span class='fu'>paste0</span>(<span class='st'>'m'</span>, <span class='fl'>1</span>:<span class='fl'>3</span>)) <span class='kw'>-&gt;</span> <span class='no'>foo</span>
+<span class='fu'>names</span>(<span class='no'>foo</span>) <span class='kw'>&lt;-</span> <span class='fu'>c</span>(<span class='st'>'marker1'</span>, <span class='st'>'marker2'</span>)
 <span class='no'>foo</span>$<span class='no'>ll</span> <span class='kw'>&lt;-</span> <span class='fu'>rgamma</span>(<span class='fl'>9</span>, <span class='fl'>5</span>)
 <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/tibble/topics/as_tibble'>as_tibble</a></span>(<span class='no'>foo</span>) <span class='kw'>-&gt;</span> <span class='no'>tib</span>
 <span class='fu'>add_pmap</span>(<span class='no'>tib</span>, <span class='no'>pm</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Column `marker1`/`marker` joining factor and character vector, coercing into character vector</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Column `marker2`/`marker` joining factor and character vector, coercing into character vector</span></div><div class='output co'>#&gt; [90m# A tibble: 9 x 5[39m
