@@ -16,6 +16,12 @@ studies in multiparental populations, such as the Diversity Outbred
 mouse population. `qtl2pleio` data structures are those used in the
 `rqtl/qtl2` package.
 
+## Code of conduct
+
+Please note that this project is released with a [Contributor Code of
+Conduct](CONDUCT.md). By participating in this project you agree to
+abide by its terms.
+
 ## Installation
 
 You can install `qtl2pleio` from github with:
