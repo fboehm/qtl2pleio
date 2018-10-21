@@ -1,0 +1,14 @@
+citHeader("To cite qtl2pleio in publications use:")
+
+citEntry(entry = "Article",
+title = "qtl2pleio: Testing pleiotropy vs. separate QTL in multiparental populations",
+author = personList(as.person("Frederick Boehm")),
+journal = "tbd",
+year = "2018",
+url = "https://github.com/fboehm/qtl2pleio",
+textVersion =
+paste("Frederick Boehm (2018).",
+"qtl2pleio: Testing pleiotropy vs. separate QTL in multiparental populations.",
+"URL https://github.com/fboehm/qtl2pleio"
+)
+)
