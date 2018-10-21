@@ -41,6 +41,6 @@ This is a basic example which shows you how to solve a common problem:
 
 Please note that this project is released with a [Contributor Code of
 Conduct](CONDUCT.md). By participating in this project you agree to
-abide by its terms.
+abide by its terms
 
 ## Citation information
