@@ -2,45 +2,54 @@
 output: github_document
 ---
 
-[![Travis-CI Build Status](https://travis-ci.org/fboehm/qtl2pleio.svg?branch=master)](https://travis-ci.org/fboehm/qtl2pleio)
-
-[![Coverage Status](https://img.shields.io/codecov/c/github/fboehm/qtl2pleio/master.svg)](https://codecov.io/github/fboehm/qtl2pleio?branch=master)
-
-[![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
-
-
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-```{r, echo = FALSE}
+```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.path = "README-"
+  fig.path = "man/figures/README-",
+  out.width = "100%"
 )
 ```
-
 # qtl2pleio
 
+## Badges
+
+[![Travis-CI Build Status](https://travis-ci.org/fboehm/qtl2pleio.svg?branch=master)](https://travis-ci.org/fboehm/qtl2pleio)
+[![Coverage Status](https://img.shields.io/codecov/c/github/fboehm/qtl2pleio/master.svg)](https://codecov.io/github/fboehm/qtl2pleio?branch=master)
+[![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
+
+
+
+
+## Goals
+
 The goal of qtl2pleio is to perform a likelihood ratio test that distinguishes between competing hypotheses of presence of two separate QTL (alternative hypothesis) and pleiotropy (null hypothesis) in QTL studies in multiparental populations, such as the Diversity Outbred mouse population. `qtl2pleio` data structures are those used in the `rqtl/qtl2` package. 
+
 
 ## Code of Conduct
 
 Please note that this project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.
 
-
 ## Installation
 
-You can install `qtl2pleio` from github with:
 
-```{r gh-installation, eval = FALSE}
-# install.packages("devtools")
+```{r, eval = FALSE}
+install.packages("devtools")
 devtools::install_github("fboehm/qtl2pleio")
 ```
 
+
+
 ## Example
+
+
 
 This is a basic example which shows you how to solve a common problem:
 
 ```{r example}
 ## basic example code
 ```
+
+
