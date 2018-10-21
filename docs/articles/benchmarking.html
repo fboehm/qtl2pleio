@@ -113,8 +113,8 @@
 <a class="sourceLine" id="cb1-6" data-line-number="6">Y &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">200</span>)</a>
 <a class="sourceLine" id="cb1-7" data-line-number="7"><span class="kw"><a href="../reference/calc_Bhat.html">calc_Bhat</a></span>(X, Sigma_inv, Y)</a>
 <a class="sourceLine" id="cb1-8" data-line-number="8"><span class="co">#&gt;           [,1]</span></a>
-<a class="sourceLine" id="cb1-9" data-line-number="9"><span class="co">#&gt; [1,] 0.4934308</span></a>
-<a class="sourceLine" id="cb1-10" data-line-number="10"><span class="co">#&gt; [2,] 0.4936133</span></a>
+<a class="sourceLine" id="cb1-9" data-line-number="9"><span class="co">#&gt; [1,] 0.5684413</span></a>
+<a class="sourceLine" id="cb1-10" data-line-number="10"><span class="co">#&gt; [2,] 0.5279925</span></a>
 <a class="sourceLine" id="cb1-11" data-line-number="11"></a>
 <a class="sourceLine" id="cb1-12" data-line-number="12">microbenchmark<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/microbenchmark/topics/microbenchmark">microbenchmark</a></span>(</a>
 <a class="sourceLine" id="cb1-13" data-line-number="13">  <span class="kw"><a href="../reference/calc_Bhat.html">calc_Bhat</a></span>(<span class="dt">X =</span> X, <span class="dt">Sigma_inv =</span> Sigma_inv, <span class="dt">Y =</span> Y), </a>
@@ -122,14 +122,14 @@
 <a class="sourceLine" id="cb1-15" data-line-number="15">  <span class="kw"><a href="../reference/rcpp_calc_Bhat.html">rcpp_calc_Bhat</a></span>(<span class="dt">X =</span> X, <span class="dt">Sigma =</span> Sigma_inv, <span class="dt">Y =</span> Y)</a>
 <a class="sourceLine" id="cb1-16" data-line-number="16">)</a>
 <a class="sourceLine" id="cb1-17" data-line-number="17"><span class="co">#&gt; Unit: microseconds</span></a>
-<a class="sourceLine" id="cb1-18" data-line-number="18"><span class="co">#&gt;                                                  expr      min       lq</span></a>
-<a class="sourceLine" id="cb1-19" data-line-number="19"><span class="co">#&gt;        calc_Bhat(X = X, Sigma_inv = Sigma_inv, Y = Y)  308.964  317.376</span></a>
-<a class="sourceLine" id="cb1-20" data-line-number="20"><span class="co">#&gt;  rcpp_calc_Bhat2(X = X, Y = Y, Sigma_inv = Sigma_inv)   74.439   76.688</span></a>
-<a class="sourceLine" id="cb1-21" data-line-number="21"><span class="co">#&gt;       rcpp_calc_Bhat(X = X, Sigma = Sigma_inv, Y = Y) 3314.724 3353.626</span></a>
-<a class="sourceLine" id="cb1-22" data-line-number="22"><span class="co">#&gt;        mean    median       uq      max neval</span></a>
-<a class="sourceLine" id="cb1-23" data-line-number="23"><span class="co">#&gt;   341.97722  334.1675  359.351  440.403   100</span></a>
-<a class="sourceLine" id="cb1-24" data-line-number="24"><span class="co">#&gt;    86.61129   80.4975   90.149  178.439   100</span></a>
-<a class="sourceLine" id="cb1-25" data-line-number="25"><span class="co">#&gt;  3428.51707 3384.3680 3443.222 3838.274   100</span></a></code></pre></div>
+<a class="sourceLine" id="cb1-18" data-line-number="18"><span class="co">#&gt;                                                  expr      min        lq</span></a>
+<a class="sourceLine" id="cb1-19" data-line-number="19"><span class="co">#&gt;        calc_Bhat(X = X, Sigma_inv = Sigma_inv, Y = Y)  544.935  563.7430</span></a>
+<a class="sourceLine" id="cb1-20" data-line-number="20"><span class="co">#&gt;  rcpp_calc_Bhat2(X = X, Y = Y, Sigma_inv = Sigma_inv)  131.205  136.1775</span></a>
+<a class="sourceLine" id="cb1-21" data-line-number="21"><span class="co">#&gt;       rcpp_calc_Bhat(X = X, Sigma = Sigma_inv, Y = Y) 5729.143 5977.1995</span></a>
+<a class="sourceLine" id="cb1-22" data-line-number="22"><span class="co">#&gt;       mean   median        uq      max neval</span></a>
+<a class="sourceLine" id="cb1-23" data-line-number="23"><span class="co">#&gt;   612.2805  604.286  637.5175   871.25   100</span></a>
+<a class="sourceLine" id="cb1-24" data-line-number="24"><span class="co">#&gt;   156.4021  146.664  155.7815   689.95   100</span></a>
+<a class="sourceLine" id="cb1-25" data-line-number="25"><span class="co">#&gt;  6332.5622 6063.418 6260.0650 14538.30   100</span></a></code></pre></div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

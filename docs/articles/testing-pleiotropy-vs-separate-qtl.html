@@ -294,7 +294,7 @@
 <a class="sourceLine" id="cb19-14" data-line-number="14"><span class="co">#&gt; starting covariance matrices estimation.</span></a>
 <a class="sourceLine" id="cb19-15" data-line-number="15"><span class="co">#&gt; covariance matrices estimation completed.</span></a>
 <a class="sourceLine" id="cb19-16" data-line-number="16"><span class="co">#&gt;    user  system elapsed </span></a>
-<a class="sourceLine" id="cb19-17" data-line-number="17"><span class="co">#&gt;   7.479   0.117   7.607</span></a></code></pre></div>
+<a class="sourceLine" id="cb19-17" data-line-number="17"><span class="co">#&gt;  13.923   0.241  14.237</span></a></code></pre></div>
 <p>The argument <code>nboot_per_job</code> indicates the number of bootstrap samples that will be created and analyzed. Here, we set <code>nboot_per_job = 10</code>, so we expect to see returned a numeric vector of length 10, where each entry is a LRT statistic value from a distinct bootstrap sample.</p>
 <p>Finally, we determine a bootstrap p-value in the usual method. We treat the bootstrap samples’ test statistics as an empirical distribution of the test statistic under the null hypothesis of pleiotropy. Thus, to get a p-value, we want to ask “What is the probability, under the null hypothesis, of observing a test statistic value that is at least as extreme as that which we observed?”</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1">(pvalue &lt;-<span class="st"> </span><span class="kw">mean</span>(b_out <span class="op">&gt;=</span><span class="st"> </span>lrt))</a>
