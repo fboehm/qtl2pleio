@@ -15,7 +15,8 @@ Description: The package contains code that implements an adaptation of Jiang & 
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-Imports: gemma2,
+Imports: 
+    gemma2,
     mvtnorm,
     tibble,
     MASS,
@@ -28,7 +29,8 @@ Imports: gemma2,
     Rcpp,
     limmbo2,
     RcppEigen,
-    microbenchmark
+    microbenchmark,
+    magrittr
 LinkingTo: Rcpp, RcppEigen
 NeedsCompilation: yes
 RoxygenNote: 6.1.0
