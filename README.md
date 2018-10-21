@@ -5,6 +5,10 @@ Status](https://travis-ci.org/fboehm/qtl2pleio.svg?branch=master)](https://travi
 [![Coverage
 Status](https://img.shields.io/codecov/c/github/fboehm/qtl2pleio/master.svg)](https://codecov.io/github/fboehm/qtl2pleio?branch=master)
 
+[![Project Status: WIP – Initial development is in progress, but there
+has not yet been a stable, usable release suitable for the
+public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 # qtl2pleio
@@ -16,7 +20,7 @@ studies in multiparental populations, such as the Diversity Outbred
 mouse population. `qtl2pleio` data structures are those used in the
 `rqtl/qtl2` package.
 
-## Code of conduct
+## Code of Conduct
 
 Please note that this project is released with a [Contributor Code of
 Conduct](CONDUCT.md). By participating in this project you agree to
