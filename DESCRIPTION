@@ -32,14 +32,17 @@ Imports: gemma2,
 LinkingTo: Rcpp, RcppEigen
 NeedsCompilation: yes
 RoxygenNote: 6.1.0
-Suggests: testthat,
+Suggests: 
+    testthat,
     knitr,
     rmarkdown,
     qtl2,
-    covr
+    covr,
+    spelling
 VignetteBuilder: knitr
 Remotes: fboehm/gemma2,
     rqtl/qtl2,
     fboehm/limmbo2
 URL: https://github.com/fboehm/qtl2pleio
 BugReports: https://github.com/fboehm/qtl2pleio/issues
+Language: en-US
