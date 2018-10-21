@@ -11,8 +11,8 @@
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
+<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
@@ -42,6 +42,16 @@
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-46757486-5"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-46757486-5');
+</script>
 
   </head>
 
@@ -120,19 +130,21 @@
       <small>Source: <a href='https://github.com/fboehm/qtl2pleio/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="qtl2pleio-0-1-0" class="section level1">
+    <div id="qtl2pleio-0-1-2-9000" class="section level1">
 <h1 class="page-header">
-<a href="#qtl2pleio-0-1-0" class="anchor"></a>qtl2pleio 0.1.0</h1>
+<a href="#qtl2pleio-0-1-2-9000" class="anchor"></a>qtl2pleio 0.1.2.9000</h1>
+<div id="major-changes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#major-changes" class="anchor"></a>Major changes</h2>
 <ul>
-<li>Added a <code>NEWS.md</code> file to track changes to the package.</li>
+<li>added inst/CITATION file for use with <code>citation("qtl2pleio")</code>
+</li>
 </ul>
 </div>
-    <div id="qtl2pleio-0-1-1" class="section level1">
-<h1 class="page-header">
-<a href="#qtl2pleio-0-1-1" class="anchor"></a>qtl2pleio 0.1.1</h1>
-<ul>
-<li>restructured <code>scan_pvl</code> to allow for more than two phenotypes. Now output is a dataframe.</li>
-</ul>
+<div id="bug-fixes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#bug-fixes" class="anchor"></a>Bug fixes</h2>
+</div>
 </div>
     <div id="qtl2pleio-0-1-2" class="section level1">
 <h1 class="page-header">
@@ -150,15 +162,30 @@
 </li>
 </ul>
 </div>
+    <div id="qtl2pleio-0-1-1" class="section level1">
+<h1 class="page-header">
+<a href="#qtl2pleio-0-1-1" class="anchor"></a>qtl2pleio 0.1.1</h1>
+<ul>
+<li>restructured <code>scan_pvl</code> to allow for more than two phenotypes. Now output is a dataframe.</li>
+</ul>
+</div>
+    <div id="qtl2pleio-0-1-0" class="section level1">
+<h1 class="page-header">
+<a href="#qtl2pleio-0-1-0" class="anchor"></a>qtl2pleio 0.1.0</h1>
+<ul>
+<li>Added a <code>NEWS.md</code> file to track changes to the package.</li>
+</ul>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-        <li><a href="#qtl2pleio-0-1-0">0.1.0</a></li>
-        <li><a href="#qtl2pleio-0-1-1">0.1.1</a></li>
+        <li><a href="#qtl2pleio-0-1-2-9000">0.1.2.9000</a></li>
         <li><a href="#qtl2pleio-0-1-2">0.1.2</a></li>
+        <li><a href="#qtl2pleio-0-1-1">0.1.1</a></li>
+        <li><a href="#qtl2pleio-0-1-0">0.1.0</a></li>
       </ul>
     </div>
   </div>

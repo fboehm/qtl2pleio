@@ -1,50 +1,59 @@
-Package: qtl2pleio
 Type: Package
-Title: Hypothesis test of close linkage vs pleiotropy in multiparental populations
+Package: qtl2pleio
+Title: Hypothesis test of close linkage vs pleiotropy in
+    multiparental populations
 Version: 0.1.2.9000
-Authors@R: c(
-    person(given = "Frederick", 
-    family = "Boehm", 
-    email = "frederick.boehm@gmail.com", 
-    role = c("aut", "cre"),
-    comment = c(ORCID = "0000-0002-1644-5931")
-    )
-    )
+Authors@R: 
+    person(given = "Frederick",
+           family = "Boehm",
+           role = c("aut", "cre"),
+           email = "frederick.boehm@gmail.com",
+           comment = c(ORCID = "0000-0002-1644-5931"))
 Maintainer: Frederick Boehm <frederick.boehm@gmail.com>
-Description: The package contains code that implements an adaptation of Jiang & Zeng's (1995) likelihood ratio test for testing the null hypothesis of pleiotropy against the alternative hypothesis, close linkage. The test differs from that in Jiang & Zeng (1995) in that our test accommodates multiparental populations.
+Description: The package contains code that implements an
+    adaptation of Jiang & Zeng's (1995) likelihood ratio test for testing
+    the null hypothesis of pleiotropy against the alternative hypothesis,
+    close linkage. The test differs from that in Jiang & Zeng (1995) in
+    that our test accommodates multiparental populations.
 License: MIT + file LICENSE
-Encoding: UTF-8
-LazyData: true
-Imports: 
-    gemma2,
-    mvtnorm,
-    tibble,
-    MASS,
-    ggplot2,
-    dplyr,
-    rlang,
-    stringr,
-    readr,
-    progress,
-    Rcpp,
-    limmbo2,
-    RcppEigen,
-    microbenchmark,
-    magrittr
-LinkingTo: Rcpp, RcppEigen
-NeedsCompilation: yes
-RoxygenNote: 6.1.0
-Suggests: 
-    testthat,
-    knitr,
-    rmarkdown,
-    qtl2,
-    covr,
-    spelling
-VignetteBuilder: knitr
-Remotes: fboehm/gemma2,
-    rqtl/qtl2,
-    fboehm/limmbo2
 URL: https://github.com/fboehm/qtl2pleio
 BugReports: https://github.com/fboehm/qtl2pleio/issues
+Depends: 
+    R (>= 3.1)
+Imports: 
+    dplyr,
+    gemma2,
+    ggplot2,
+    limmbo2,
+    magrittr,
+    MASS,
+    microbenchmark,
+    mvtnorm,
+    progress,
+    Rcpp,
+    RcppEigen,
+    readr,
+    rlang,
+    stringr,
+    tibble
+Suggests: 
+    covr,
+    knitr,
+    qtl2,
+    rmarkdown,
+    spelling,
+    testthat
+LinkingTo: 
+    Rcpp,
+    RcppEigen
+VignetteBuilder: 
+    knitr
+Remotes: 
+    fboehm/gemma2,
+    fboehm/limmbo2,
+    rqtl/qtl2
+Encoding: UTF-8
 Language: en-US
+LazyData: true
+NeedsCompilation: yes
+RoxygenNote: 6.1.0

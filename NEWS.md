@@ -1,10 +1,15 @@
-# qtl2pleio 0.1.0
+# qtl2pleio 0.1.2.9000
 
-* Added a `NEWS.md` file to track changes to the package.
+## Major changes
 
-# qtl2pleio 0.1.1
+- added inst/CITATION file for use with `citation("qtl2pleio")`
 
-* restructured `scan_pvl` to allow for more than two phenotypes. Now output is a dataframe.
+
+
+## Bug fixes
+
+
+
 
 # qtl2pleio 0.1.2
 
@@ -13,3 +18,13 @@
 * added `boot_n` function for use in bootstrap analyses  
 * started using covariates in calls to `calc_covs`. Note that we still don't use genetic data when calling `calc_covs`.  
 * deprecated `calc_loglik_bvlmm`
+
+
+
+# qtl2pleio 0.1.1
+
+* restructured `scan_pvl` to allow for more than two phenotypes. Now output is a dataframe.
+
+# qtl2pleio 0.1.0
+
+* Added a `NEWS.md` file to track changes to the package.

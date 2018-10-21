@@ -5,4 +5,7 @@ articles:
   Comparing_limmbo2_covariance_estimates_with_those_of_gemma2: Comparing_limmbo2_covariance_estimates_with_those_of_gemma2.html
   benchmarking: benchmarking.html
   testing-pleiotropy-vs-separate-qtl: testing-pleiotropy-vs-separate-qtl.html
+urls:
+  reference: https://fboehm.us/qtl2pleio/reference
+  article: https://fboehm.us/qtl2pleio/articles
 

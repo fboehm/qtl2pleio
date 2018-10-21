@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Simulate a single data set consisting of n subjects and 2 phenotypes for each — sim1 • qtl2pleio</title>
+<title>Pipe operator — %&gt;% • qtl2pleio</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Simulate a single data set consisting of n subjects and 2 phenotypes for each — sim1" />
+<meta property="og:title" content="Pipe operator — %&gt;%" />
 
-<meta property="og:description" content="Simulate a single data set consisting of n subjects and 2 phenotypes for each" />
+<meta property="og:description" content="See magrittr::%&amp;gt;% for details." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -129,50 +129,24 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Simulate a single data set consisting of n subjects and 2 phenotypes for each</h1>
-    <small class="dont-index">Source: <a href='https://github.com/fboehm/qtl2pleio/blob/master/R/sim1.R'><code>R/sim1.R</code></a></small>
-    <div class="hidden name"><code>sim1.Rd</code></div>
+    <h1>Pipe operator</h1>
+    <small class="dont-index">Source: <a href='https://github.com/fboehm/qtl2pleio/blob/master/R/utils-pipe.R'><code>R/utils-pipe.R</code></a></small>
+    <div class="hidden name"><code>pipe.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Simulate a single data set consisting of n subjects and 2 phenotypes for each</p>
+    <p>See <code>magrittr::%&gt;%</code> for details.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>sim1</span>(<span class='no'>X</span>, <span class='no'>B</span>, <span class='no'>Vg</span>, <span class='no'>Ve</span>, <span class='no'>kinship</span>)</pre>
-    
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>X</th>
-      <td><p>design matrix (incorporating genotype probabilities from two loci), 2n by 2f</p></td>
-    </tr>
-    <tr>
-      <th>B</th>
-      <td><p>a matrix of allele effects, f rows by 2 columns</p></td>
-    </tr>
-    <tr>
-      <th>Vg</th>
-      <td><p>a genetic covariance matrix, 2 by 2</p></td>
-    </tr>
-    <tr>
-      <th>Ve</th>
-      <td><p>an error covariance matrix, 2 by 2</p></td>
-    </tr>
-    <tr>
-      <th>kinship</th>
-      <td><p>a chromosome-specific kinship matrix, n by n</p></td>
-    </tr>
-    </table>
-    
+    <pre class="usage"><span class='no'>lhs</span> <span class='kw'>%&gt;%</span> <span class='no'>rhs</span></pre>
+        
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
                 </ul>
 
   </div>

@@ -41,6 +41,31 @@ This is a basic example which shows you how to solve a common problem:
 
 Please note that this project is released with a [Contributor Code of
 Conduct](CONDUCT.md). By participating in this project you agree to
-abide by its terms
+abide by its terms.
 
 ## Citation information
+
+``` r
+citation("qtl2pleio")
+#> Warning: 'DESCRIPTION' file has an 'Encoding' field and re-encoding is not
+#> possible
+#> Warning in citation("qtl2pleio"): no date field in DESCRIPTION file of
+#> package 'qtl2pleio'
+#> Warning in citation("qtl2pleio"): could not determine year for 'qtl2pleio'
+#> from package DESCRIPTION file
+#> 
+#> To cite package 'qtl2pleio' in publications use:
+#> 
+#>   Frederick Boehm (NA). qtl2pleio: Hypothesis test of close
+#>   linkage vs pleiotropy in multiparental populations. R package
+#>   version 0.1.2.9000. https://github.com/fboehm/qtl2pleio
+#> 
+#> A BibTeX entry for LaTeX users is
+#> 
+#>   @Manual{,
+#>     title = {qtl2pleio: Hypothesis test of close linkage vs pleiotropy in multiparental populations},
+#>     author = {Frederick Boehm},
+#>     note = {R package version 0.1.2.9000},
+#>     url = {https://github.com/fboehm/qtl2pleio},
+#>   }
+```
