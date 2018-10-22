@@ -2,12 +2,17 @@
 
 ## Major changes
 
-- added inst/CITATION file for use with `citation("qtl2pleio")`
+- added inst/CITATION file    
+- aligned ordering and names of arguments for both `boot_pvl` and `scan_pvl`    
+- added examples for `boot_pvl`    
+- added literature references to both `boot_pvl` and `scan_pvl`    
+
 
 
 
 ## Bug fixes
 
+- corrected typo in vignette  
 
 
 
