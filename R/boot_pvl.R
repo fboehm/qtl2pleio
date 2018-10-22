@@ -19,7 +19,7 @@
 #'
 #' @param probs allele probabilities object for one chromosome only, like aprobs$`8`. Not a list
 #' @param pheno n by d matrix of phenotypes
-#' @param covariates n by n.cov matrix of covariates
+#' @param addcovar n by n.cov matrix of additive numeric covariates
 #' @param kinship a kinship matrix, not a list
 #' @param start_snp positive integer indicating index within probs for start of scan
 #' @param n_snp number of (consecutive) markers to use in scan
@@ -47,9 +47,9 @@
 #'Y <- matrix(data = Y_pre, nrow = 100)
 #'rownames(Y) <- s_id
 #'colnames(Y) <- paste0('t', 1:2)
-#'covariates <- matrix(c(runif(99), NA), nrow = 100, ncol = 1)
-#'rownames(covariates) <- s_id
-#'colnames(covariates) <- 'c1'
+#'addcovar <- matrix(c(runif(99), NA), nrow = 100, ncol = 1)
+#'rownames(addcovar) <- s_id
+#'colnames(addcovar) <- 'c1'
 #'kin <- diag(100)
 #'rownames(kin) <- s_id
 #'colnames(kin) <- s_id
@@ -66,7 +66,7 @@
 #'
 boot_pvl <- function(probs,
                      pheno,
-                     covariates = NULL,
+                     addcovar = NULL,
                      kinship = NULL,
                      start_snp = 1,
                      n_snp,
@@ -81,14 +81,18 @@ boot_pvl <- function(probs,
               identical(nrow(probs), nrow(pheno)),
               check_dimnames(kinship, probs),
               check_dimnames(probs, pheno))
-    if (!is.null(covariates)) {
-        stopifnot(check_dimnames(kinship, covariates),
-                  identical(nrow(probs), nrow(covariates))
+    if (!is.null(addcovar)) {
+        stopifnot(check_dimnames(kinship, addcovar),
+                  identical(nrow(probs), nrow(addcovar))
                   )
     }
+
+
+
+
     X1 <- probs[, , pleio_peak_index]
-    if (!is.null(covariates)) {
-        Xpre <- cbind(X1, covariates)
+    if (!is.null(addcovar)) {
+        Xpre <- cbind(X1, addcovar)
     } else {
         Xpre <- X1
     }
@@ -102,7 +106,7 @@ boot_pvl <- function(probs,
     X <- gemma2::stagger_mats(Xpre_nona, Xpre_nona)
     cc_out <- calc_covs(pheno = pheno_nona,
                         kinship = k_nona,
-                        covariates = covariates
+                        addcovar = addcovar
                         )
     (Vg <- cc_out$Vg)
     (Ve <- cc_out$Ve)
@@ -124,10 +128,10 @@ boot_pvl <- function(probs,
         Ysim <- matrix(foo, ncol = 2, byrow = FALSE)
         rownames(Ysim) <- rownames(pheno_nona)
         colnames(Ysim) <- c("t1", "t2")
-        if (!is.null(covariates)) {
+        if (!is.null(addcovar)) {
             loglik <- scan_pvl(probs = probs[!missing_indic, , ],
                                pheno = Ysim,
-                               covariates = covariates[!missing_indic, , drop = FALSE],
+                               addcovar = addcovar[!missing_indic, , drop = FALSE],
                                kinship = k_nona,
                                start_snp = start_snp,
                                n_snp = n_snp

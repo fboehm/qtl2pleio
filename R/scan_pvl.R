@@ -2,8 +2,8 @@
 #'
 #' `scan_pvl` calculates log likelihood for d-variate phenotype model fits. Inputted parameter `start_snp` indicates where in the `probs` object to start the scan.
 #'
-#' The function first discards individuals with missing phenotypes or missing covariates.
-#' It also discards covariates that have the same value for all remaining subjects.
+#' The function first discards individuals with missing phenotypes or missing addcovar.
+#' It also discards addcovar that have the same value for all remaining subjects.
 #' It then uses one of two methods to infer variance components, Vg and Ve. Both Vg and Ve
 #' are d by d covariance matrices.
 #' The first method, the default, uses an expectation maximization algorithm, as
@@ -40,7 +40,7 @@
 #' @param probs an array of founder allele probabilities for a single chromosome
 #' @param pheno a matrix of phenotypes
 #' @param kinship a kinship matrix for one chromosome
-#' @param covariates a matrix, n subjects by n.cov covariates, where each column is one covariate
+#' @param addcovar a matrix, n subjects by n.cov, of additive covariates, where each column is one numeric additive covariate
 #' @param start_snp index of where to start the scan within probs
 #' @param n_snp the number of (consecutive) markers to include in the scan
 #' @param max_iter maximum number of iterations for EM algorithm
@@ -93,7 +93,7 @@
 scan_pvl <- function(probs,
                      pheno,
                      kinship = NULL,
-                     covariates = NULL,
+                     addcovar = NULL,
                      start_snp = 1,
                      n_snp,
                      max_iter = 1e+06,
@@ -116,15 +116,32 @@ scan_pvl <- function(probs,
               start_snp > 0,
               start_snp + n_snp - 1 <= dim(probs)[3]
         )
-    # check additional conditions when covariates is not NULL
-    if (!is.null(covariates)) {
-        stopifnot(!is.null(rownames(covariates)),
-                  !is.null(colnames(covariates))
+    # check additional conditions when addcovar is not NULL
+    if (!is.null(addcovar)) {
+        stopifnot(!is.null(rownames(addcovar)),
+                  !is.null(colnames(addcovar))
                   )
     }
 
     d_size <- ncol(pheno)  # d_size is the number of univariate phenotypes
-    # remove mice with missing values of phenotype or missing value(s) in covariates
+    # check that the objects have rownames
+    qtl2::check4names(pheno, kinship, probs)
+    # force things to be matrices
+    if(!is.matrix(pheno)) {
+        pheno <- as.matrix(pheno)
+        if(!is.numeric(pheno)) stop("pheno is not numeric")
+    }
+    if(is.null(colnames(pheno))) # force column names
+        colnames(pheno) <- paste0("pheno", seq_len(ncol(pheno)))
+    if(!is.null(addcovar)) {
+        if(!is.matrix(addcovar)) addcovar <- as.matrix(addcovar)
+        if(!is.numeric(addcovar)) stop("addcovar is not numeric")
+    }
+
+
+
+
+    # remove mice with missing values of phenotype or missing value(s) in addcovar
     missing_indic <- matrix(!apply(FUN = is.finite,
                                    X = pheno,
                                    MARGIN = 1
@@ -141,24 +158,24 @@ scan_pvl <- function(probs,
         MARGIN = 1,
         X = missing_indic
         )
-    if (!is.null(covariates)) {
-        covariates <- subset_input(input = covariates,
+    if (!is.null(addcovar)) {
+        addcovar <- subset_input(input = addcovar,
                                    id2keep = intersect(rownames(pheno),
-                                                       rownames(covariates))
+                                                       rownames(addcovar))
                                    )
         pheno <- subset_input(input = pheno,
                               id2keep = intersect(rownames(pheno),
-                                                  rownames(covariates))
+                                                  rownames(addcovar))
                               )
         miss_cov <- matrix(!apply(FUN = is.finite,
-                                  X = covariates,
+                                  X = addcovar,
                                   MARGIN = 1),
-                           nrow = nrow(covariates),
-                           ncol = ncol(covariates),
+                           nrow = nrow(addcovar),
+                           ncol = ncol(addcovar),
                            byrow = TRUE
                            )
         miss_cov2 <- apply(FUN = function(x){
-            identical(as.logical(x), rep(FALSE, ncol(covariates)))
+            identical(as.logical(x), rep(FALSE, ncol(addcovar)))
             },
             MARGIN = 1,
             X = miss_cov
@@ -171,43 +188,43 @@ scan_pvl <- function(probs,
     pheno <- pheno[missing2, , drop = FALSE]
     kinship <- kinship[missing2, missing2, drop = FALSE]
     probs <- probs[missing2, , , drop = FALSE]
-    if (!is.null(covariates)) {
+    if (!is.null(addcovar)) {
         # remove subjects with missing data
-        covariates <- covariates[missing2, , drop = FALSE]
+        addcovar <- addcovar[missing2, , drop = FALSE]
         if (sum(!missing2) > 0){
             message(paste0("removed ",
                        sum(!missing2),
                        " subjects due to missing covariate values")
                 )
         }
-        # check for any covariates that have the same value for all subjects note that we do this AFTER
+        # check for any addcovar that have the same value for all subjects note that we do this AFTER
         # removing subjects with missing values
-        covs_identical <- apply(FUN = check_identical, X = covariates, MARGIN = 2)
+        covs_identical <- apply(FUN = check_identical, X = addcovar, MARGIN = 2)
         if (sum(covs_identical) > 0) {
             message(
-                paste0("removed covariates due to absence of variation in covariate values: ",
-                       colnames(covariates)[covs_identical]))
+                paste0("removed addcovar due to absence of variation in covariate values: ",
+                       colnames(addcovar)[covs_identical]))
         }
-        covariates <- covariates[, !covs_identical, drop = FALSE]
-        if (ncol(covariates) == 0) {
-            covariates <- NULL
+        addcovar <- addcovar[, !covs_identical, drop = FALSE]
+        if (ncol(addcovar) == 0) {
+            addcovar <- NULL
         }
         # remove those covariate columns for which all subjects have the same value
     }
     # create id2keep and subset all four input objects to include only those subjects that are in id2keep
-    # we've already removed subjects that have missing values from both phenotypes matrix and covariates
+    # we've already removed subjects that have missing values from both phenotypes matrix and addcovar
     # matrix
-    id2keep <- make_id2keep(probs = probs, pheno = pheno, covar = covariates, kinship = kinship)
+    id2keep <- make_id2keep(probs = probs, pheno = pheno, covar = addcovar, kinship = kinship)
     probs <- subset_input(input = probs, id2keep = id2keep)
     pheno <- subset_input(input = pheno, id2keep = id2keep)
-    covariates <- subset_input(input = covariates, id2keep = id2keep)
+    addcovar <- subset_input(input = addcovar, id2keep = id2keep)
     kinship <- subset_kinship(kinship = kinship, id2keep = id2keep)
 
     # covariance matrix estimation
     message("starting covariance matrices estimation.")
     if (!use_limmbo2) {
         # first, run gemma2::MphEM() to get Vg and Ve
-        cc_out <- calc_covs(pheno, kinship, max_iter = max_iter, max_prec = max_prec, covariates = covariates)
+        cc_out <- calc_covs(pheno, kinship, max_iter = max_iter, max_prec = max_prec, addcovar = addcovar)
         Vg <- cc_out$Vg
         Ve <- cc_out$Ve
     } else {
@@ -237,7 +254,7 @@ scan_pvl <- function(probs,
         X_list <- prep_X_list(indices = indices[-length(indices)],
                               start_snp = start_snp,
                               probs = probs,
-                              covariates = covariates
+                              addcovar = addcovar
                               )
         X <- gemma2::stagger_mats(X_list)
         # Bhat <- rcpp_calc_Bhat2(X = X, Y = as.vector(pheno), Sigma_inv = Sigma_inv)
