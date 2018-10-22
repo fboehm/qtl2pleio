@@ -62,7 +62,7 @@
 #'         start_snp = 1, n_snp = 10, pleio_peak_index = 10, nboot_per_job = 2)
 #'
 #'
-#' @return numerical vector of lrt statistics from `nboot_per_job` bootstrap samples
+#' @return numeric vector of lrt statistics from `nboot_per_job` bootstrap samples
 #'
 boot_pvl <- function(probs,
                      pheno,

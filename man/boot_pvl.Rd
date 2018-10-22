@@ -25,7 +25,7 @@ boot_pvl(probs, pheno, addcovar = NULL, kinship = NULL,
 \item{nboot_per_job}{number of bootstrap samples to call per invocation of function}
 }
 \value{
-numerical vector of lrt statistics from `nboot_per_job` bootstrap samples
+numeric vector of lrt statistics from `nboot_per_job` bootstrap samples
 }
 \description{
 Create a bootstrap sample, perform multivariate QTL scan, and calculate LRT statistic
