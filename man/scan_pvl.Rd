@@ -4,9 +4,9 @@
 \alias{scan_pvl}
 \title{Perform model fitting for all ordered pairs of markers in a genomic region of interest}
 \usage{
-scan_pvl(probs, pheno, kinship, covariates = NULL, start_snp = 1,
-  n_snp, max_iter = 1e+06, max_prec = 1/1e+08, use_limmbo2 = FALSE,
-  limmbo2_subset_size = NULL)
+scan_pvl(probs, pheno, kinship = NULL, covariates = NULL,
+  start_snp = 1, n_snp, max_iter = 1e+06, max_prec = 1/1e+08,
+  use_limmbo2 = FALSE, limmbo2_subset_size = NULL)
 }
 \arguments{
 \item{probs}{an array of founder allele probabilities for a single chromosome}
@@ -95,4 +95,17 @@ scan_pvl(probs = probs, pheno = Y, kinship = kin,
         start_snp = 1, n_snp = 10)
 scan_pvl(probs = probs, pheno = Y2, kinship = kin,
         start_snp = 1, n_snp = 10)
+}
+\references{
+Knott SA, Haley CS (2000) Multitrait
+least squares for quantitative trait loci detection.
+Genetics 156: 899–911.
+
+Jiang C, Zeng ZB (1995) Multiple trait analysis
+of genetic mapping for quantitative trait loci.
+Genetics 140: 1111-1127.
+
+Zhou X, Stephens M (2014) Efficient multivariate linear
+mixed model algorithms for genome-wide association studies.
+Nature methods 11:407-409.
 }

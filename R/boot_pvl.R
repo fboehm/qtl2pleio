@@ -1,28 +1,79 @@
+#' Perform bootstrap sampling and calculate test statistics for each bootstrap sample
+#'
 #' Create a bootstrap sample, perform multivariate QTL scan, and calculate LRT statistic
 #'
+#' Performs a parametric bootstrap method to calibrate test statistic values in the test of
+#' pleiotropy vs. separate QTL. It begins by inferring parameter values at
+#' the `pleio_peak_index` index value in the object `probs`. It then uses
+#' these inferred parameter values in sampling from a multivariate normal
+#' distribution. For each of the `nboot_per_job` sampled phenotype vectors, a two-dimensional QTL
+#' scan, starting at the marker indexed by `start_snp` within the object
+#' `probs` and extending for a total of `n_snp` consecutive markers. The
+#' two-dimensional scan is performed via the function `scan_pvl`. For each
+#' two-dimensional scan, a likelihood ratio test statistic is calculated. The
+#' outputted object is a vector of `nboot_per_job` likelihood ratio test
+#' statistics from `nboot_per_job` distinct bootstrap samples.
 #'
 #'
 #'
 #'
 #' @param probs allele probabilities object for one chromosome only, like aprobs$`8`. Not a list
-#' @param pleio_peak_index positive integer index indicating design matrix for simulation. Typically acquired by using `find_pleio_peak_tib`.
 #' @param pheno n by d matrix of phenotypes
 #' @param covariates n by n.cov matrix of covariates
 #' @param kinship a kinship matrix, not a list
-#' @param nboot_per_job number of bootstrap samples to call per invocation of function
 #' @param start_snp positive integer indicating index within probs for start of scan
 #' @param n_snp number of (consecutive) markers to use in scan
+#' @param pleio_peak_index positive integer index indicating design matrix for simulation. Typically acquired by using `find_pleio_peak_tib`.
+#' @param nboot_per_job number of bootstrap samples to call per invocation of function
 #' @export
+#' #' @references Knott SA, Haley CS (2000) Multitrait
+#' least squares for quantitative trait loci detection.
+#' Genetics 156: 899–911.
+#'
+#' Walling GA, Visscher PM, Haley CS (1998) A comparison of
+#' bootstrap methods to construct confidence intervals in QTL mapping.
+#' Genet. Res. 71: 171–180.
+#' @examples
+#'
+## define probs
+#'probs_pre <- rbinom(n = 100 * 10, size = 1, prob = 1 / 2)
+#'probs <- array(data = probs_pre, dim = c(100, 1, 10))
+#'s_id <- paste0('s', 1:100)
+#'rownames(probs) <- s_id
+#'colnames(probs) <- 'A'
+#'dimnames(probs)[[3]] <- paste0('Marker', 1:10)
+#'# define Y
+#'Y_pre <- runif(200)
+#'Y <- matrix(data = Y_pre, nrow = 100)
+#'rownames(Y) <- s_id
+#'colnames(Y) <- paste0('t', 1:2)
+#'covariates <- matrix(c(runif(99), NA), nrow = 100, ncol = 1)
+#'rownames(covariates) <- s_id
+#'colnames(covariates) <- 'c1'
+#'kin <- diag(100)
+#'rownames(kin) <- s_id
+#'colnames(kin) <- s_id
+#'Y2 <- Y
+#'Y2[1, 2] <- NA
+#'set.seed(2018-10-22)
+#'boot_pvl(probs = probs, pheno = Y, kinship = kin,
+#'         start_snp = 1, n_snp = 10, pleio_peak_index = 10, nboot_per_job = 1)
+#'boot_pvl(probs = probs, pheno = Y2, kinship = kin,
+#'         start_snp = 1, n_snp = 10, pleio_peak_index = 10, nboot_per_job = 2)
+#'
+#'
 #' @return numerical vector of lrt statistics from `nboot_per_job` bootstrap samples
 #'
 boot_pvl <- function(probs,
-                     pleio_peak_index,
                      pheno,
                      covariates = NULL,
                      kinship = NULL,
-                     nboot_per_job = 1,
-                     start_snp,
-                     n_snp) {
+                     start_snp = 1,
+                     n_snp,
+                     pleio_peak_index,
+                     nboot_per_job = 1
+                     )
+    {
     stopifnot(identical(nrow(kinship), nrow(probs)),
               identical(nrow(probs), nrow(pheno)),
               check_dimnames(kinship, probs),

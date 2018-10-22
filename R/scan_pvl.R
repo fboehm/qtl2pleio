@@ -48,6 +48,20 @@
 #' @param use_limmbo2 logical indicating whether to use limmbo2::limbbo2() in covariance matrices estimation. Default is to use gemma2 R package.
 #' @param limmbo2_subset_size positive integer denoting the number of phenotypes for each bootstrap sample with limmbo2. Only used when `use_limmbo2` is TRUE
 #' @export
+#' @references Knott SA, Haley CS (2000) Multitrait
+#' least squares for quantitative trait loci detection.
+#' Genetics 156: 899–911.
+#'
+#' Jiang C, Zeng ZB (1995) Multiple trait analysis
+#' of genetic mapping for quantitative trait loci.
+#' Genetics 140: 1111-1127.
+#'
+#' Zhou X, Stephens M (2014) Efficient multivariate linear
+#' mixed model algorithms for genome-wide association studies.
+#' Nature methods 11:407-409.
+#'
+#'
+#'
 #' @examples
 #' ## define probs
 #'probs_pre <- rbinom(n = 100 * 10, size = 1, prob = 1 / 2)
@@ -78,7 +92,7 @@
 
 scan_pvl <- function(probs,
                      pheno,
-                     kinship,
+                     kinship = NULL,
                      covariates = NULL,
                      start_snp = 1,
                      n_snp,

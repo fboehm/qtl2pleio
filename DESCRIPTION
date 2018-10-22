@@ -3,7 +3,7 @@ Package: qtl2pleio
 Title: Hypothesis test of close linkage vs pleiotropy in
     multiparental populations
 Version: 0.1.2.9000
-Authors@R: 
+Authors@R:
     person(given = "Frederick",
            family = "Boehm",
            role = c("aut", "cre"),
@@ -18,9 +18,9 @@ Description: The package contains code that implements an
 License: MIT + file LICENSE
 URL: https://github.com/fboehm/qtl2pleio
 BugReports: https://github.com/fboehm/qtl2pleio/issues
-Depends: 
+Depends:
     R (>= 3.1)
-Imports: 
+Imports:
     dplyr,
     gemma2,
     ggplot2,
@@ -35,20 +35,20 @@ Imports:
     readr,
     rlang,
     stringr,
-    tibble
-Suggests: 
+    tibble,
+    qtl2
+Suggests:
     covr,
     knitr,
-    qtl2,
     rmarkdown,
     spelling,
     testthat
-LinkingTo: 
+LinkingTo:
     Rcpp,
     RcppEigen
-VignetteBuilder: 
+VignetteBuilder:
     knitr
-Remotes: 
+Remotes:
     fboehm/gemma2,
     fboehm/limmbo2,
     rqtl/qtl2
