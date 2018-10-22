@@ -4,7 +4,7 @@
 \alias{scan_pvl}
 \title{Perform model fitting for all ordered pairs of markers in a genomic region of interest}
 \usage{
-scan_pvl(probs, pheno, kinship = NULL, covariates = NULL,
+scan_pvl(probs, pheno, kinship = NULL, addcovar = NULL,
   start_snp = 1, n_snp, max_iter = 1e+06, max_prec = 1/1e+08,
   use_limmbo2 = FALSE, limmbo2_subset_size = NULL)
 }
@@ -15,7 +15,7 @@ scan_pvl(probs, pheno, kinship = NULL, covariates = NULL,
 
 \item{kinship}{a kinship matrix for one chromosome}
 
-\item{covariates}{a matrix, n subjects by n.cov covariates, where each column is one covariate}
+\item{addcovar}{a matrix, n subjects by n.cov, of additive covariates, where each column is one numeric additive covariate}
 
 \item{start_snp}{index of where to start the scan within probs}
 
@@ -36,8 +36,8 @@ a tibble with d + 1 columns. First d columns indicate the genetic data (by listi
 `scan_pvl` calculates log likelihood for d-variate phenotype model fits. Inputted parameter `start_snp` indicates where in the `probs` object to start the scan.
 }
 \details{
-The function first discards individuals with missing phenotypes or missing covariates.
-It also discards covariates that have the same value for all remaining subjects.
+The function first discards individuals with missing phenotypes or missing addcovar.
+It also discards addcovar that have the same value for all remaining subjects.
 It then uses one of two methods to infer variance components, Vg and Ve. Both Vg and Ve
 are d by d covariance matrices.
 The first method, the default, uses an expectation maximization algorithm, as

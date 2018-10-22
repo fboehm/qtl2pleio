@@ -4,7 +4,7 @@
 \alias{boot_pvl}
 \title{Perform bootstrap sampling and calculate test statistics for each bootstrap sample}
 \usage{
-boot_pvl(probs, pheno, covariates = NULL, kinship = NULL,
+boot_pvl(probs, pheno, addcovar = NULL, kinship = NULL,
   start_snp = 1, n_snp, pleio_peak_index, nboot_per_job = 1)
 }
 \arguments{
@@ -12,7 +12,7 @@ boot_pvl(probs, pheno, covariates = NULL, kinship = NULL,
 
 \item{pheno}{n by d matrix of phenotypes}
 
-\item{covariates}{n by n.cov matrix of covariates}
+\item{addcovar}{n by n.cov matrix of additive numeric covariates}
 
 \item{kinship}{a kinship matrix, not a list}
 
@@ -56,9 +56,9 @@ Y_pre <- runif(200)
 Y <- matrix(data = Y_pre, nrow = 100)
 rownames(Y) <- s_id
 colnames(Y) <- paste0('t', 1:2)
-covariates <- matrix(c(runif(99), NA), nrow = 100, ncol = 1)
-rownames(covariates) <- s_id
-colnames(covariates) <- 'c1'
+addcovar <- matrix(c(runif(99), NA), nrow = 100, ncol = 1)
+rownames(addcovar) <- s_id
+colnames(addcovar) <- 'c1'
 kin <- diag(100)
 rownames(kin) <- s_id
 colnames(kin) <- s_id
