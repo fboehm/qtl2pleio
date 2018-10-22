@@ -74,6 +74,9 @@ boot_pvl <- function(probs,
                      nboot_per_job = 1
                      )
     {
+    if(is.null(probs)) stop("probs is NULL")
+    if(is.null(pheno)) stop("pheno is NULL")
+
     stopifnot(identical(nrow(kinship), nrow(probs)),
               identical(nrow(probs), nrow(pheno)),
               check_dimnames(kinship, probs),

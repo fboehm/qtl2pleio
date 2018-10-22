@@ -102,6 +102,9 @@ scan_pvl <- function(probs,
                      limmbo2_subset_size = NULL
                      )
     {
+    if(is.null(probs)) stop("probs is NULL")
+    if(is.null(pheno)) stop("pheno is NULL")
+
     stopifnot(!is.null(rownames(probs)),
               !is.null(colnames(probs)),
               !is.null(dimnames(probs)[[3]]),
