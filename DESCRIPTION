@@ -24,7 +24,6 @@ Imports:
     dplyr,
     gemma2,
     ggplot2,
-    limmbo2,
     magrittr,
     MASS,
     microbenchmark,
@@ -50,7 +49,6 @@ VignetteBuilder:
     knitr
 Remotes:
     fboehm/gemma2,
-    fboehm/limmbo2,
     rqtl/qtl2
 Encoding: UTF-8
 Language: en-US
