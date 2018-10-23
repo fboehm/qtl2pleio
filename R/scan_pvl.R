@@ -45,8 +45,6 @@
 #' @param n_snp the number of (consecutive) markers to include in the scan
 #' @param max_iter maximum number of iterations for EM algorithm
 #' @param max_prec stepwise precision for EM algorithm. EM stops once incremental difference in log likelihood is less than max_prec
-#' @param use_limmbo2 logical indicating whether to use limmbo2::limbbo2() in covariance matrices estimation. Default is to use gemma2 R package.
-#' @param limmbo2_subset_size positive integer denoting the number of phenotypes for each bootstrap sample with limmbo2. Only used when `use_limmbo2` is TRUE
 #' @export
 #' @references Knott SA, Haley CS (2000) Multitrait
 #' least squares for quantitative trait loci detection.
@@ -97,7 +95,7 @@ scan_pvl <- function(probs,
                      start_snp = 1,
                      n_snp,
                      max_iter = 1e+06,
-                     max_prec = 1 / 1e+08,
+                     max_prec = 1 / 1e+08
                      )
     {
     if(is.null(probs)) stop("probs is NULL")

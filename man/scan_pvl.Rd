@@ -5,8 +5,7 @@
 \title{Perform model fitting for all ordered pairs of markers in a genomic region of interest}
 \usage{
 scan_pvl(probs, pheno, kinship = NULL, addcovar = NULL,
-  start_snp = 1, n_snp, max_iter = 1e+06, max_prec = 1/1e+08,
-  use_limmbo2 = FALSE, limmbo2_subset_size = NULL)
+  start_snp = 1, n_snp, max_iter = 1e+06, max_prec = 1/1e+08)
 }
 \arguments{
 \item{probs}{an array of founder allele probabilities for a single chromosome}
@@ -24,10 +23,6 @@ scan_pvl(probs, pheno, kinship = NULL, addcovar = NULL,
 \item{max_iter}{maximum number of iterations for EM algorithm}
 
 \item{max_prec}{stepwise precision for EM algorithm. EM stops once incremental difference in log likelihood is less than max_prec}
-
-\item{use_limmbo2}{logical indicating whether to use limmbo2::limbbo2() in covariance matrices estimation. Default is to use gemma2 R package.}
-
-\item{limmbo2_subset_size}{positive integer denoting the number of phenotypes for each bootstrap sample with limmbo2. Only used when `use_limmbo2` is TRUE}
 }
 \value{
 a tibble with d + 1 columns. First d columns indicate the genetic data (by listing the marker ids) used in the design matrix; last is log likelihood
