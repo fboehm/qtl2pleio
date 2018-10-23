@@ -98,8 +98,6 @@ scan_pvl <- function(probs,
                      n_snp,
                      max_iter = 1e+06,
                      max_prec = 1 / 1e+08,
-                     use_limmbo2 = FALSE,
-                     limmbo2_subset_size = NULL
                      )
     {
     if(is.null(probs)) stop("probs is NULL")
@@ -110,8 +108,8 @@ scan_pvl <- function(probs,
               !is.null(dimnames(probs)[[3]]),
               !is.null(rownames(pheno)),
               !is.null(colnames(pheno)),
-              !is.null(rownames(kinship)),
-              !is.null(colnames(kinship)),
+              #!is.null(rownames(kinship)),
+              #!is.null(colnames(kinship)),
               n_snp > 0,
               start_snp > 0,
               start_snp + n_snp - 1 <= dim(probs)[3]
@@ -138,6 +136,19 @@ scan_pvl <- function(probs,
         if(!is.numeric(addcovar)) stop("addcovar is not numeric")
     }
 
+    # find individuals in common across all arguments
+    # and drop individuals with missing covariates or missing *one or more* phenotypes
+    ind2keep <- qtl2::get_common_ids(probs, addcovar, complete.cases=TRUE)
+    ind2keep <- qtl2::get_common_ids(ind2keep, rownames(pheno)[rowSums(!is.finite(pheno)) > 0])
+    if(length(ind2keep) <= 2) {
+        if(length(ind2keep) == 0)
+            stop("No individuals in common.")
+        else
+            stop("Only ", length(ind2keep), " individuals in common: ",
+                 paste(ind2keep, collapse = ":"))
+    }
+    # make sure addcovar is full rank when we add an intercept
+    addcovar <- qtl2:::drop_depcols(addcovar, TRUE, tol)
 
 
 
@@ -222,16 +233,10 @@ scan_pvl <- function(probs,
 
     # covariance matrix estimation
     message("starting covariance matrices estimation.")
-    if (!use_limmbo2) {
-        # first, run gemma2::MphEM() to get Vg and Ve
-        cc_out <- calc_covs(pheno, kinship, max_iter = max_iter, max_prec = max_prec, addcovar = addcovar)
-        Vg <- cc_out$Vg
-        Ve <- cc_out$Ve
-    } else {
-        li_out <- limmbo2::limmbo2(kinship = kinship, pheno = pheno, S = limmbo2_subset_size)
-        Vg <- li_out$Vg
-        Ve <- li_out$Ve
-    }
+    # first, run gemma2::MphEM() to get Vg and Ve
+    cc_out <- calc_covs(pheno, kinship, max_iter = max_iter, max_prec = max_prec, addcovar = addcovar)
+    Vg <- cc_out$Vg
+    Ve <- cc_out$Ve
     message("covariance matrices estimation completed.")
 
     # define Sigma
