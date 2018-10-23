@@ -26,7 +26,7 @@
 #' @param pleio_peak_index positive integer index indicating design matrix for simulation. Typically acquired by using `find_pleio_peak_tib`.
 #' @param nboot_per_job number of bootstrap samples to call per invocation of function
 #' @export
-#' #' @references Knott SA, Haley CS (2000) Multitrait
+#' @references Knott SA, Haley CS (2000) Multitrait
 #' least squares for quantitative trait loci detection.
 #' Genetics 156: 899–911.
 #'

@@ -72,3 +72,12 @@ boot_pvl(probs = probs, pheno = Y2, kinship = kin,
 
 
 }
+\references{
+Knott SA, Haley CS (2000) Multitrait
+least squares for quantitative trait loci detection.
+Genetics 156: 899–911.
+
+Walling GA, Visscher PM, Haley CS (1998) A comparison of
+bootstrap methods to construct confidence intervals in QTL mapping.
+Genet. Res. 71: 171–180.
+}
