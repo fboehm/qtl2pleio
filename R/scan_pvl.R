@@ -121,7 +121,7 @@ scan_pvl <- function(probs,
 
     d_size <- ncol(pheno)  # d_size is the number of univariate phenotypes
     # check that the objects have rownames
-    qtl2::check4names(pheno, kinship, probs)
+    qtl2:::check4names(pheno, kinship, probs)
     # force things to be matrices
     if(!is.matrix(pheno)) {
         pheno <- as.matrix(pheno)
@@ -232,7 +232,7 @@ scan_pvl <- function(probs,
     # covariance matrix estimation
     message("starting covariance matrices estimation.")
     # first, run gemma2::MphEM() to get Vg and Ve
-    cc_out <- calc_covs(pheno, kinship, max_iter = max_iter, max_prec = max_prec, addcovar = addcovar)
+    cc_out <- calc_covs(pheno, kinship, max_iter = max_iter, max_prec = max_prec, covariates = addcovar)
     Vg <- cc_out$Vg
     Ve <- cc_out$Ve
     message("covariance matrices estimation completed.")
@@ -257,7 +257,7 @@ scan_pvl <- function(probs,
         X_list <- prep_X_list(indices = indices[-length(indices)],
                               start_snp = start_snp,
                               probs = probs,
-                              addcovar = addcovar
+                              covariates = addcovar
                               )
         X <- gemma2::stagger_mats(X_list)
         # Bhat <- rcpp_calc_Bhat2(X = X, Y = as.vector(pheno), Sigma_inv = Sigma_inv)

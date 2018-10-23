@@ -106,7 +106,7 @@ boot_pvl <- function(probs,
     X <- gemma2::stagger_mats(Xpre_nona, Xpre_nona)
     cc_out <- calc_covs(pheno = pheno_nona,
                         kinship = k_nona,
-                        addcovar = addcovar
+                        covariates = addcovar
                         )
     (Vg <- cc_out$Vg)
     (Ve <- cc_out$Ve)
