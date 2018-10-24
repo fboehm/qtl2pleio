@@ -39,6 +39,117 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// find_matching_cols
+NumericVector find_matching_cols(const NumericMatrix& mat, const double tol);
+RcppExport SEXP _qtl2pleio_find_matching_cols(SEXP matSEXP, SEXP tolSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const NumericMatrix& >::type mat(matSEXP);
+    Rcpp::traits::input_parameter< const double >::type tol(tolSEXP);
+    rcpp_result_gen = Rcpp::wrap(find_matching_cols(mat, tol));
+    return rcpp_result_gen;
+END_RCPP
+}
+// find_lin_indep_cols
+IntegerVector find_lin_indep_cols(const NumericMatrix& mat, const double tol);
+RcppExport SEXP _qtl2pleio_find_lin_indep_cols(SEXP matSEXP, SEXP tolSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const NumericMatrix& >::type mat(matSEXP);
+    Rcpp::traits::input_parameter< const double >::type tol(tolSEXP);
+    rcpp_result_gen = Rcpp::wrap(find_lin_indep_cols(mat, tol));
+    return rcpp_result_gen;
+END_RCPP
+}
+// formX_intcovar
+NumericMatrix formX_intcovar(const NumericVector& probs, const NumericMatrix& addcovar, const NumericMatrix& intcovar, const int position, const bool has_intercept);
+RcppExport SEXP _qtl2pleio_formX_intcovar(SEXP probsSEXP, SEXP addcovarSEXP, SEXP intcovarSEXP, SEXP positionSEXP, SEXP has_interceptSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const NumericVector& >::type probs(probsSEXP);
+    Rcpp::traits::input_parameter< const NumericMatrix& >::type addcovar(addcovarSEXP);
+    Rcpp::traits::input_parameter< const NumericMatrix& >::type intcovar(intcovarSEXP);
+    Rcpp::traits::input_parameter< const int >::type position(positionSEXP);
+    Rcpp::traits::input_parameter< const bool >::type has_intercept(has_interceptSEXP);
+    rcpp_result_gen = Rcpp::wrap(formX_intcovar(probs, addcovar, intcovar, position, has_intercept));
+    return rcpp_result_gen;
+END_RCPP
+}
+// expand_genoprobs_intcovar
+NumericVector expand_genoprobs_intcovar(const NumericVector& probs, const NumericMatrix& intcovar);
+RcppExport SEXP _qtl2pleio_expand_genoprobs_intcovar(SEXP probsSEXP, SEXP intcovarSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const NumericVector& >::type probs(probsSEXP);
+    Rcpp::traits::input_parameter< const NumericMatrix& >::type intcovar(intcovarSEXP);
+    rcpp_result_gen = Rcpp::wrap(expand_genoprobs_intcovar(probs, intcovar));
+    return rcpp_result_gen;
+END_RCPP
+}
+// weighted_matrix
+NumericMatrix weighted_matrix(const NumericMatrix& mat, const NumericVector& weights);
+RcppExport SEXP _qtl2pleio_weighted_matrix(SEXP matSEXP, SEXP weightsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const NumericMatrix& >::type mat(matSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type weights(weightsSEXP);
+    rcpp_result_gen = Rcpp::wrap(weighted_matrix(mat, weights));
+    return rcpp_result_gen;
+END_RCPP
+}
+// weighted_3darray
+NumericVector weighted_3darray(const NumericVector& array, const NumericVector& weights);
+RcppExport SEXP _qtl2pleio_weighted_3darray(SEXP arraySEXP, SEXP weightsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const NumericVector& >::type array(arraySEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type weights(weightsSEXP);
+    rcpp_result_gen = Rcpp::wrap(weighted_3darray(array, weights));
+    return rcpp_result_gen;
+END_RCPP
+}
+// matrix_x_matrix
+NumericMatrix matrix_x_matrix(const NumericMatrix& X, const NumericMatrix& Y);
+RcppExport SEXP _qtl2pleio_matrix_x_matrix(SEXP XSEXP, SEXP YSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const NumericMatrix& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< const NumericMatrix& >::type Y(YSEXP);
+    rcpp_result_gen = Rcpp::wrap(matrix_x_matrix(X, Y));
+    return rcpp_result_gen;
+END_RCPP
+}
+// matrix_x_vector
+NumericVector matrix_x_vector(const NumericMatrix& X, const NumericVector& y);
+RcppExport SEXP _qtl2pleio_matrix_x_vector(SEXP XSEXP, SEXP ySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const NumericMatrix& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type y(ySEXP);
+    rcpp_result_gen = Rcpp::wrap(matrix_x_vector(X, y));
+    return rcpp_result_gen;
+END_RCPP
+}
+// matrix_x_3darray
+NumericVector matrix_x_3darray(const NumericMatrix& X, NumericVector& A);
+RcppExport SEXP _qtl2pleio_matrix_x_3darray(SEXP XSEXP, SEXP ASEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const NumericMatrix& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< NumericVector& >::type A(ASEXP);
+    rcpp_result_gen = Rcpp::wrap(matrix_x_3darray(X, A));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rcpp_ols
 Eigen::MatrixXd rcpp_ols(const Eigen::Map<Eigen::MatrixXd>& X, const Eigen::Map<Eigen::MatrixXd>& Y);
 RcppExport SEXP _qtl2pleio_rcpp_ols(SEXP XSEXP, SEXP YSEXP) {
@@ -135,6 +246,15 @@ static const R_CallMethodDef CallEntries[] = {
     {"_qtl2pleio_rcppeigen_sqrt", (DL_FUNC) &_qtl2pleio_rcppeigen_sqrt, 1},
     {"_qtl2pleio_rcppeigen_invsqrt", (DL_FUNC) &_qtl2pleio_rcppeigen_invsqrt, 1},
     {"_qtl2pleio_timesTwo", (DL_FUNC) &_qtl2pleio_timesTwo, 1},
+    {"_qtl2pleio_find_matching_cols", (DL_FUNC) &_qtl2pleio_find_matching_cols, 2},
+    {"_qtl2pleio_find_lin_indep_cols", (DL_FUNC) &_qtl2pleio_find_lin_indep_cols, 2},
+    {"_qtl2pleio_formX_intcovar", (DL_FUNC) &_qtl2pleio_formX_intcovar, 5},
+    {"_qtl2pleio_expand_genoprobs_intcovar", (DL_FUNC) &_qtl2pleio_expand_genoprobs_intcovar, 2},
+    {"_qtl2pleio_weighted_matrix", (DL_FUNC) &_qtl2pleio_weighted_matrix, 2},
+    {"_qtl2pleio_weighted_3darray", (DL_FUNC) &_qtl2pleio_weighted_3darray, 2},
+    {"_qtl2pleio_matrix_x_matrix", (DL_FUNC) &_qtl2pleio_matrix_x_matrix, 2},
+    {"_qtl2pleio_matrix_x_vector", (DL_FUNC) &_qtl2pleio_matrix_x_vector, 2},
+    {"_qtl2pleio_matrix_x_3darray", (DL_FUNC) &_qtl2pleio_matrix_x_3darray, 2},
     {"_qtl2pleio_rcpp_ols", (DL_FUNC) &_qtl2pleio_rcpp_ols, 2},
     {"_qtl2pleio_rcpp_gls", (DL_FUNC) &_qtl2pleio_rcpp_gls, 3},
     {"_qtl2pleio_rcppeigen_invert_matrix", (DL_FUNC) &_qtl2pleio_rcppeigen_invert_matrix, 1},

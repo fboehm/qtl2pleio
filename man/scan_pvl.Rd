@@ -31,23 +31,19 @@ a tibble with d + 1 columns. First d columns indicate the genetic data (by listi
 `scan_pvl` calculates log likelihood for d-variate phenotype model fits. Inputted parameter `start_snp` indicates where in the `probs` object to start the scan.
 }
 \details{
-The function first discards individuals with missing phenotypes or missing addcovar.
-It also discards addcovar that have the same value for all remaining subjects.
-It then uses one of two methods to infer variance components, Vg and Ve. Both Vg and Ve
-are d by d covariance matrices.
-The first method, the default, uses an expectation maximization algorithm, as
+The function first discards individuals with one or more missing phenotypes or missing covariates.
+It then infers variance components, Vg and Ve. Both Vg and Ve
+are d by d covariance matrices. It uses an expectation maximization algorithm, as
 implemented in the `gemma2` R package. `gemma2` R package is an R implementation of the
-GEMMA algorithm (Zhou & Stephens 2012 Nature Genetics).
-The alternative method for inferring variance components, which is useful for more than two
-phenotypes, ie, when d > 2, uses the LiMMBo method to infer variance components (Meyer et al. 2018).
-Specifically, with input `use_limmbo2 = TRUE`, `scan_pvl` calls the function
-`limmbo2::limmbo2` to infer d by d variance components.
-Note that variance components, when inferred via
-`gemma2`, are fitted on a model that uses the d-variate phenotype
-but contains no genetic information. This model does, however, use the specified covariates.
-Current implementation of `limmbo2` doesn't use covariates.
-These inferred covariance matrices, \eqn{\hat{Vg}} and \eqn{\hat{Ve}}, are then used in subsequent model fitting via
-generalized least squares. Generalized least squares model fitting is applied to every d-tuple of
+GEMMA algorithm (Zhou & Stephens 2014 Nature methods).
+Note that variance components are fitted on a model that uses the d-variate phenotype
+but contains no genetic information. This model does, however,
+use the specified covariates (after dropping dependent columns
+in the covariates matrix).
+These inferred covariance matrices, \eqn{\hat{Vg}} and \eqn{\hat{Ve}},
+are then used in subsequent model fitting via
+generalized least squares.
+Generalized least squares model fitting is applied to every d-tuple of
 markers within the specified genomic region for `scan_pvl`.
 A progress bar appears *after* inferring Vg and Ve and records progress through the
 d-tuples of markers that constitute the d-variate scan.

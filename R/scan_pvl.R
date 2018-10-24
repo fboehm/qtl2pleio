@@ -2,23 +2,19 @@
 #'
 #' `scan_pvl` calculates log likelihood for d-variate phenotype model fits. Inputted parameter `start_snp` indicates where in the `probs` object to start the scan.
 #'
-#' The function first discards individuals with missing phenotypes or missing addcovar.
-#' It also discards addcovar that have the same value for all remaining subjects.
-#' It then uses one of two methods to infer variance components, Vg and Ve. Both Vg and Ve
-#' are d by d covariance matrices.
-#' The first method, the default, uses an expectation maximization algorithm, as
+#' The function first discards individuals with one or more missing phenotypes or missing covariates.
+#' It then infers variance components, Vg and Ve. Both Vg and Ve
+#' are d by d covariance matrices. It uses an expectation maximization algorithm, as
 #' implemented in the `gemma2` R package. `gemma2` R package is an R implementation of the
-#' GEMMA algorithm (Zhou & Stephens 2012 Nature Genetics).
-#' The alternative method for inferring variance components, which is useful for more than two
-#' phenotypes, ie, when d > 2, uses the LiMMBo method to infer variance components (Meyer et al. 2018).
-#' Specifically, with input `use_limmbo2 = TRUE`, `scan_pvl` calls the function
-#' `limmbo2::limmbo2` to infer d by d variance components.
-#' Note that variance components, when inferred via
-#' `gemma2`, are fitted on a model that uses the d-variate phenotype
-#' but contains no genetic information. This model does, however, use the specified covariates.
-#' Current implementation of `limmbo2` doesn't use covariates.
-#' These inferred covariance matrices, \eqn{\hat{Vg}} and \eqn{\hat{Ve}}, are then used in subsequent model fitting via
-#' generalized least squares. Generalized least squares model fitting is applied to every d-tuple of
+#' GEMMA algorithm (Zhou & Stephens 2014 Nature methods).
+#' Note that variance components are fitted on a model that uses the d-variate phenotype
+#' but contains no genetic information. This model does, however,
+#' use the specified covariates (after dropping dependent columns
+#' in the covariates matrix).
+#' These inferred covariance matrices, \eqn{\hat{Vg}} and \eqn{\hat{Ve}},
+#' are then used in subsequent model fitting via
+#' generalized least squares.
+#' Generalized least squares model fitting is applied to every d-tuple of
 #' markers within the specified genomic region for `scan_pvl`.
 #' A progress bar appears *after* inferring Vg and Ve and records progress through the
 #' d-tuples of markers that constitute the d-variate scan.
@@ -105,9 +101,6 @@ scan_pvl <- function(probs,
               !is.null(colnames(probs)),
               !is.null(dimnames(probs)[[3]]),
               !is.null(rownames(pheno)),
-              !is.null(colnames(pheno)),
-              #!is.null(rownames(kinship)),
-              #!is.null(colnames(kinship)),
               n_snp > 0,
               start_snp > 0,
               start_snp + n_snp - 1 <= dim(probs)[3]
@@ -120,8 +113,6 @@ scan_pvl <- function(probs,
     }
 
     d_size <- ncol(pheno)  # d_size is the number of univariate phenotypes
-    # check that the objects have rownames
-    qtl2:::check4names(pheno, kinship, probs)
     # force things to be matrices
     if(!is.matrix(pheno)) {
         pheno <- as.matrix(pheno)
@@ -136,99 +127,43 @@ scan_pvl <- function(probs,
 
     # find individuals in common across all arguments
     # and drop individuals with missing covariates or missing *one or more* phenotypes
-    ind2keep <- qtl2::get_common_ids(probs, addcovar, complete.cases=TRUE)
-    ind2keep <- qtl2::get_common_ids(ind2keep, rownames(pheno)[rowSums(!is.finite(pheno)) > 0])
-    if(length(ind2keep) <= 2) {
-        if(length(ind2keep) == 0)
-            stop("No individuals in common.")
-        else
-            stop("Only ", length(ind2keep), " individuals in common: ",
-                 paste(ind2keep, collapse = ":"))
-    }
-    # make sure addcovar is full rank when we add an intercept
-    addcovar <- qtl2:::drop_depcols(addcovar, TRUE, tol)
-
-
-
-    # remove mice with missing values of phenotype or missing value(s) in addcovar
-    missing_indic <- matrix(!apply(FUN = is.finite,
-                                   X = pheno,
-                                   MARGIN = 1
-                                   ),
-                            nrow = nrow(pheno),
-                            ncol = ncol(pheno),
-                            byrow = TRUE
+    # need to consider presence or absence of different inputs: kinship, addcovar
+    id2keep <- make_id2keep(probs = probs,
+                            pheno = pheno,
+                            covar = addcovar,
+                            kinship = kinship
                             )
-    missing2 <- apply(FUN = function(x) {
-        identical(as.logical(x),
-                  rep(FALSE, ncol(pheno))
-                  )
-        },
-        MARGIN = 1,
-        X = missing_indic
-        )
-    if (!is.null(addcovar)) {
-        addcovar <- subset_input(input = addcovar,
-                                   id2keep = intersect(rownames(pheno),
-                                                       rownames(addcovar))
-                                   )
-        pheno <- subset_input(input = pheno,
-                              id2keep = intersect(rownames(pheno),
-                                                  rownames(addcovar))
-                              )
-        miss_cov <- matrix(!apply(FUN = is.finite,
-                                  X = addcovar,
-                                  MARGIN = 1),
-                           nrow = nrow(addcovar),
-                           ncol = ncol(addcovar),
-                           byrow = TRUE
-                           )
-        miss_cov2 <- apply(FUN = function(x){
-            identical(as.logical(x), rep(FALSE, ncol(addcovar)))
-            },
-            MARGIN = 1,
-            X = miss_cov
-            )
-        missing2 <- missing2 & miss_cov2
-    }
-    if (sum(!missing2) > 0) {
-        message(paste0(sum(!missing2), " subjects dropped due to missing values"))
-    }
-    pheno <- pheno[missing2, , drop = FALSE]
-    kinship <- kinship[missing2, missing2, drop = FALSE]
-    probs <- probs[missing2, , , drop = FALSE]
-    if (!is.null(addcovar)) {
-        # remove subjects with missing data
-        addcovar <- addcovar[missing2, , drop = FALSE]
-        if (sum(!missing2) > 0){
-            message(paste0("removed ",
-                       sum(!missing2),
-                       " subjects due to missing covariate values")
-                )
+    if (length(id2keep) == 0){stop("no individuals common to all inputs")}
+    if (length(id2keep) <= 2){
+        stop(paste0("only ", length(id2keep),
+                    " common individuals: ",
+                    paste(id2keep, collapse = ": ")))
         }
-        # check for any addcovar that have the same value for all subjects note that we do this AFTER
-        # removing subjects with missing values
-        covs_identical <- apply(FUN = check_identical, X = addcovar, MARGIN = 2)
-        if (sum(covs_identical) > 0) {
-            message(
-                paste0("removed addcovar due to absence of variation in covariate values: ",
-                       colnames(addcovar)[covs_identical]))
-        }
-        addcovar <- addcovar[, !covs_identical, drop = FALSE]
-        if (ncol(addcovar) == 0) {
-            addcovar <- NULL
-        }
-        # remove those covariate columns for which all subjects have the same value
-    }
-    # create id2keep and subset all four input objects to include only those subjects that are in id2keep
-    # we've already removed subjects that have missing values from both phenotypes matrix and addcovar
-    # matrix
-    id2keep <- make_id2keep(probs = probs, pheno = pheno, covar = addcovar, kinship = kinship)
     probs <- subset_input(input = probs, id2keep = id2keep)
-    pheno <- subset_input(input = pheno, id2keep = id2keep)
     addcovar <- subset_input(input = addcovar, id2keep = id2keep)
+    pheno <- subset_input(input = pheno, id2keep = id2keep)
     kinship <- subset_kinship(kinship = kinship, id2keep = id2keep)
-
+    # make sure addcovar is full rank when we add an intercept
+    addcovar <- drop_depcols(covar = addcovar, add_intercept = FALSE)
+    # remove subjects with missing value(s) of phenotype or missing value(s) in addcovar
+    phe_nonmissing <- check_missingness(input_matrix = pheno)
+    if (!is.null(addcovar)){
+        cov_nonmissing <- check_missingness(input_matrix = addcovar)
+        phe_nonmissing <- phe_nonmissing & cov_nonmissing
+    }
+    pheno <- pheno[phe_nonmissing, , drop = FALSE]
+    kinship <- kinship[phe_nonmissing, phe_nonmissing, drop = FALSE]
+    probs <- probs[phe_nonmissing, , , drop = FALSE]
+    if (!is.null(addcovar)) {
+        addcovar <- addcovar[phe_nonmissing, , drop = FALSE]
+    }
+    if (sum(!phe_nonmissing) > 0){
+        message(paste0("removed ",
+                       sum(!phe_nonmissing),
+                       " subjects due to missing covariate values: ",
+                       paste(rownames(pheno)[!phe_nonmissing], collapse = ": "))
+        )
+        }
     # covariance matrix estimation
     message("starting covariance matrices estimation.")
     # first, run gemma2::MphEM() to get Vg and Ve

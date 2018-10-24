@@ -138,7 +138,7 @@ The function to simulate phenotypes in `qtl2pleio` is `sim1`. By examining its h
 
 ```{r}
 # set up the design matrix, X
-pp <- pr$`2`
+pp <- pr[[2]]
 X <- gemma2::stagger_mats(pp[ , , 50], pp[ , , 50])
 # assemble B matrix of allele effects
 B <- matrix(data = c(-1, -1, -1, -1, 1, 1, 1, 1, -1, -1, -1, -1, 1, 1, 1, 1), nrow = 8, ncol = 2, byrow = FALSE)
@@ -178,7 +178,12 @@ find_peaks(s2, map = pm)
 
 
 ```{r}
-out <- scan_pvl(probs = pp, pheno = Y, kinship = kinship$`2`, start_snp = 38, n_snp = 5)
+out <- scan_pvl(probs = pp, 
+                pheno = Y, 
+                kinship = kinship$`2`, 
+                start_snp = 38, 
+                n_snp = 5
+                )
 ```
 
 

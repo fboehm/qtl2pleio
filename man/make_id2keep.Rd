@@ -4,7 +4,7 @@
 \alias{make_id2keep}
 \title{Identify shared subject ids among all inputs: covariates, allele probabilities array, kinship, and phenotypes}
 \usage{
-make_id2keep(probs, pheno, covar, kinship)
+make_id2keep(probs, pheno, covar = NULL, kinship = NULL)
 }
 \arguments{
 \item{probs}{an allele probabilities array}
@@ -14,6 +14,9 @@ make_id2keep(probs, pheno, covar, kinship)
 \item{covar}{a covariates matrix}
 
 \item{kinship}{a kinship matrix}
+}
+\value{
+a character vector of subject IDs common to all (non-null) inputs
 }
 \description{
 Identify shared subject ids among all inputs: covariates, allele probabilities array, kinship, and phenotypes

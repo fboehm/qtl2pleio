@@ -13,6 +13,42 @@ timesTwo <- function(x) {
     .Call('_qtl2pleio_timesTwo', PACKAGE = 'qtl2pleio', x)
 }
 
+find_matching_cols <- function(mat, tol = 1e-12) {
+    .Call('_qtl2pleio_find_matching_cols', PACKAGE = 'qtl2pleio', mat, tol)
+}
+
+find_lin_indep_cols <- function(mat, tol = 1e-12) {
+    .Call('_qtl2pleio_find_lin_indep_cols', PACKAGE = 'qtl2pleio', mat, tol)
+}
+
+formX_intcovar <- function(probs, addcovar, intcovar, position, has_intercept = TRUE) {
+    .Call('_qtl2pleio_formX_intcovar', PACKAGE = 'qtl2pleio', probs, addcovar, intcovar, position, has_intercept)
+}
+
+expand_genoprobs_intcovar <- function(probs, intcovar) {
+    .Call('_qtl2pleio_expand_genoprobs_intcovar', PACKAGE = 'qtl2pleio', probs, intcovar)
+}
+
+weighted_matrix <- function(mat, weights) {
+    .Call('_qtl2pleio_weighted_matrix', PACKAGE = 'qtl2pleio', mat, weights)
+}
+
+weighted_3darray <- function(array, weights) {
+    .Call('_qtl2pleio_weighted_3darray', PACKAGE = 'qtl2pleio', array, weights)
+}
+
+matrix_x_matrix <- function(X, Y) {
+    .Call('_qtl2pleio_matrix_x_matrix', PACKAGE = 'qtl2pleio', X, Y)
+}
+
+matrix_x_vector <- function(X, y) {
+    .Call('_qtl2pleio_matrix_x_vector', PACKAGE = 'qtl2pleio', X, y)
+}
+
+matrix_x_3darray <- function(X, A) {
+    .Call('_qtl2pleio_matrix_x_3darray', PACKAGE = 'qtl2pleio', X, A)
+}
+
 rcpp_ols <- function(X, Y) {
     .Call('_qtl2pleio_rcpp_ols', PACKAGE = 'qtl2pleio', X, Y)
 }

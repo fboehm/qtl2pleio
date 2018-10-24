@@ -46,7 +46,7 @@ test_that("pvl_scan returns a dataframe where the last column has numeric entrie
 
 so_cov <- scan_pvl(probs = probs,
                    pheno = Y,
-                   covariates = covariates,
+                   addcovar = covariates,
                    kinship = K1,
                    start_snp = 1,
                    n_snp = 10
@@ -55,7 +55,7 @@ so_cov <- scan_pvl(probs = probs,
 test_that("pvl_scan handles missing values in covariates appropriately", {
   expect_message(scan_pvl(probs = probs,
                           pheno = Y,
-                          covariates = covariates,
+                          addcovar = covariates,
                           kinship = K1,
                           start_snp = 1,
                           n_snp = 10
@@ -64,7 +64,7 @@ test_that("pvl_scan handles missing values in covariates appropriately", {
                  )
   expect_message(scan_pvl(probs = probs,
                           pheno = Y2,
-                          covariates = covariates,
+                          addcovar = covariates,
                           kinship = K1,
                           start_snp = 1,
                           n_snp = 10

@@ -40,7 +40,6 @@ Suggests:
     covr,
     knitr,
     rmarkdown,
-    spelling,
     testthat
 LinkingTo:
     Rcpp,

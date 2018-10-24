@@ -14,9 +14,6 @@
 #' outputted object is a vector of `nboot_per_job` likelihood ratio test
 #' statistics from `nboot_per_job` distinct bootstrap samples.
 #'
-#'
-#'
-#'
 #' @param probs allele probabilities object for one chromosome only, like aprobs$`8`. Not a list
 #' @param pheno n by d matrix of phenotypes
 #' @param addcovar n by n.cov matrix of additive numeric covariates
@@ -100,7 +97,7 @@ boot_pvl <- function(probs,
     missing_indic <- apply(FUN = function(x) identical(x, rep(TRUE, length(x))), X = !is.na(pheno),
         MARGIN = 1)
     pheno_nona <- pheno[!missing_indic, ]
-    Xpre_nona <- Xpre[!missing_indic, ]
+    Xpre_nona <- Xpre[!missing_indic, , ]
     k_nona <- kinship[!missing_indic, !missing_indic]
     ##
     X <- gemma2::stagger_mats(Xpre_nona, Xpre_nona)
