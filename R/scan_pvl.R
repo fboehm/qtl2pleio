@@ -130,40 +130,35 @@ scan_pvl <- function(probs,
     # need to consider presence or absence of different inputs: kinship, addcovar
     id2keep <- make_id2keep(probs = probs,
                             pheno = pheno,
-                            covar = addcovar,
+                            addcovar = addcovar,
                             kinship = kinship
                             )
+    # remove - from id2keep vector - subjects with a missing phenotype or covariate
+    pheno <- subset_input(input = pheno, id2keep = id2keep)
+    subjects_phe <- check_missingness(pheno)
+    id2keep <- intersect(id2keep, subjects_phe)
+    if (!is.null(addcovar)) {
+        addcovar <- subset_input(input = addcovar, id2keep = id2keep)
+        addcovar <- drop_depcols(covar = addcovar, add_intercept = FALSE)
+        subjects_cov <- check_missingness(addcovar)
+        id2keep <- intersect(id2keep, subjects_cov)
+    }
+    # Send messages if there are two or fewer subjects
     if (length(id2keep) == 0){stop("no individuals common to all inputs")}
     if (length(id2keep) <= 2){
         stop(paste0("only ", length(id2keep),
-                    " common individuals: ",
+                    " common individual(s): ",
                     paste(id2keep, collapse = ": ")))
         }
+    # subset inputs to get all without missingness
     probs <- subset_input(input = probs, id2keep = id2keep)
-    addcovar <- subset_input(input = addcovar, id2keep = id2keep)
     pheno <- subset_input(input = pheno, id2keep = id2keep)
-    kinship <- subset_kinship(kinship = kinship, id2keep = id2keep)
-    # make sure addcovar is full rank when we add an intercept
-    addcovar <- drop_depcols(covar = addcovar, add_intercept = FALSE)
-    # remove subjects with missing value(s) of phenotype or missing value(s) in addcovar
-    phe_nonmissing <- check_missingness(input_matrix = pheno)
-    if (!is.null(addcovar)){
-        cov_nonmissing <- check_missingness(input_matrix = addcovar)
-        phe_nonmissing <- phe_nonmissing & cov_nonmissing
+    if (!is.null(kinship)) {
+        kinship <- subset_kinship(kinship = kinship, id2keep = id2keep)
     }
-    pheno <- pheno[phe_nonmissing, , drop = FALSE]
-    kinship <- kinship[phe_nonmissing, phe_nonmissing, drop = FALSE]
-    probs <- probs[phe_nonmissing, , , drop = FALSE]
     if (!is.null(addcovar)) {
-        addcovar <- addcovar[phe_nonmissing, , drop = FALSE]
+        addcovar <- subset_input(input = addcovar, id2keep = id2keep)
     }
-    if (sum(!phe_nonmissing) > 0){
-        message(paste0("removed ",
-                       sum(!phe_nonmissing),
-                       " subjects due to missing covariate values: ",
-                       paste(rownames(pheno)[!phe_nonmissing], collapse = ": "))
-        )
-        }
     # covariance matrix estimation
     message("starting covariance matrices estimation.")
     # first, run gemma2::MphEM() to get Vg and Ve

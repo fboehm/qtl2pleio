@@ -10,9 +10,9 @@ rownames(y) <- rownames(x)[10:1]
 z <- x[10:1, 1, drop = FALSE]
 rownames(z)[10] <- "mouse11"
 
-id2keep <- make_id2keep(x, y)
+id2keep <- make_id2keep(probs = x, pheno = y)
 
-id2keep2 <- make_id2keep()
+
 
 test_that("subset_inputs arranges subject names in same order", {
   expect_identical(rownames(subset_input(input = x, id2keep = id2keep)),

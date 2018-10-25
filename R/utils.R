@@ -20,6 +20,9 @@ check_identical <- function(x) {
 #' @param id2keep a character vector of subject ids to identify those subjects that are shared by all inputs
 #' @export
 subset_input <- function(input, id2keep) {
+    if (is.null(dim(input))){
+        stop("input must have dim = 2 or 3")
+    }
     if (length(dim(input)) == 2) {
         out <- input[match(rownames(input), id2keep), , drop = FALSE]
     }
@@ -35,6 +38,9 @@ subset_input <- function(input, id2keep) {
 #' @param id2keep a character vector of subject ids to identify those subjects that are shared by all inputs
 #' @export
 subset_kinship <- function(kinship, id2keep) {
+    if (is.null(dim(kinship))){
+        stop("kinship matrix must have dim = 2")
+    }
     return(kinship[match(rownames(kinship), id2keep), match(colnames(kinship), id2keep)])
 }
 
@@ -42,26 +48,29 @@ subset_kinship <- function(kinship, id2keep) {
 #'
 #' @param probs an allele probabilities array
 #' @param pheno a phenotypes matrix
-#' @param covar a covariates matrix
+#' @param addcovar a covariates matrix
 #' @param kinship a kinship matrix
 #' @export
 #' @return a character vector of subject IDs common to all (non-null) inputs
-make_id2keep <- function(probs, pheno, covar = NULL, kinship = NULL) {
-    if (is.null(covar) & !is.null(kinship)) {
+make_id2keep <- function(probs,
+                         pheno,
+                         addcovar = NULL,
+                         kinship = NULL) {
+    if (is.null(addcovar) & !is.null(kinship)) {
         shared <- intersect(rownames(probs), rownames(pheno))
         id2keep <- intersect(shared, rownames(kinship))
     }
-    if (!is.null(covar) & !is.null(kinship)){
+    if (!is.null(addcovar) & !is.null(kinship)){
         shared1 <- intersect(rownames(probs), rownames(pheno))
-        shared2 <- intersect(rownames(kinship), rownames(covar))
+        shared2 <- intersect(rownames(kinship), rownames(addcovar))
         id2keep <- intersect(shared1, shared2)
     }
-    if (is.null(covar) & is.null(kinship)) {
+    if (is.null(addcovar) & is.null(kinship)) {
         id2keep <- intersect(rownames(probs), rownames(pheno))
     }
-    if (!is.null(covar) & is.null(kinship)){
+    if (!is.null(addcovar) & is.null(kinship)){
         shared1 <- intersect(rownames(probs), rownames(pheno))
-        id2keep <- intersect(shared1, rownames(covar))
+        id2keep <- intersect(shared1, rownames(addcovar))
     }
     return(id2keep)
 }
@@ -70,13 +79,14 @@ make_id2keep <- function(probs, pheno, covar = NULL, kinship = NULL) {
 #'
 #' @param input_matrix phenotypes or covariates matrix
 #' @export
-#' @return logical vector indicating presence of no missingness. Those entries with TRUE have no missingness, while those with FALSE have one or more missing values.
+#' @return character vector of subjects that have no missingness
 check_missingness <- function(input_matrix){
     nr <- nrow(input_matrix)
     nc <- ncol(input_matrix)
     foo <- input_matrix[is.finite(input_matrix)]
     bar <- matrix(data = foo, ncol = nc, nrow = nr)
-    return(as.logical(apply(FUN = prod, X = bar, MARGIN = 1)))
+    indic <- as.logical(apply(FUN = prod, X = bar, MARGIN = 1))
+    return(rownames(input_matrix)[indic])
 }
 
 
