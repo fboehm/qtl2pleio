@@ -14,7 +14,7 @@ scan_pvl(probs, pheno, kinship = NULL, addcovar = NULL,
 
 \item{kinship}{a kinship matrix for one chromosome}
 
-\item{addcovar}{a matrix, n subjects by n.cov, of additive covariates, where each column is one numeric additive covariate}
+\item{addcovar}{a matrix, n subjects by n.cov, of additive covariates, where each column is one numeric additive covariate.}
 
 \item{start_snp}{index of where to start the scan within probs}
 
@@ -60,6 +60,9 @@ have only zero entries.
 The log-likelihood is returned for each model. The outputted object is a tibble with
 d + 1 columns. The first d columns specify the markers used in the corresponding model fit, while
 the last column specifies the log-likelihood value at that d-tuple of markers.
+Note also that the covariates matrix must be a set of linearly independent columns.
+scan_pvl checks for linear independence of columns in covariates and returns an error
+if the columns form a linear dependent set of vectors.
 }
 \examples{
 ## define probs

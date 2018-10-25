@@ -10,7 +10,7 @@ check_missingness(input_matrix)
 \item{input_matrix}{phenotypes or covariates matrix}
 }
 \value{
-logical vector indicating presence of no missingness. Those entries with TRUE have no missingness, while those with FALSE have one or more missing values.
+character vector of subjects that have no missingness
 }
 \description{
 Check for missingness in phenotypes or covariates

@@ -31,12 +31,14 @@
 #' The log-likelihood is returned for each model. The outputted object is a tibble with
 #' d + 1 columns. The first d columns specify the markers used in the corresponding model fit, while
 #' the last column specifies the log-likelihood value at that d-tuple of markers.
-#'
+#' Note also that the covariates matrix must be a set of linearly independent columns.
+#' scan_pvl checks for linear independence of columns in covariates and returns an error
+#' if the columns form a linear dependent set of vectors.
 #'
 #' @param probs an array of founder allele probabilities for a single chromosome
 #' @param pheno a matrix of phenotypes
 #' @param kinship a kinship matrix for one chromosome
-#' @param addcovar a matrix, n subjects by n.cov, of additive covariates, where each column is one numeric additive covariate
+#' @param addcovar a matrix, n subjects by n.cov, of additive covariates, where each column is one numeric additive covariate.
 #' @param start_snp index of where to start the scan within probs
 #' @param n_snp the number of (consecutive) markers to include in the scan
 #' @param max_iter maximum number of iterations for EM algorithm
@@ -94,9 +96,8 @@ scan_pvl <- function(probs,
                      max_prec = 1 / 1e+08
                      )
     {
-    if(is.null(probs)) stop("probs is NULL")
-    if(is.null(pheno)) stop("pheno is NULL")
-
+    if (is.null(probs)) stop("probs is NULL")
+    if (is.null(pheno)) stop("pheno is NULL")
     stopifnot(!is.null(rownames(probs)),
               !is.null(colnames(probs)),
               !is.null(dimnames(probs)[[3]]),
@@ -111,7 +112,6 @@ scan_pvl <- function(probs,
                   !is.null(colnames(addcovar))
                   )
     }
-
     d_size <- ncol(pheno)  # d_size is the number of univariate phenotypes
     # force things to be matrices
     if(!is.matrix(pheno)) {
@@ -139,7 +139,6 @@ scan_pvl <- function(probs,
     id2keep <- intersect(id2keep, subjects_phe)
     if (!is.null(addcovar)) {
         addcovar <- subset_input(input = addcovar, id2keep = id2keep)
-        addcovar <- drop_depcols(covar = addcovar, add_intercept = FALSE)
         subjects_cov <- check_missingness(addcovar)
         id2keep <- intersect(id2keep, subjects_cov)
     }
@@ -158,15 +157,21 @@ scan_pvl <- function(probs,
     }
     if (!is.null(addcovar)) {
         addcovar <- subset_input(input = addcovar, id2keep = id2keep)
+        if (Matrix::rankMatrix(addcovar) < ncol(addcovar)){
+            stop("addcovar, after removal of subjects with missing data and subsetting to include only those subjects present in all inputs,
+                  is not full rank.
+                 Please input a matrix of linearly independent columns.")
+        }
     }
+
+
     # covariance matrix estimation
-    message("starting covariance matrices estimation.")
-    # first, run gemma2::MphEM() to get Vg and Ve
+    message(paste0("starting covariance matrices estimation with data from ", length(id2keep), " subjects."))
+    # first, run gemma2::MphEM(), by way of calc_covs(), to get Vg and Ve
     cc_out <- calc_covs(pheno, kinship, max_iter = max_iter, max_prec = max_prec, covariates = addcovar)
     Vg <- cc_out$Vg
     Ve <- cc_out$Ve
     message("covariance matrices estimation completed.")
-
     # define Sigma
     Sigma <- calc_Sigma(Vg, Ve, kinship)
     # define Sigma_inv

@@ -38,7 +38,7 @@ scan_out <- scan_pvl(probs = probs,
                      n_snp = 10
                      )
 
-test_that("pvl_scan returns a dataframe where the last column has numeric entries, all negative", {
+test_that("scan_pvl returns a dataframe where the last column has numeric entries, all negative", {
   expect_true(identical(rep(TRUE, nrow(scan_out)),
                         as.vector(scan_out[ , ncol(scan_out)] < 0)))
   expect_true(is.data.frame(scan_out))
@@ -52,7 +52,7 @@ so_cov <- scan_pvl(probs = probs,
                    n_snp = 10
                    )
 
-test_that("pvl_scan handles missing values in covariates appropriately", {
+test_that("scan_pvl handles missing values in covariates appropriately", {
   expect_message(scan_pvl(probs = probs,
                           pheno = Y,
                           addcovar = covariates,
@@ -72,5 +72,20 @@ test_that("pvl_scan handles missing values in covariates appropriately", {
                  regexp = "2 subjects")
   expect_equal(sum(!is.na(scan_out)), prod(dim(scan_out)))
   expect_equal(sum(!is.na(so_cov)), prod(dim(so_cov)))
-
 })
+
+addcovar_rep <- matrix(rep(1, 200), ncol = 2)
+rownames(add_covar) <- s_id
+
+test_that("scan_pvl handles linearly dependent columns in covariates by throwing error message", {
+  expect_error(scan_pvl(probs = probs,
+                        pheno = Y2,
+                        addcovar = addcovar_rep,
+                        kinship = K1,
+                        start_snp = 1,
+                        n_snp = 10
+                        )
+               )
+}
+)
+

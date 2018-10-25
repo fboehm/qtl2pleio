@@ -35,7 +35,8 @@ Imports:
     rlang,
     stringr,
     tibble,
-    qtl2
+    qtl2,
+    Matrix
 Suggests:
     covr,
     knitr,

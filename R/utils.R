@@ -83,7 +83,7 @@ make_id2keep <- function(probs,
 check_missingness <- function(input_matrix){
     nr <- nrow(input_matrix)
     nc <- ncol(input_matrix)
-    foo <- input_matrix[is.finite(input_matrix)]
+    foo <- is.finite(input_matrix)
     bar <- matrix(data = foo, ncol = nc, nrow = nr)
     indic <- as.logical(apply(FUN = prod, X = bar, MARGIN = 1))
     return(rownames(input_matrix)[indic])
