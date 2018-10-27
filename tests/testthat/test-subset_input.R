@@ -1,6 +1,8 @@
 library(qtl2pleio)
 library(testthat)
-context("testing correct subsetting of inputs: phenotypes, allele probabilities, covariates, and kinship")
+context("testing correct subsetting of inputs (with proper
+        ordering of subject ids): phenotypes, allele probabilities,
+        covariates, and kinship")
 
 # setup
 ## define subject ids
@@ -38,49 +40,73 @@ test_that("subset_input, with covariates, when not NULL,
           returns a matrix with the correct number of rows and correct
           subject ids in row names", {
   expect_equal(nrow(subset_input(input = covariates,
-                                id2keep = paste0("s", 101:110)
-)), 10)
+                                id2keep = paste0("s", 101:110))),
+               10)
+  expect_equal(ncol(subset_input(input = covariates,
+                                           id2keep = paste0("s", 101:110))),
+                         ncol(covariates))
+
   expect_identical(rownames(subset_input(input = covariates,
-                                    id2keep = paste0("s", 101:110)
-  )), paste0("s", 101:110))
+                                    id2keep = paste0("s", 101:110))),
+                   paste0("s", 101:110))
+  expect_identical(rownames(subset_input(input = covariates,
+                                         id2keep = paste0("s", 110:101))),
+                   paste0("s", 110:101))
+
 })
 
-test_that("subset_input, with pheno, returns a matrix with the correct number of rows and correct subject ids in row names", {
+test_that("subset_input, with pheno, returns
+          a matrix with the correct number of
+          rows and correct subject ids in row names", {
   expect_equal(nrow(subset_input(input = Y,
                                 id2keep = paste0("s", 101:110)
   )), 10)
+  expect_equal(ncol(subset_input(input = Y,
+                                 id2keep = paste0("s", 101:110)
+            )), ncol(Y))
   expect_identical(rownames(subset_input(input = Y,
                                          id2keep = paste0("s", 101:110)
-  )), paste0("s", 101:110))
+                                         )), paste0("s", 101:110))
+  expect_true(is.matrix(subset_input(input = Y,
+                                     id2keep = paste0("s", 101:110))))
 })
 
-test_that("subset_input, with allele probabilities array, returns a matrix with the correct number of rows and correct subject ids in row names and that dimension = 3 is preserved", {
+test_that("subset_input, with allele probabilities array,
+          returns a matrix with the correct number of rows
+          and correct subject ids in row names and that
+          dimension = 3 is preserved", {
   expect_equal(nrow(subset_input(input = probs,
                                 id2keep = paste0("s", 101:110)
-  )), 10)
+                                )), 10)
   expect_identical(rownames(subset_input(input = probs,
                                          id2keep = paste0("s", 101:110)
-  )), paste0("s", 101:110))
+                                         )), paste0("s", 101:110))
   expect_equal(length(dim(subset_input(input = probs,
                                          id2keep = paste0("s", 101:110)
-  ))), 3)
-
+                                       ))), 3)
 })
 
 test_that("subset_kinship returns a matrix with the correct number of
           rows & columns and correct subject ids in row names and column names", {
   expect_equal(dim(subset_kinship(kinship = K1,
-                                  id2keep = paste0("s", 101:110)
-  ))[1], 10)
+                                  id2keep = paste0("s", 101:110)))[1],
+               10)
   expect_equal(dim(subset_kinship(kinship = K1,
-                                  id2keep = paste0("s", 101:110)
-  ))[2], 10)
+                                  id2keep = paste0("s", 101:110))
+                   )[2],
+               10)
   expect_identical(rownames(subset_kinship(kinship = K1,
-                                         id2keep = paste0("s", 101:110)
-  )), paste0("s", 101:110))
+                                         id2keep = paste0("s", 101:110))),
+                   paste0("s", 101:110))
   expect_identical(colnames(subset_kinship(kinship = K1,
                                          id2keep = paste0("s", 101:110)
   )), paste0("s", 101:110))
+  expect_identical(colnames(subset_kinship(kinship = K1,
+                                           id2keep = paste0("s", 110:101)
+  )), paste0("s", 110:101))
+  expect_identical(rownames(subset_kinship(kinship = K1,
+                                           id2keep = paste0("s", 110:101)
+  )), paste0("s", 110:101))
 
 })
 
@@ -96,7 +122,7 @@ id2keep <- make_id2keep(probs = x, pheno = y)
 
 
 
-test_that("subset_inputs arranges subject names in same order", {
+test_that("subset_inputs arranges subject names in order specified in id2keep", {
   expect_identical(rownames(subset_input(input = x, id2keep = id2keep)),
                    rownames(subset_input(input = y, id2keep = id2keep))
   )
