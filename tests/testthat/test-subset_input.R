@@ -84,9 +84,30 @@ test_that("subset_kinship returns a matrix with the correct number of
 
 })
 
-# tests for make_id2keep
+x <- matrix(runif(100), nrow = 10, ncol = 10)
+rownames(x) <- paste0("mouse", 1:10)
 
-test_that("make_id2keep returns correct vector of subject ids both with and without covariates", {
-  expect_length(make_id2keep(probs = probs, pheno = Y[1:10, ], covar = NULL, kinship = K1), 10)
-  expect_length(make_id2keep(probs = probs, pheno = Y[1:10, ], covar = covariates, kinship = K1), 10)
+y <- x[10:1, ]
+rownames(y) <- rownames(x)[10:1]
+z <- x[10:1, 1, drop = FALSE]
+rownames(z)[10] <- "mouse11"
+
+id2keep <- make_id2keep(probs = x, pheno = y)
+
+
+
+test_that("subset_inputs arranges subject names in same order", {
+  expect_identical(rownames(subset_input(input = x, id2keep = id2keep)),
+                   rownames(subset_input(input = y, id2keep = id2keep))
+  )
+  expect_false(identical(rownames(subset_input(input = x, id2keep = id2keep)),
+                         rownames(y)
+  )
+  )
+  expect_identical(x, subset_input(input = y, id2keep = id2keep))
 })
+
+
+
+
+

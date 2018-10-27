@@ -24,10 +24,12 @@ subset_input <- function(input, id2keep) {
         stop("input must have dim = 2 or 3")
     }
     if (length(dim(input)) == 2) {
+        input <- input[rownames(input) %in% id2keep, , drop = FALSE]
         out <- input[match(rownames(input), id2keep), , drop = FALSE]
     }
    if (length(dim(input)) == 3) {
-        out <- input[match(rownames(input), id2keep), , , drop = FALSE]
+       input <- input[rownames(input) %in% id2keep, , , drop = FALSE]
+       out <- input[match(rownames(input), id2keep), , , drop = FALSE]
     }
     return(out)
 }
@@ -41,6 +43,7 @@ subset_kinship <- function(kinship, id2keep) {
     if (is.null(dim(kinship))){
         stop("kinship matrix must have dim = 2")
     }
+    kinship <- kinship[rownames(kinship) %in% id2keep, colnames(kinship) %in% id2keep]
     return(kinship[match(rownames(kinship), id2keep), match(colnames(kinship), id2keep)])
 }
 

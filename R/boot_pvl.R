@@ -71,38 +71,84 @@ boot_pvl <- function(probs,
                      nboot_per_job = 1
                      )
     {
-    if(is.null(probs)) stop("probs is NULL")
-    if(is.null(pheno)) stop("pheno is NULL")
-
-    stopifnot(identical(nrow(kinship), nrow(probs)),
-              identical(nrow(probs), nrow(pheno)),
-              check_dimnames(kinship, probs),
-              check_dimnames(probs, pheno))
+    if (is.null(probs)) stop("probs is NULL")
+    if (is.null(pheno)) stop("pheno is NULL")
+    stopifnot(!is.null(rownames(probs)),
+              !is.null(colnames(probs)),
+              !is.null(dimnames(probs)[[3]]),
+              !is.null(rownames(pheno)),
+              n_snp > 0,
+              start_snp > 0,
+              start_snp + n_snp - 1 <= dim(probs)[3]
+    )
+    # check additional conditions when addcovar is not NULL
     if (!is.null(addcovar)) {
-        stopifnot(check_dimnames(kinship, addcovar),
-                  identical(nrow(probs), nrow(addcovar))
-                  )
+        stopifnot(!is.null(rownames(addcovar)),
+                  !is.null(colnames(addcovar))
+        )
+    }
+    d_size <- ncol(pheno)  # d_size is the number of univariate phenotypes
+    # force things to be matrices
+    if(!is.matrix(pheno)) {
+        pheno <- as.matrix(pheno)
+        if(!is.numeric(pheno)) stop("pheno is not numeric")
+    }
+    if(is.null(colnames(pheno))) # force column names
+        colnames(pheno) <- paste0("pheno", seq_len(ncol(pheno)))
+    if(!is.null(addcovar)) {
+        if(!is.matrix(addcovar)) addcovar <- as.matrix(addcovar)
+        if(!is.numeric(addcovar)) stop("addcovar is not numeric")
     }
 
+    # find individuals in common across all arguments
+    # and drop individuals with missing covariates or missing *one or more* phenotypes
+    # need to consider presence or absence of different inputs: kinship, addcovar
+    id2keep <- make_id2keep(probs = probs,
+                            pheno = pheno,
+                            addcovar = addcovar,
+                            kinship = kinship
+    )
+    # remove - from id2keep vector - subjects with a missing phenotype or covariate
+    pheno <- subset_input(input = pheno, id2keep = id2keep)
+    subjects_phe <- check_missingness(pheno)
+    id2keep <- intersect(id2keep, subjects_phe)
+    if (!is.null(addcovar)) {
+        addcovar <- subset_input(input = addcovar, id2keep = id2keep)
+        subjects_cov <- check_missingness(addcovar)
+        id2keep <- intersect(id2keep, subjects_cov)
+    }
+    # Send messages if there are two or fewer subjects
+    if (length(id2keep) == 0){stop("no individuals common to all inputs")}
+    if (length(id2keep) <= 2){
+        stop(paste0("only ", length(id2keep),
+                    " common individual(s): ",
+                    paste(id2keep, collapse = ": ")))
+    }
+    # subset inputs to get all without missingness
+    probs <- subset_input(input = probs, id2keep = id2keep)
+    pheno <- subset_input(input = pheno, id2keep = id2keep)
+    if (!is.null(kinship)) {
+        kinship <- subset_kinship(kinship = kinship, id2keep = id2keep)
+    }
+    if (!is.null(addcovar)) {
+        addcovar <- subset_input(input = addcovar, id2keep = id2keep)
+        if (Matrix::rankMatrix(addcovar) < ncol(addcovar)){
+            stop("addcovar, after removal of subjects with missing data and subsetting to include only those subjects present in all inputs,
+                  is not full rank.
+                 Please input a matrix of linearly independent columns.")
+        }
+    }
 
-
-
-    X1 <- probs[, , pleio_peak_index]
+## define X1 - a single marker's allele probabilities
+    X1 <- probs[ , , pleio_peak_index]
     if (!is.null(addcovar)) {
         Xpre <- cbind(X1, addcovar)
     } else {
         Xpre <- X1
     }
-    ## remove subjects with missing values of phenotype
-    missing_indic <- apply(FUN = function(x) identical(x, rep(TRUE, length(x))), X = !is.na(pheno),
-        MARGIN = 1)
-    pheno_nona <- pheno[!missing_indic, ]
-    Xpre_nona <- Xpre[!missing_indic, , ]
-    k_nona <- kinship[!missing_indic, !missing_indic]
-    ##
-    X <- gemma2::stagger_mats(Xpre_nona, Xpre_nona)
-    cc_out <- calc_covs(pheno = pheno_nona,
-                        kinship = k_nona,
+    X <- gemma2::stagger_mats(Xpre, Xpre)
+    cc_out <- calc_covs(pheno = pheno,
+                        kinship = kinship,
                         covariates = addcovar
                         )
     (Vg <- cc_out$Vg)
@@ -110,33 +156,33 @@ boot_pvl <- function(probs,
     # calculate Sigma
     Sigma <- calc_Sigma(Vg = Vg,
                         Ve = Ve,
-                        K = k_nona
+                        K = kinship
                         )
     Sigma_inv <- solve(Sigma)
     # calc Bhat
     B <- calc_Bhat(X = X,
                    Sigma_inv = Sigma_inv,
-                   Y = pheno_nona
+                   Y = pheno
                    )
     # Start loop
     lrt <- numeric()
     for (i in 1:nboot_per_job) {
-        foo <- sim1(X = X, B = B, Vg = Vg, Ve = Ve, kinship = k_nona)
+        foo <- sim1(X = X, B = B, Vg = Vg, Ve = Ve, kinship = kinship)
         Ysim <- matrix(foo, ncol = 2, byrow = FALSE)
-        rownames(Ysim) <- rownames(pheno_nona)
+        rownames(Ysim) <- rownames(pheno)
         colnames(Ysim) <- c("t1", "t2")
         if (!is.null(addcovar)) {
-            loglik <- scan_pvl(probs = probs[!missing_indic, , ],
+            loglik <- scan_pvl(probs = probs,
                                pheno = Ysim,
-                               addcovar = addcovar[!missing_indic, , drop = FALSE],
-                               kinship = k_nona,
+                               addcovar = addcovar,
+                               kinship = kinship,
                                start_snp = start_snp,
                                n_snp = n_snp
                                )
         } else {
-            loglik <- scan_pvl(probs = probs[!missing_indic, , ],
+            loglik <- scan_pvl(probs = probs,
                                pheno = Ysim,
-                               kinship = k_nona,
+                               kinship = kinship,
                                start_snp = start_snp,
                                n_snp = n_snp
                                )

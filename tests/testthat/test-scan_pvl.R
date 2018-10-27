@@ -53,23 +53,6 @@ so_cov <- scan_pvl(probs = probs,
                    )
 
 test_that("scan_pvl handles missing values in covariates appropriately", {
-  expect_message(scan_pvl(probs = probs,
-                          pheno = Y,
-                          addcovar = covariates,
-                          kinship = K1,
-                          start_snp = 1,
-                          n_snp = 10
-                          ),
-                 regexp = "1 subjects"
-                 )
-  expect_message(scan_pvl(probs = probs,
-                          pheno = Y2,
-                          addcovar = covariates,
-                          kinship = K1,
-                          start_snp = 1,
-                          n_snp = 10
-                          ),
-                 regexp = "2 subjects")
   expect_equal(sum(!is.na(scan_out)), prod(dim(scan_out)))
   expect_equal(sum(!is.na(so_cov)), prod(dim(so_cov)))
 })
