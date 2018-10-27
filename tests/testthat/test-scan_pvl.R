@@ -58,7 +58,7 @@ test_that("scan_pvl handles missing values in covariates appropriately", {
 })
 
 addcovar_rep <- matrix(rep(1, 200), ncol = 2)
-rownames(add_covar) <- s_id
+rownames(addcovar_rep) <- s_id
 
 test_that("scan_pvl handles linearly dependent columns in covariates by throwing error message", {
   expect_error(scan_pvl(probs = probs,
