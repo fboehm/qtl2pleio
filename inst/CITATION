@@ -1,14 +1,22 @@
 citHeader("To cite qtl2pleio in publications use:")
 
-citEntry(entry = "Article",
-title = "qtl2pleio: Testing pleiotropy vs. separate QTL in multiparental populations",
-author = personList(as.person("Frederick Boehm")),
-journal = "tbd",
-year = "2018",
-url = "https://github.com/fboehm/qtl2pleio",
-textVersion =
-paste("Frederick Boehm (2018).",
-"qtl2pleio: Testing pleiotropy vs. separate QTL in multiparental populations.",
-"URL https://github.com/fboehm/qtl2pleio"
+
+year = sub('.*(2[[:digit:]]{3})-.*', '\\1', meta$Date, perl = TRUE)
+if (length(year) == 0) year = format(Sys.Date(), '%Y')
+vers = paste('R package version', meta$Version)
+auth = format(Filter(function(p) 'aut' %in% p$role, as.person(meta$Author)), c('given', 'family'))
+
+citEntry(
+  entry = 'manual',
+  title = paste('qtl2pleio:', meta$Title),
+  author = auth,
+  year = year,
+  note = vers,
+  url = meta$URL,
+  textVersion = paste0(
+    paste(auth, collapse = ' and '), ' (', year, '). qtl2pleio: ', meta$Title, '. ', vers, '.',
+    ' URL https://github.com/fboehm/qtl2pleio'
+  )
 )
-)
+
+
