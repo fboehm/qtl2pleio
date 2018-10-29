@@ -11,6 +11,12 @@ subset_input(input, id2keep)
 
 \item{id2keep}{a character vector of subject ids to identify those subjects that are shared by all inputs}
 }
+\value{
+an object resulting from subsetting of `input`. Its rows are ordered per `id2keep`
+}
 \description{
-Subset an input object - allele probabilities array or phenotypes matrix or covariates matrix. Kinship has its own subset function
+An inputted matrix or 3-dimensional array is first subsetted - by rownames - to remove
+those subjects who are not in `id2keep`. After that, the object's rows
+are ordered to match the ordering of subject ids in the vector `id2keep`. This
+(possibly reordered) object is returned.
 }

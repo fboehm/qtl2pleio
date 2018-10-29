@@ -19,5 +19,6 @@ make_id2keep(probs, pheno, addcovar = NULL, kinship = NULL)
 a character vector of subject IDs common to all (non-null) inputs
 }
 \description{
-Identify shared subject ids among all inputs: covariates, allele probabilities array, kinship, and phenotypes
+We consider only those inputs that are not NULL. We then use `intersect` on pairs
+of inputs' rownames to identify those subjects are shared among all non-NULL inputs.
 }

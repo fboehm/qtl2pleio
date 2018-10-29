@@ -1,6 +1,6 @@
 library(qtl2pleio)
 library(testthat)
-context("testing correct subsetting of inputs (with proper
+context("testing correct subsetting - based on common ids - of inputs (with proper
         ordering of subject ids): phenotypes, allele probabilities,
         covariates, and kinship")
 

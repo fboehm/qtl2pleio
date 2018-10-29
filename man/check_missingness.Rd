@@ -13,5 +13,7 @@ check_missingness(input_matrix)
 character vector of subjects that have no missingness
 }
 \description{
-Check for missingness in phenotypes or covariates
+We use `is.finite` from base R to identify those subjects that have one or
+more missing values in `input_matrix`. We then return a character vector of subjects
+that have no missingness in `input_matrix`.
 }

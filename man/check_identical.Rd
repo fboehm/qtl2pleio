@@ -9,6 +9,9 @@ check_identical(x)
 \arguments{
 \item{x}{a vector}
 }
+\value{
+a logical indicating whether all vector entries are the same
+}
 \description{
 Check whether a vector, x, has all its entries equal to its first entry
 }
