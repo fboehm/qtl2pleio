@@ -25,7 +25,7 @@ check_identical <- function(x) {
 #' @param input a matrix of either phenotypes or covariates or array of allele probabilities
 #' @param id2keep a character vector of subject ids to identify those subjects that are shared by all inputs
 #' @export
-#' @example
+#' @examples
 #' # define s_id
 #' s_id <- paste0("s", 1:10)
 #' # set up input matrix

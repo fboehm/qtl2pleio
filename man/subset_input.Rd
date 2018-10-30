@@ -20,3 +20,11 @@ those subjects who are not in `id2keep`. After that, the object's rows
 are ordered to match the ordering of subject ids in the vector `id2keep`. This
 (possibly reordered) object is returned.
 }
+\examples{
+# define s_id
+s_id <- paste0("s", 1:10)
+# set up input matrix
+foo <- matrix(data = rnorm(10 * 3), nrow = 10, ncol = 3)
+rownames(foo) <- s_id
+subset_input(input = foo, id2keep = s_id)
+}
