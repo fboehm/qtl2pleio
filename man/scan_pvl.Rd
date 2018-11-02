@@ -5,7 +5,8 @@
 \title{Perform model fitting for all ordered pairs of markers in a genomic region of interest}
 \usage{
 scan_pvl(probs, pheno, kinship = NULL, addcovar = NULL,
-  start_snp = 1, n_snp, max_iter = 1e+06, max_prec = 1/1e+08)
+  start_snp = 1, n_snp, max_iter = 1e+06, max_prec = 1/1e+08,
+  n_cores = 1)
 }
 \arguments{
 \item{probs}{an array of founder allele probabilities for a single chromosome}
@@ -87,7 +88,7 @@ Y2 <- Y
 Y2[1, 2] <- NA
 scan_pvl(probs = probs, pheno = Y, kinship = kin,
         start_snp = 1, n_snp = 10)
-scan_pvl(probs = probs, pheno = Y2, kinship = kin,
+scan_pvl(probs = probs, pheno = Y2, kinship = kin, addcovar = covariates,
         start_snp = 1, n_snp = 10)
 }
 \references{

@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-## Setting for close linkage v pleiotropy likelihood ratio test
+## Setting for pleiotropy vs. two separate QTL 
 
 Our setting involves a pair of traits, $Y_1$ and $Y_2$, each of which individually (univariately) maps to a single genomic region. $Y_1$ and $Y_2$ are both measured on the same subjects. The exact definition of a genomic region is imprecise; in practice, it may be as large as 4 or 5 Mb. We seek to distinguish whether $Y_1$ and $Y_2$ associations (in the genomic region of interest) arise due to a single QTL or whether there are two two distinct loci, each of which associates with exactly one of the two traits. We recognize that more complicated association patterns are possible, but we neglect them in this test.
 
@@ -46,7 +46,7 @@ library(qtl2pleio)
 ```
 
 
-We'll work with data from the `qtl2data` R package, which is on github. First, we install and load the `qtl2` package.
+We'll work with data from the `qtl2data` repository, which is on github. First, we install and load the `qtl2` package.
 
 ```{r, eval = FALSE}
 devtools::install_github("rqtl/qtl2")
@@ -106,7 +106,7 @@ calc_kinship(probs = pr, type = "loco") -> kinship
 str(kinship)
 ```
 
-We see that `kinship` is a list containing 3 matrices. Each matrix is 261 by 261 - where the number of subjects is 261 - and symmetric. The $(i, j)$ cell in the matrix contains the estimate of identity-by-state (IBS) probability for randomly chosen alleles at a given locus for those two subjects.
+We see that `kinship` is a list containing 3 matrices. Each matrix is 261 by 261 - where the number of subjects is 261 - and symmetric. The $(i, j)$ cell in the matrix contains the estimate of identity-by-state (IBS) probability for randomly chosen alleles at a single locus for those two subjects.
 
 
 
@@ -117,7 +117,7 @@ We use the model:
 
 $$vec(Y) = X vec(B) + vec(G) + vec(E)$$
 
-where $Y$ is a $n$ by $2$ matrix, where each row is one subject and each column is one quantitative phenotype. $X$ is a $2n$ by $2f$ design matrix containing $n$ by $f$ allele probabilities matrices for each of two (possibly identical) markers. Thus, $X$ is a block-diagonal matrix, with exactly two $n$ by $f$ blocks on the diagonal. $B$ is $f$ by 2 matrix. "vec" refers to the vectorization operator. "vec(B)", where $B$ is a $f$ by $2$ matrix, is, thus, a (column) vector of length $2f$ that is formed by stacking the second column of $B$ beneath the first column of $B$. 
+where $Y$ is a $n$ by $2$ matrix, where each row is one subject and each column is one quantitative trait. $X$ is a $2n$ by $2f$ design matrix containing $n$ by $f$ allele probabilities matrices for each of two (possibly identical) markers. Thus, $X$ is a block-diagonal matrix, with exactly two $n$ by $f$ blocks on the diagonal. $B$ is a $f$ by 2 matrix. "vec" refers to the vectorization operator. "vec(B)", where $B$ is a $f$ by $2$ matrix, is, thus, a (column) vector of length $2f$ that is formed by stacking the second column of $B$ beneath the first column of $B$. 
 
 $G$ is a matrix of random effects. We specify its distribution as matrix-variate normal with mean being a $n$ by $2$ matrix of zeros, covariance among row vectors a $n$ by $n$ kinship matrix, $K$, and covariance among column vectors a $2$ by $2$ genetic covariance matrix, $V_g$. 
 
@@ -126,6 +126,10 @@ In mathematical notation, we write:
 $$G \sim MN_{\text{n by 2}}(0, K, V_g)$$
 
 We also need to specify the distribution of the $E$ matrix, which contains the random errors. $E$ is a random $n$ by $2$ matrix that is distributed as a matrix-variate normal distribution with mean being the $n$ by $2$ zero matrix, covariance among row vectors $I_n$, the $n$ by $n$ identity matrix, and covariance among columns the $2$ by $2$ matrix $V_e$.
+
+$$E \sim MN_{\text{n by 2}}(0, I_n, V_e)$$
+
+
 
 In practice, we typically observe the phenotype matrix $Y$. We also treat as known the design matrix $X$ and the kinship matrix $K$. We then infer the values of $B$, $V_g$, and $V_e$. 
 
@@ -147,7 +151,7 @@ B
 # set.seed to ensure reproducibility
 set.seed(2018-01-30)
 # call to sim1
-Ypre <- sim1(X = X, B = B, Vg = diag(2), Ve = diag(2), kinship = kinship[[1]])
+Ypre <- sim1(X = X, B = B, Vg = diag(2), Ve = diag(2), kinship = kinship[[2]])
 Y <- matrix(Ypre, nrow = 261, ncol = 2, byrow = FALSE)
 rownames(Y) <- rownames(pp)
 colnames(Y) <- c("tr1", "tr2")
@@ -156,22 +160,20 @@ colnames(Y) <- c("tr1", "tr2")
 Let's perform univariate QTL mapping for each of the two traits in the Y matrix.
 
 ```{r}
-scan1(genoprobs = pr, pheno = Y[ , 1], kinship = kinship) -> s1
-scan1(genoprobs = pr, pheno = Y[ , 2], kinship = kinship) -> s2
+scan1(genoprobs = pr, pheno = Y, kinship = kinship) -> s1
 ```
 
 ```{r}
-plot(s1, pm)
+plot(s1[ , 1], pm)
 ```
 
 ```{r}
-plot(s2, pm)
+plot(s1[ , 2], pm)
 ```
 
 
 ```{r}
 find_peaks(s1, map = pm)
-find_peaks(s2, map = pm)
 ```
 
 # Perform two-dimensional scan as first step in pleiotropy v separate QTL hypothesis test
@@ -251,4 +253,4 @@ Finally, we determine a bootstrap p-value in the usual method. We treat the boot
 
 In practice, one would want to use many more bootstrap samples to achieve an empirical distribution that is closer to the theoretical distribution of the test statistic under the null hypothesis.
 
-However, if one wants to perform analyses with a reasonable number - say 400 - bootstrap samples, this will take a very long time - many days - on a single laptop computer. We have used a series of computer clusters that are coordinated by the University of Wisconsin-Madison's Center for High-throughput Computing (http://chtc.cs.wisc.edu). We typically are able to analyze 1000 bootstrap samples in less than 12 hours with this service.
+However, if one wants to perform analyses with a reasonable number - say 400 - bootstrap samples, this will take a very long time - many days - on a single laptop computer. We have used a series of computer clusters that are coordinated by the University of Wisconsin-Madison's Center for High-throughput Computing (http://chtc.cs.wisc.edu). We typically are able to analyze 1000 bootstrap samples in less than 24 hours with this service.

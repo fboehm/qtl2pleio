@@ -81,7 +81,7 @@
 #'Y2[1, 2] <- NA
 #'scan_pvl(probs = probs, pheno = Y, kinship = kin,
 #'         start_snp = 1, n_snp = 10)
-#'scan_pvl(probs = probs, pheno = Y2, kinship = kin,
+#'scan_pvl(probs = probs, pheno = Y2, kinship = kin, addcovar = covariates,
 #'         start_snp = 1, n_snp = 10)
 #' @importFrom rlang .data
 #' @return a tibble with d + 1 columns. First d columns indicate the genetic data (by listing the marker ids) used in the design matrix; last is log likelihood
@@ -93,7 +93,8 @@ scan_pvl <- function(probs,
                      start_snp = 1,
                      n_snp,
                      max_iter = 1e+06,
-                     max_prec = 1 / 1e+08
+                     max_prec = 1 / 1e+08,
+                     n_cores = 1
                      )
     {
     if (is.null(probs)) stop("probs is NULL")
@@ -178,33 +179,32 @@ scan_pvl <- function(probs,
     Sigma_inv <- solve(Sigma)
     # prepare table of marker indices for each call of scan_pvl
     mytab <- prep_mytab(d_size = d_size, n_snp = n_snp)
-    # start progress bar
-    pb <- progress::progress_bar$new(format = " scanning [:bar] :percent eta: :eta",
-                                     total = n_snp^d_size,
-                                     clear = FALSE,
-                                     width = 80
-                                     )
-    pb$tick(0)
-
-    for (rownum in 1:nrow(mytab)) {
-        pb$tick()
-        indices <- unlist(mytab[rownum, ])
-        X_list <- prep_X_list(indices = indices[-length(indices)],
-                              start_snp = start_snp,
-                              probs = probs,
-                              covariates = addcovar
-                              )
-        X <- gemma2::stagger_mats(X_list)
-        # Bhat <- rcpp_calc_Bhat2(X = X, Y = as.vector(pheno), Sigma_inv = Sigma_inv)
-        Bhat <- rcpp_calc_Bhat2(X = X, Sigma_inv = Sigma_inv, Y = as.vector(as.matrix(pheno)))
-        mymu <- as.vector(X %*% Bhat)
-        mytab$loglik[rownum] <- as.numeric(
-            rcpp_log_dmvnorm2(inv_S = Sigma_inv,
-                              mu = mymu,
-                              x = as.vector(as.matrix(pheno)),
-                              S = Sigma)
-            )
+    # set up parallel analysis
+    if(n_cores == 1) { # no parallel processing
+        for (rownum in 1:nrow(mytab)) {
+            mytab$loglik[i] <- fit1_pvl(mytab = mytab, rownum = rownum,
+                                        start_snp = start_snp,
+                                        probs = probs,
+                                        addcovar = addcovar,
+                                        Sigma_inv = Sigma_inv,
+                                        pheno = pheno
+                                        )
+        }
     }
+    if(n_cores > 1) { # parallel processing
+        list_result <- mclapply(mytab = mytab,
+                                X = 1:nrow(mytab),
+                                FUN = fit1_pvl,
+                                addcovar = addcovar,
+                                probs = aprobs$`1`,
+                                Sigma_inv = Sigma_inv,
+                                start_snp = start_snp,
+                                pheno = pheno,
+                                mc.cores = n_cores
+                                )
+        mytab$loglik <- unlist(list_result)
+        }
+
     marker_id <- dimnames(probs)[[3]][start_snp:(start_snp + n_snp - 1)]
     mytab2 <- tibble::as_tibble(apply(FUN = function(x) marker_id[x], X = mytab[, -ncol(mytab)], MARGIN = 2))
     mytab2$loglik <- mytab$loglik
