@@ -32,6 +32,7 @@ get_li_cols <- function(addcovar, add_intercept = TRUE){
                       MARGIN = 2
                       )
   addcovar <- addcovar[ , !id_logical] #remove column(s) that have a single value only
+  rr <- qr(addcovar)$rank # rank of inputted matrix, after possibly removing column(s) with all entries a single value
   if (add_intercept){
     addcovar <- cbind(1, addcovar)
   }
