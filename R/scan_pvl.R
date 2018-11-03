@@ -86,7 +86,7 @@ scan_pvl <- function(probs,
                      addcovar = NULL,
                      start_snp = 1,
                      n_snp,
-                     max_iter = 1e+06,
+                     max_iter = 1e+04,
                      max_prec = 1 / 1e+08,
                      n_cores = 1
                      )
@@ -113,8 +113,8 @@ scan_pvl <- function(probs,
         pheno <- as.matrix(pheno)
         if(!is.numeric(pheno)) stop("pheno is not numeric")
     }
-    if(is.null(colnames(pheno))) # force column names
-        colnames(pheno) <- paste0("pheno", seq_len(ncol(pheno)))
+    if(is.null(colnames(pheno))){ # force column names
+        colnames(pheno) <- paste0("pheno", seq_len(ncol(pheno)))}
     if(!is.null(addcovar)) {
         if(!is.matrix(addcovar)) addcovar <- as.matrix(addcovar)
         if(!is.numeric(addcovar)) stop("addcovar is not numeric")
@@ -137,7 +137,9 @@ scan_pvl <- function(probs,
         subjects_cov <- check_missingness(addcovar)
         id2keep <- intersect(id2keep, subjects_cov)
     }
-    addcovar <- get_li_cols(addcovar)
+    if (!is.null(addcovar)) {
+        addcovar <- get_li_cols(addcovar)
+    }
     # Send messages if there are two or fewer subjects
     if (length(id2keep) == 0){stop("no individuals common to all inputs")}
     if (length(id2keep) <= 2){
@@ -153,14 +155,7 @@ scan_pvl <- function(probs,
     }
     if (!is.null(addcovar)) {
         addcovar <- subset_input(input = addcovar, id2keep = id2keep)
-        if (Matrix::rankMatrix(addcovar) < ncol(addcovar)){
-            stop("addcovar, after removal of subjects with missing data and subsetting to include only those subjects present in all inputs,
-                  is not full rank.
-                 Please input a matrix of linearly independent columns.")
-        }
     }
-
-
     # covariance matrix estimation
     message(paste0("starting covariance matrices estimation with data from ", length(id2keep), " subjects."))
     # first, run gemma2::MphEM(), by way of calc_covs(), to get Vg and Ve
