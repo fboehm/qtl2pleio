@@ -70,8 +70,12 @@
 #' # leave-one-chromosome-out kinship matrices
 #' kinship <- qtl2::calc_kinship(probs, "loco")
 #' # get founder allele probabilites
-#' probs <- qtl2::genoprob_to_alleleprob(probs)
-#' scan_pvl(probs = probs$`1`, pheno = pheno, kinship = kinship$`1`, addcovar = iron$covar,
+#' probs <- qtl2::genoprob_to_alleleprob(probs)$`1`
+#' ac <- matrix(as.numeric(iron$covar$sex == "m", ncol = 1))
+#' colnames(ac) <- "sex"
+#' rownames(ac) <- rownames(probs)
+#'
+#' scan_pvl(probs = probs, pheno = pheno, kinship = kinship$`1`, addcovar = ac,
 #' start_snp = 1, n_snp = 10, n_cores = 1)
 #' @importFrom rlang .data
 #' @return a tibble with d + 1 columns. First d columns indicate the genetic data (by listing the marker ids) used in the design matrix; last is log likelihood

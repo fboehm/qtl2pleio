@@ -14,9 +14,6 @@
 #' the founder allele probabilities add to 1 and that a subset of the covariate columns
 #' may sum to 1 (or a multiple of 1).
 #'
-#'
-#'
-#'
 #' @references
 #' https://stackoverflow.com/questions/14943422/r-independent-columns-in-matrix
 #' @examples
@@ -37,9 +34,9 @@ get_li_cols <- function(addcovar, add_intercept = TRUE){
     addcovar <- cbind(1, addcovar)
   }
   q <- qr(addcovar)
-  out <- addcovar[ , q$pivot[seq(q$rank)]]
+  out <- addcovar[ , q$pivot[seq(q$rank)], drop = FALSE]
   if (add_intercept){ # remove the column of all 1's before returning the result
-    out <- out[ , -1]
+    out <- out[ , -1, drop = FALSE]
   }
   return(out)
 }
