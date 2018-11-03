@@ -164,11 +164,7 @@ scan1(genoprobs = pr, pheno = Y, kinship = kinship) -> s1
 ```
 
 ```{r}
-plot(s1[ , 1], pm)
-```
-
-```{r}
-plot(s1[ , 2], pm)
+plot(s1, pm)
 ```
 
 
@@ -176,15 +172,19 @@ plot(s1[ , 2], pm)
 find_peaks(s1, map = pm)
 ```
 
+
+
+
+
 # Perform two-dimensional scan as first step in pleiotropy v separate QTL hypothesis test
 
 
 ```{r}
 out <- scan_pvl(probs = pp, 
                 pheno = Y, 
-                kinship = kinship$`2`, 
+                kinship = kinship[[2]], # 2nd entry in kinship list is Chr 3
                 start_snp = 38, 
-                n_snp = 5
+                n_snp = 25, n_cores = 8
                 )
 ```
 
@@ -194,8 +194,8 @@ out <- scan_pvl(probs = pp,
 ```{r}
 library(dplyr)
 out %>% 
-  tidy_scan_pvl(pm2) %>%
-  add_intercepts(intercepts_univariate = c(69.6, 69.6)) %>%
+  tidy_scan_pvl(pm3) %>% # pm3 is physical map for Chr 3
+  add_intercepts(intercepts_univariate = c(82.8, 82.8)) %>%
   plot_pvl(phenames = c("tr1", "tr2"))
 
 ```
@@ -234,10 +234,10 @@ set.seed(2018-10-03)
 system.time(b_out <- boot_pvl(probs = pp,
          pheno = Y, 
          pleio_peak_index = pleio_index, 
-         kinship = kinship$`2`, 
-         nboot_per_job = 3, 
+         kinship = kinship[[2]], # 2nd element in kinship list is Chr 3 
+         nboot_per_job = 10, 
          start_snp = 38, 
-         n_snp = 5
+         n_snp = 25
          ))
 
 ```
