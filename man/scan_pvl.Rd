@@ -5,7 +5,7 @@
 \title{Perform model fitting for all ordered pairs of markers in a genomic region of interest}
 \usage{
 scan_pvl(probs, pheno, kinship = NULL, addcovar = NULL,
-  start_snp = 1, n_snp, max_iter = 1e+06, max_prec = 1/1e+08,
+  start_snp = 1, n_snp, max_iter = 10000, max_prec = 1/1e+08,
   n_cores = 1)
 }
 \arguments{
