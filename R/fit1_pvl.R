@@ -10,6 +10,7 @@
 #' @param probs founder allele probabilities matrix
 #' @param addcovar additive covariates matrix
 #' @param Sigma_inv inverse covariance matrix for the vectorized phenotype
+#' @param Sigma covariance matrix for the vectorized phenotype, ie, the inverse of Sigma_inv
 #' @param pheno a n by d phenotypes matrix
 #' @export
 #' @return a number, the log-likelihood for the specified model
@@ -46,6 +47,7 @@ fit1_pvl <- function(mytab, rownum,
                      probs,
                      addcovar,
                      Sigma_inv,
+                     Sigma,
                      pheno
                      ){
   indices <- unlist(mytab[rownum, ])

@@ -14,6 +14,9 @@
 #' the founder allele probabilities add to 1 and that a subset of the covariate columns
 #' may sum to 1 (or a multiple of 1).
 #'
+#' @param addcovar matrix containing additive covariates
+#' @param add_intercept logical indicating whether to add an intercept column when checking linear independence.
+#' @export
 #' @references
 #' https://stackoverflow.com/questions/14943422/r-independent-columns-in-matrix
 #' @examples
@@ -21,7 +24,6 @@
 #' c2 <- rep(c(0, 1), times = 4)
 #' c3 <- rep(c(0, 0, 1, 1), times = 2)
 #' addcovar <- cbind(c1, c2, c3)
-
 get_li_cols <- function(addcovar, add_intercept = TRUE){
   # check if each column has only one value repeated, eg, (2, 2, 2, ..., 2)
   id_logical <- apply(FUN = function(x)identical(x, rep(x[1], length(x))),

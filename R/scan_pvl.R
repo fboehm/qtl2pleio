@@ -177,22 +177,24 @@ scan_pvl <- function(probs,
     # set up parallel analysis
     if(n_cores == 1) { # no parallel processing
         for (rownum in 1:nrow(mytab)) {
-            mytab$loglik[i] <- fit1_pvl(mytab = mytab, rownum = rownum,
+            mytab$loglik[rownum] <- fit1_pvl(mytab = mytab, rownum = rownum,
                                         start_snp = start_snp,
                                         probs = probs,
                                         addcovar = addcovar,
                                         Sigma_inv = Sigma_inv,
+                                        Sigma = Sigma,
                                         pheno = pheno
                                         )
         }
     }
     if(n_cores > 1) { # parallel processing
-        list_result <- mclapply(mytab = mytab,
+        list_result <- parallel::mclapply(mytab = mytab,
                                 X = 1:nrow(mytab),
                                 FUN = fit1_pvl,
                                 addcovar = addcovar,
-                                probs = aprobs$`1`,
+                                probs = probs,
                                 Sigma_inv = Sigma_inv,
+                                Sigma = Sigma,
                                 start_snp = start_snp,
                                 pheno = pheno,
                                 mc.cores = n_cores
