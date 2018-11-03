@@ -66,30 +66,20 @@ scan_pvl checks for linear independence of columns in covariates and returns an 
 if the columns form a linear dependent set of vectors.
 }
 \examples{
-## define probs
-probs_pre <- rbinom(n = 100 * 10, size = 1, prob = 1 / 2)
-probs <- array(data = probs_pre, dim = c(100, 1, 10))
-s_id <- paste0('s', 1:100)
-rownames(probs) <- s_id
-colnames(probs) <- 'A'
-dimnames(probs)[[3]] <- paste0('Marker', 1:10)
-# define Y
-Y_pre <- runif(200)
-Y <- matrix(data = Y_pre, nrow = 100)
-rownames(Y) <- s_id
-colnames(Y) <- paste0('t', 1:2)
-covariates <- matrix(c(runif(99), NA), nrow = 100, ncol = 1)
-rownames(covariates) <- s_id
-colnames(covariates) <- 'c1'
-kin <- diag(100)
-rownames(kin) <- s_id
-colnames(kin) <- s_id
-Y2 <- Y
-Y2[1, 2] <- NA
-scan_pvl(probs = probs, pheno = Y, kinship = kin,
-        start_snp = 1, n_snp = 10)
-scan_pvl(probs = probs, pheno = Y2, kinship = kin, addcovar = covariates,
-        start_snp = 1, n_snp = 10)
+# read data
+iron <- qtl2::read_cross2(system.file("extdata", "iron.zip", package="qtl2"))
+# insert pseudomarkers into map
+map <- qtl2::insert_pseudomarkers(iron$gmap, step=1)
+# calculate genotype probabilities
+probs <- qtl2::calc_genoprob(iron, map, error_prob=0.002)
+# grab phenotypes and covariates; ensure that covariates have names attribute
+pheno <- iron$pheno
+# leave-one-chromosome-out kinship matrices
+kinship <- qtl2::calc_kinship(probs, "loco")
+# get founder allele probabilites
+probs <- qtl2::genoprob_to_alleleprob(probs)
+scan_pvl(probs = probs$`1`, pheno = pheno, kinship = kinship$`1`, addcovar = iron$covar,
+start_snp = 1, n_snp = 10, n_cores = 1)
 }
 \references{
 Knott SA, Haley CS (2000) Multitrait

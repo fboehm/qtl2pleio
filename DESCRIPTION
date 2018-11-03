@@ -36,7 +36,8 @@ Imports:
     stringr,
     tibble,
     qtl2,
-    Matrix
+    Matrix,
+    parallel
 Suggests:
     covr,
     knitr,
