@@ -22,6 +22,7 @@
 #' @param n_snp number of (consecutive) markers to use in scan
 #' @param pleio_peak_index positive integer index indicating design matrix for simulation. Typically acquired by using `find_pleio_peak_tib`.
 #' @param nboot_per_job number of bootstrap samples to call per invocation of function
+#' @param n_cores number of cores to use when calling `scan_pvl`
 #' @export
 #' @references Knott SA, Haley CS (2000) Multitrait
 #' least squares for quantitative trait loci detection.
@@ -68,7 +69,8 @@ boot_pvl <- function(probs,
                      start_snp = 1,
                      n_snp,
                      pleio_peak_index,
-                     nboot_per_job = 1
+                     nboot_per_job = 1,
+                     n_cores = 1
                      )
     {
     if (is.null(probs)) stop("probs is NULL")
@@ -171,22 +173,14 @@ boot_pvl <- function(probs,
         Ysim <- matrix(foo, ncol = 2, byrow = FALSE)
         rownames(Ysim) <- rownames(pheno)
         colnames(Ysim) <- c("t1", "t2")
-        if (!is.null(addcovar)) {
-            loglik <- scan_pvl(probs = probs,
+        loglik <- scan_pvl(probs = probs,
                                pheno = Ysim,
                                addcovar = addcovar,
                                kinship = kinship,
                                start_snp = start_snp,
-                               n_snp = n_snp
+                               n_snp = n_snp,
+                               n_cores = n_cores
                                )
-        } else {
-            loglik <- scan_pvl(probs = probs,
-                               pheno = Ysim,
-                               kinship = kinship,
-                               start_snp = start_snp,
-                               n_snp = n_snp
-                               )
-        }
         lrt[i] <- calc_lrt_tib(loglik)
     }
     return(lrt)
