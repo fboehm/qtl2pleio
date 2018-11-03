@@ -9,8 +9,8 @@
 #' @param rownum an integer to indicate which row of `mytab` to use
 #' @param probs founder allele probabilities matrix
 #' @param addcovar additive covariates matrix
-#' @param Sigma_inv inverse covariance matrix for the vectorized phenotype
-#' @param Sigma covariance matrix for the vectorized phenotype, ie, the inverse of Sigma_inv
+#' @param inv_S inverse covariance matrix for the vectorized phenotype
+#' @param S covariance matrix for the vectorized phenotype, ie, the inverse of inv_S
 #' @param pheno a n by d phenotypes matrix
 #' @export
 #' @return a number, the log-likelihood for the specified model
@@ -46,8 +46,8 @@ fit1_pvl <- function(mytab, rownum,
                      start_snp,
                      probs,
                      addcovar,
-                     Sigma_inv,
-                     Sigma,
+                     inv_S,
+                     S,
                      pheno
                      ){
   indices <- unlist(mytab[rownum, ])
@@ -58,14 +58,14 @@ fit1_pvl <- function(mytab, rownum,
   )
   X <- gemma2::stagger_mats(X_list)
   Bhat <- rcpp_calc_Bhat2(X = X,
-                          Sigma_inv = Sigma_inv,
+                          Sigma_inv = inv_S,
                           Y = as.vector(as.matrix(pheno))
                           )
   mymu <- as.vector(X %*% Bhat)
-  out <- rcpp_log_dmvnorm2(inv_S = Sigma_inv,
+  out <- rcpp_log_dmvnorm2(inv_S = inv_S,
                            mu = mymu,
                            x = as.vector(as.matrix(pheno)),
-                           S = Sigma
+                           S = S
                            )
   return(out)
 }

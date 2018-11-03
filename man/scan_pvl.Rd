@@ -75,15 +75,14 @@ probs <- qtl2::calc_genoprob(iron, map, error_prob=0.002)
 # grab phenotypes and covariates; ensure that covariates have names attribute
 pheno <- iron$pheno
 # leave-one-chromosome-out kinship matrices
-kinship <- qtl2::calc_kinship(probs, "loco")
+kinship <- qtl2::calc_kinship(probs, "loco")$`1`
 # get founder allele probabilites
 probs <- qtl2::genoprob_to_alleleprob(probs)$`1`
 ac <- matrix(as.numeric(iron$covar$sex == "m", ncol = 1))
 colnames(ac) <- "sex"
 rownames(ac) <- rownames(probs)
-
-scan_pvl(probs = probs, pheno = pheno, kinship = kinship$`1`, addcovar = ac,
-start_snp = 1, n_snp = 10, n_cores = 1)
+scan_pvl(probs = probs, pheno = pheno, kinship = kinship, addcovar = ac,
+start_snp = 1, n_snp = 80, n_cores = 1)
 }
 \references{
 Knott SA, Haley CS (2000) Multitrait

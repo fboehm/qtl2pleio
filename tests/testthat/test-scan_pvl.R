@@ -48,16 +48,33 @@ test_that("scan_pvl handles missing values in covariates appropriately", {
 
 test_that("scan_pvl gives same output for 1 v 4 cores",{
           expect_equal(scan_pvl(probs = probs,
-                   pheno = Y,
-                   addcovar = covariates,
-                   kinship = K1,
+                   pheno = pheno,
+                   addcovar = ac,
+                   kinship = kinship,
                    start_snp = 1,
                    n_snp = 10
           ), scan_pvl(probs = probs,
-                      pheno = Y,
-                      addcovar = covariates,
-                      kinship = K1,
+                      pheno = pheno,
+                      addcovar = ac,
+                      kinship = kinship,
                       start_snp = 1,
                       n_snp = 10, n_cores = 4)
           )}
           )
+
+test_that("scan_pvl ends sooner when using more cores", {
+  expect_gt(system.time(scan_pvl(probs = probs,
+                                 pheno = pheno,
+                                 addcovar = ac,
+                                 kinship = kinship,
+                                 start_snp = 1,
+                                 n_snp = 10, n_cores = 1
+  ))[3], system.time(scan_pvl(probs = probs,
+                              pheno = pheno,
+                              addcovar = ac,
+                              kinship = kinship,
+                              start_snp = 1,
+                              n_snp = 10, n_cores = 8
+  ))[3] # third entry is "elapsed" time
+  )
+})

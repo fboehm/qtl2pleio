@@ -68,15 +68,14 @@
 #' # grab phenotypes and covariates; ensure that covariates have names attribute
 #' pheno <- iron$pheno
 #' # leave-one-chromosome-out kinship matrices
-#' kinship <- qtl2::calc_kinship(probs, "loco")
+#' kinship <- qtl2::calc_kinship(probs, "loco")$`1`
 #' # get founder allele probabilites
 #' probs <- qtl2::genoprob_to_alleleprob(probs)$`1`
 #' ac <- matrix(as.numeric(iron$covar$sex == "m", ncol = 1))
 #' colnames(ac) <- "sex"
 #' rownames(ac) <- rownames(probs)
-#'
-#' scan_pvl(probs = probs, pheno = pheno, kinship = kinship$`1`, addcovar = ac,
-#' start_snp = 1, n_snp = 10, n_cores = 1)
+#' scan_pvl(probs = probs, pheno = pheno, kinship = kinship, addcovar = ac,
+#' start_snp = 1, n_snp = 80, n_cores = 1)
 #' @importFrom rlang .data
 #' @return a tibble with d + 1 columns. First d columns indicate the genetic data (by listing the marker ids) used in the design matrix; last is log likelihood
 
@@ -170,33 +169,18 @@ scan_pvl <- function(probs,
     # prepare table of marker indices for each call of scan_pvl
     mytab <- prep_mytab(d_size = d_size, n_snp = n_snp)
     # set up parallel analysis
-    if(n_cores == 1) { # no parallel processing
-        for (rownum in 1:nrow(mytab)) {
-            mytab$loglik[rownum] <- fit1_pvl(mytab = mytab, rownum = rownum,
-                                        start_snp = start_snp,
-                                        probs = probs,
-                                        addcovar = addcovar,
-                                        Sigma_inv = Sigma_inv,
-                                        Sigma = Sigma,
-                                        pheno = pheno
-                                        )
-        }
-    }
-    if(n_cores > 1) { # parallel processing
-        list_result <- parallel::mclapply(mytab = mytab,
+    list_result <- parallel::mclapply(mytab = mytab,
                                 X = 1:nrow(mytab),
                                 FUN = fit1_pvl,
                                 addcovar = addcovar,
                                 probs = probs,
-                                Sigma_inv = Sigma_inv,
-                                Sigma = Sigma,
+                                inv_S = Sigma_inv,
+                                S = Sigma,
                                 start_snp = start_snp,
                                 pheno = pheno,
                                 mc.cores = n_cores
                                 )
-        mytab$loglik <- unlist(list_result)
-        }
-
+    mytab$loglik <- unlist(list_result)
     marker_id <- dimnames(probs)[[3]][start_snp:(start_snp + n_snp - 1)]
     mytab2 <- tibble::as_tibble(apply(FUN = function(x) marker_id[x], X = mytab[, -ncol(mytab)], MARGIN = 2))
     mytab2$loglik <- mytab$loglik

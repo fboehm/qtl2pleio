@@ -4,8 +4,7 @@
 \alias{fit1_pvl}
 \title{Fit a model for a specified d-tuple of markers}
 \usage{
-fit1_pvl(mytab, rownum, start_snp, probs, addcovar, Sigma_inv, Sigma,
-  pheno)
+fit1_pvl(mytab, rownum, start_snp, probs, addcovar, inv_S, S, pheno)
 }
 \arguments{
 \item{mytab}{a `mytab` object, with d+ 1 columns, typically the output of `prep_mytab`}
@@ -16,9 +15,9 @@ fit1_pvl(mytab, rownum, start_snp, probs, addcovar, Sigma_inv, Sigma,
 
 \item{addcovar}{additive covariates matrix}
 
-\item{Sigma_inv}{inverse covariance matrix for the vectorized phenotype}
+\item{inv_S}{inverse covariance matrix for the vectorized phenotype}
 
-\item{Sigma}{covariance matrix for the vectorized phenotype, ie, the inverse of Sigma_inv}
+\item{S}{covariance matrix for the vectorized phenotype, ie, the inverse of inv_S}
 
 \item{pheno}{a n by d phenotypes matrix}
 }
