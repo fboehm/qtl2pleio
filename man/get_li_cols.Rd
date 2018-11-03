@@ -12,9 +12,6 @@ get_li_cols(addcovar, add_intercept = TRUE)
 \item{add_intercept}{logical indicating whether to add an intercept column when checking linear independence.}
 }
 \description{
-Extract a subset of covariate columns that are linearly independent
-}
-\details{
 We have the option of adding or not adding an intercept before doing the QR decomposition,
 as indicated by the input `add_intercept`.
 We will typically use `add_intercept = TRUE` because, in practice,

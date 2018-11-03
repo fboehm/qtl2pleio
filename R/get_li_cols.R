@@ -1,7 +1,5 @@
 #' Extract a subset of covariate columns that are linearly independent
 #'
-#'
-#'
 #' We have the option of adding or not adding an intercept before doing the QR decomposition,
 #' as indicated by the input `add_intercept`.
 #' We will typically use `add_intercept = TRUE` because, in practice,
