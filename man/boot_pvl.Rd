@@ -5,7 +5,8 @@
 \title{Perform bootstrap sampling and calculate test statistics for each bootstrap sample}
 \usage{
 boot_pvl(probs, pheno, addcovar = NULL, kinship = NULL,
-  start_snp = 1, n_snp, pleio_peak_index, nboot_per_job = 1)
+  start_snp = 1, n_snp, pleio_peak_index, nboot_per_job = 1,
+  n_cores = 1)
 }
 \arguments{
 \item{probs}{allele probabilities object for one chromosome only, like aprobs$`8`. Not a list}
@@ -23,6 +24,8 @@ boot_pvl(probs, pheno, addcovar = NULL, kinship = NULL,
 \item{pleio_peak_index}{positive integer index indicating design matrix for simulation. Typically acquired by using `find_pleio_peak_tib`.}
 
 \item{nboot_per_job}{number of bootstrap samples to call per invocation of function}
+
+\item{n_cores}{number of cores to use when calling `scan_pvl`}
 }
 \value{
 numeric vector of lrt statistics from `nboot_per_job` bootstrap samples

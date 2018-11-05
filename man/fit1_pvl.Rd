@@ -43,15 +43,15 @@ pheno <- iron$pheno
 kinship <- qtl2::calc_kinship(probs, "loco")
 # get founder allele probabilites
 probs <- qtl2::genoprob_to_alleleprob(probs)
-cc_out <- calc_covs(pheno, kinship$`1`, max_iter = max_iter, max_prec = max_prec, covariates = addcovar)
+cc_out <- calc_covs(pheno, kinship$`1`, max_iter = 10000, max_prec = 1e-07, covariates = NULL)
 Vg <- cc_out$Vg
 Ve <- cc_out$Ve
 # define Sigma
-Sigma <- calc_Sigma(Vg, Ve, kinship)
+Sigma <- calc_Sigma(Vg, Ve, kinship$`1`)
 # define Sigma_inv
 Sigma_inv <- solve(Sigma)
 # prepare table of marker indices for each call of scan_pvl
-mytab <- prep_mytab(d_size = d_size, n_snp = n_snp)
+mytab <- prep_mytab(d_size = 2, n_snp = 10)
 # set up parallel analysis
 fit1_pvl(mytab, 1, start_snp = 1,
 probs = probs$`1`, addcovar = NULL, Sigma_inv = Sigma_inv,
