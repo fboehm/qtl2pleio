@@ -184,7 +184,7 @@ out <- scan_pvl(probs = pp,
                 pheno = Y, 
                 kinship = kinship[[2]], # 2nd entry in kinship list is Chr 3
                 start_snp = 38, 
-                n_snp = 25, n_cores = 8
+                n_snp = 25, n_cores = 1
                 )
 ```
 
@@ -237,7 +237,7 @@ system.time(b_out <- boot_pvl(probs = pp,
          kinship = kinship[[2]], # 2nd element in kinship list is Chr 3 
          nboot_per_job = 10, 
          start_snp = 38, 
-         n_snp = 25
+         n_snp = 10
          ))
 
 ```
