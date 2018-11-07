@@ -132,15 +132,6 @@ boot_pvl <- function(probs,
     if (!is.null(kinship)) {
         kinship <- subset_kinship(kinship = kinship, id2keep = id2keep)
     }
-    if (!is.null(addcovar)) {
-        addcovar <- subset_input(input = addcovar, id2keep = id2keep)
-        if (Matrix::rankMatrix(addcovar) < ncol(addcovar)){
-            stop("addcovar, after removal of subjects with missing data and subsetting to include only those subjects present in all inputs,
-                  is not full rank.
-                 Please input a matrix of linearly independent columns.")
-        }
-    }
-
 ## define X1 - a single marker's allele probabilities
     X1 <- probs[ , , pleio_peak_index]
     if (!is.null(addcovar)) {

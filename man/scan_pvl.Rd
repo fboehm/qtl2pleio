@@ -24,6 +24,8 @@ scan_pvl(probs, pheno, kinship = NULL, addcovar = NULL,
 \item{max_iter}{maximum number of iterations for EM algorithm}
 
 \item{max_prec}{stepwise precision for EM algorithm. EM stops once incremental difference in log likelihood is less than max_prec}
+
+\item{n_cores}{number of cores to use for calculations}
 }
 \value{
 a tibble with d + 1 columns. First d columns indicate the genetic data (by listing the marker ids) used in the design matrix; last is log likelihood

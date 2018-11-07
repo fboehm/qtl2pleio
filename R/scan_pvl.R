@@ -43,6 +43,7 @@
 #' @param n_snp the number of (consecutive) markers to include in the scan
 #' @param max_iter maximum number of iterations for EM algorithm
 #' @param max_prec stepwise precision for EM algorithm. EM stops once incremental difference in log likelihood is less than max_prec
+#' @param n_cores number of cores to use for calculations
 #' @export
 #' @references Knott SA, Haley CS (2000) Multitrait
 #' least squares for quantitative trait loci detection.

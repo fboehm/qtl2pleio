@@ -11,6 +11,8 @@ fit1_pvl(mytab, rownum, start_snp, probs, addcovar, inv_S, S, pheno)
 
 \item{rownum}{an integer to indicate which row of `mytab` to use}
 
+\item{start_snp}{an integer to specify the index of the marker where the scan - in call to scan_pvl - starts. This argument is needed because `mytab` has only relative indices (relative to the `start_snp` marker)}
+
 \item{probs}{founder allele probabilities matrix}
 
 \item{addcovar}{additive covariates matrix}
@@ -54,7 +56,8 @@ Sigma_inv <- solve(Sigma)
 mytab <- prep_mytab(d_size = 2, n_snp = 10)
 # set up parallel analysis
 fit1_pvl(mytab, 1, start_snp = 1,
-probs = probs$`1`, addcovar = NULL, Sigma_inv = Sigma_inv,
+probs = probs$`1`, addcovar = NULL, inv_S = Sigma_inv,
+S = Sigma,
 pheno = pheno
 )
 }

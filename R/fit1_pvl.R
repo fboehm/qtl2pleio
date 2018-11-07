@@ -7,6 +7,7 @@
 #'
 #' @param mytab a `mytab` object, with d+ 1 columns, typically the output of `prep_mytab`
 #' @param rownum an integer to indicate which row of `mytab` to use
+#' @param start_snp an integer to specify the index of the marker where the scan - in call to scan_pvl - starts. This argument is needed because `mytab` has only relative indices (relative to the `start_snp` marker)
 #' @param probs founder allele probabilities matrix
 #' @param addcovar additive covariates matrix
 #' @param inv_S inverse covariance matrix for the vectorized phenotype
