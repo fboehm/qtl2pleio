@@ -122,7 +122,6 @@ check_missingness <- function(input_matrix){
 
 # drop linearly dependent columns
 # if intercept=TRUE, add intercept before checking and then remove afterwards
-#' @export
 #' @importFrom stats complete.cases
 drop_depcols <-
     function(covar=NULL, add_intercept=FALSE, tol=1e-12)
