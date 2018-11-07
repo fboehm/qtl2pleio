@@ -138,7 +138,7 @@ scan_pvl <- function(probs,
         id2keep <- intersect(id2keep, subjects_cov)
     }
     if (!is.null(addcovar)) {
-        addcovar <- get_li_cols(addcovar)
+        addcovar <- drop_depcols(addcovar)
     }
     # Send messages if there are two or fewer subjects
     if (length(id2keep) == 0){stop("no individuals common to all inputs")}

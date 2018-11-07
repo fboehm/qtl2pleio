@@ -120,3 +120,58 @@ check_missingness <- function(input_matrix){
 }
 
 
+# drop linearly dependent columns
+# if intercept=TRUE, add intercept before checking and then remove afterwards
+#' @export
+#' @importFrom stats complete.cases
+drop_depcols <-
+    function(covar=NULL, add_intercept=FALSE, tol=1e-12)
+    {
+        if(is.null(covar)) return(covar)
+
+        if(!is.matrix(covar)) covar <- as.matrix(covar)
+        if(add_intercept) covar <- cbind(rep(1, nrow(covar)), covar)
+
+        if(ncol(covar) <= 1) return(covar)
+
+        X <- covar[complete.cases(covar),,drop=FALSE]
+
+        # deal with NAs by omitting those rows before
+        indep_cols <- sort(find_lin_indep_cols(X, tol))
+
+        if(add_intercept) {
+
+            target_ncol <- length(indep_cols)
+
+            n_it <- 0
+            while(!(1 %in% indep_cols)) {
+                # don't want to omit the first column (the intercept)
+                # need to work harder...
+                #  - drop one column at a time other the intercept
+                #  - when you find a column that doesn't reduce the target number of columns, drop it
+                #  - check again if the intercept is being retained; if not, repeat
+
+                for(i in seq_len(ncol(X))[-1]) { # loop over all but the first column (the intercept)
+                    indep_cols <- find_lin_indep_cols(X[,-i,drop=FALSE], tol)
+                    if(length(indep_cols) == target_ncol) { # this one definitely dependent; omit it
+                        X <- X[,-i,drop=FALSE]
+                        break
+                    }
+                }
+
+                # new set of linearly independent columns
+                indep_cols <- sort(find_lin_indep_cols(X, tol))
+
+                n_it <- n_it+1 # count number of iterations and bail if it's large
+                if(n_it > ncol(covar)+5) { # something is seriously messed up
+                    stop("Not able to find set of linearly independent columns")
+                }
+            }
+
+            # now drop the intercept
+            indep_cols <- indep_cols[-1]
+        }
+        if(length(indep_cols)==0) return(NULL)
+
+        covar[, indep_cols, drop=FALSE]
+    }
