@@ -32,7 +32,8 @@
 
 <meta property="og:title" content="Identify shared subject ids among all inputs: covariates, allele probabilities array, kinship, and phenotypes — make_id2keep" />
 
-<meta property="og:description" content="Identify shared subject ids among all inputs: covariates, allele probabilities array, kinship, and phenotypes" />
+<meta property="og:description" content="We consider only those inputs that are not NULL. We then use `intersect` on pairs
+of inputs' rownames to identify those subjects are shared among all non-NULL inputs." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -85,12 +86,6 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/Comparing_limmbo2_covariance_estimates_with_those_of_gemma2.html">Comparing covariance estimates between `limmbo2` and `gemma2`</a>
-    </li>
-    <li>
-      <a href="../articles/benchmarking.html">Benchmarking</a>
-    </li>
-    <li>
       <a href="../articles/testing-pleiotropy-vs-separate-qtl.html">Testing pleiotropy v separate QTL in multiparental populations</a>
     </li>
   </ul>
@@ -126,11 +121,12 @@
 
     <div class="ref-description">
     
-    <p>Identify shared subject ids among all inputs: covariates, allele probabilities array, kinship, and phenotypes</p>
+    <p>We consider only those inputs that are not NULL. We then use `intersect` on pairs
+of inputs' rownames to identify those subjects are shared among all non-NULL inputs.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>make_id2keep</span>(<span class='no'>probs</span>, <span class='no'>pheno</span>, <span class='no'>covar</span>, <span class='no'>kinship</span>)</pre>
+    <pre class="usage"><span class='fu'>make_id2keep</span>(<span class='no'>probs</span>, <span class='no'>pheno</span>, <span class='kw'>addcovar</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>kinship</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -144,7 +140,7 @@
       <td><p>a phenotypes matrix</p></td>
     </tr>
     <tr>
-      <th>covar</th>
+      <th>addcovar</th>
       <td><p>a covariates matrix</p></td>
     </tr>
     <tr>
@@ -153,13 +149,19 @@
     </tr>
     </table>
     
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>a character vector of subject IDs common to all (non-null) inputs</p>
+    
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-                </ul>
+      
+      <li><a href="#value">Value</a></li>
+          </ul>
 
   </div>
 </div>

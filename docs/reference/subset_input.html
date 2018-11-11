@@ -32,7 +32,10 @@
 
 <meta property="og:title" content="Subset an input object - allele probabilities array or phenotypes matrix or covariates matrix. Kinship has its own subset function — subset_input" />
 
-<meta property="og:description" content="Subset an input object - allele probabilities array or phenotypes matrix or covariates matrix. Kinship has its own subset function" />
+<meta property="og:description" content="An inputted matrix or 3-dimensional array is first subsetted - by rownames - to remove
+those subjects who are not in `id2keep`. After that, the object's rows
+are ordered to match the ordering of subject ids in the vector `id2keep`. This
+(possibly reordered) object is returned." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -85,12 +88,6 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/Comparing_limmbo2_covariance_estimates_with_those_of_gemma2.html">Comparing covariance estimates between `limmbo2` and `gemma2`</a>
-    </li>
-    <li>
-      <a href="../articles/benchmarking.html">Benchmarking</a>
-    </li>
-    <li>
       <a href="../articles/testing-pleiotropy-vs-separate-qtl.html">Testing pleiotropy v separate QTL in multiparental populations</a>
     </li>
   </ul>
@@ -126,7 +123,10 @@
 
     <div class="ref-description">
     
-    <p>Subset an input object - allele probabilities array or phenotypes matrix or covariates matrix. Kinship has its own subset function</p>
+    <p>An inputted matrix or 3-dimensional array is first subsetted - by rownames - to remove
+those subjects who are not in `id2keep`. After that, the object's rows
+are ordered to match the ordering of subject ids in the vector `id2keep`. This
+(possibly reordered) object is returned.</p>
     
     </div>
 
@@ -145,13 +145,38 @@
     </tr>
     </table>
     
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
+    <p>an object resulting from subsetting of `input`. Its rows are ordered per `id2keep`</p>
+    
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'># define s_id</span>
+<span class='no'>s_id</span> <span class='kw'>&lt;-</span> <span class='fu'>paste0</span>(<span class='st'>"s"</span>, <span class='fl'>1</span>:<span class='fl'>10</span>)
+<span class='co'># set up input matrix</span>
+<span class='no'>foo</span> <span class='kw'>&lt;-</span> <span class='fu'>matrix</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='fu'>rnorm</span>(<span class='fl'>10</span> * <span class='fl'>3</span>), <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>3</span>)
+<span class='fu'>rownames</span>(<span class='no'>foo</span>) <span class='kw'>&lt;-</span> <span class='no'>s_id</span>
+<span class='fu'>subset_input</span>(<span class='kw'>input</span> <span class='kw'>=</span> <span class='no'>foo</span>, <span class='kw'>id2keep</span> <span class='kw'>=</span> <span class='no'>s_id</span>)</div><div class='output co'>#&gt;            [,1]        [,2]       [,3]
+#&gt; s1  -0.58842023 -0.87001689 -0.2273689
+#&gt; s2  -0.89053995  0.54692585  1.3038703
+#&gt; s3  -0.46918365 -1.31202805  1.2754842
+#&gt; s4   1.16422669  0.49725170  0.3281084
+#&gt; s5  -1.31710040  1.23153858  0.6887350
+#&gt; s6   0.99218680  0.22944083  0.3979102
+#&gt; s7  -0.61282471 -1.13371963  0.3745270
+#&gt; s8  -0.46957487 -0.69196963 -1.5546580
+#&gt; s9  -0.03621951 -0.01220178  0.1589274
+#&gt; s10  1.09810709 -1.52733578 -2.5352605</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-                </ul>
+      
+      <li><a href="#value">Value</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

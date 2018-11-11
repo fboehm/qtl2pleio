@@ -53,12 +53,6 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/Comparing_limmbo2_covariance_estimates_with_those_of_gemma2.html">Comparing covariance estimates between `limmbo2` and `gemma2`</a>
-    </li>
-    <li>
-      <a href="../articles/benchmarking.html">Benchmarking</a>
-    </li>
-    <li>
       <a href="../articles/testing-pleiotropy-vs-separate-qtl.html">Testing pleiotropy v separate QTL in multiparental populations</a>
     </li>
   </ul>
@@ -89,7 +83,7 @@
       <h1>Testing pleiotropy v separate QTL in multiparental populations</h1>
                         <h4 class="author">Frederick Boehm</h4>
             
-            <h4 class="date">2018-10-21</h4>
+            <h4 class="date">2018-11-10</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/fboehm/qtl2pleio/blob/master/vignettes/testing-pleiotropy-vs-separate-qtl.Rmd"><code>vignettes/testing-pleiotropy-vs-separate-qtl.Rmd</code></a></small>
       <div class="hidden name"><code>testing-pleiotropy-vs-separate-qtl.Rmd</code></div>
@@ -98,9 +92,9 @@
 
     
     
-<div id="setting-for-close-linkage-v-pleiotropy-likelihood-ratio-test" class="section level2">
+<div id="setting-for-pleiotropy-vs-two-separate-qtl" class="section level2">
 <h2 class="hasAnchor">
-<a href="#setting-for-close-linkage-v-pleiotropy-likelihood-ratio-test" class="anchor"></a>Setting for close linkage v pleiotropy likelihood ratio test</h2>
+<a href="#setting-for-pleiotropy-vs-two-separate-qtl" class="anchor"></a>Setting for pleiotropy vs. two separate QTL</h2>
 <p>Our setting involves a pair of traits, <span class="math inline">\(Y_1\)</span> and <span class="math inline">\(Y_2\)</span>, each of which individually (univariately) maps to a single genomic region. <span class="math inline">\(Y_1\)</span> and <span class="math inline">\(Y_2\)</span> are both measured on the same subjects. The exact definition of a genomic region is imprecise; in practice, it may be as large as 4 or 5 Mb. We seek to distinguish whether <span class="math inline">\(Y_1\)</span> and <span class="math inline">\(Y_2\)</span> associations (in the genomic region of interest) arise due to a single QTL or whether there are two two distinct loci, each of which associates with exactly one of the two traits. We recognize that more complicated association patterns are possible, but we neglect them in this test.</p>
 </div>
 <div id="installing-qtl2pleio" class="section level2">
@@ -111,12 +105,12 @@
 <p>If you haven’t installed <code>devtools</code> R package, you can do so with this line of code:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">install.packages</span>(<span class="st">"devtools"</span>)</a></code></pre></div>
 <p>Now that you have installed <code>devtools</code>, you can install <code>qtl2pleio</code> from its Github repository with this line of code:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"fboehm/qtl2pleio"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"fboehm/qtl2pleio"</span>)</a></code></pre></div>
 <p>The above line only needs to be run once on a given computer (unless you wish to install a newer version of the package).</p>
 <p>We then load the library into our R session with the <code>library</code> command:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">library</span>(qtl2pleio)</a></code></pre></div>
-<p>We’ll work with data from the <code>qtl2data</code> R package, which is on github. First, we install and load the <code>qtl2</code> package.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"rqtl/qtl2"</span>)</a></code></pre></div>
+<p>We’ll work with data from the <code>qtl2data</code> repository, which is on github. First, we install and load the <code>qtl2</code> package.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"rqtl/qtl2"</span>)</a></code></pre></div>
 <p>We use the above line once to install the package on our computer before loading the package with the <code>library</code> command.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">library</span>(qtl2)</a></code></pre></div>
 </div>
@@ -173,15 +167,16 @@
 <a class="sourceLine" id="cb9-15" data-line-number="15"><span class="co">#&gt;   ..- attr(*, "dimnames")=List of 2</span></a>
 <a class="sourceLine" id="cb9-16" data-line-number="16"><span class="co">#&gt;   .. ..$ : chr [1:261] "1" "4" "5" "6" ...</span></a>
 <a class="sourceLine" id="cb9-17" data-line-number="17"><span class="co">#&gt;   .. ..$ : chr [1:261] "1" "4" "5" "6" ...</span></a></code></pre></div>
-<p>We see that <code>kinship</code> is a list containing 3 matrices. Each matrix is 261 by 261 - where the number of subjects is 261 - and symmetric. The <span class="math inline">\((i, j)\)</span> cell in the matrix contains the estimate of identity-by-state (IBS) probability for randomly chosen alleles at a given locus for those two subjects.</p>
+<p>We see that <code>kinship</code> is a list containing 3 matrices. Each matrix is 261 by 261 - where the number of subjects is 261 - and symmetric. The <span class="math inline">\((i, j)\)</span> cell in the matrix contains the estimate of identity-by-state (IBS) probability for randomly chosen alleles at a single locus for those two subjects.</p>
 <p>Before we simulate phenotype data, we first specify our statistical model.</p>
 <p>We use the model:</p>
 <p><span class="math display">\[vec(Y) = X vec(B) + vec(G) + vec(E)\]</span></p>
-<p>where <span class="math inline">\(Y\)</span> is a <span class="math inline">\(n\)</span> by <span class="math inline">\(2\)</span> matrix, where each row is one subject and each column is one quantitative phenotype. <span class="math inline">\(X\)</span> is a <span class="math inline">\(2n\)</span> by <span class="math inline">\(2f\)</span> design matrix containing <span class="math inline">\(n\)</span> by <span class="math inline">\(f\)</span> allele probabilities matrices for each of two (possibly identical) markers. Thus, <span class="math inline">\(X\)</span> is a block-diagonal matrix, with exactly two <span class="math inline">\(n\)</span> by <span class="math inline">\(f\)</span> blocks on the diagonal. <span class="math inline">\(B\)</span> is <span class="math inline">\(f\)</span> by 2 matrix. “vec” refers to the vectorization operator. “vec(B)”, where <span class="math inline">\(B\)</span> is a <span class="math inline">\(f\)</span> by <span class="math inline">\(2\)</span> matrix, is, thus, a (column) vector of length <span class="math inline">\(2f\)</span> that is formed by stacking the second column of <span class="math inline">\(B\)</span> beneath the first column of <span class="math inline">\(B\)</span>.</p>
+<p>where <span class="math inline">\(Y\)</span> is a <span class="math inline">\(n\)</span> by <span class="math inline">\(2\)</span> matrix, where each row is one subject and each column is one quantitative trait. <span class="math inline">\(X\)</span> is a <span class="math inline">\(2n\)</span> by <span class="math inline">\(2f\)</span> design matrix containing <span class="math inline">\(n\)</span> by <span class="math inline">\(f\)</span> allele probabilities matrices for each of two (possibly identical) markers. Thus, <span class="math inline">\(X\)</span> is a block-diagonal matrix, with exactly two <span class="math inline">\(n\)</span> by <span class="math inline">\(f\)</span> blocks on the diagonal. <span class="math inline">\(B\)</span> is a <span class="math inline">\(f\)</span> by 2 matrix. “vec” refers to the vectorization operator. “vec(B)”, where <span class="math inline">\(B\)</span> is a <span class="math inline">\(f\)</span> by <span class="math inline">\(2\)</span> matrix, is, thus, a (column) vector of length <span class="math inline">\(2f\)</span> that is formed by stacking the second column of <span class="math inline">\(B\)</span> beneath the first column of <span class="math inline">\(B\)</span>.</p>
 <p><span class="math inline">\(G\)</span> is a matrix of random effects. We specify its distribution as matrix-variate normal with mean being a <span class="math inline">\(n\)</span> by <span class="math inline">\(2\)</span> matrix of zeros, covariance among row vectors a <span class="math inline">\(n\)</span> by <span class="math inline">\(n\)</span> kinship matrix, <span class="math inline">\(K\)</span>, and covariance among column vectors a <span class="math inline">\(2\)</span> by <span class="math inline">\(2\)</span> genetic covariance matrix, <span class="math inline">\(V_g\)</span>.</p>
 <p>In mathematical notation, we write:</p>
 <p><span class="math display">\[G \sim MN_{\text{n by 2}}(0, K, V_g)\]</span></p>
 <p>We also need to specify the distribution of the <span class="math inline">\(E\)</span> matrix, which contains the random errors. <span class="math inline">\(E\)</span> is a random <span class="math inline">\(n\)</span> by <span class="math inline">\(2\)</span> matrix that is distributed as a matrix-variate normal distribution with mean being the <span class="math inline">\(n\)</span> by <span class="math inline">\(2\)</span> zero matrix, covariance among row vectors <span class="math inline">\(I_n\)</span>, the <span class="math inline">\(n\)</span> by <span class="math inline">\(n\)</span> identity matrix, and covariance among columns the <span class="math inline">\(2\)</span> by <span class="math inline">\(2\)</span> matrix <span class="math inline">\(V_e\)</span>.</p>
+<p><span class="math display">\[E \sim MN_{\text{n by 2}}(0, I_n, V_e)\]</span></p>
 <p>In practice, we typically observe the phenotype matrix <span class="math inline">\(Y\)</span>. We also treat as known the design matrix <span class="math inline">\(X\)</span> and the kinship matrix <span class="math inline">\(K\)</span>. We then infer the values of <span class="math inline">\(B\)</span>, <span class="math inline">\(V_g\)</span>, and <span class="math inline">\(V_e\)</span>.</p>
 </div>
 <div id="simulating-phenotypes-with-qtl2pleiosim1" class="section level2">
@@ -190,7 +185,7 @@
 </h2>
 <p>The function to simulate phenotypes in <code>qtl2pleio</code> is <code>sim1</code>. By examining its help page, we see that it takes five arguments. The help page also gives the dimensions of the inputs.</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="co"># set up the design matrix, X</span></a>
-<a class="sourceLine" id="cb10-2" data-line-number="2">pp &lt;-<span class="st"> </span>pr<span class="op">$</span><span class="st">`</span><span class="dt">2</span><span class="st">`</span></a>
+<a class="sourceLine" id="cb10-2" data-line-number="2">pp &lt;-<span class="st"> </span>pr[[<span class="dv">2</span>]]</a>
 <a class="sourceLine" id="cb10-3" data-line-number="3">X &lt;-<span class="st"> </span>gemma2<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/gemma2/topics/stagger_mats">stagger_mats</a></span>(pp[ , , <span class="dv">50</span>], pp[ , , <span class="dv">50</span>])</a>
 <a class="sourceLine" id="cb10-4" data-line-number="4"><span class="co"># assemble B matrix of allele effects</span></a>
 <a class="sourceLine" id="cb10-5" data-line-number="5">B &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">data =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">-1</span>, <span class="dv">-1</span>, <span class="dv">-1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">-1</span>, <span class="dv">-1</span>, <span class="dv">-1</span>, <span class="dv">-1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>), <span class="dt">nrow =</span> <span class="dv">8</span>, <span class="dt">ncol =</span> <span class="dv">2</span>, <span class="dt">byrow =</span> <span class="ot">FALSE</span>)</a>
@@ -208,58 +203,59 @@
 <a class="sourceLine" id="cb10-17" data-line-number="17"><span class="co"># set.seed to ensure reproducibility</span></a>
 <a class="sourceLine" id="cb10-18" data-line-number="18"><span class="kw">set.seed</span>(<span class="dv">2018-01-30</span>)</a>
 <a class="sourceLine" id="cb10-19" data-line-number="19"><span class="co"># call to sim1</span></a>
-<a class="sourceLine" id="cb10-20" data-line-number="20">Ypre &lt;-<span class="st"> </span><span class="kw"><a href="../reference/sim1.html">sim1</a></span>(<span class="dt">X =</span> X, <span class="dt">B =</span> B, <span class="dt">Vg =</span> <span class="kw">diag</span>(<span class="dv">2</span>), <span class="dt">Ve =</span> <span class="kw">diag</span>(<span class="dv">2</span>), <span class="dt">kinship =</span> kinship[[<span class="dv">1</span>]])</a>
+<a class="sourceLine" id="cb10-20" data-line-number="20">Ypre &lt;-<span class="st"> </span><span class="kw"><a href="../reference/sim1.html">sim1</a></span>(<span class="dt">X =</span> X, <span class="dt">B =</span> B, <span class="dt">Vg =</span> <span class="kw">diag</span>(<span class="dv">2</span>), <span class="dt">Ve =</span> <span class="kw">diag</span>(<span class="dv">2</span>), <span class="dt">kinship =</span> kinship[[<span class="dv">2</span>]])</a>
 <a class="sourceLine" id="cb10-21" data-line-number="21">Y &lt;-<span class="st"> </span><span class="kw">matrix</span>(Ypre, <span class="dt">nrow =</span> <span class="dv">261</span>, <span class="dt">ncol =</span> <span class="dv">2</span>, <span class="dt">byrow =</span> <span class="ot">FALSE</span>)</a>
 <a class="sourceLine" id="cb10-22" data-line-number="22"><span class="kw">rownames</span>(Y) &lt;-<span class="st"> </span><span class="kw">rownames</span>(pp)</a>
 <a class="sourceLine" id="cb10-23" data-line-number="23"><span class="kw">colnames</span>(Y) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">"tr1"</span>, <span class="st">"tr2"</span>)</a></code></pre></div>
 <p>Let’s perform univariate QTL mapping for each of the two traits in the Y matrix.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw"><a href="http://www.rdocumentation.org/packages/qtl2/topics/scan1">scan1</a></span>(<span class="dt">genoprobs =</span> pr, <span class="dt">pheno =</span> Y[ , <span class="dv">1</span>], <span class="dt">kinship =</span> kinship) -&gt;<span class="st"> </span>s1</a>
-<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="kw"><a href="http://www.rdocumentation.org/packages/qtl2/topics/scan1">scan1</a></span>(<span class="dt">genoprobs =</span> pr, <span class="dt">pheno =</span> Y[ , <span class="dv">2</span>], <span class="dt">kinship =</span> kinship) -&gt;<span class="st"> </span>s2</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw"><a href="http://www.rdocumentation.org/packages/qtl2/topics/scan1">scan1</a></span>(<span class="dt">genoprobs =</span> pr, <span class="dt">pheno =</span> Y, <span class="dt">kinship =</span> kinship) -&gt;<span class="st"> </span>s1</a></code></pre></div>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw">plot</span>(s1, pm)</a></code></pre></div>
 <p><img src="testing-pleiotropy-vs-separate-qtl_files/figure-html/unnamed-chunk-12-1.png" width="700"></p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw">plot</span>(s2, pm)</a></code></pre></div>
-<p><img src="testing-pleiotropy-vs-separate-qtl_files/figure-html/unnamed-chunk-13-1.png" width="700"></p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw"><a href="http://www.rdocumentation.org/packages/qtl2/topics/find_peaks">find_peaks</a></span>(s1, <span class="dt">map =</span> pm)</a>
-<a class="sourceLine" id="cb14-2" data-line-number="2"><span class="co">#&gt;   lodindex lodcolumn chr       pos       lod</span></a>
-<a class="sourceLine" id="cb14-3" data-line-number="3"><span class="co">#&gt; 1        1    pheno1 `2`  69.22872 18.780597</span></a>
-<a class="sourceLine" id="cb14-4" data-line-number="4"><span class="co">#&gt; 2        1    pheno1 `3` 121.67903  5.796552</span></a>
-<a class="sourceLine" id="cb14-5" data-line-number="5"><span class="co">#&gt; 3        1    pheno1   X 101.09827  5.185032</span></a>
-<a class="sourceLine" id="cb14-6" data-line-number="6"><span class="kw"><a href="http://www.rdocumentation.org/packages/qtl2/topics/find_peaks">find_peaks</a></span>(s2, <span class="dt">map =</span> pm)</a>
-<a class="sourceLine" id="cb14-7" data-line-number="7"><span class="co">#&gt;   lodindex lodcolumn chr      pos       lod</span></a>
-<a class="sourceLine" id="cb14-8" data-line-number="8"><span class="co">#&gt; 1        1    pheno1 `2` 70.57099 13.495275</span></a>
-<a class="sourceLine" id="cb14-9" data-line-number="9"><span class="co">#&gt; 2        1    pheno1 `3` 24.59295  6.276006</span></a>
-<a class="sourceLine" id="cb14-10" data-line-number="10"><span class="co">#&gt; 3        1    pheno1   X 58.92215 11.203151</span></a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw"><a href="http://www.rdocumentation.org/packages/qtl2/topics/find_peaks">find_peaks</a></span>(s1, <span class="dt">map =</span> pm)</a>
+<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="co">#&gt;   lodindex lodcolumn chr       pos       lod</span></a>
+<a class="sourceLine" id="cb13-3" data-line-number="3"><span class="co">#&gt; 1        1       tr1 `2` 75.562440  3.636498</span></a>
+<a class="sourceLine" id="cb13-4" data-line-number="4"><span class="co">#&gt; 2        1       tr1 `3` 82.778059 24.552172</span></a>
+<a class="sourceLine" id="cb13-5" data-line-number="5"><span class="co">#&gt; 3        1       tr1   X 13.406552  3.585519</span></a>
+<a class="sourceLine" id="cb13-6" data-line-number="6"><span class="co">#&gt; 4        2       tr2 `2`  3.164247  8.195879</span></a>
+<a class="sourceLine" id="cb13-7" data-line-number="7"><span class="co">#&gt; 5        2       tr2 `3` 82.778059 17.454825</span></a>
+<a class="sourceLine" id="cb13-8" data-line-number="8"><span class="co">#&gt; 6        2       tr2   X 95.069663 14.110670</span></a></code></pre></div>
 </div>
 <div id="perform-two-dimensional-scan-as-first-step-in-pleiotropy-v-separate-qtl-hypothesis-test" class="section level1">
 <h1 class="hasAnchor">
 <a href="#perform-two-dimensional-scan-as-first-step-in-pleiotropy-v-separate-qtl-hypothesis-test" class="anchor"></a>Perform two-dimensional scan as first step in pleiotropy v separate QTL hypothesis test</h1>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">out &lt;-<span class="st"> </span><span class="kw"><a href="../reference/scan_pvl.html">scan_pvl</a></span>(<span class="dt">probs =</span> pp, <span class="dt">pheno =</span> Y, <span class="dt">kinship =</span> kinship<span class="op">$</span><span class="st">`</span><span class="dt">2</span><span class="st">`</span>, <span class="dt">start_snp =</span> <span class="dv">38</span>, <span class="dt">n_snp =</span> <span class="dv">5</span>)</a>
-<a class="sourceLine" id="cb15-2" data-line-number="2"><span class="co">#&gt; starting covariance matrices estimation.</span></a>
-<a class="sourceLine" id="cb15-3" data-line-number="3"><span class="co">#&gt; covariance matrices estimation completed.</span></a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">out &lt;-<span class="st"> </span><span class="kw"><a href="../reference/scan_pvl.html">scan_pvl</a></span>(<span class="dt">probs =</span> pp, </a>
+<a class="sourceLine" id="cb14-2" data-line-number="2">                <span class="dt">pheno =</span> Y, </a>
+<a class="sourceLine" id="cb14-3" data-line-number="3">                <span class="dt">kinship =</span> kinship[[<span class="dv">2</span>]], <span class="co"># 2nd entry in kinship list is Chr 3</span></a>
+<a class="sourceLine" id="cb14-4" data-line-number="4">                <span class="dt">start_snp =</span> <span class="dv">38</span>, </a>
+<a class="sourceLine" id="cb14-5" data-line-number="5">                <span class="dt">n_snp =</span> <span class="dv">25</span>, <span class="dt">n_cores =</span> <span class="dv">1</span></a>
+<a class="sourceLine" id="cb14-6" data-line-number="6">                )</a>
+<a class="sourceLine" id="cb14-7" data-line-number="7"><span class="co">#&gt; starting covariance matrices estimation with data from 261 subjects.</span></a>
+<a class="sourceLine" id="cb14-8" data-line-number="8"><span class="co">#&gt; covariance matrices estimation completed.</span></a></code></pre></div>
 <div id="create-a-profile-lod-plot-to-visualize-results-of-two-dimensional-scan" class="section level3">
 <h3 class="hasAnchor">
 <a href="#create-a-profile-lod-plot-to-visualize-results-of-two-dimensional-scan" class="anchor"></a>Create a profile LOD plot to visualize results of two-dimensional scan</h3>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw">library</span>(dplyr)</a>
-<a class="sourceLine" id="cb16-2" data-line-number="2"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb16-3" data-line-number="3"><span class="co">#&gt; Attaching package: 'dplyr'</span></a>
-<a class="sourceLine" id="cb16-4" data-line-number="4"><span class="co">#&gt; The following objects are masked from 'package:stats':</span></a>
-<a class="sourceLine" id="cb16-5" data-line-number="5"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb16-6" data-line-number="6"><span class="co">#&gt;     filter, lag</span></a>
-<a class="sourceLine" id="cb16-7" data-line-number="7"><span class="co">#&gt; The following objects are masked from 'package:base':</span></a>
-<a class="sourceLine" id="cb16-8" data-line-number="8"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb16-9" data-line-number="9"><span class="co">#&gt;     intersect, setdiff, setequal, union</span></a>
-<a class="sourceLine" id="cb16-10" data-line-number="10">out <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb16-11" data-line-number="11"><span class="st">  </span><span class="kw"><a href="../reference/tidy_scan_pvl.html">tidy_scan_pvl</a></span>(pm2) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb16-12" data-line-number="12"><span class="st">  </span><span class="kw"><a href="../reference/add_intercepts.html">add_intercepts</a></span>(<span class="dt">intercepts_univariate =</span> <span class="kw">c</span>(<span class="fl">69.6</span>, <span class="fl">69.6</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb16-13" data-line-number="13"><span class="st">  </span><span class="kw"><a href="../reference/plot_pvl.html">plot_pvl</a></span>(<span class="dt">phenames =</span> <span class="kw">c</span>(<span class="st">"tr1"</span>, <span class="st">"tr2"</span>))</a></code></pre></div>
-<p><img src="testing-pleiotropy-vs-separate-qtl_files/figure-html/unnamed-chunk-16-1.png" width="700"></p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw">library</span>(dplyr)</a>
+<a class="sourceLine" id="cb15-2" data-line-number="2"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb15-3" data-line-number="3"><span class="co">#&gt; Attaching package: 'dplyr'</span></a>
+<a class="sourceLine" id="cb15-4" data-line-number="4"><span class="co">#&gt; The following objects are masked from 'package:stats':</span></a>
+<a class="sourceLine" id="cb15-5" data-line-number="5"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb15-6" data-line-number="6"><span class="co">#&gt;     filter, lag</span></a>
+<a class="sourceLine" id="cb15-7" data-line-number="7"><span class="co">#&gt; The following objects are masked from 'package:base':</span></a>
+<a class="sourceLine" id="cb15-8" data-line-number="8"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb15-9" data-line-number="9"><span class="co">#&gt;     intersect, setdiff, setequal, union</span></a>
+<a class="sourceLine" id="cb15-10" data-line-number="10">out <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb15-11" data-line-number="11"><span class="st">  </span><span class="kw"><a href="../reference/tidy_scan_pvl.html">tidy_scan_pvl</a></span>(pm3) <span class="op">%&gt;%</span><span class="st"> </span><span class="co"># pm3 is physical map for Chr 3</span></a>
+<a class="sourceLine" id="cb15-12" data-line-number="12"><span class="st">  </span><span class="kw"><a href="../reference/add_intercepts.html">add_intercepts</a></span>(<span class="dt">intercepts_univariate =</span> <span class="kw">c</span>(<span class="fl">82.8</span>, <span class="fl">82.8</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb15-13" data-line-number="13"><span class="st">  </span><span class="kw"><a href="../reference/plot_pvl.html">plot_pvl</a></span>(<span class="dt">phenames =</span> <span class="kw">c</span>(<span class="st">"tr1"</span>, <span class="st">"tr2"</span>))</a>
+<a class="sourceLine" id="cb15-14" data-line-number="14"><span class="co">#&gt; Warning: Removed 50 rows containing missing values (geom_path).</span></a></code></pre></div>
+<p><img src="testing-pleiotropy-vs-separate-qtl_files/figure-html/unnamed-chunk-15-1.png" width="700"></p>
 </div>
 <div id="calculate-the-likelihood-ratio-test-statistic-for-pleiotropy-v-separate-qtl" class="section level3">
 <h3 class="hasAnchor">
 <a href="#calculate-the-likelihood-ratio-test-statistic-for-pleiotropy-v-separate-qtl" class="anchor"></a>Calculate the likelihood ratio test statistic for pleiotropy v separate QTL</h3>
 <p>We use the function <code>calc_lrt_tib</code> to calculate the likelihood ratio test statistic value for the specified traits and specified genomic region.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1">(<span class="kw"><a href="../reference/calc_lrt_tib.html">calc_lrt_tib</a></span>(out) -&gt;<span class="st"> </span>lrt)</a>
-<a class="sourceLine" id="cb17-2" data-line-number="2"><span class="co">#&gt; [1] 0</span></a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">(<span class="kw"><a href="../reference/calc_lrt_tib.html">calc_lrt_tib</a></span>(out) -&gt;<span class="st"> </span>lrt)</a>
+<a class="sourceLine" id="cb16-2" data-line-number="2"><span class="co">#&gt; [1] 0.7730965</span></a></code></pre></div>
 </div>
 <div id="bootstrap-analysis-to-get-p-values" class="section level2">
 <h2 class="hasAnchor">
@@ -269,32 +265,46 @@
 <p>We use a parametric bootstrap strategy in which we first use the studied phenotypes to infer the values of model parameters. Once we have the inferred values of the model parameters, we simulate phenotypes from the pleiotropy model (with the inferred parameter values).</p>
 <p>A natural question that arises is “which marker’s allele probabilities do we use when simulating phenotypes?” We use the marker that, under the null hypothesis, ie, under the pleiotropy constraint, yields the greatest value of the log-likelihood.</p>
 <p>Before we call <code>boot_pvl</code>, we need to identify the index (on the chromosome under study) of the marker that maximizes the likelihood under the pleiotropy constraint. To do this, we use the <code>qtl2pleio</code> function <code>find_pleio_peak_tib</code>.</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">(pleio_index &lt;-<span class="st"> </span><span class="kw"><a href="../reference/find_pleio_peak_tib.html">find_pleio_peak_tib</a></span>(out, <span class="dt">start_snp =</span> <span class="dv">38</span>))</a>
-<a class="sourceLine" id="cb18-2" data-line-number="2"><span class="co">#&gt; loglik5 </span></a>
-<a class="sourceLine" id="cb18-3" data-line-number="3"><span class="co">#&gt;      42</span></a></code></pre></div>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="kw">set.seed</span>(<span class="dv">2018-10-03</span>)</a>
-<a class="sourceLine" id="cb19-2" data-line-number="2"><span class="kw">system.time</span>(b_out &lt;-<span class="st"> </span><span class="kw"><a href="../reference/boot_pvl.html">boot_pvl</a></span>(<span class="dt">probs =</span> pp,</a>
-<a class="sourceLine" id="cb19-3" data-line-number="3">         <span class="dt">pheno =</span> Y, </a>
-<a class="sourceLine" id="cb19-4" data-line-number="4">         <span class="dt">pleio_peak_index =</span> pleio_index, </a>
-<a class="sourceLine" id="cb19-5" data-line-number="5">         <span class="dt">kinship =</span> kinship<span class="op">$</span><span class="st">`</span><span class="dt">2</span><span class="st">`</span>, </a>
-<a class="sourceLine" id="cb19-6" data-line-number="6">         <span class="dt">nboot_per_job =</span> <span class="dv">3</span>, </a>
-<a class="sourceLine" id="cb19-7" data-line-number="7">         <span class="dt">start_snp =</span> <span class="dv">38</span>, </a>
-<a class="sourceLine" id="cb19-8" data-line-number="8">         <span class="dt">n_snp =</span> <span class="dv">5</span></a>
-<a class="sourceLine" id="cb19-9" data-line-number="9">         ))</a>
-<a class="sourceLine" id="cb19-10" data-line-number="10"><span class="co">#&gt; starting covariance matrices estimation.</span></a>
-<a class="sourceLine" id="cb19-11" data-line-number="11"><span class="co">#&gt; covariance matrices estimation completed.</span></a>
-<a class="sourceLine" id="cb19-12" data-line-number="12"><span class="co">#&gt; starting covariance matrices estimation.</span></a>
-<a class="sourceLine" id="cb19-13" data-line-number="13"><span class="co">#&gt; covariance matrices estimation completed.</span></a>
-<a class="sourceLine" id="cb19-14" data-line-number="14"><span class="co">#&gt; starting covariance matrices estimation.</span></a>
-<a class="sourceLine" id="cb19-15" data-line-number="15"><span class="co">#&gt; covariance matrices estimation completed.</span></a>
-<a class="sourceLine" id="cb19-16" data-line-number="16"><span class="co">#&gt;    user  system elapsed </span></a>
-<a class="sourceLine" id="cb19-17" data-line-number="17"><span class="co">#&gt;  12.568   0.183  12.775</span></a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1">(pleio_index &lt;-<span class="st"> </span><span class="kw"><a href="../reference/find_pleio_peak_tib.html">find_pleio_peak_tib</a></span>(out, <span class="dt">start_snp =</span> <span class="dv">38</span>))</a>
+<a class="sourceLine" id="cb17-2" data-line-number="2"><span class="co">#&gt; loglik13 </span></a>
+<a class="sourceLine" id="cb17-3" data-line-number="3"><span class="co">#&gt;       50</span></a></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="kw">set.seed</span>(<span class="dv">2018-10-03</span>)</a>
+<a class="sourceLine" id="cb18-2" data-line-number="2"><span class="kw">system.time</span>(b_out &lt;-<span class="st"> </span><span class="kw"><a href="../reference/boot_pvl.html">boot_pvl</a></span>(<span class="dt">probs =</span> pp,</a>
+<a class="sourceLine" id="cb18-3" data-line-number="3">         <span class="dt">pheno =</span> Y, </a>
+<a class="sourceLine" id="cb18-4" data-line-number="4">         <span class="dt">pleio_peak_index =</span> pleio_index, </a>
+<a class="sourceLine" id="cb18-5" data-line-number="5">         <span class="dt">kinship =</span> kinship[[<span class="dv">2</span>]], <span class="co"># 2nd element in kinship list is Chr 3 </span></a>
+<a class="sourceLine" id="cb18-6" data-line-number="6">         <span class="dt">nboot_per_job =</span> <span class="dv">10</span>, </a>
+<a class="sourceLine" id="cb18-7" data-line-number="7">         <span class="dt">start_snp =</span> <span class="dv">38</span>, </a>
+<a class="sourceLine" id="cb18-8" data-line-number="8">         <span class="dt">n_snp =</span> <span class="dv">10</span></a>
+<a class="sourceLine" id="cb18-9" data-line-number="9">         ))</a>
+<a class="sourceLine" id="cb18-10" data-line-number="10"><span class="co">#&gt; starting covariance matrices estimation with data from 261 subjects.</span></a>
+<a class="sourceLine" id="cb18-11" data-line-number="11"><span class="co">#&gt; covariance matrices estimation completed.</span></a>
+<a class="sourceLine" id="cb18-12" data-line-number="12"><span class="co">#&gt; starting covariance matrices estimation with data from 261 subjects.</span></a>
+<a class="sourceLine" id="cb18-13" data-line-number="13"><span class="co">#&gt; covariance matrices estimation completed.</span></a>
+<a class="sourceLine" id="cb18-14" data-line-number="14"><span class="co">#&gt; starting covariance matrices estimation with data from 261 subjects.</span></a>
+<a class="sourceLine" id="cb18-15" data-line-number="15"><span class="co">#&gt; covariance matrices estimation completed.</span></a>
+<a class="sourceLine" id="cb18-16" data-line-number="16"><span class="co">#&gt; starting covariance matrices estimation with data from 261 subjects.</span></a>
+<a class="sourceLine" id="cb18-17" data-line-number="17"><span class="co">#&gt; covariance matrices estimation completed.</span></a>
+<a class="sourceLine" id="cb18-18" data-line-number="18"><span class="co">#&gt; starting covariance matrices estimation with data from 261 subjects.</span></a>
+<a class="sourceLine" id="cb18-19" data-line-number="19"><span class="co">#&gt; covariance matrices estimation completed.</span></a>
+<a class="sourceLine" id="cb18-20" data-line-number="20"><span class="co">#&gt; starting covariance matrices estimation with data from 261 subjects.</span></a>
+<a class="sourceLine" id="cb18-21" data-line-number="21"><span class="co">#&gt; covariance matrices estimation completed.</span></a>
+<a class="sourceLine" id="cb18-22" data-line-number="22"><span class="co">#&gt; starting covariance matrices estimation with data from 261 subjects.</span></a>
+<a class="sourceLine" id="cb18-23" data-line-number="23"><span class="co">#&gt; covariance matrices estimation completed.</span></a>
+<a class="sourceLine" id="cb18-24" data-line-number="24"><span class="co">#&gt; starting covariance matrices estimation with data from 261 subjects.</span></a>
+<a class="sourceLine" id="cb18-25" data-line-number="25"><span class="co">#&gt; covariance matrices estimation completed.</span></a>
+<a class="sourceLine" id="cb18-26" data-line-number="26"><span class="co">#&gt; starting covariance matrices estimation with data from 261 subjects.</span></a>
+<a class="sourceLine" id="cb18-27" data-line-number="27"><span class="co">#&gt; covariance matrices estimation completed.</span></a>
+<a class="sourceLine" id="cb18-28" data-line-number="28"><span class="co">#&gt; starting covariance matrices estimation with data from 261 subjects.</span></a>
+<a class="sourceLine" id="cb18-29" data-line-number="29"><span class="co">#&gt; covariance matrices estimation completed.</span></a>
+<a class="sourceLine" id="cb18-30" data-line-number="30"><span class="co">#&gt;    user  system elapsed </span></a>
+<a class="sourceLine" id="cb18-31" data-line-number="31"><span class="co">#&gt;  54.673   0.676  55.760</span></a></code></pre></div>
 <p>The argument <code>nboot_per_job</code> indicates the number of bootstrap samples that will be created and analyzed. Here, we set <code>nboot_per_job = 10</code>, so we expect to see returned a numeric vector of length 10, where each entry is a LRT statistic value from a distinct bootstrap sample.</p>
 <p>Finally, we determine a bootstrap p-value in the usual method. We treat the bootstrap samples’ test statistics as an empirical distribution of the test statistic under the null hypothesis of pleiotropy. Thus, to get a p-value, we want to ask “What is the probability, under the null hypothesis, of observing a test statistic value that is at least as extreme as that which we observed?”</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1">(pvalue &lt;-<span class="st"> </span><span class="kw">mean</span>(b_out <span class="op">&gt;=</span><span class="st"> </span>lrt))</a>
-<a class="sourceLine" id="cb20-2" data-line-number="2"><span class="co">#&gt; [1] 1</span></a></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1">(pvalue &lt;-<span class="st"> </span><span class="kw">mean</span>(b_out <span class="op">&gt;=</span><span class="st"> </span>lrt))</a>
+<a class="sourceLine" id="cb19-2" data-line-number="2"><span class="co">#&gt; [1] 0.1</span></a></code></pre></div>
 <p>In practice, one would want to use many more bootstrap samples to achieve an empirical distribution that is closer to the theoretical distribution of the test statistic under the null hypothesis.</p>
-<p>However, if one wants to perform analyses with a reasonable number - say 400 - bootstrap samples, this will take a very long time - many days - on a single laptop computer. We have used a series of computer clusters that are coordinated by the University of Wisconsin-Madison’s Center for High-throughput Computing (<a href="http://chtc.cs.wisc.edu" class="uri">http://chtc.cs.wisc.edu</a>). We typically are able to analyze 1000 bootstrap samples in less than 12 hours with this service.</p>
+<p>However, if one wants to perform analyses with a reasonable number - say 400 - bootstrap samples, this will take a very long time - many days - on a single laptop computer. We have used a series of computer clusters that are coordinated by the University of Wisconsin-Madison’s Center for High-throughput Computing (<a href="http://chtc.cs.wisc.edu" class="uri">http://chtc.cs.wisc.edu</a>). We typically are able to analyze 1000 bootstrap samples in less than 24 hours with this service.</p>
 </div>
 </div>
   </div>
@@ -304,7 +314,7 @@
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-<li><a href="#setting-for-close-linkage-v-pleiotropy-likelihood-ratio-test">Setting for close linkage v pleiotropy likelihood ratio test</a></li>
+<li><a href="#setting-for-pleiotropy-vs-two-separate-qtl">Setting for pleiotropy vs. two separate QTL</a></li>
       <li><a href="#installing-qtl2pleio">Installing <code>qtl2pleio</code></a></li>
       <li><a href="#reading-data-from-qtl2data-repository-on-github">Reading data from <code>qtl2data</code> repository on github</a></li>
       <li><a href="#kinship-calculations">Kinship calculations</a></li>

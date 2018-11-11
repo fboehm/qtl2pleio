@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Estimate allele effects matrix, B hat, with Rcpp functions — rcpp_calc_Bhat • qtl2pleio</title>
+<title>Extract founder allele effects at a single marker from output of qtl2::scan1coef — get_effects • qtl2pleio</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Estimate allele effects matrix, B hat, with Rcpp functions — rcpp_calc_Bhat" />
+<meta property="og:title" content="Extract founder allele effects at a single marker from output of qtl2::scan1coef — get_effects" />
 
-<meta property="og:description" content="Estimate allele effects matrix, B hat, with Rcpp functions" />
+<meta property="og:description" content="Extract founder allele effects at a single marker from output of qtl2::scan1coef" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -113,49 +113,59 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Estimate allele effects matrix, B hat, with Rcpp functions</h1>
-    <small class="dont-index">Source: <a href='https://github.com/fboehm/qtl2pleio/blob/master/R/rcpp_calc_Bhat.R'><code>R/rcpp_calc_Bhat.R</code></a></small>
-    <div class="hidden name"><code>rcpp_calc_Bhat.Rd</code></div>
+    <h1>Extract founder allele effects at a single marker from output of qtl2::scan1coef</h1>
+    <small class="dont-index">Source: <a href='https://github.com/fboehm/qtl2pleio/blob/master/R/get_effects.R'><code>R/get_effects.R</code></a></small>
+    <div class="hidden name"><code>get_effects.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Estimate allele effects matrix, B hat, with Rcpp functions</p>
+    <p>Extract founder allele effects at a single marker from output of qtl2::scan1coef</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>rcpp_calc_Bhat</span>(<span class='no'>X</span>, <span class='no'>Sigma_inv</span>, <span class='no'>Y</span>)</pre>
+    <pre class="usage"><span class='fu'>get_effects</span>(<span class='no'>marker_index</span>, <span class='no'>allele_effects_matrix</span>, <span class='no'>map</span>, <span class='kw'>columns</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>8</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>X</th>
-      <td><p>dn by df block-diagonal design matrix that incorporates genetic info for two markers. Note that we can use the same marker data twice.</p></td>
+      <th>marker_index</th>
+      <td><p>an integer indicating where in the `map` object the peak position (or position of interest) is located</p></td>
     </tr>
     <tr>
-      <th>Sigma_inv</th>
-      <td><p>dn by dn inverse covariance matrix, where its inverse, ie, Sigma, is often composed as \(K \otimes V_g + I_n \otimes V_e\)</p></td>
+      <th>allele_effects_matrix</th>
+      <td><p>output of `qtl2::scan1coef` for a single chromosome</p></td>
     </tr>
     <tr>
-      <th>Y</th>
-      <td><p>dn by 1 matrix, ie, a column vector, of d phenotypes' measurements</p></td>
+      <th>map</th>
+      <td><p>a map object for the chromosome of interest</p></td>
+    </tr>
+    <tr>
+      <th>columns</th>
+      <td><p>which columns to choose within the `allele_effects_matrix`. Default is 1:8 to reflect 8 founder alleles of Diversity Outbred mice</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a df by 1 matrix of GLS-estimated allele effects</p>
+    <p>a vector of founder allele effects at a single marker</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>X1</span> <span class='kw'>&lt;-</span> <span class='fu'>as.matrix</span>(<span class='fu'>rbinom</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>prob</span> <span class='kw'>=</span> <span class='fl'>1</span> / <span class='fl'>2</span>))
-<span class='no'>X</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>gemma2</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/gemma2/topics/stagger_mats'>stagger_mats</a></span>(<span class='no'>X1</span>, <span class='no'>X1</span>)
-<span class='no'>Sigma_inv</span> <span class='kw'>&lt;-</span> <span class='fu'>diag</span>(<span class='fl'>200</span>)
-<span class='no'>Y</span> <span class='kw'>&lt;-</span> <span class='fu'>runif</span>(<span class='fl'>200</span>)
-<span class='fu'>rcpp_calc_Bhat</span>(<span class='kw'>X</span> <span class='kw'>=</span> <span class='no'>X</span>, <span class='kw'>Sigma_inv</span> <span class='kw'>=</span> <span class='no'>Sigma_inv</span>, <span class='kw'>Y</span> <span class='kw'>=</span> <span class='no'>Y</span>)</div><div class='output co'>#&gt;           [,1]
-#&gt; [1,] 0.4264985
-#&gt; [2,] 0.4778885</div></pre>
+    <pre class="examples"><div class='input'><span class='co'># set up allele effects matrix</span>
+<span class='no'>ae</span> <span class='kw'>&lt;-</span> <span class='fu'>matrix</span>(<span class='kw'>dat</span> <span class='kw'>=</span> <span class='fu'>rnorm</span>(<span class='fl'>100</span> * <span class='fl'>8</span>), <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>8</span>, <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>100</span>)
+<span class='no'>ae</span>[, <span class='fl'>8</span>] <span class='kw'>&lt;-</span> - <span class='fu'>rowSums</span>(<span class='no'>ae</span>[, <span class='fl'>1</span>:<span class='fl'>7</span>])
+<span class='fu'>colnames</span>(<span class='no'>ae</span>) <span class='kw'>&lt;-</span> <span class='no'>LETTERS</span>[<span class='fl'>1</span>:<span class='fl'>8</span>]
+<span class='fu'>rownames</span>(<span class='no'>ae</span>) <span class='kw'>&lt;-</span> <span class='fu'>paste0</span>(<span class='fl'>1</span>, <span class='st'>"_"</span>, <span class='fl'>1</span>:<span class='fl'>100</span>)
+<span class='co'># set up map</span>
+<span class='no'>map</span> <span class='kw'>&lt;-</span> <span class='fl'>1</span>:<span class='fl'>100</span>
+<span class='fu'>names</span>(<span class='no'>map</span>) <span class='kw'>&lt;-</span> <span class='fu'>rownames</span>(<span class='no'>ae</span>)
+<span class='co'># call get_effects</span>
+<span class='fu'>get_effects</span>(<span class='kw'>marker_index</span> <span class='kw'>=</span> <span class='fl'>15</span>, <span class='kw'>allele_effects_matrix</span> <span class='kw'>=</span> <span class='no'>ae</span>, <span class='kw'>map</span> <span class='kw'>=</span> <span class='no'>map</span>)</div><div class='output co'>#&gt;           A           B           C           D           E           F 
+#&gt;  0.81131017 -0.14235953  0.82583982  0.26228964  1.16295943 -1.36447629 
+#&gt;           G           H 
+#&gt; -1.46978592 -0.08577732 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

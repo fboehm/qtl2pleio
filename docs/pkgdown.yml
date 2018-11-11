@@ -1,8 +1,6 @@
-pandoc: 2.2.1
+pandoc: 2.3.1
 pkgdown: 1.1.0.9000
 pkgdown_sha: f99ff09e95790156c36c8bcfa7288bf5a4bf0ca0
 articles:
-  Comparing_limmbo2_covariance_estimates_with_those_of_gemma2: Comparing_limmbo2_covariance_estimates_with_those_of_gemma2.html
-  benchmarking: benchmarking.html
   testing-pleiotropy-vs-separate-qtl: testing-pleiotropy-vs-separate-qtl.html
 

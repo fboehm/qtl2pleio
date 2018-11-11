@@ -85,12 +85,6 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/Comparing_limmbo2_covariance_estimates_with_those_of_gemma2.html">Comparing covariance estimates between `limmbo2` and `gemma2`</a>
-    </li>
-    <li>
-      <a href="../articles/benchmarking.html">Benchmarking</a>
-    </li>
-    <li>
       <a href="../articles/testing-pleiotropy-vs-separate-qtl.html">Testing pleiotropy v separate QTL in multiparental populations</a>
     </li>
   </ul>
@@ -155,8 +149,8 @@
 <span class='no'>marker2</span> <span class='kw'>&lt;-</span> <span class='fu'>rep</span>(<span class='fu'>paste0</span>(<span class='st'>'SNP'</span>, <span class='fl'>1</span>:<span class='fl'>3</span>), <span class='kw'>each</span> <span class='kw'>=</span> <span class='fl'>3</span>)
 <span class='no'>loglik</span> <span class='kw'>&lt;-</span> <span class='fu'>runif</span>(<span class='fl'>9</span>, -<span class='fl'>5</span>, <span class='fl'>0</span>)
 <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/tibble/topics/tibble'>tibble</a></span>(<span class='no'>marker1</span>, <span class='no'>marker2</span>, <span class='no'>loglik</span>) <span class='kw'>-&gt;</span> <span class='no'>tib</span>
-<span class='fu'>find_pleio_peak_tib</span>(<span class='no'>tib</span>, <span class='kw'>start_snp</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='output co'>#&gt; loglik3 
-#&gt;       3 </div></pre>
+<span class='fu'>find_pleio_peak_tib</span>(<span class='no'>tib</span>, <span class='kw'>start_snp</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='output co'>#&gt; loglik1 
+#&gt;       1 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

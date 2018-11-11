@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create a bootstrap sample, perform multivariate QTL scan, and calculate LRT statistic — boot_pvl • qtl2pleio</title>
+<title>Perform bootstrap sampling and calculate test statistics for each bootstrap sample — boot_pvl • qtl2pleio</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,7 +30,7 @@
 
 
 
-<meta property="og:title" content="Create a bootstrap sample, perform multivariate QTL scan, and calculate LRT statistic — boot_pvl" />
+<meta property="og:title" content="Perform bootstrap sampling and calculate test statistics for each bootstrap sample — boot_pvl" />
 
 <meta property="og:description" content="Create a bootstrap sample, perform multivariate QTL scan, and calculate LRT statistic" />
 <meta name="twitter:card" content="summary" />
@@ -85,12 +85,6 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/Comparing_limmbo2_covariance_estimates_with_those_of_gemma2.html">Comparing covariance estimates between `limmbo2` and `gemma2`</a>
-    </li>
-    <li>
-      <a href="../articles/benchmarking.html">Benchmarking</a>
-    </li>
-    <li>
       <a href="../articles/testing-pleiotropy-vs-separate-qtl.html">Testing pleiotropy v separate QTL in multiparental populations</a>
     </li>
   </ul>
@@ -119,7 +113,7 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Create a bootstrap sample, perform multivariate QTL scan, and calculate LRT statistic</h1>
+    <h1>Perform bootstrap sampling and calculate test statistics for each bootstrap sample</h1>
     <small class="dont-index">Source: <a href='https://github.com/fboehm/qtl2pleio/blob/master/R/boot_pvl.R'><code>R/boot_pvl.R</code></a></small>
     <div class="hidden name"><code>boot_pvl.Rd</code></div>
     </div>
@@ -130,8 +124,9 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>boot_pvl</span>(<span class='no'>probs</span>, <span class='no'>pleio_peak_index</span>, <span class='no'>pheno</span>, <span class='kw'>covariates</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>kinship</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>nboot_per_job</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='no'>start_snp</span>, <span class='no'>n_snp</span>)</pre>
+    <pre class="usage"><span class='fu'>boot_pvl</span>(<span class='no'>probs</span>, <span class='no'>pheno</span>, <span class='kw'>addcovar</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>kinship</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>start_snp</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='no'>n_snp</span>, <span class='no'>pleio_peak_index</span>, <span class='kw'>nboot_per_job</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>n_cores</span> <span class='kw'>=</span> <span class='fl'>1</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -141,24 +136,16 @@
       <td><p>allele probabilities object for one chromosome only, like aprobs$`8`. Not a list</p></td>
     </tr>
     <tr>
-      <th>pleio_peak_index</th>
-      <td><p>positive integer index indicating design matrix for simulation. Typically acquired by using `find_pleio_peak_tib`.</p></td>
-    </tr>
-    <tr>
       <th>pheno</th>
       <td><p>n by d matrix of phenotypes</p></td>
     </tr>
     <tr>
-      <th>covariates</th>
-      <td><p>n by n.cov matrix of covariates</p></td>
+      <th>addcovar</th>
+      <td><p>n by n.cov matrix of additive numeric covariates</p></td>
     </tr>
     <tr>
       <th>kinship</th>
       <td><p>a kinship matrix, not a list</p></td>
-    </tr>
-    <tr>
-      <th>nboot_per_job</th>
-      <td><p>number of bootstrap samples to call per invocation of function</p></td>
     </tr>
     <tr>
       <th>start_snp</th>
@@ -168,13 +155,75 @@
       <th>n_snp</th>
       <td><p>number of (consecutive) markers to use in scan</p></td>
     </tr>
+    <tr>
+      <th>pleio_peak_index</th>
+      <td><p>positive integer index indicating design matrix for simulation. Typically acquired by using `find_pleio_peak_tib`.</p></td>
+    </tr>
+    <tr>
+      <th>nboot_per_job</th>
+      <td><p>number of bootstrap samples to call per invocation of function</p></td>
+    </tr>
+    <tr>
+      <th>n_cores</th>
+      <td><p>number of cores to use when calling `scan_pvl`</p></td>
+    </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>numerical vector of lrt statistics from `nboot_per_job` bootstrap samples</p>
+    <p>numeric vector of lrt statistics from `nboot_per_job` bootstrap samples</p>
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Performs a parametric bootstrap method to calibrate test statistic values in the test of
+pleiotropy vs. separate QTL. It begins by inferring parameter values at
+the `pleio_peak_index` index value in the object `probs`. It then uses
+these inferred parameter values in sampling from a multivariate normal
+distribution. For each of the `nboot_per_job` sampled phenotype vectors, a two-dimensional QTL
+scan, starting at the marker indexed by `start_snp` within the object
+`probs` and extending for a total of `n_snp` consecutive markers. The
+two-dimensional scan is performed via the function `scan_pvl`. For each
+two-dimensional scan, a likelihood ratio test statistic is calculated. The
+outputted object is a vector of `nboot_per_job` likelihood ratio test
+statistics from `nboot_per_job` distinct bootstrap samples.</p>
+    
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p>Knott SA, Haley CS (2000) Multitrait
+least squares for quantitative trait loci detection.
+Genetics 156: 899–911.</p>
+<p>Walling GA, Visscher PM, Haley CS (1998) A comparison of
+bootstrap methods to construct confidence intervals in QTL mapping.
+Genet. Res. 71: 171–180.</p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'>
+<span class='no'>probs_pre</span> <span class='kw'>&lt;-</span> <span class='fu'>rbinom</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span> * <span class='fl'>10</span>, <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>prob</span> <span class='kw'>=</span> <span class='fl'>1</span> / <span class='fl'>2</span>)
+<span class='no'>probs</span> <span class='kw'>&lt;-</span> <span class='fu'>array</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>probs_pre</span>, <span class='kw'>dim</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>100</span>, <span class='fl'>1</span>, <span class='fl'>10</span>))
+<span class='no'>s_id</span> <span class='kw'>&lt;-</span> <span class='fu'>paste0</span>(<span class='st'>'s'</span>, <span class='fl'>1</span>:<span class='fl'>100</span>)
+<span class='fu'>rownames</span>(<span class='no'>probs</span>) <span class='kw'>&lt;-</span> <span class='no'>s_id</span>
+<span class='fu'>colnames</span>(<span class='no'>probs</span>) <span class='kw'>&lt;-</span> <span class='st'>'A'</span>
+<span class='fu'>dimnames</span>(<span class='no'>probs</span>)<span class='kw'>[[</span><span class='fl'>3</span>]] <span class='kw'>&lt;-</span> <span class='fu'>paste0</span>(<span class='st'>'Marker'</span>, <span class='fl'>1</span>:<span class='fl'>10</span>)
+<span class='co'># define Y</span>
+<span class='no'>Y_pre</span> <span class='kw'>&lt;-</span> <span class='fu'>runif</span>(<span class='fl'>200</span>)
+<span class='no'>Y</span> <span class='kw'>&lt;-</span> <span class='fu'>matrix</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>Y_pre</span>, <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>100</span>)
+<span class='fu'>rownames</span>(<span class='no'>Y</span>) <span class='kw'>&lt;-</span> <span class='no'>s_id</span>
+<span class='fu'>colnames</span>(<span class='no'>Y</span>) <span class='kw'>&lt;-</span> <span class='fu'>paste0</span>(<span class='st'>'t'</span>, <span class='fl'>1</span>:<span class='fl'>2</span>)
+<span class='no'>addcovar</span> <span class='kw'>&lt;-</span> <span class='fu'>matrix</span>(<span class='fu'>c</span>(<span class='fu'>runif</span>(<span class='fl'>99</span>), <span class='fl'>NA</span>), <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>1</span>)
+<span class='fu'>rownames</span>(<span class='no'>addcovar</span>) <span class='kw'>&lt;-</span> <span class='no'>s_id</span>
+<span class='fu'>colnames</span>(<span class='no'>addcovar</span>) <span class='kw'>&lt;-</span> <span class='st'>'c1'</span>
+<span class='no'>kin</span> <span class='kw'>&lt;-</span> <span class='fu'>diag</span>(<span class='fl'>100</span>)
+<span class='fu'>rownames</span>(<span class='no'>kin</span>) <span class='kw'>&lt;-</span> <span class='no'>s_id</span>
+<span class='fu'>colnames</span>(<span class='no'>kin</span>) <span class='kw'>&lt;-</span> <span class='no'>s_id</span>
+<span class='no'>Y2</span> <span class='kw'>&lt;-</span> <span class='no'>Y</span>
+<span class='no'>Y2</span>[<span class='fl'>1</span>, <span class='fl'>2</span>] <span class='kw'>&lt;-</span> <span class='fl'>NA</span>
+<span class='fu'>set.seed</span>(<span class='fl'>2018</span>-<span class='fl'>10</span>-<span class='fl'>22</span>)
+<span class='fu'>boot_pvl</span>(<span class='kw'>probs</span> <span class='kw'>=</span> <span class='no'>probs</span>, <span class='kw'>pheno</span> <span class='kw'>=</span> <span class='no'>Y</span>, <span class='kw'>kinship</span> <span class='kw'>=</span> <span class='no'>kin</span>,
+        <span class='kw'>start_snp</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>n_snp</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>pleio_peak_index</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>nboot_per_job</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='output co'>#&gt; <span class='message'>starting covariance matrices estimation with data from 100 subjects.</span></div><div class='output co'>#&gt; <span class='message'>covariance matrices estimation completed.</span></div><div class='output co'>#&gt; [1] 0</div><div class='input'><span class='fu'>boot_pvl</span>(<span class='kw'>probs</span> <span class='kw'>=</span> <span class='no'>probs</span>, <span class='kw'>pheno</span> <span class='kw'>=</span> <span class='no'>Y2</span>, <span class='kw'>kinship</span> <span class='kw'>=</span> <span class='no'>kin</span>,
+        <span class='kw'>start_snp</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>n_snp</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>pleio_peak_index</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>nboot_per_job</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='output co'>#&gt; <span class='message'>starting covariance matrices estimation with data from 99 subjects.</span></div><div class='output co'>#&gt; <span class='message'>covariance matrices estimation completed.</span></div><div class='output co'>#&gt; <span class='message'>starting covariance matrices estimation with data from 99 subjects.</span></div><div class='output co'>#&gt; <span class='message'>covariance matrices estimation completed.</span></div><div class='output co'>#&gt; [1] 0 0</div><div class='input'>
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -182,7 +231,13 @@
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-          </ul>
+
+      <li><a href="#details">Details</a></li>
+
+      <li><a href="#references">References</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
