@@ -44,7 +44,8 @@ Suggests:
     testthat
 LinkingTo:
     Rcpp,
-    RcppEigen
+    RcppEigen,
+    testthat
 VignetteBuilder:
     knitr
 Remotes:
