@@ -31,8 +31,31 @@ Eigen::MatrixXd rcpp_gls(const Eigen::Map<Eigen::MatrixXd> & X, const Eigen::Map
 
 
 
-// You can include R code blocks in C++ files processed with sourceCpp
-// (useful for testing and development). The R code will be automatically
-// run after the compilation.
-//
+// All test files should include the <testthat.h>
+// header file.
+#include <testthat.h>
 
+// Normally this would be a function from your package's
+// compiled library -- you might instead just include a header
+// file providing the definition, and let R CMD INSTALL
+// handle building and linking.
+
+//setup
+
+
+
+
+// Initialize a unit test context. This is similar to how you
+// might begin an R test file with 'context()', expect the
+// associated context should be wrapped in braced.
+context("Test whether gls with iid errors gives same value as ols") {
+
+  // The format for specifying tests is similar to that of
+  // testthat's R functions. Use 'test_that()' to define a
+  // unit test, and use 'expect_true()' and 'expect_false()'
+  // to test the desired conditions.
+  test_that("rcpp_gls with iid errors and rcpp_ols give same Bhat values") {
+    expect_true(rcpp_ols() == rcpp_gls());
+  }
+
+}
