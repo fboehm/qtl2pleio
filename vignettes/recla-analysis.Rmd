@@ -207,13 +207,6 @@ sum(boot_lrt >= mylrt) / length(boot_lrt)
 
 
 
-
-
-
-
-
-
-
 ## Session info
 
 ```{r}
