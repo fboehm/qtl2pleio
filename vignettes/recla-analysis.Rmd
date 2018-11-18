@@ -1,0 +1,180 @@
+---
+title: "Recla Analysis"
+author: "Frederick Boehm"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Recla Analysis}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(qtl2pleio)
+library(qtl2)
+```
+
+
+
+## Load Recla from qtl2data github repository
+
+```{r}
+file <- paste0("https://raw.githubusercontent.com/rqtl/",
+               "qtl2data/master/DO_Recla/recla.zip")
+recla <- read_cross2(file)
+# make sex a covariate for use in qtl2pleio::scan_pvl
+recla[[6]][ , 1, drop = FALSE] -> sex
+# insert pseudomarkers
+insert_pseudomarkers(recla, step = 0.10) -> pseudomap
+gm <- pseudomap$`8`
+```
+
+```{r}
+probs <- calc_genoprob(recla, map = pseudomap)
+```
+
+We now convert the genotype probabilities to haplotype dosages.
+
+```{r}
+aprobs <- genoprob_to_alleleprob(probs)
+```
+
+We now calculate kinship matrices, by the "leave one chromosome out (loco)" method.
+
+```{r}
+kinship <- calc_kinship(aprobs, "loco")
+```
+
+
+```{r}
+recla$pheno -> ph
+log(ph) -> lph
+apply(FUN = broman::winsorize, X = lph, MARGIN = 2) -> wlph
+#colnames(wlph)[c(7, 10, 22)] <- c("distance traveled in light", "percent time in light", "hot plate latency")
+
+as_tibble(wlph) -> wlph_tib
+```
+
+```{r, eval = TRUE}
+sex2 <- matrix(as.numeric(sex == "female"), ncol = 1)
+colnames(sex2) <- "female"
+rownames(sex2) <- rownames(aprobs[[1]])
+out <- scan1(genoprobs = aprobs, pheno = wlph, kinship = kinship, addcovar = sex2, reml = TRUE)
+```
+
+
+```{r, eval = TRUE}
+(peaks <- find_peaks(out, pseudomap, threshold = 5) %>%
+  arrange(chr, pos) %>%
+   select(- lodindex))
+peaks8 <- peaks %>%
+  filter(chr == 8, pos > 50, pos < 60)
+pos_LD_light_pct <- peaks8 %>%
+  filter(lodcolumn == "LD_light_pct") %>%
+  select(pos)
+pos_HP_latency <- peaks8 %>%
+  filter(lodcolumn == "HP_latency") %>%
+  select(pos)
+```
+
+## Correlation
+
+Given that the two traits "percent time in light" and "distance traveled in light" share a peak, we want to ask how correlated they are.
+
+```{r}
+cor(wlph[ , 7], wlph[ , 10], use = "complete.obs")
+cor(wlph[ , 22], wlph[ , 10], use = "complete.obs")
+cor(wlph[ , 7], wlph[ , 22], use = "complete.obs")
+```
+
+
+## Scatter plot of phenotypes
+
+```{r}
+scatter1022 <- ggplot() + geom_point(data = wlph_tib, aes(y = HP_latency, x = LD_light_pct)) + labs(x = "Percent time in light", y = "Hot plate latency") + ggtitle("Scatterplot of hot plate latency vs. percent time in light")
+scatter1022
+```
+
+## Genome-wide LOD plots for the traits from Recla
+
+```{r}
+plot(out, map = pseudomap, lodcolumn = 10, main = "Genome-wide LOD for percent time in light")
+```
+
+```{r}
+plot(out, map = pseudomap, lodcolumn = 22, main = "Genome-wide LOD for hot plate latency")
+```
+
+
+## Allele effects plots on chr 8 for each of the three Recla traits
+
+```{r}
+scan1coef(aprobs[ , 8], pheno = wlph[, 10], kinship = kinship$`8`, 
+          reml = TRUE,
+          addcovar = sex2) -> s1c_10
+scan1coef(aprobs[ , 8], pheno = wlph[, 22], kinship = kinship$`8`, 
+          reml = TRUE,
+          addcovar = sex2) -> s1c_22
+```
+
+```{r}
+# subset scan1output objects
+s1c_10s <- s1c_10[650:999, ] # 650:999 is the same as the interval for the two-dimensional scan.
+s1c_22s <- s1c_22[650:999, ]
+```
+
+
+```{r}
+plot_coefCC(s1c_10s, map = pseudomap, main = "Allele effects for percent time in light", scan1_output = s1c_10s)
+plot_coefCC(s1c_22s, map = pseudomap, main = "Allele effects for hot plate latency", scan1_output = s1c_22s)
+```
+
+
+## Two-dimensional scan results from github
+
+We present the code that we ran to perform the two-dimensional scan.
+
+```{r, eval = FALSE}
+scan_pvl(probs = pp, pheno = wlph[, c(10, 22)], covariates = sex2, kinship = kinship$`8`, start_snp1 = 650, n_snp = 350) -> pvl1022
+```
+
+To save time, we read the two-dimensional scan results from github.
+
+```{r}
+as_tibble(read.table("recla-10-22.txt")) -> pvl1022
+```
+
+We then calculate the likelihood ratio test statistic.
+
+```{r}
+calc_lrt_tib(pvl1022)
+```
+
+
+## Profile LOD Plot
+
+```{r}
+colnames(recla$pheno)[c(10, 22)] <- c("Percent time in light", "Hot plate latency")
+p1022 <- tidy_scan_pvl(pvl1022, pmap = gm) %>%
+  add_intercepts(c(as.numeric(pos_LD_light_pct), as.numeric(pos_HP_latency))) %>%
+  plot_pvl(phenames = colnames(recla$pheno)[c(10, 22)]) + ggtitle("Chromosome 8 profile LOD for percent time in light and hot plate latency") 
+```
+
+
+## Bootstrap analyses
+
+To save computing time, we read the bootstrap results files from Github. For details of how we performed the bootstrap analyses on the University of Wisconsin-Madison Center for High-Throughput Computing, please see the vignette: chtc-computing.
+
+
+
+
+
+
+## Session info
+
+```{r}
+devtools::session_info()
+```
+
