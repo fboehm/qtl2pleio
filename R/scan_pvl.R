@@ -45,6 +45,7 @@
 #' @param max_prec stepwise precision for EM algorithm. EM stops once incremental difference in log likelihood is less than max_prec
 #' @param n_cores number of cores to use for calculations
 #' @export
+#' @importFrom stats var
 #' @references Knott SA, Haley CS (2000) Multitrait
 #' least squares for quantitative trait loci detection.
 #' Genetics 156: 899–911.
