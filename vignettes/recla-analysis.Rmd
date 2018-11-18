@@ -169,7 +169,7 @@ First, we find the *pleiotropy peak* marker. This is the marker for which the lo
 
 
 ```{r}
-find_pleio_peak_tib(pvl1022)
+find_pleio_peak_tib(pvl1022, start_snp = 650)
 ```
 
 
