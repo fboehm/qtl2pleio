@@ -140,23 +140,26 @@ boot_pvl <- function(probs,
         Xpre <- X1
     }
     X <- gemma2::stagger_mats(Xpre, Xpre)
-    cc_out <- calc_covs(pheno = pheno,
-                        kinship = kinship,
-                        covariates = addcovar
-                        )
-    (Vg <- cc_out$Vg)
-    (Ve <- cc_out$Ve)
-    # calculate Sigma
-    Sigma <- calc_Sigma(Vg = Vg,
-                        Ve = Ve,
-                        K = kinship
-                        )
+    if (!is.null(kinship)){
+        # covariance matrix estimation
+        # first, run gemma2::MphEM(), by way of calc_covs(), to get Vg and Ve
+        cc_out <- calc_covs(pheno, kinship, max_iter = max_iter, max_prec = max_prec, covariates = addcovar)
+        Vg <- cc_out$Vg
+        Ve <- cc_out$Ve
+        # define Sigma
+        Sigma <- calc_Sigma(Vg, Ve, kinship)
+    }
+    if (is.null(kinship)){
+        # get Sigma for Haley Knott regression without random effect
+        Ve <- var(pheno) # get d by d covar matrix
+        Sigma <- calc_Sigma(Vg = NULL, Ve = Ve)
+    }
     Sigma_inv <- solve(Sigma)
     # calc Bhat
-    B <- calc_Bhat(X = X,
-                   Sigma_inv = Sigma_inv,
-                   Y = pheno
-                   )
+    B <- rcpp_calc_Bhat2(X = X,
+                         Sigma_inv = inv_S,
+                         Y = as.vector(as.matrix(pheno))
+    )
     # Start loop
     lrt <- numeric()
     for (i in 1:nboot_per_job) {
