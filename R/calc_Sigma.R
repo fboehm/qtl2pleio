@@ -7,6 +7,11 @@
 #' @return dn by dn covariance matrix
 calc_Sigma <- function(Vg, Ve, kinship = NULL) {
     n_mouse <- nrow(kinship)
-    out <- Vg %x% kinship + Ve %x% diag(n_mouse)
+    if (!is.null(kinship)){
+      out <- Vg %x% kinship + Ve %x% diag(n_mouse)
+    }
+    if (is.null(kinship)){
+      out <- Ve %x% diag(n_mouse)
+    }
     return(out)
 }
