@@ -41,16 +41,21 @@ so_cov <- scan_pvl(probs = probs,
                    n_snp = 10
                    )
 
+
+
+foo <- scan_pvl(probs = probs,
+         pheno = pheno,
+         kinship = NULL,
+         start_snp = 1,
+         n_snp = 10
+)
+
 test_that("scan_pvl handles missing values in covariates appropriately", {
   expect_equal(sum(!is.na(scan_out)), prod(dim(scan_out)))
   expect_equal(sum(!is.na(so_cov)), prod(dim(so_cov)))
 })
 
 test_that("scan_pvl handles kinship = NULL", {
-  expect_true(is.data.frame(scan_pvl(probs = probs,
-                                     pheno = pheno,
-                                     kinship = NULL,
-                                     start_snp = 1,
-                                     n_snp = 10
-  )))
+  expect_true(is.data.frame(foo))
+  expect_known_output(foo)
 })
