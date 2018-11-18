@@ -14,7 +14,7 @@
 #' outputted object is a vector of `nboot_per_job` likelihood ratio test
 #' statistics from `nboot_per_job` distinct bootstrap samples.
 #'
-#' @param probs allele probabilities object for one chromosome only, like aprobs$`8`. Not a list
+#' @param probs founder allele probabilities object for one chromosome only, like aprobs$`8`. Not a list
 #' @param pheno n by d matrix of phenotypes
 #' @param addcovar n by n.cov matrix of additive numeric covariates
 #' @param kinship a kinship matrix, not a list
@@ -22,6 +22,8 @@
 #' @param n_snp number of (consecutive) markers to use in scan
 #' @param pleio_peak_index positive integer index indicating design matrix for simulation. Typically acquired by using `find_pleio_peak_tib`.
 #' @param nboot_per_job number of bootstrap samples to call per invocation of function
+#' @param max_iter maximum number of iterations for EM algorithm
+#' @param max_prec stepwise precision for EM algorithm. EM stops once incremental difference in log likelihood is less than max_prec
 #' @param n_cores number of cores to use when calling `scan_pvl`
 #' @export
 #' @references Knott SA, Haley CS (2000) Multitrait
@@ -70,6 +72,8 @@ boot_pvl <- function(probs,
                      n_snp,
                      pleio_peak_index,
                      nboot_per_job = 1,
+                     max_iter = 1e+04,
+                     max_prec = 1 / 1e+08,
                      n_cores = 1
                      )
     {
@@ -157,7 +161,7 @@ boot_pvl <- function(probs,
     Sigma_inv <- solve(Sigma)
     # calc Bhat
     B <- rcpp_calc_Bhat2(X = X,
-                         Sigma_inv = inv_S,
+                         Sigma_inv = Sigma_inv,
                          Y = as.vector(as.matrix(pheno))
     )
     # Start loop
@@ -168,13 +172,15 @@ boot_pvl <- function(probs,
         rownames(Ysim) <- rownames(pheno)
         colnames(Ysim) <- c("t1", "t2")
         loglik <- scan_pvl(probs = probs,
-                               pheno = Ysim,
-                               addcovar = addcovar,
-                               kinship = kinship,
-                               start_snp = start_snp,
-                               n_snp = n_snp,
-                               n_cores = n_cores
-                               )
+                           pheno = Ysim,
+                           addcovar = addcovar,
+                           kinship = kinship,
+                           start_snp = start_snp,
+                           n_snp = n_snp,
+                           max_iter = max_iter,
+                           max_prec = max_prec,
+                           n_cores = n_cores
+                           )
         lrt[i] <- calc_lrt_tib(loglik)
     }
     return(lrt)

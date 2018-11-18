@@ -170,7 +170,7 @@ scan_pvl <- function(probs,
     if (is.null(kinship)){
         # get Sigma for Haley Knott regression without random effect
         Ve <- var(pheno) # get d by d covar matrix
-        Sigma <- calc_Sigma(Vg = NULL, Ve = Ve)
+        Sigma <- calc_Sigma(Vg = NULL, Ve = Ve, n_mouse = nrow(pheno))
     }
 
     # define Sigma_inv

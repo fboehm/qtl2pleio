@@ -57,5 +57,4 @@ test_that("scan_pvl handles missing values in covariates appropriately", {
 
 test_that("scan_pvl handles kinship = NULL", {
   expect_true(is.data.frame(foo))
-  expect_known_output(foo)
 })

@@ -4,7 +4,7 @@
 \alias{calc_Sigma}
 \title{Calculate the phenotypes covariance matrix Sigma}
 \usage{
-calc_Sigma(Vg, Ve, kinship = NULL)
+calc_Sigma(Vg, Ve, kinship = NULL, n_mouse = nrow(kinship))
 }
 \arguments{
 \item{Vg}{d by d genetic covariance matrix for the d phenotypes}
@@ -12,6 +12,8 @@ calc_Sigma(Vg, Ve, kinship = NULL)
 \item{Ve}{d by d error covariance matrix for the d phenotypes}
 
 \item{kinship}{optional n by n kinship matrix. if NULL, Vg is not used.}
+
+\item{n_mouse}{number of subjects}
 }
 \value{
 dn by dn covariance matrix

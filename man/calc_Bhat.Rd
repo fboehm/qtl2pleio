@@ -7,7 +7,7 @@
 calc_Bhat(X, Sigma_inv, Y)
 }
 \arguments{
-\item{X}{dn by df block-diagonal design matrix that incorporates genetic info for two markers. Note that we can use the same marker data twice.}
+\item{X}{dn by df block-diagonal design matrix that incorporates genetic info for d markers. Note that we can use the same marker data twice.}
 
 \item{Sigma_inv}{dn by dn inverse covariance matrix, often composed as the inverse of \eqn{K \otimes V_g + I_n \otimes V_e}}
 

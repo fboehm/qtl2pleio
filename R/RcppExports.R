@@ -2,82 +2,82 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 rcppeigen_sqrt <- function(A) {
-    .Call('_qtl2pleio_rcppeigen_sqrt', PACKAGE = 'qtl2pleio', A)
+    .Call(`_qtl2pleio_rcppeigen_sqrt`, A)
 }
 
 rcppeigen_invsqrt <- function(A) {
-    .Call('_qtl2pleio_rcppeigen_invsqrt', PACKAGE = 'qtl2pleio', A)
+    .Call(`_qtl2pleio_rcppeigen_invsqrt`, A)
 }
 
 timesTwo <- function(x) {
-    .Call('_qtl2pleio_timesTwo', PACKAGE = 'qtl2pleio', x)
+    .Call(`_qtl2pleio_timesTwo`, x)
 }
 
 find_matching_cols <- function(mat, tol = 1e-12) {
-    .Call('_qtl2pleio_find_matching_cols', PACKAGE = 'qtl2pleio', mat, tol)
+    .Call(`_qtl2pleio_find_matching_cols`, mat, tol)
 }
 
 find_lin_indep_cols <- function(mat, tol = 1e-12) {
-    .Call('_qtl2pleio_find_lin_indep_cols', PACKAGE = 'qtl2pleio', mat, tol)
+    .Call(`_qtl2pleio_find_lin_indep_cols`, mat, tol)
 }
 
 formX_intcovar <- function(probs, addcovar, intcovar, position, has_intercept = TRUE) {
-    .Call('_qtl2pleio_formX_intcovar', PACKAGE = 'qtl2pleio', probs, addcovar, intcovar, position, has_intercept)
+    .Call(`_qtl2pleio_formX_intcovar`, probs, addcovar, intcovar, position, has_intercept)
 }
 
 expand_genoprobs_intcovar <- function(probs, intcovar) {
-    .Call('_qtl2pleio_expand_genoprobs_intcovar', PACKAGE = 'qtl2pleio', probs, intcovar)
+    .Call(`_qtl2pleio_expand_genoprobs_intcovar`, probs, intcovar)
 }
 
 weighted_matrix <- function(mat, weights) {
-    .Call('_qtl2pleio_weighted_matrix', PACKAGE = 'qtl2pleio', mat, weights)
+    .Call(`_qtl2pleio_weighted_matrix`, mat, weights)
 }
 
 weighted_3darray <- function(array, weights) {
-    .Call('_qtl2pleio_weighted_3darray', PACKAGE = 'qtl2pleio', array, weights)
+    .Call(`_qtl2pleio_weighted_3darray`, array, weights)
 }
 
 matrix_x_matrix <- function(X, Y) {
-    .Call('_qtl2pleio_matrix_x_matrix', PACKAGE = 'qtl2pleio', X, Y)
+    .Call(`_qtl2pleio_matrix_x_matrix`, X, Y)
 }
 
 matrix_x_vector <- function(X, y) {
-    .Call('_qtl2pleio_matrix_x_vector', PACKAGE = 'qtl2pleio', X, y)
+    .Call(`_qtl2pleio_matrix_x_vector`, X, y)
 }
 
 matrix_x_3darray <- function(X, A) {
-    .Call('_qtl2pleio_matrix_x_3darray', PACKAGE = 'qtl2pleio', X, A)
+    .Call(`_qtl2pleio_matrix_x_3darray`, X, A)
 }
 
 rcpp_ols <- function(X, Y) {
-    .Call('_qtl2pleio_rcpp_ols', PACKAGE = 'qtl2pleio', X, Y)
+    .Call(`_qtl2pleio_rcpp_ols`, X, Y)
 }
 
 rcpp_gls <- function(X, Y, Sigma_inv) {
-    .Call('_qtl2pleio_rcpp_gls', PACKAGE = 'qtl2pleio', X, Y, Sigma_inv)
+    .Call(`_qtl2pleio_rcpp_gls`, X, Y, Sigma_inv)
 }
 
 rcppeigen_invert_matrix <- function(A) {
-    .Call('_qtl2pleio_rcppeigen_invert_matrix', PACKAGE = 'qtl2pleio', A)
+    .Call(`_qtl2pleio_rcppeigen_invert_matrix`, A)
 }
 
 rcppeigen_get_diag <- function(A) {
-    .Call('_qtl2pleio_rcppeigen_get_diag', PACKAGE = 'qtl2pleio', A)
+    .Call(`_qtl2pleio_rcppeigen_get_diag`, A)
 }
 
 rcppeigen_get_det <- function(A) {
-    .Call('_qtl2pleio_rcppeigen_get_det', PACKAGE = 'qtl2pleio', A)
+    .Call(`_qtl2pleio_rcppeigen_get_det`, A)
 }
 
 rcppeigen_get_chol <- function(A) {
-    .Call('_qtl2pleio_rcppeigen_get_chol', PACKAGE = 'qtl2pleio', A)
+    .Call(`_qtl2pleio_rcppeigen_get_chol`, A)
 }
 
 rcppeigen_get_chol_stable <- function(A) {
-    .Call('_qtl2pleio_rcppeigen_get_chol_stable', PACKAGE = 'qtl2pleio', A)
+    .Call(`_qtl2pleio_rcppeigen_get_chol_stable`, A)
 }
 
 rcppeigen_get_chol_diag <- function(A) {
-    .Call('_qtl2pleio_rcppeigen_get_chol_diag', PACKAGE = 'qtl2pleio', A)
+    .Call(`_qtl2pleio_rcppeigen_get_chol_diag`, A)
 }
 

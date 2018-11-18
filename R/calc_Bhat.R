@@ -1,6 +1,6 @@
 #' Calculate estimated allele effects, B matrix
 #'
-#' @param X dn by df block-diagonal design matrix that incorporates genetic info for two markers. Note that we can use the same marker data twice.
+#' @param X dn by df block-diagonal design matrix that incorporates genetic info for d markers. Note that we can use the same marker data twice.
 #' @param Sigma_inv dn by dn inverse covariance matrix, often composed as the inverse of \eqn{K \otimes V_g + I_n \otimes V_e}
 #' @param Y dn by 1 matrix, ie, a column vector, of d phenotypes' measurements
 #' @return a df by 1 matrix of GLS-estimated allele effects
