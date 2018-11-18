@@ -7,7 +7,7 @@
 fit1_pvl(mytab, rownum, start_snp, probs, addcovar, inv_S, S, pheno)
 }
 \arguments{
-\item{mytab}{a `mytab` object, with d+ 1 columns, typically the output of `prep_mytab`}
+\item{mytab}{a `mytab` object, with d + 1 columns, typically the output of `prep_mytab`}
 
 \item{rownum}{an integer to indicate which row of `mytab` to use}
 
