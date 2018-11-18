@@ -36,7 +36,8 @@ Imports:
     stringr,
     tibble,
     qtl2,
-    parallel
+    parallel,
+    broman
 Suggests:
     covr,
     knitr,
