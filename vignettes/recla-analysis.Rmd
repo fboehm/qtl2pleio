@@ -57,12 +57,18 @@ apply(FUN = broman::winsorize, X = lph, MARGIN = 2) -> wlph
 as_tibble(wlph) -> wlph_tib
 ```
 
+We next perform the univariate QTL scan for our phenotypes.
+
 ```{r, eval = TRUE}
 sex2 <- matrix(as.numeric(sex == "female"), ncol = 1)
 colnames(sex2) <- "female"
 rownames(sex2) <- rownames(aprobs[[1]])
 out <- scan1(genoprobs = aprobs, pheno = wlph, kinship = kinship, addcovar = sex2, reml = TRUE)
 ```
+
+Let's find the univariate QTL peaks for all phenotypes.
+
+We want to look closely at those peaks on Chromosome 8. We'll save the positions of peaks for our two traits of interest.
 
 
 ```{r, eval = TRUE}
@@ -92,12 +98,16 @@ cor(wlph[ , 7], wlph[ , 22], use = "complete.obs")
 
 ## Scatter plot of phenotypes
 
+We create a scatter plot for the two phenotypes.
+
 ```{r}
 scatter1022 <- ggplot() + geom_point(data = wlph_tib, aes(y = HP_latency, x = LD_light_pct)) + labs(x = "Percent time in light", y = "Hot plate latency") + ggtitle("Scatterplot of hot plate latency vs. percent time in light")
 scatter1022
 ```
 
 ## Genome-wide LOD plots for the traits from Recla
+
+Let's plot the results of the univariate QTL scans for our two traits.
 
 ```{r}
 plot(out, map = pseudomap, lodcolumn = 10, main = "Genome-wide LOD for percent time in light")
@@ -109,6 +119,8 @@ plot(out, map = pseudomap, lodcolumn = 22, main = "Genome-wide LOD for hot plate
 
 
 ## Allele effects plots on chr 8 for each of the three Recla traits
+
+We examine the allele effects plots for our two traits, in the region of interest on Chromosome 8.
 
 ```{r}
 scan1coef(aprobs[ , 8], pheno = wlph[, 10], kinship = kinship$`8`, 
@@ -138,9 +150,10 @@ We present the code that we ran to perform the two-dimensional scan.
 
 ```{r, eval = FALSE}
 scan_pvl(probs = pp, pheno = wlph[, c(10, 22)], covariates = sex2, kinship = kinship$`8`, start_snp1 = 650, n_snp = 350) -> pvl1022
+write.table(x = pvl1022, file = "recla-10-22.txt")
 ```
 
-To save time, we read the two-dimensional scan results from github.
+To save computing time, we read the two-dimensional scan results from github.
 
 ```{r}
 as_tibble(read.table("https://raw.githubusercontent.com/fboehm/qtl2pleio-manuscript/master/Rmd/recla-10-22.txt")) -> pvl1022
@@ -154,6 +167,8 @@ We then calculate the likelihood ratio test statistic.
 
 
 ## Profile LOD Plot
+
+We create a profile LOD plot.
 
 ```{r}
 colnames(recla$pheno)[c(10, 22)] <- c("Percent time in light", "Hot plate latency")
