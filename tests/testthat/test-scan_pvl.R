@@ -1,4 +1,5 @@
 library(qtl2pleio)
+library(testthat)
 context("testing scan_pvl")
 
 # setup
@@ -45,4 +46,11 @@ test_that("scan_pvl handles missing values in covariates appropriately", {
   expect_equal(sum(!is.na(so_cov)), prod(dim(so_cov)))
 })
 
-
+test_that("scan_pvl handles kinship = NULL", {
+  expect_true(is.data.frame(scan_pvl(probs = probs,
+                                     pheno = pheno,
+                                     kinship = NULL,
+                                     start_snp = 1,
+                                     n_snp = 10
+  )))
+})

@@ -2,10 +2,11 @@
 #'
 #' @param Vg d by d genetic covariance matrix for the d phenotypes
 #' @param Ve d by d error covariance matrix for the d phenotypes
-#' @param K n by n kinship matrix
+#' @param kinship optional n by n kinship matrix. if NULL, Vg is not used.
 #' @export
-calc_Sigma <- function(Vg, Ve, K) {
-    n_mouse <- nrow(K)
-    out <- Vg %x% K + Ve %x% diag(n_mouse)
+#' @return dn by dn covariance matrix
+calc_Sigma <- function(Vg, Ve, kinship = NULL) {
+    n_mouse <- nrow(kinship)
+    out <- Vg %x% kinship + Ve %x% diag(n_mouse)
     return(out)
 }

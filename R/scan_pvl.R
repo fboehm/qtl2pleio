@@ -156,15 +156,23 @@ scan_pvl <- function(probs,
     if (!is.null(addcovar)) {
         addcovar <- subset_input(input = addcovar, id2keep = id2keep)
     }
-    # covariance matrix estimation
-    message(paste0("starting covariance matrices estimation with data from ", length(id2keep), " subjects."))
-    # first, run gemma2::MphEM(), by way of calc_covs(), to get Vg and Ve
-    cc_out <- calc_covs(pheno, kinship, max_iter = max_iter, max_prec = max_prec, covariates = addcovar)
-    Vg <- cc_out$Vg
-    Ve <- cc_out$Ve
-    message("covariance matrices estimation completed.")
-    # define Sigma
-    Sigma <- calc_Sigma(Vg, Ve, kinship)
+    if (!is.null(kinship)){
+        # covariance matrix estimation
+        message(paste0("starting covariance matrices estimation with data from ", length(id2keep), " subjects."))
+        # first, run gemma2::MphEM(), by way of calc_covs(), to get Vg and Ve
+        cc_out <- calc_covs(pheno, kinship, max_iter = max_iter, max_prec = max_prec, covariates = addcovar)
+        Vg <- cc_out$Vg
+        Ve <- cc_out$Ve
+        message("covariance matrices estimation completed.")
+        # define Sigma
+        Sigma <- calc_Sigma(Vg, Ve, kinship)
+    }
+    if (is.null(kinship)){
+        # get Sigma for Haley Knott regression without random effect
+        Ve <- var(pheno) # get d by d covar matrix
+        Sigma <- calc_Sigma(Vg = NULL, Ve = Ve)
+    }
+
     # define Sigma_inv
     Sigma_inv <- solve(Sigma)
     # prepare table of marker indices for each call of scan_pvl
