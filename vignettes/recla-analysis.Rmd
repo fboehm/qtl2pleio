@@ -143,13 +143,13 @@ scan_pvl(probs = pp, pheno = wlph[, c(10, 22)], covariates = sex2, kinship = kin
 To save time, we read the two-dimensional scan results from github.
 
 ```{r}
-as_tibble(read.table("recla-10-22.txt")) -> pvl1022
+as_tibble(read.table("https://raw.githubusercontent.com/fboehm/qtl2pleio-manuscript/master/Rmd/recla-10-22.txt")) -> pvl1022
 ```
 
 We then calculate the likelihood ratio test statistic.
 
 ```{r}
-calc_lrt_tib(pvl1022)
+(mylrt <- calc_lrt_tib(pvl1022))
 ```
 
 
@@ -165,7 +165,49 @@ p1022 <- tidy_scan_pvl(pvl1022, pmap = gm) %>%
 
 ## Bootstrap analyses
 
-To save computing time, we read the bootstrap results files from Github. For details of how we performed the bootstrap analyses on the University of Wisconsin-Madison Center for High-Throughput Computing, please see the vignette: chtc-computing.
+First, we find the *pleiotropy peak* marker. This is the marker for which the log likelihood is maximized under the constraint of pleiotropy.
+
+
+```{r}
+find_pleio_peak_tib(pvl1022)
+```
+
+
+To save computing time, we read the bootstrap results files from Github. For details of how we performed the bootstrap analyses on the University of Wisconsin-Madison Center for High-Throughput Computing, please see the documentation in the qtl2pleio-manuscript repository: https://github.com/fboehm/qtl2pleio-manuscript.
+
+
+The code below creates a temporary directory "tmp" in the user's working directory. We then download a gzipped tar file that contains 1000 text files. Each text file contains a single likelihood ratio test statistic from a bootstrap sample.
+
+
+
+```{r}
+gz_file <- "https://raw.githubusercontent.com/fboehm/qtl2pleio-manuscript/master/chtc/Recla-bootstrap/submit_files/recla-boot-run561.tar.gz"
+tmp_dir <- file.path(getwd(), "tmp")
+dir.create(tmp_dir)
+download.file(gz_file, destfile = file.path(tmp_dir, "recla-boot-run561.tar.gz"))
+untar(file.path(tmp_dir, "recla-boot-run561.tar.gz"), exdir = tmp_dir)
+## read boot lrt files
+boot_lrt <- list()
+for (i in 1:1000){
+  n <- i - 1
+  fn <- paste0("recla-boot-run561_", n, ".txt")
+  boot_lrt[i] <- read.table(file.path(tmp_dir, fn))
+}
+# convert list to numeric vector
+boot_lrt <- unlist(boot_lrt)
+# delete tmp_dir and its contents
+unlink(tmp_dir, recursive = TRUE)
+```
+
+We get a bootstrap p-value by comparing the above vector's values to `mylrt`, the test statistic for the observed data.
+
+```{r}
+sum(boot_lrt >= mylrt) / length(boot_lrt)
+```
+
+
+
+
 
 
 
