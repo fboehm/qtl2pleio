@@ -139,8 +139,8 @@ s1c_22s <- s1c_22[650:999, ]
 
 
 ```{r}
-plot_coefCC(s1c_10s, map = pseudomap, main = "Allele effects for percent time in light", scan1_output = s1c_10s)
-plot_coefCC(s1c_22s, map = pseudomap, main = "Allele effects for hot plate latency", scan1_output = s1c_22s)
+plot_coefCC(s1c_10s, map = pseudomap, main = "Allele effects for percent time in light")
+plot_coefCC(s1c_22s, map = pseudomap, main = "Allele effects for hot plate latency")
 ```
 
 
