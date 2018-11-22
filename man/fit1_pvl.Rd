@@ -4,12 +4,11 @@
 \alias{fit1_pvl}
 \title{Fit a model for a specified d-tuple of markers}
 \usage{
-fit1_pvl(mytab, rownum, start_snp, probs, addcovar, inv_S, S, pheno)
+fit1_pvl(indices = unlist(mytab[rownum, ]), start_snp, probs, addcovar,
+  inv_S, S, pheno)
 }
 \arguments{
-\item{mytab}{a `mytab` object, with d + 1 columns, typically the output of `prep_mytab`}
-
-\item{rownum}{an integer to indicate which row of `mytab` to use}
+\item{indices}{a vector of indices for extracting elements of `probs` array}
 
 \item{start_snp}{an integer to specify the index of the marker where the scan - in call to scan_pvl - starts. This argument is needed because `mytab` has only relative indices (relative to the `start_snp` marker)}
 
@@ -55,7 +54,7 @@ Sigma_inv <- solve(Sigma)
 # prepare table of marker indices for each call of scan_pvl
 mytab <- prep_mytab(d_size = 2, n_snp = 10)
 # set up parallel analysis
-fit1_pvl(mytab, 1, start_snp = 1,
+fit1_pvl(mytab[1, ], start_snp = 1,
 probs = probs$`1`, addcovar = NULL, inv_S = Sigma_inv,
 S = Sigma,
 pheno = pheno

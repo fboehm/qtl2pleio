@@ -9,7 +9,7 @@ prep_X_list(indices, start_snp, probs, covariates)
 \arguments{
 \item{indices}{a vector of integers}
 
-\item{start_snp}{an integer}
+\item{start_snp}{an integer denoting the index (within genotype probabilities array) where the scan should start}
 
 \item{probs}{a three-dimensional array of genotype probabilities for a single chromosome}
 
