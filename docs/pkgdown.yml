@@ -1,6 +1,7 @@
 pandoc: 2.3.1
-pkgdown: 1.1.0.9000
-pkgdown_sha: f99ff09e95790156c36c8bcfa7288bf5a4bf0ca0
+pkgdown: 1.2.0.9000
+pkgdown_sha: 44460e6d6aae008684f68bf48a8a51e18c38a08a
 articles:
+  recla-analysis: recla-analysis.html
   testing-pleiotropy-vs-separate-qtl: testing-pleiotropy-vs-separate-qtl.html
 
