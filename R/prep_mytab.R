@@ -13,7 +13,7 @@ prep_mytab <- function(d_size, n_snp) {
 #' Create a list of component X matrices for input to stagger_mats, to ultimately create design matrix
 #'
 #' @param indices a vector of integers
-#' @param start_snp an integer
+#' @param start_snp an integer denoting the index (within genotype probabilities array) where the scan should start
 #' @param probs a three-dimensional array of genotype probabilities for a single chromosome
 #' @param covariates a matrix of covariates
 #' @export

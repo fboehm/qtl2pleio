@@ -86,7 +86,7 @@
       <h1>Recla Analysis</h1>
                         <h4 class="author">Frederick Boehm</h4>
             
-            <h4 class="date">2018-11-21</h4>
+            <h4 class="date">2018-11-22</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/fboehm/qtl2pleio/blob/master/vignettes/recla-analysis.Rmd"><code>vignettes/recla-analysis.Rmd</code></a></small>
       <div class="hidden name"><code>recla-analysis.Rmd</code></div>
@@ -268,9 +268,9 @@
 <div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="co"># subset scan1output objects</span></a>
 <a class="sourceLine" id="cb26-2" data-line-number="2">s1c_10s &lt;-<span class="st"> </span>s1c_<span class="dv">10</span>[<span class="dv">650</span><span class="op">:</span><span class="dv">999</span>, ] <span class="co"># 650:999 is the same as the interval for the two-dimensional scan.</span></a>
 <a class="sourceLine" id="cb26-3" data-line-number="3">s1c_22s &lt;-<span class="st"> </span>s1c_<span class="dv">22</span>[<span class="dv">650</span><span class="op">:</span><span class="dv">999</span>, ]</a></code></pre></div>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/qtl2/topics/plot_coef">plot_coefCC</a></span>(s1c_10s, <span class="dt">map =</span> pseudomap, <span class="dt">main =</span> <span class="st">"Allele effects for percent time in light"</span>, <span class="dt">scan1_output =</span> s1c_10s)</a></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/qtl2/topics/plot_coef">plot_coefCC</a></span>(s1c_10s, <span class="dt">map =</span> pseudomap, <span class="dt">main =</span> <span class="st">"Allele effects for percent time in light"</span>)</a></code></pre></div>
 <p><img src="recla-analysis_files/figure-html/unnamed-chunk-15-1.png" width="700"></p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/qtl2/topics/plot_coef">plot_coefCC</a></span>(s1c_22s, <span class="dt">map =</span> pseudomap, <span class="dt">main =</span> <span class="st">"Allele effects for hot plate latency"</span>, <span class="dt">scan1_output =</span> s1c_22s)</a></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/qtl2/topics/plot_coef">plot_coefCC</a></span>(s1c_22s, <span class="dt">map =</span> pseudomap, <span class="dt">main =</span> <span class="st">"Allele effects for hot plate latency"</span>)</a></code></pre></div>
 <p><img src="recla-analysis_files/figure-html/unnamed-chunk-15-2.png" width="700"></p>
 </div>
 <div id="two-dimensional-scan-results-from-github" class="section level2">
@@ -341,76 +341,76 @@
 ##  collate  en_US.UTF-8                 
 ##  ctype    en_US.UTF-8                 
 ##  tz       America/Chicago             
-##  date     2018-11-21                  
+##  date     2018-11-22                  
 ## 
 ## ─ Packages ──────────────────────────────────────────────────────────────
-##  package     * version    date       lib source                         
-##  assertthat    0.2.0      2017-04-11 [1] CRAN (R 3.5.0)                 
-##  backports     1.1.2      2017-12-13 [1] CRAN (R 3.5.0)                 
-##  base64enc     0.1-3      2015-07-28 [1] CRAN (R 3.5.0)                 
-##  bindr         0.1.1      2018-03-13 [1] CRAN (R 3.5.0)                 
-##  bindrcpp    * 0.2.2      2018-03-29 [1] CRAN (R 3.5.0)                 
-##  bit           1.1-14     2018-05-29 [1] CRAN (R 3.5.0)                 
-##  bit64         0.9-7      2017-05-08 [1] CRAN (R 3.5.0)                 
-##  blob          1.1.1      2018-03-25 [1] CRAN (R 3.5.0)                 
-##  broman        0.68-2     2018-07-25 [1] CRAN (R 3.5.0)                 
-##  callr         3.0.0      2018-08-24 [1] CRAN (R 3.5.0)                 
-##  cli           1.0.1      2018-09-25 [1] CRAN (R 3.5.0)                 
-##  colorspace    1.3-2      2016-12-14 [1] CRAN (R 3.5.0)                 
-##  commonmark    1.6        2018-09-30 [1] CRAN (R 3.5.0)                 
-##  crayon        1.3.4      2017-09-16 [1] CRAN (R 3.5.0)                 
-##  data.table    1.11.8     2018-09-30 [1] CRAN (R 3.5.0)                 
-##  DBI           1.0.0      2018-05-02 [1] CRAN (R 3.5.0)                 
-##  desc          1.2.0      2018-05-01 [1] CRAN (R 3.5.0)                 
-##  devtools      2.0.1      2018-10-26 [1] CRAN (R 3.5.1)                 
-##  digest        0.6.18     2018-10-10 [1] CRAN (R 3.5.0)                 
-##  dplyr       * 0.7.8      2018-11-10 [1] CRAN (R 3.5.0)                 
-##  evaluate      0.12       2018-10-09 [1] CRAN (R 3.5.0)                 
-##  fs            1.2.6      2018-08-23 [1] CRAN (R 3.5.0)                 
-##  ggplot2     * 3.1.0      2018-10-25 [1] CRAN (R 3.5.0)                 
-##  glue          1.3.0      2018-07-17 [1] CRAN (R 3.5.0)                 
-##  gtable        0.2.0      2016-02-26 [1] CRAN (R 3.5.0)                 
-##  htmltools     0.3.6      2017-04-28 [1] CRAN (R 3.5.0)                 
-##  jsonlite      1.5        2017-06-01 [1] CRAN (R 3.5.0)                 
-##  knitr         1.20       2018-02-20 [1] CRAN (R 3.5.0)                 
-##  labeling      0.3        2014-08-23 [1] CRAN (R 3.5.0)                 
-##  lazyeval      0.2.1      2017-10-29 [1] CRAN (R 3.5.0)                 
-##  magrittr      1.5        2014-11-22 [1] CRAN (R 3.5.0)                 
-##  MASS          7.3-50     2018-04-30 [1] CRAN (R 3.5.1)                 
-##  memoise       1.1.0      2017-04-21 [1] CRAN (R 3.5.0)                 
-##  munsell       0.5.0      2018-06-12 [1] CRAN (R 3.5.0)                 
-##  pillar        1.3.0      2018-07-14 [1] CRAN (R 3.5.0)                 
-##  pkgbuild      1.0.2      2018-10-16 [1] CRAN (R 3.5.0)                 
-##  pkgconfig     2.0.2      2018-08-16 [1] CRAN (R 3.5.0)                 
-##  pkgdown       1.2.0.9000 2018-11-21 [1] Github (hadley/pkgdown@44460e6)
-##  pkgload       1.0.2      2018-10-29 [1] CRAN (R 3.5.0)                 
-##  plyr          1.8.4      2016-06-08 [1] CRAN (R 3.5.0)                 
-##  prettyunits   1.0.2      2015-07-13 [1] CRAN (R 3.5.0)                 
-##  processx      3.2.0      2018-08-16 [1] CRAN (R 3.5.0)                 
-##  ps            1.2.1      2018-11-06 [1] CRAN (R 3.5.0)                 
-##  purrr         0.2.5      2018-05-29 [1] CRAN (R 3.5.0)                 
-##  qtl2        * 0.17-9     2018-11-18 [1] Github (rqtl/qtl2@1c007a2)     
-##  qtl2pleio   * 0.1.2.9000 2018-11-21 [1] local                          
-##  R6            2.3.0      2018-10-04 [1] CRAN (R 3.5.0)                 
-##  Rcpp          1.0.0.1    2018-11-18 [1] Github (RcppCore/Rcpp@4f168e6) 
-##  remotes       2.0.2      2018-10-30 [1] CRAN (R 3.5.0)                 
-##  rlang         0.3.0.1    2018-10-25 [1] CRAN (R 3.5.0)                 
-##  rmarkdown     1.10       2018-06-11 [1] CRAN (R 3.5.0)                 
-##  roxygen2      6.1.1      2018-11-07 [1] CRAN (R 3.5.0)                 
-##  rprojroot     1.3-2      2018-01-03 [1] CRAN (R 3.5.0)                 
-##  RSQLite       2.1.1      2018-05-06 [1] CRAN (R 3.5.0)                 
-##  rstudioapi    0.8        2018-10-02 [1] CRAN (R 3.5.0)                 
-##  scales        1.0.0      2018-08-09 [1] CRAN (R 3.5.0)                 
-##  sessioninfo   1.1.1      2018-11-05 [1] CRAN (R 3.5.0)                 
-##  stringi       1.2.4      2018-07-20 [1] CRAN (R 3.5.0)                 
-##  stringr       1.3.1      2018-05-10 [1] CRAN (R 3.5.0)                 
-##  testthat      2.0.1      2018-10-13 [1] CRAN (R 3.5.0)                 
-##  tibble        1.4.2      2018-01-22 [1] CRAN (R 3.5.0)                 
-##  tidyselect    0.2.5      2018-10-11 [1] CRAN (R 3.5.0)                 
-##  usethis       1.4.0      2018-08-14 [1] CRAN (R 3.5.0)                 
-##  withr         2.1.2      2018-03-15 [1] CRAN (R 3.5.0)                 
-##  xml2          1.2.0      2018-01-24 [1] CRAN (R 3.5.0)                 
-##  yaml          2.2.0      2018-07-25 [1] CRAN (R 3.5.0)                 
+##  package     * version    date       lib source                           
+##  assertthat    0.2.0      2017-04-11 [1] CRAN (R 3.5.0)                   
+##  backports     1.1.2      2017-12-13 [1] CRAN (R 3.5.0)                   
+##  base64enc     0.1-3      2015-07-28 [1] CRAN (R 3.5.0)                   
+##  bindr         0.1.1      2018-03-13 [1] CRAN (R 3.5.0)                   
+##  bindrcpp    * 0.2.2      2018-03-29 [1] CRAN (R 3.5.0)                   
+##  bit           1.1-14     2018-05-29 [1] CRAN (R 3.5.0)                   
+##  bit64         0.9-7      2017-05-08 [1] CRAN (R 3.5.0)                   
+##  blob          1.1.1      2018-03-25 [1] CRAN (R 3.5.0)                   
+##  broman        0.68-2     2018-07-25 [1] CRAN (R 3.5.0)                   
+##  callr         3.0.0      2018-08-24 [1] CRAN (R 3.5.0)                   
+##  cli           1.0.1      2018-09-25 [1] CRAN (R 3.5.0)                   
+##  colorspace    1.3-2      2016-12-14 [1] CRAN (R 3.5.0)                   
+##  commonmark    1.6        2018-09-30 [1] CRAN (R 3.5.0)                   
+##  crayon        1.3.4      2017-09-16 [1] CRAN (R 3.5.0)                   
+##  data.table    1.11.8     2018-09-30 [1] CRAN (R 3.5.0)                   
+##  DBI           1.0.0      2018-05-02 [1] CRAN (R 3.5.0)                   
+##  desc          1.2.0      2018-05-01 [1] CRAN (R 3.5.0)                   
+##  devtools      2.0.1      2018-10-26 [1] CRAN (R 3.5.1)                   
+##  digest        0.6.18     2018-10-10 [1] CRAN (R 3.5.0)                   
+##  dplyr       * 0.7.8      2018-11-10 [1] CRAN (R 3.5.0)                   
+##  evaluate      0.12       2018-10-09 [1] CRAN (R 3.5.0)                   
+##  fs            1.2.6      2018-08-23 [1] CRAN (R 3.5.0)                   
+##  ggplot2     * 3.1.0      2018-10-25 [1] CRAN (R 3.5.0)                   
+##  glue          1.3.0      2018-07-17 [1] CRAN (R 3.5.0)                   
+##  gtable        0.2.0      2016-02-26 [1] CRAN (R 3.5.0)                   
+##  htmltools     0.3.6      2017-04-28 [1] CRAN (R 3.5.0)                   
+##  jsonlite      1.5        2017-06-01 [1] CRAN (R 3.5.0)                   
+##  knitr         1.20       2018-02-20 [1] CRAN (R 3.5.0)                   
+##  labeling      0.3        2014-08-23 [1] CRAN (R 3.5.0)                   
+##  lazyeval      0.2.1      2017-10-29 [1] CRAN (R 3.5.0)                   
+##  magrittr      1.5        2014-11-22 [1] CRAN (R 3.5.0)                   
+##  MASS          7.3-50     2018-04-30 [1] CRAN (R 3.5.1)                   
+##  memoise       1.1.0      2017-04-21 [1] CRAN (R 3.5.0)                   
+##  munsell       0.5.0      2018-06-12 [1] CRAN (R 3.5.0)                   
+##  pillar        1.3.0      2018-07-14 [1] CRAN (R 3.5.0)                   
+##  pkgbuild      1.0.2      2018-10-16 [1] CRAN (R 3.5.0)                   
+##  pkgconfig     2.0.2      2018-08-16 [1] CRAN (R 3.5.0)                   
+##  pkgdown       1.2.0.9000 2018-11-21 [1] Github (hadley/pkgdown@44460e6)  
+##  pkgload       1.0.2      2018-10-29 [1] CRAN (R 3.5.0)                   
+##  plyr          1.8.4      2016-06-08 [1] CRAN (R 3.5.0)                   
+##  prettyunits   1.0.2      2015-07-13 [1] CRAN (R 3.5.0)                   
+##  processx      3.2.0      2018-08-16 [1] CRAN (R 3.5.0)                   
+##  ps            1.2.1      2018-11-06 [1] CRAN (R 3.5.0)                   
+##  purrr         0.2.5      2018-05-29 [1] CRAN (R 3.5.0)                   
+##  qtl2        * 0.17-9     2018-11-18 [1] Github (rqtl/qtl2@1c007a2)       
+##  qtl2pleio   * 0.1.2.9000 2018-11-22 [1] Github (fboehm/qtl2pleio@d414fa2)
+##  R6            2.3.0      2018-10-04 [1] CRAN (R 3.5.0)                   
+##  Rcpp          1.0.0.1    2018-11-18 [1] Github (RcppCore/Rcpp@4f168e6)   
+##  remotes       2.0.2      2018-10-30 [1] CRAN (R 3.5.0)                   
+##  rlang         0.3.0.1    2018-10-25 [1] CRAN (R 3.5.0)                   
+##  rmarkdown     1.10       2018-06-11 [1] CRAN (R 3.5.0)                   
+##  roxygen2      6.1.1      2018-11-07 [1] CRAN (R 3.5.0)                   
+##  rprojroot     1.3-2      2018-01-03 [1] CRAN (R 3.5.0)                   
+##  RSQLite       2.1.1      2018-05-06 [1] CRAN (R 3.5.0)                   
+##  rstudioapi    0.8        2018-10-02 [1] CRAN (R 3.5.0)                   
+##  scales        1.0.0      2018-08-09 [1] CRAN (R 3.5.0)                   
+##  sessioninfo   1.1.1      2018-11-05 [1] CRAN (R 3.5.0)                   
+##  stringi       1.2.4      2018-07-20 [1] CRAN (R 3.5.0)                   
+##  stringr       1.3.1      2018-05-10 [1] CRAN (R 3.5.0)                   
+##  testthat      2.0.1      2018-10-13 [1] CRAN (R 3.5.0)                   
+##  tibble        1.4.2      2018-01-22 [1] CRAN (R 3.5.0)                   
+##  tidyselect    0.2.5      2018-10-11 [1] CRAN (R 3.5.0)                   
+##  usethis       1.4.0      2018-08-14 [1] CRAN (R 3.5.0)                   
+##  withr         2.1.2      2018-03-15 [1] CRAN (R 3.5.0)                   
+##  xml2          1.2.0      2018-01-24 [1] CRAN (R 3.5.0)                   
+##  yaml          2.2.0      2018-07-25 [1] CRAN (R 3.5.0)                   
 ## 
 ## [1] /Library/Frameworks/R.framework/Versions/3.5/Resources/library</code></pre>
 </div>

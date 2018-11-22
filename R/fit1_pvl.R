@@ -5,8 +5,7 @@
 #' Creation of `fit1_pvl` - from code that originally resided in `scan_pvl`, enabled
 #' parallelization via the `parallel` R package.
 #'
-#' @param mytab a `mytab` object, with d + 1 columns, typically the output of `prep_mytab`
-#' @param rownum an integer to indicate which row of `mytab` to use
+#' @param indices a vector of indices for extracting elements of `probs` array
 #' @param start_snp an integer to specify the index of the marker where the scan - in call to scan_pvl - starts. This argument is needed because `mytab` has only relative indices (relative to the `start_snp` marker)
 #' @param probs founder allele probabilities matrix
 #' @param addcovar additive covariates matrix
@@ -38,13 +37,13 @@
 #' # prepare table of marker indices for each call of scan_pvl
 #' mytab <- prep_mytab(d_size = 2, n_snp = 10)
 #' # set up parallel analysis
-#' fit1_pvl(mytab, 1, start_snp = 1,
+#' fit1_pvl(mytab[1, ], start_snp = 1,
 #' probs = probs$`1`, addcovar = NULL, inv_S = Sigma_inv,
 #' S = Sigma,
 #' pheno = pheno
 #' )
 
-fit1_pvl <- function(mytab, rownum,
+fit1_pvl <- function(indices = unlist(mytab[rownum, ]),
                      start_snp,
                      probs,
                      addcovar,
@@ -52,8 +51,8 @@ fit1_pvl <- function(mytab, rownum,
                      S,
                      pheno
                      ){
-  indices <- unlist(mytab[rownum, ])
-  X_list <- prep_X_list(indices = indices[-length(indices)],
+  if (is.na(indices[length(indices)])) indices <- indices[- length(indices)]
+  X_list <- prep_X_list(indices = indices,
                         start_snp = start_snp,
                         probs = probs,
                         covariates = addcovar

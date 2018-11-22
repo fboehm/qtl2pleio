@@ -179,8 +179,8 @@ scan_pvl <- function(probs,
     # prepare table of marker indices for each call of scan_pvl
     mytab <- prep_mytab(d_size = d_size, n_snp = n_snp)
     # set up parallel analysis
-    list_result <- parallel::mclapply(mytab = mytab,
-                                X = 1:nrow(mytab),
+    list_result <- parallel::mclapply(
+                                X = as.data.frame(t(mytab)),
                                 FUN = fit1_pvl,
                                 addcovar = addcovar,
                                 probs = probs,
