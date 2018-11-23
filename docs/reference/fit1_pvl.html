@@ -134,18 +134,14 @@ parallelization via the `parallel` R package.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>fit1_pvl</span>(<span class='no'>mytab</span>, <span class='no'>rownum</span>, <span class='no'>start_snp</span>, <span class='no'>probs</span>, <span class='no'>addcovar</span>, <span class='no'>inv_S</span>, <span class='no'>S</span>, <span class='no'>pheno</span>)</pre>
+    <pre class="usage"><span class='fu'>fit1_pvl</span>(<span class='no'>indices</span>, <span class='no'>start_snp</span>, <span class='no'>probs</span>, <span class='no'>addcovar</span>, <span class='no'>inv_S</span>, <span class='no'>S</span>, <span class='no'>pheno</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>mytab</th>
-      <td><p>a `mytab` object, with d + 1 columns, typically the output of `prep_mytab`</p></td>
-    </tr>
-    <tr>
-      <th>rownum</th>
-      <td><p>an integer to indicate which row of `mytab` to use</p></td>
+      <th>indices</th>
+      <td><p>a vector of indices for extracting elements of `probs` array</p></td>
     </tr>
     <tr>
       <th>start_snp</th>
@@ -201,7 +197,7 @@ parallelization via the `parallel` R package.</p>
 <span class='co'># prepare table of marker indices for each call of scan_pvl</span>
 <span class='no'>mytab</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='prep_mytab.html'>prep_mytab</a></span>(<span class='kw'>d_size</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>n_snp</span> <span class='kw'>=</span> <span class='fl'>10</span>)
 <span class='co'># set up parallel analysis</span>
-<span class='fu'>fit1_pvl</span>(<span class='no'>mytab</span>, <span class='fl'>1</span>, <span class='kw'>start_snp</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+<span class='fu'>fit1_pvl</span>(<span class='no'>mytab</span>[<span class='fl'>1</span>, ], <span class='kw'>start_snp</span> <span class='kw'>=</span> <span class='fl'>1</span>,
 <span class='kw'>probs</span> <span class='kw'>=</span> <span class='no'>probs</span>$<span class='no'>`1`</span>, <span class='kw'>addcovar</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>inv_S</span> <span class='kw'>=</span> <span class='no'>Sigma_inv</span>,
 <span class='kw'>S</span> <span class='kw'>=</span> <span class='no'>Sigma</span>,
 <span class='kw'>pheno</span> <span class='kw'>=</span> <span class='no'>pheno</span>
