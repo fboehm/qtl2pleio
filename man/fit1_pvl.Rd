@@ -4,8 +4,7 @@
 \alias{fit1_pvl}
 \title{Fit a model for a specified d-tuple of markers}
 \usage{
-fit1_pvl(indices = unlist(mytab[rownum, ]), start_snp, probs, addcovar,
-  inv_S, S, pheno)
+fit1_pvl(indices, start_snp, probs, addcovar, inv_S, S, pheno)
 }
 \arguments{
 \item{indices}{a vector of indices for extracting elements of `probs` array}

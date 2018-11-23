@@ -43,7 +43,7 @@
 #' pheno = pheno
 #' )
 
-fit1_pvl <- function(indices = unlist(mytab[rownum, ]),
+fit1_pvl <- function(indices,
                      start_snp,
                      probs,
                      addcovar,
