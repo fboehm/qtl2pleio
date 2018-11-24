@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# qtl2pleio
+# qtl2pleio <img src="man/figures/logo.png" align="right" />
 
 [![Travis-CI Build
 Status](https://travis-ci.org/fboehm/qtl2pleio.svg?branch=master)](https://travis-ci.org/fboehm/qtl2pleio)
@@ -332,7 +332,7 @@ system.time(b_out <- boot_pvl(probs = pp,
 #> starting covariance matrices estimation with data from 261 subjects.
 #> covariance matrices estimation completed.
 #>    user  system elapsed 
-#>  55.406   0.475  55.985
+#>  50.532   0.427  51.004
 ```
 
 The argument `nboot_per_job` indicates the number of bootstrap samples
