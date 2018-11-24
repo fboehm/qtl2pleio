@@ -1,3 +1,7 @@
 destination: ~/Documents/website-mediumish/docs/static/software/qtl2pleio
 url: https://fboehm.us/static/software/qtl2pleio
 
+home:
+  links:
+  - text: Frederick Boehm's Website
+    href: https://fboehm.us
