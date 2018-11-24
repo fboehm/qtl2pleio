@@ -9,4 +9,4 @@ build_site:
 	Rscript -e 'pkgdown::build_site()'
 
 copy_site: build_site
-	cp -r docs/* $(WEB_PATH)
+	cp -R docs/* $(WEB_PATH)
