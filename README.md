@@ -332,7 +332,7 @@ system.time(b_out <- boot_pvl(probs = pp,
 #> starting covariance matrices estimation with data from 261 subjects.
 #> covariance matrices estimation completed.
 #>    user  system elapsed 
-#>  50.532   0.427  51.004
+#>  49.757   0.320  50.117
 ```
 
 The argument `nboot_per_job` indicates the number of bootstrap samples
