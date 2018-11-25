@@ -302,14 +302,14 @@ function `find_pleio_peak_tib`.
 ```
 
 ``` r
-set.seed(2018-10-03)
+set.seed(2018-11-25)
 system.time(b_out <- boot_pvl(probs = pp,
          pheno = Y, 
          pleio_peak_index = pleio_index, 
          kinship = kinship[[2]], # 2nd element in kinship list is Chr 3 
          nboot_per_job = 10, 
          start_snp = 38, 
-         n_snp = 10
+         n_snp = 25
          ))
 #> starting covariance matrices estimation with data from 261 subjects.
 #> covariance matrices estimation completed.
@@ -332,7 +332,7 @@ system.time(b_out <- boot_pvl(probs = pp,
 #> starting covariance matrices estimation with data from 261 subjects.
 #> covariance matrices estimation completed.
 #>    user  system elapsed 
-#>  49.757   0.320  50.117
+#> 184.168   2.012 186.441
 ```
 
 The argument `nboot_per_job` indicates the number of bootstrap samples
@@ -348,6 +348,9 @@ hypothesis, of observing a test statistic value that is at least as
 extreme as that which we observed?”
 
 ``` r
+b_out
+#>  [1] 0.0000000 0.0000000 0.4512753 0.0000000 0.0000000 0.0000000 0.0000000
+#>  [8] 0.0000000 0.0000000 0.9867788
 (pvalue <- mean(b_out >= lrt))
 #> [1] 0.1
 ```

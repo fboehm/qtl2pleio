@@ -233,14 +233,14 @@ Before we call `boot_pvl`, we need to identify the index (on the chromosome unde
 
 
 ```{r}
-set.seed(2018-10-03)
+set.seed(2018-11-25)
 system.time(b_out <- boot_pvl(probs = pp,
          pheno = Y, 
          pleio_peak_index = pleio_index, 
          kinship = kinship[[2]], # 2nd element in kinship list is Chr 3 
          nboot_per_job = 10, 
          start_snp = 38, 
-         n_snp = 10
+         n_snp = 25
          ))
 
 ```
@@ -251,6 +251,7 @@ The argument `nboot_per_job` indicates the number of bootstrap samples that will
 Finally, we determine a bootstrap p-value in the usual method. We treat the bootstrap samples' test statistics as an empirical distribution of the test statistic under the null hypothesis of pleiotropy. Thus, to get a p-value, we want to ask "What is the probability, under the null hypothesis, of observing a test statistic value that is at least as extreme as that which we observed?"
 
 ```{r}
+b_out
 (pvalue <- mean(b_out >= lrt))
 ```
 
