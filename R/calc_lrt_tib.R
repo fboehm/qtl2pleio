@@ -11,6 +11,7 @@
 #' @return a number, the LRT statistic
 calc_lrt_tib <- function(tib) {
     nc <- ncol(tib)
+    if (nc != 3) stop("tib must have exactly 3 columns")
     smat <- as.matrix(tib[, -nc])
     # define an indicator vector for which rows to keep when making pleio_tib
     pleio_ind <- apply(FUN = function(x) {
