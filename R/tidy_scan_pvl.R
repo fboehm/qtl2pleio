@@ -35,13 +35,13 @@ transform_loglik_mat <- function(loglik_mat) {
 #' @importFrom rlang .data
 
 add_pmap <- function(tib, pmap) {
-    pmap_tib <- tibble::tibble(marker = names(pmap), marker_position = pmap)
-    # now join
-    tib2 <- dplyr::left_join(tib, pmap_tib, by = c("marker1" = "marker"))
-    tib3 <- dplyr::rename(tib2, marker1_position = .data$marker_position)
-    tib4 <- dplyr::left_join(tib3, pmap_tib, by = c("marker2" = "marker"))
-    tib5 <- dplyr::rename(tib4, marker2_position = .data$marker_position)
-    return(tib5)
+    pmap_tib <- tibble::tibble(marker = as.character(names(pmap)), marker_position = pmap)
+    out <- pmap_tib %>%
+        dplyr::right_join(tib, by = c("marker" = "marker1")) %>%
+        dplyr::rename(marker1_position = .data$marker_position, marker1 = .data$marker) %>%
+        dplyr::left_join(pmap_tib, by = c("marker2" = "marker")) %>%
+        dplyr::rename(marker2_position = .data$marker_position)
+    return(out)
 }
 
 #' Assemble a profile ll tibble
@@ -76,19 +76,18 @@ assemble_profile_tib <- function(tib, trace = "profile1") {
 #' Tidy the data frame outputted by scan_pvl for further analysis & plotting
 #'
 #' @family profile log-likelihood tibble functions
-#' @param mytib outputted dataframe from scan_pvl
+#' @param mytib outputted tibble from scan_pvl
 #' @param pmap physical map (in Mb) for exactly one chromosome, pmap$`5`, for example
 #' @export
 #' @importFrom rlang .data
 
 tidy_scan_pvl <- function(mytib, pmap) {
-    mytib <- tibble::as_tibble(mytib)
-    mytib <- dplyr::rename(mytib, marker1 = .data$Var1, marker2 = .data$Var2, ll = .data$loglik)
-    dat <- add_pmap(mytib, pmap)
-    pl <- dplyr::filter(dat, .data$marker1 == .data$marker2)
-    # pleio_ll <- dplyr::rename(pleio_ll, marker_position = .data$marker1_position)
-    pl2 <- dplyr::rename(pl, marker_position = .data$marker1_position)
-    # pleio_ll <- dplyr::mutate(pleio_ll, trace = 'pleio')
+    dat <- mytib %>%
+        dplyr::rename(marker1 = .data$Var1, marker2 = .data$Var2, ll = .data$loglik) %>%
+        add_pmap(pmap)
+    pl2 <- dat %>%
+        dplyr::filter(.data$marker1 == .data$marker2) %>%
+        dplyr::rename(marker_position = .data$marker1_position)
     pl2$trace <- "pleio"
     pleio_ll <- dplyr::select(pl2, .data$marker_position, .data$ll, .data$trace)
     # assemble pro1_ll
@@ -96,12 +95,12 @@ tidy_scan_pvl <- function(mytib, pmap) {
     pro2 <- assemble_profile_tib(dat, "profile2")
     # bind 3 tibbles
     foo <- dplyr::bind_rows(pleio_ll, pro1, pro2)
-    foo$lod <- (foo$ll - max(pleio_ll$ll))/log(10)  # convert from base e to base 10
+    foo$lod <- (foo$ll - max(pleio_ll$ll)) / log(10)  # convert from base e to base 10
     dat <- dplyr::select(foo, .data$marker_position, .data$lod, .data$trace)
     return(dat)
 }
 
-#' Add intercepts to tidied loglikelihood tibble
+#' Add intercepts to tidied log-likelihood tibble
 #'
 #' @family profile log-likelihood tibble functions
 #' @param dat a tibble that results from tidy_scan_pvl acting on a log likelihood matrix

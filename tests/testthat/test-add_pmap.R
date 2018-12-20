@@ -1,28 +1,18 @@
 library(qtl2pleio)
+library(testthat)
+context("Testing add_pmap function")
 
-context("testing add_pmap")
+# set up tibble
 
-## example code
-pm <- 1:3
-names(pm) <- as.character(paste0('m', 1:3))
-expand.grid(paste0('m', 1:3), paste0('m', 1:3)) -> foo
-tib <- tibble::tibble(marker1 = as.character(foo[ , 1]),
-   marker2 = as.character(foo[ , 2]))
-tib$ll <- rgamma(9, 5)
-pm2 <- 1:4
-names(pm2) <- as.character(paste0('m', 1:4))
-# tests
+marker1 <- as.character(rep(paste0("m", 1:5), each = 5))
+marker2 <- as.character(rep(paste0("m", 1:5), times = 5))
+loglik <- - runif(25)
+dat <- tibble::tibble(marker1, marker2, loglik)
+pmap <- 1:5
+names(pmap) <- as.character(paste0("m", 1:5))
 
-test_that("add_pmap returns a tibble with 5 columns", {
-  expect_s3_class(add_pmap(tib, pm), class = "tbl_df")
-  expect_true(tibble::is_tibble(add_pmap(tib, pm)))
-  expect_equal(ncol(add_pmap(tib, pm)), 5)
+test_that("add_pmap outputs tibble with correct dimensions", {
+  expect_equal(nrow(add_pmap(dat, pmap)), nrow(dat))
+  expect_equal(ncol(add_pmap(dat, pmap)), ncol(dat) + 2)
+  expect_true(tibble::is_tibble(add_pmap(dat, pmap)))
 })
-
-test_that("add_pmap returns object with correct number of rows when inputs differ in length or number of rows",
-          {
-            expect_equal(nrow(add_pmap(tib, pm2)), 3 ^ 2)
-            expect_equal(nrow(add_pmap(tib, pm2[1:2])), 3 ^ 2)
-            expect
-          })
-
