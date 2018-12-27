@@ -2,7 +2,7 @@
 % Please edit documentation in R/tidy_scan_pvl.R
 \name{add_intercepts}
 \alias{add_intercepts}
-\title{Add intercepts to tidied loglikelihood tibble}
+\title{Add intercepts to tidied log-likelihood tibble}
 \usage{
 add_intercepts(dat, intercepts_univariate)
 }
@@ -12,7 +12,7 @@ add_intercepts(dat, intercepts_univariate)
 \item{intercepts_univariate}{a vector of length 2 that contains the x coordinate values for the ordered univariate peaks}
 }
 \description{
-Add intercepts to tidied loglikelihood tibble
+Add intercepts to tidied log-likelihood tibble
 }
 \seealso{
 Other profile log-likelihood tibble functions: \code{\link{add_pmap}},

@@ -7,7 +7,7 @@
 tidy_scan_pvl(mytib, pmap)
 }
 \arguments{
-\item{mytib}{outputted dataframe from scan_pvl}
+\item{mytib}{outputted tibble from scan_pvl}
 
 \item{pmap}{physical map (in Mb) for exactly one chromosome, pmap$`5`, for example}
 }

@@ -1,7 +1,7 @@
 #' Find the marker index corresponding to the peak of the pleiotropy trace in a tibble where the last column contains log likelihood values and the first d columns contain marker ids
 #'
 #' @param tib a (d+1) column tibble with first d columns containing marker ids and the last containing log likelihood values. Typically this is the output from `scan_pvl`.
-#' @param start_snp positive integer, from the pvl scan, that indicates where the scan started on the chromosome
+#' @param start_snp positive integer, from the two-dimensional scan, that indicates where the scan started on the chromosome
 #' @return positive integer indicating marker index for maximum value of log lik under pleiotropy
 #' @export
 #' @examples
@@ -13,6 +13,9 @@
 
 find_pleio_peak_tib <- function(tib, start_snp) {
     nc <- ncol(tib)
+    if (nc < 3){stop("tib must have at least 3 columns")}
+    if (!is.numeric(unlist(tib[, nc]))){stop("last column of tib must be numeric")}
+    if (sum(tib[, nc] >= 0) > 0){stop("last column of tib must have log likelihood values, which are all negative.")}
     smat <- as.matrix(tib[, -nc])
     # define an indicator vector for which rows to keep when making pleio_tib
     pleio_ind <- apply(FUN = function(x) {

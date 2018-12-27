@@ -30,6 +30,9 @@ sim400(run_num, index1, index2, probs, Vg = matrix(data = c(1, 0, 0, 1),
 
 \item{nsim}{number of trait files to create}
 }
+\value{
+a n by 2 matrix containing two distinct phenotypes
+}
 \description{
 Simulate many bivariate phenotype files and write them to a new directory
 }

@@ -9,7 +9,7 @@ find_pleio_peak_tib(tib, start_snp)
 \arguments{
 \item{tib}{a (d+1) column tibble with first d columns containing marker ids and the last containing log likelihood values. Typically this is the output from `scan_pvl`.}
 
-\item{start_snp}{positive integer, from the pvl scan, that indicates where the scan started on the chromosome}
+\item{start_snp}{positive integer, from the two-dimensional scan, that indicates where the scan started on the chromosome}
 }
 \value{
 positive integer indicating marker index for maximum value of log lik under pleiotropy
