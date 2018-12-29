@@ -53,6 +53,15 @@ add_pmap <- function(tib, pmap) {
 #' @return a tibble with 3 columns: marker position, profile log-likelihood, and trace (profile1 or profile2)
 #'
 #' @importFrom rlang .data
+#' @examples
+#' pm <- 1:3
+#' names(pm) <- as.character(paste0('m', 1:3))
+#' expand.grid(paste0('m', 1:3), paste0('m', 1:3)) -> foo
+#' tib <- tibble::tibble(marker1 = as.character(foo[ , 1]),
+#'   marker2 = as.character(foo[ , 2]))
+#' tib$ll <- rgamma(9, 5)
+#' add_pmap(tib, pm) -> tib_pm
+#' assemble_profile_tib(tib = tib_pm, trace = "profile1")
 
 assemble_profile_tib <- function(tib, trace = "profile1") {
     if (trace == "profile1")
@@ -77,9 +86,29 @@ assemble_profile_tib <- function(tib, trace = "profile1") {
 #'
 #' @family profile log-likelihood tibble functions
 #' @param mytib outputted tibble from scan_pvl
-#' @param pmap physical map (in Mb) for exactly one chromosome, pmap$`5`, for example
+#' @param pmap physical map (in Mb) or genetic map (in cM) for exactly one chromosome
 #' @export
 #' @importFrom rlang .data
+#' @examples
+#' # read data
+#' iron <- qtl2::read_cross2(system.file("extdata", "iron.zip", package="qtl2"))
+#' # insert pseudomarkers into map
+#' map <- qtl2::insert_pseudomarkers(iron$gmap, step=1)
+#' # calculate genotype probabilities
+#' probs <- qtl2::calc_genoprob(iron, map, error_prob=0.002)
+#' # grab phenotypes and covariates; ensure that covariates have names attribute
+#' pheno <- iron$pheno
+#' # leave-one-chromosome-out kinship matrices
+#' kinship <- qtl2::calc_kinship(probs, "loco")$`1`
+#' # get founder allele probabilites
+#' probs <- qtl2::genoprob_to_alleleprob(probs)$`1`
+#' ac <- matrix(as.numeric(iron$covar$sex == "m", ncol = 1))
+#' colnames(ac) <- "sex"
+#' rownames(ac) <- rownames(probs)
+#' ss <- scan_pvl(probs = probs, pheno = pheno, kinship = kinship, addcovar = ac,
+#' start_snp = 1, n_snp = 80, n_cores = 1)
+#' tidy_scan_pvl(ss, pm = map)
+
 
 tidy_scan_pvl <- function(mytib, pmap) {
     dat <- mytib %>%
@@ -103,28 +132,51 @@ tidy_scan_pvl <- function(mytib, pmap) {
 #' Add intercepts to tidied log-likelihood tibble
 #'
 #' @family profile log-likelihood tibble functions
-#' @param dat a tibble that results from tidy_scan_pvl acting on a log likelihood matrix
+#' @param tib a tibble that results from tidy_scan_pvl acting on a log likelihood matrix
 #' @param intercepts_univariate a vector of length 2 that contains the x coordinate values for the ordered univariate peaks
 #' @export
 #' @importFrom rlang .data
+#' @examples
+#' # read data
+#' iron <- qtl2::read_cross2(system.file("extdata", "iron.zip", package="qtl2"))
+#' # insert pseudomarkers into map
+#' map <- qtl2::insert_pseudomarkers(iron$gmap, step=1)
+#' # calculate genotype probabilities
+#' probs <- qtl2::calc_genoprob(iron, map, error_prob=0.002)
+#' # grab phenotypes and covariates; ensure that covariates have names attribute
+#' pheno <- iron$pheno
+#' # leave-one-chromosome-out kinship matrices
+#' kinship <- qtl2::calc_kinship(probs, "loco")$`1`
+#' # get founder allele probabilites
+#' probs <- qtl2::genoprob_to_alleleprob(probs)$`1`
+#' ac <- matrix(as.numeric(iron$covar$sex == "m", ncol = 1))
+#' colnames(ac) <- "sex"
+#' rownames(ac) <- rownames(probs)
+#' ss <- scan_pvl(probs = probs, pheno = pheno, kinship = kinship, addcovar = ac,
+#' start_snp = 1, n_snp = 80, n_cores = 1)
+#' tidy_scan_pvl(ss, pm = map) -> tidy_ss
+#' # in practice, use the univariate peaks for each trait.
+#' # here, we add arbitrary univariate peaks to illustrate function use.
+#' add_intercepts(tib = tidy_ss, intercepts_univariate = c(8, 10))
 
-add_intercepts <- function(dat, intercepts_univariate) {
-    dat$intercept_uni <- NA
-    dat$intercept_uni[dat$trace == "profile1"] <- intercepts_univariate[1]
-    dat$intercept_uni[dat$trace == "profile2"] <- intercepts_univariate[2]
+
+add_intercepts <- function(tib, intercepts_univariate) {
+    tib$intercept_uni <- NA
+    tib$intercept_uni[tib$trace == "profile1"] <- intercepts_univariate[1]
+    tib$intercept_uni[tib$trace == "profile2"] <- intercepts_univariate[2]
     # determine pleiotropy peak location
-    pleio_lod <- dplyr::filter(dat, .data$trace == "pleio")
+    pleio_lod <- dplyr::filter(tib, .data$trace == "pleio")
     pleio_peak <- pleio_lod$marker_position[which.max(pleio_lod$lod)]
-    dat$intercept_pleio <- NA
-    dat$intercept_pleio[dat$trace == "pleio"] <- pleio_peak
+    tib$intercept_pleio <- NA
+    tib$intercept_pleio[tib$trace == "pleio"] <- pleio_peak
     # determine bivariate peak locations
-    dat$intercept_biv <- NA
-    profile1_lod <- dplyr::filter(dat, .data$trace == "profile1")
+    tib$intercept_biv <- NA
+    profile1_lod <- dplyr::filter(tib, .data$trace == "profile1")
     profile1_peak <- profile1_lod$marker_position[which.max(profile1_lod$lod)]
-    profile2_lod <- dplyr::filter(dat, .data$trace == "profile2")
+    profile2_lod <- dplyr::filter(tib, .data$trace == "profile2")
     profile2_peak <- profile2_lod$marker_position[which.max(profile2_lod$lod)]
-    dat$intercept_biv[dat$trace == "profile1"] <- profile1_peak
-    dat$intercept_biv[dat$trace == "profile2"] <- profile2_peak
-    return(dat)
+    tib$intercept_biv[tib$trace == "profile1"] <- profile1_peak
+    tib$intercept_biv[tib$trace == "profile2"] <- profile2_peak
+    return(tib)
 }
 

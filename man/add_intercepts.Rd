@@ -4,15 +4,38 @@
 \alias{add_intercepts}
 \title{Add intercepts to tidied log-likelihood tibble}
 \usage{
-add_intercepts(dat, intercepts_univariate)
+add_intercepts(tib, intercepts_univariate)
 }
 \arguments{
-\item{dat}{a tibble that results from tidy_scan_pvl acting on a log likelihood matrix}
+\item{tib}{a tibble that results from tidy_scan_pvl acting on a log likelihood matrix}
 
 \item{intercepts_univariate}{a vector of length 2 that contains the x coordinate values for the ordered univariate peaks}
 }
 \description{
 Add intercepts to tidied log-likelihood tibble
+}
+\examples{
+# read data
+iron <- qtl2::read_cross2(system.file("extdata", "iron.zip", package="qtl2"))
+# insert pseudomarkers into map
+map <- qtl2::insert_pseudomarkers(iron$gmap, step=1)
+# calculate genotype probabilities
+probs <- qtl2::calc_genoprob(iron, map, error_prob=0.002)
+# grab phenotypes and covariates; ensure that covariates have names attribute
+pheno <- iron$pheno
+# leave-one-chromosome-out kinship matrices
+kinship <- qtl2::calc_kinship(probs, "loco")$`1`
+# get founder allele probabilites
+probs <- qtl2::genoprob_to_alleleprob(probs)$`1`
+ac <- matrix(as.numeric(iron$covar$sex == "m", ncol = 1))
+colnames(ac) <- "sex"
+rownames(ac) <- rownames(probs)
+ss <- scan_pvl(probs = probs, pheno = pheno, kinship = kinship, addcovar = ac,
+start_snp = 1, n_snp = 80, n_cores = 1)
+tidy_scan_pvl(ss, pm = map) -> tidy_ss
+# in practice, use the univariate peaks for each trait.
+# here, we add arbitrary univariate peaks to illustrate function use.
+add_intercepts(tib = tidy_ss, intercepts_univariate = c(8, 10))
 }
 \seealso{
 Other profile log-likelihood tibble functions: \code{\link{add_pmap}},

@@ -17,6 +17,16 @@ a tibble with 3 columns: marker position, profile log-likelihood, and trace (pro
 \description{
 Assemble a profile log-likelihood tibble
 }
+\examples{
+pm <- 1:3
+names(pm) <- as.character(paste0('m', 1:3))
+expand.grid(paste0('m', 1:3), paste0('m', 1:3)) -> foo
+tib <- tibble::tibble(marker1 = as.character(foo[ , 1]),
+  marker2 = as.character(foo[ , 2]))
+tib$ll <- rgamma(9, 5)
+add_pmap(tib, pm) -> tib_pm
+assemble_profile_tib(tib = tib_pm, trace = "profile1")
+}
 \seealso{
 Other profile log-likelihood tibble functions: \code{\link{add_intercepts}},
   \code{\link{add_pmap}}, \code{\link{tidy_scan_pvl}},
