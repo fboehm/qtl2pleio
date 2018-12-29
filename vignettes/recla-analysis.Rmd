@@ -95,10 +95,12 @@ cor(wlph[ , 22], wlph[ , 10], use = "complete.obs")
 cor(wlph[ , 7], wlph[ , 22], use = "complete.obs")
 ```
 
+Since "percent time in light" and "distance traveled in light" are very highly correlated, we'll discard "distance traveled in light" and perform subsequent analyses with only "percent time in light" and the second trait, "hot plate latency".
+
 
 ## Scatter plot of phenotypes
 
-We create a scatter plot for the two phenotypes.
+We create a scatter plot for the two phenotypes, "hot plate latency" and "percent time in light".
 
 ```{r}
 scatter1022 <- ggplot() + geom_point(data = wlph_tib, aes(y = HP_latency, x = LD_light_pct)) + labs(x = "Percent time in light", y = "Hot plate latency") + ggtitle("Scatterplot of hot plate latency vs. percent time in light")
@@ -118,7 +120,7 @@ plot(out, map = pseudomap, lodcolumn = 22, main = "Genome-wide LOD for hot plate
 ```
 
 
-## Allele effects plots on chr 8 for each of the three Recla traits
+## Allele effects plots on Chr 8 for each of the three Recla traits
 
 We examine the allele effects plots for our two traits, in the region of interest on Chromosome 8.
 
@@ -153,7 +155,7 @@ scan_pvl(probs = pp, pheno = wlph[, c(10, 22)], covariates = sex2, kinship = kin
 write.table(x = pvl1022, file = "recla-10-22.txt")
 ```
 
-To save computing time, we read the two-dimensional scan results from github.
+To save computing time, we read the two-dimensional scan results from Github.
 
 ```{r}
 as_tibble(read.table("https://raw.githubusercontent.com/fboehm/qtl2pleio-manuscript/master/Rmd/recla-10-22.txt")) -> pvl1022

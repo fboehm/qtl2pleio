@@ -14,14 +14,14 @@
 #' outputted object is a vector of `nboot_per_job` likelihood ratio test
 #' statistics from `nboot_per_job` distinct bootstrap samples.
 #'
-#' @param probs founder allele probabilities object for one chromosome only, like aprobs$`8`. Not a list
+#' @param probs founder allele probabilities three-dimensional array for one chromosome only (not a list)
 #' @param pheno n by d matrix of phenotypes
-#' @param addcovar n by n.cov matrix of additive numeric covariates
+#' @param addcovar n by c matrix of additive numeric covariates
 #' @param kinship a kinship matrix, not a list
 #' @param start_snp positive integer indicating index within probs for start of scan
 #' @param n_snp number of (consecutive) markers to use in scan
-#' @param pleio_peak_index positive integer index indicating design matrix for simulation. Typically acquired by using `find_pleio_peak_tib`.
-#' @param nboot_per_job number of bootstrap samples to call per invocation of function
+#' @param pleio_peak_index positive integer index indicating genotype matrix for bootstrap sampling. Typically acquired by using `find_pleio_peak_tib`.
+#' @param nboot_per_job number of bootstrap samples to acquire per function invocation
 #' @param max_iter maximum number of iterations for EM algorithm
 #' @param max_prec stepwise precision for EM algorithm. EM stops once incremental difference in log likelihood is less than max_prec
 #' @param n_cores number of cores to use when calling `scan_pvl`
@@ -44,6 +44,7 @@
 #'colnames(probs) <- 'A'
 #'dimnames(probs)[[3]] <- paste0('Marker', 1:10)
 #'# define Y
+#'set.seed(2018-12-29)
 #'Y_pre <- runif(200)
 #'Y <- matrix(data = Y_pre, nrow = 100)
 #'rownames(Y) <- s_id
@@ -56,14 +57,13 @@
 #'colnames(kin) <- s_id
 #'Y2 <- Y
 #'Y2[1, 2] <- NA
-#'set.seed(2018-10-22)
 #'boot_pvl(probs = probs, pheno = Y, kinship = kin,
 #'         start_snp = 1, n_snp = 10, pleio_peak_index = 10, nboot_per_job = 1)
 #'boot_pvl(probs = probs, pheno = Y2, kinship = kin,
 #'         start_snp = 1, n_snp = 10, pleio_peak_index = 10, nboot_per_job = 2)
 #'
 #'
-#' @return numeric vector of lrt statistics from `nboot_per_job` bootstrap samples
+#' @return numeric vector of (log) likelihood ratio test statistics from `nboot_per_job` bootstrap samples
 #'
 boot_pvl <- function(probs,
                      pheno,

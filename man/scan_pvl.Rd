@@ -15,7 +15,7 @@ scan_pvl(probs, pheno, kinship = NULL, addcovar = NULL,
 
 \item{kinship}{a kinship matrix for one chromosome}
 
-\item{addcovar}{a matrix, n subjects by n.cov, of additive covariates, where each column is one numeric additive covariate.}
+\item{addcovar}{a matrix, n subjects by c additive covariates}
 
 \item{start_snp}{index of where to start the scan within probs}
 
@@ -38,7 +38,7 @@ The function first discards individuals with one or more missing phenotypes or m
 It then infers variance components, Vg and Ve. Both Vg and Ve
 are d by d covariance matrices. It uses an expectation maximization algorithm, as
 implemented in the `gemma2` R package. `gemma2` R package is an R implementation of the
-GEMMA algorithm (Zhou & Stephens 2014 Nature methods).
+GEMMA algorithm for multivariate variance component estimation (Zhou & Stephens 2014 Nature methods).
 Note that variance components are fitted on a model that uses the d-variate phenotype
 but contains no genetic information. This model does, however,
 use the specified covariates (after dropping dependent columns
@@ -48,8 +48,6 @@ are then used in subsequent model fitting via
 generalized least squares.
 Generalized least squares model fitting is applied to every d-tuple of
 markers within the specified genomic region for `scan_pvl`.
-A progress bar appears *after* inferring Vg and Ve and records progress through the
-d-tuples of markers that constitute the d-variate scan.
 For a single d-tuple of markers, we fit the model:
 \deqn{vec(Y) = Xvec(B) + vec(G) + vec(E)} where
 \deqn{G \sim MN(0, K, \hat{Vg})} and \deqn{E \sim MN(0, I, \hat{Ve})} where \eqn{MN} denotes the matrix-variate
@@ -63,9 +61,6 @@ have only zero entries.
 The log-likelihood is returned for each model. The outputted object is a tibble with
 d + 1 columns. The first d columns specify the markers used in the corresponding model fit, while
 the last column specifies the log-likelihood value at that d-tuple of markers.
-Note also that the covariates matrix must be a set of linearly independent columns.
-scan_pvl checks for linear independence of columns in covariates and returns an error
-if the columns form a linear dependent set of vectors.
 }
 \examples{
 # read data
@@ -98,4 +93,8 @@ Genetics 140: 1111-1127.
 Zhou X, Stephens M (2014) Efficient multivariate linear
 mixed model algorithms for genome-wide association studies.
 Nature methods 11:407-409.
+
+Broman KW, Gatti DM, Simecek P, Furlotte NA, Prins P, Sen S, Yandell BS, Churchill GA (2018)
+R/qtl2: software for mapping quantitative trait loci with high-dimensional data and
+multi-parent populations. Biorxiv https://www.biorxiv.org/content/early/2018/09/12/414748.
 }

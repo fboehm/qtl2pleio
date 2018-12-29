@@ -272,3 +272,12 @@ Please note that this project is released with a [Contributor Code of Conduct](C
 citation("qtl2pleio")
 ```
 
+Icon image of mice: https://www.jax.org/~/media/JaxWeb/images/jax-mice-and-services/mice/datasheets/002468
+
+Icon image of Arabidopsis: https://sites.cns.utexas.edu/sites/default/files/styles/os_files_large/public/juenger_lab/files/pp1244cvr001-1.gif
+
+Icon image of Drosophila: https://www.yourgenome.org/sites/default/files/styles/banner/public/banners/stories/fruit-flies-in-the-laboratory/single-fruit-fly-drosophila-melanogaster-on-white-background-cropped.jpg
+
+
+
+

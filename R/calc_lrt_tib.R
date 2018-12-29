@@ -1,4 +1,4 @@
-#' Calculate a LRT statistic from the (new) output from scan_pvl
+#' Calculate a likelihood ratio test statistic from the output of scan_pvl()
 #'
 #' @param tib outputted tibble from scan_pvl
 #' @examples
@@ -8,7 +8,7 @@
 #' tibble::tibble(marker1, marker2, ll) -> scan_out
 #' calc_lrt_tib(scan_out)
 #' @export
-#' @return a number, the LRT statistic
+#' @return a number, the (log) likelihood ratio test statistic
 calc_lrt_tib <- function(tib) {
     nc <- ncol(tib)
     if (nc != 3) stop("tib must have exactly 3 columns")

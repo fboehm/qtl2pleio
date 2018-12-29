@@ -44,7 +44,7 @@ add_pmap <- function(tib, pmap) {
     return(out)
 }
 
-#' Assemble a profile ll tibble
+#' Assemble a profile log-likelihood tibble
 #'
 #' @family profile log-likelihood tibble functions
 #' @param tib a tibble, derived from loglik_mat and with pmap info

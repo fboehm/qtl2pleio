@@ -2,7 +2,7 @@
 % Please edit documentation in R/tidy_scan_pvl.R
 \name{assemble_profile_tib}
 \alias{assemble_profile_tib}
-\title{Assemble a profile ll tibble}
+\title{Assemble a profile log-likelihood tibble}
 \usage{
 assemble_profile_tib(tib, trace = "profile1")
 }
@@ -15,7 +15,7 @@ assemble_profile_tib(tib, trace = "profile1")
 a tibble with 3 columns: marker position, profile log-likelihood, and trace (profile1 or profile2)
 }
 \description{
-Assemble a profile ll tibble
+Assemble a profile log-likelihood tibble
 }
 \seealso{
 Other profile log-likelihood tibble functions: \code{\link{add_intercepts}},

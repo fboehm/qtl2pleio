@@ -2,7 +2,7 @@
 % Please edit documentation in R/calc_lrt_tib.R
 \name{calc_lrt_tib}
 \alias{calc_lrt_tib}
-\title{Calculate a LRT statistic from the (new) output from scan_pvl}
+\title{Calculate a likelihood ratio test statistic from the output of scan_pvl()}
 \usage{
 calc_lrt_tib(tib)
 }
@@ -10,10 +10,10 @@ calc_lrt_tib(tib)
 \item{tib}{outputted tibble from scan_pvl}
 }
 \value{
-a number, the LRT statistic
+a number, the (log) likelihood ratio test statistic
 }
 \description{
-Calculate a LRT statistic from the (new) output from scan_pvl
+Calculate a likelihood ratio test statistic from the output of scan_pvl()
 }
 \examples{
 rep(paste0('Marker', 1:3), times = 3) -> marker1

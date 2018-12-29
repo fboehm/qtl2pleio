@@ -9,11 +9,11 @@ boot_pvl(probs, pheno, addcovar = NULL, kinship = NULL,
   max_iter = 10000, max_prec = 1/1e+08, n_cores = 1)
 }
 \arguments{
-\item{probs}{founder allele probabilities object for one chromosome only, like aprobs$`8`. Not a list}
+\item{probs}{founder allele probabilities three-dimensional array for one chromosome only (not a list)}
 
 \item{pheno}{n by d matrix of phenotypes}
 
-\item{addcovar}{n by n.cov matrix of additive numeric covariates}
+\item{addcovar}{n by c matrix of additive numeric covariates}
 
 \item{kinship}{a kinship matrix, not a list}
 
@@ -21,9 +21,9 @@ boot_pvl(probs, pheno, addcovar = NULL, kinship = NULL,
 
 \item{n_snp}{number of (consecutive) markers to use in scan}
 
-\item{pleio_peak_index}{positive integer index indicating design matrix for simulation. Typically acquired by using `find_pleio_peak_tib`.}
+\item{pleio_peak_index}{positive integer index indicating genotype matrix for bootstrap sampling. Typically acquired by using `find_pleio_peak_tib`.}
 
-\item{nboot_per_job}{number of bootstrap samples to call per invocation of function}
+\item{nboot_per_job}{number of bootstrap samples to acquire per function invocation}
 
 \item{max_iter}{maximum number of iterations for EM algorithm}
 
@@ -32,7 +32,7 @@ boot_pvl(probs, pheno, addcovar = NULL, kinship = NULL,
 \item{n_cores}{number of cores to use when calling `scan_pvl`}
 }
 \value{
-numeric vector of lrt statistics from `nboot_per_job` bootstrap samples
+numeric vector of (log) likelihood ratio test statistics from `nboot_per_job` bootstrap samples
 }
 \description{
 Create a bootstrap sample, perform multivariate QTL scan, and calculate LRT statistic
@@ -59,6 +59,7 @@ rownames(probs) <- s_id
 colnames(probs) <- 'A'
 dimnames(probs)[[3]] <- paste0('Marker', 1:10)
 # define Y
+set.seed(2018-12-29)
 Y_pre <- runif(200)
 Y <- matrix(data = Y_pre, nrow = 100)
 rownames(Y) <- s_id
@@ -71,7 +72,6 @@ rownames(kin) <- s_id
 colnames(kin) <- s_id
 Y2 <- Y
 Y2[1, 2] <- NA
-set.seed(2018-10-22)
 boot_pvl(probs = probs, pheno = Y, kinship = kin,
         start_snp = 1, n_snp = 10, pleio_peak_index = 10, nboot_per_job = 1)
 boot_pvl(probs = probs, pheno = Y2, kinship = kin,
