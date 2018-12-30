@@ -1,7 +1,7 @@
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
+<!-- README.md is generated from README.Rmd. Please edit README.Rmd -->
 
-# qtl2pleio <img src="man/figures/logo.png" align="right" />
+# qtl2pleio <img src="https://github.com/fboehm/qtl2pleio/blob/master/man/figures/logo.png" align="right" />
 
 [![Travis-CI Build
 Status](https://travis-ci.org/fboehm/qtl2pleio.svg?branch=master)](https://travis-ci.org/fboehm/qtl2pleio)
@@ -332,7 +332,7 @@ system.time(b_out <- boot_pvl(probs = pp,
 #> starting covariance matrices estimation with data from 261 subjects.
 #> covariance matrices estimation completed.
 #>    user  system elapsed 
-#> 184.168   2.012 186.441
+#> 194.106   2.546 197.037
 ```
 
 The argument `nboot_per_job` indicates the number of bootstrap samples
@@ -394,3 +394,12 @@ citation("qtl2pleio")
 #>     url = {https://github.com/fboehm/qtl2pleio},
 #>   }
 ```
+
+Icon image of mice:
+<https://www.jax.org/~/media/JaxWeb/images/jax-mice-and-services/mice/datasheets/002468>
+
+Icon image of Arabidopsis:
+<https://sites.cns.utexas.edu/sites/default/files/styles/os_files_large/public/juenger_lab/files/pp1244cvr001-1.gif>
+
+Icon image of Drosophila:
+<https://www.yourgenome.org/sites/default/files/styles/banner/public/banners/stories/fruit-flies-in-the-laboratory/single-fruit-fly-drosophila-melanogaster-on-white-background-cropped.jpg>
