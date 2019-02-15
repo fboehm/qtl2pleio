@@ -12,8 +12,11 @@ vignette: >
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
-)
+  comment = "#>", 
+  tidy = TRUE, 
+  tidy.opts = list(width.cutoff = 60)
+  )
+
 ```
 
 ## Setting for pleiotropy vs. two separate QTL 
@@ -258,4 +261,15 @@ In practice, one would want to use many more bootstrap samples to achieve an emp
 However, if one wants to perform analyses with a reasonable number - say 400 - bootstrap samples, this will take a very long time - several days - on a single laptop computer. We have used a series of computer clusters that are coordinated by the University of Wisconsin-Madison's Center for High-throughput Computing (http://chtc.cs.wisc.edu). We typically are able to analyze 1000 bootstrap samples in less than 24 hours with this service.
 
 We recently added parallel computing capacity with `boot_pvl` and `scan_pvl`. The user may specify `n_cores` when calling each function. 
+
+
+
+
+
+## Session info
+
+```{r}
+devtools::session_info()
+```
+
 

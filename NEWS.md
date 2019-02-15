@@ -1,3 +1,10 @@
+# qtl2pleio 0.1.2.9001
+
+## Major changes
+
+* added a vignette for Condor & bootstrap analysis
+
+
 # qtl2pleio 0.1.2.9000
 
 ## Major changes
