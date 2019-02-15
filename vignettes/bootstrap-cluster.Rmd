@@ -19,6 +19,17 @@ knitr::opts_chunk$set(
 ```
 
 
+## Overview
+
+Performing a bootstrap analysis with qtl2pleio requires first sampling a (bivariate) phenotype from the inferred bivariate normal distribution, then a two-dimensional QTL scan over the defined scan region. Often, one wants to include more than 100 markers in a scan region. Each two-dimensional scan can take tens of minutes with a single core. Thus, performing a bootstrap analysis with, say, 1000 bootstrap samples is prohibitively time-consuming on most computers.
+For this reason, we used a high-throughput computing cluster at the University of Wisconsin-Madison (where qtl2pleio was developed). The UW-Madison Center for High-Throughput Computing is available to all UW-Madison researchers. While we recognize that qtl2pleio users may not have access to the CHTC, we anticipate that some will have access to computing cl
+
+## Directory structure, files & setup for using Condor
+
+
+
+## Submitting jobs to Condor (at UW-Madison CHTC)
+
 
 
 
