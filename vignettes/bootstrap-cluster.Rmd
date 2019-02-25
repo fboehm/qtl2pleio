@@ -21,10 +21,70 @@ knitr::opts_chunk$set(
 
 ## Overview
 
-Performing a bootstrap analysis with qtl2pleio requires first sampling a (bivariate) phenotype from the inferred bivariate normal distribution, then a two-dimensional QTL scan over the defined scan region. Often, one wants to include more than 100 markers in a scan region. Each two-dimensional scan can take tens of minutes with a single core. Thus, performing a bootstrap analysis with, say, 1000 bootstrap samples is prohibitively time-consuming on most computers.
-For this reason, we used a high-throughput computing cluster at the University of Wisconsin-Madison (where qtl2pleio was developed). The UW-Madison Center for High-Throughput Computing is available to all UW-Madison researchers. While we recognize that qtl2pleio users may not have access to the CHTC, we anticipate that some will have access to computing cl
+Performing a bootstrap analysis with `qtl2pleio` requires first sampling a (bivariate) phenotype from the inferred bivariate normal distribution, then a two-dimensional QTL scan over the defined scan region. Often, one wants to include more than 100 markers in a scan region. Each two-dimensional scan can take tens of minutes with a single core. Thus, performing a bootstrap analysis with, say, 1000 bootstrap samples is prohibitively time-consuming on most computers.
+For this reason, we used a high-throughput computing cluster at the University of Wisconsin-Madison (where `qtl2pleio` was developed). The UW-Madison Center for High-Throughput Computing is available to all UW-Madison researchers. While we recognize that `qtl2pleio` users may not have access to the CHTC, we anticipate that some will have access to computing cluster. Hopefully this vignette can be adapted to your needs.
 
 ## Directory structure, files & setup for using Condor
+
+The repository at ** **
+demonstrates the directory structure that we used in our bootstrap analyses.
+
+Within a project directory, we created four subdirectories:
+
+
+1. Rscript
+1. data
+1. shell_scripts
+1. submit_files
+
+The Github repository also contains a fifth subdirectory, `squid` that is included for completeness. In practice, files in `squid` were in a distinct directory. We describe it below.
+
+### Files in `Rscript`
+
+The `Rscript` subdirectory contains a file, `boot-Recla-10-22.R` that contains R code for our bootstrap analysis.
+
+```{r}
+fn <- file.path("https://raw.githubusercontent.com", 
+                "fboehm/qtl2pleio-manuscript/master/chtc", 
+                "Recla-bootstrap/Rscript/boot-Recla-10-22.R"
+                )
+foo <- readLines(fn)
+```
+
+
+Here we display the contents of our `boot-Recla-10-22.R` file.
+
+```{r, echo = FALSE, comment = ""}
+cat(foo, sep = "\n")
+```
+
+
+
+
+ 
+### Files in `data`
+
+
+
+
+
+### Files in `shell_scripts`
+
+
+### Files in `submit_files`
+
+The HTCondor "submit" file provides instructions for controlling the interaction with the high-throughput resources. 
+
+
+
+
+### Files on `SQUID`
+
+The UW-Madison CHTC provides for each user disk space on a web proxy. More information about `SQUID` can be found here: http://chtc.cs.wisc.edu/file-avail-squid.shtml
+
+In practice, we placed files containing founder allele dosages (for chromosomes of interest) and our (compressed) R installation on `SQUID`.
+
+
 
 
 

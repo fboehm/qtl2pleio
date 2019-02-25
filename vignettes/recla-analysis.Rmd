@@ -15,13 +15,13 @@ library(ggplot2)
 library(qtl2pleio)
 library(qtl2)
 knitr::opts_chunk$set(tidy = TRUE, 
-                      tidy.opts = list(width.cutoff = 60)
+                      tidy.opts = list(width.cutoff = 50)
                       )
 ```
 
 
 
-## Load Recla from `qtl2data` github repository
+## Load Recla data from `qtl2data` github repository
 
 ```{r}
 file <- paste0("https://raw.githubusercontent.com/rqtl/",
@@ -55,8 +55,6 @@ kinship <- calc_kinship(aprobs, "loco")
 recla$pheno -> ph
 log(ph) -> lph
 apply(FUN = broman::winsorize, X = lph, MARGIN = 2) -> wlph
-#colnames(wlph)[c(7, 10, 22)] <- c("distance traveled in light", "percent time in light", "hot plate latency")
-
 as_tibble(wlph) -> wlph_tib
 ```
 
@@ -66,7 +64,12 @@ We next perform the univariate QTL scan for our phenotypes.
 sex2 <- matrix(as.numeric(sex == "female"), ncol = 1)
 colnames(sex2) <- "female"
 rownames(sex2) <- rownames(aprobs[[1]])
-out <- scan1(genoprobs = aprobs, pheno = wlph, kinship = kinship, addcovar = sex2, reml = TRUE)
+out <- scan1(genoprobs = aprobs, 
+             pheno = wlph, 
+             kinship = kinship, 
+             addcovar = sex2, 
+             reml = TRUE
+             )
 ```
 
 Let's find the univariate QTL peaks for all phenotypes.
@@ -106,7 +109,10 @@ Since "percent time in light" and "distance traveled in light" are very highly c
 We create a scatter plot for the two phenotypes, "hot plate latency" and "percent time in light".
 
 ```{r}
-scatter1022 <- ggplot() + geom_point(data = wlph_tib, aes(y = HP_latency, x = LD_light_pct)) + labs(x = "Percent time in light", y = "Hot plate latency") + ggtitle("Scatterplot of hot plate latency vs. percent time in light")
+scatter1022 <- ggplot() + 
+  geom_point(data = wlph_tib, aes(y = HP_latency, x = LD_light_pct)) +
+  labs(x = "Percent time in light", y = "Hot plate latency") +
+  ggtitle("Scatterplot of hot plate latency vs. percent time in light")
 scatter1022
 ```
 
@@ -115,11 +121,17 @@ scatter1022
 Let's plot the results of the univariate QTL scans for our two traits.
 
 ```{r}
-plot(out, map = pseudomap, lodcolumn = 10, main = "Genome-wide LOD for percent time in light")
+plot(out, map = pseudomap, 
+     lodcolumn = 10, 
+     main = "Genome-wide LOD for percent time in light"
+     )
 ```
 
 ```{r}
-plot(out, map = pseudomap, lodcolumn = 22, main = "Genome-wide LOD for hot plate latency")
+plot(out, map = pseudomap, 
+     lodcolumn = 22, 
+     main = "Genome-wide LOD for hot plate latency"
+     )
 ```
 
 
@@ -138,7 +150,8 @@ scan1coef(aprobs[ , 8], pheno = wlph[, 22], kinship = kinship$`8`,
 
 ```{r}
 # subset scan1output objects
-s1c_10s <- s1c_10[650:999, ] # 650:999 is the same as the interval for the two-dimensional scan.
+s1c_10s <- s1c_10[650:999, ] 
+# 650:999 is the same as the interval for the two-dimensional scan.
 s1c_22s <- s1c_22[650:999, ]
 ```
 
