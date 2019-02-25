@@ -1,8 +1,9 @@
 
 <!-- README.md is generated from README.Rmd. Please edit README.Rmd -->
 
-# qtl2pleio <img src="https://github.com/fboehm/qtl2pleio/blob/master/man/figures/logo.png" align="right" />
+# qtl2pleio <img src="https://raw.githubusercontent.com/fboehm/qtl2pleio/master/man/figures/logo.png" align="right" />
 
+[![Binder](http://mybinder.org/badge_logo.svg)](http://mybinder.org/v2/gh/fboehm/qtl2pleio/master?urlpath=rstudio)
 [![Travis-CI Build
 Status](https://travis-ci.org/fboehm/qtl2pleio.svg?branch=master)](https://travis-ci.org/fboehm/qtl2pleio)
 [![Coverage
@@ -332,7 +333,7 @@ system.time(b_out <- boot_pvl(probs = pp,
 #> starting covariance matrices estimation with data from 261 subjects.
 #> covariance matrices estimation completed.
 #>    user  system elapsed 
-#> 194.106   2.546 197.037
+#> 194.531   3.017 197.971
 ```
 
 The argument `nboot_per_job` indicates the number of bootstrap samples
@@ -380,7 +381,7 @@ citation("qtl2pleio")
 #> 
 #> To cite qtl2pleio in publications use:
 #> 
-#>   Frederick Boehm (2018). qtl2pleio: Testing pleiotropy vs.
+#>   Frederick Boehm (2019). qtl2pleio: Testing pleiotropy vs.
 #>   separate QTL in multiparental populations. R package version
 #>   0.1.2.9000. URL https://github.com/fboehm/qtl2pleio
 #> 
@@ -389,7 +390,7 @@ citation("qtl2pleio")
 #>   @Manual{,
 #>     title = {qtl2pleio: Testing pleiotropy vs. separate QTL in multiparental populations},
 #>     author = {Frederick Boehm},
-#>     year = {2018},
+#>     year = {2019},
 #>     note = {R package version 0.1.2.9000},
 #>     url = {https://github.com/fboehm/qtl2pleio},
 #>   }
