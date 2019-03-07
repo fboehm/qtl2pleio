@@ -26,7 +26,7 @@ knitr::opts_chunk$set(
 
 ## Goals
 
-The goal of qtl2pleio is to perform a likelihood ratio test that distinguishes between competing hypotheses of presence of two separate QTL (alternative hypothesis) and pleiotropy (null hypothesis) in QTL studies in multiparental populations, such as the Diversity Outbred mouse population. `qtl2pleio` data structures are those used in the `rqtl/qtl2` package. 
+The goal of qtl2pleio is to perform a likelihood ratio test that distinguishes between competing hypotheses of presence of two separate QTL (alternative hypothesis) and pleiotropy (null hypothesis) in QTL studies in multiparental populations, such as the Diversity Outbred mouse population. `qtl2pleio` data structures are those used in the `rqtl/qtl2` package.
 
 
 ## Installation
@@ -119,9 +119,9 @@ We use the model:
 
 $$vec(Y) = X vec(B) + vec(G) + vec(E)$$
 
-where $Y$ is a $n$ by $2$ matrix, where each row is one subject and each column is one quantitative trait. $X$ is a $2n$ by $2f$ design matrix containing $n$ by $f$ allele probabilities matrices for each of two (possibly identical) markers. Thus, $X$ is a block-diagonal matrix, with exactly two $n$ by $f$ blocks on the diagonal. $B$ is a $f$ by 2 matrix. "vec" refers to the vectorization operator. "vec(B)", where $B$ is a $f$ by $2$ matrix, is, thus, a (column) vector of length $2f$ that is formed by stacking the second column of $B$ beneath the first column of $B$. 
+where $Y$ is a $n$ by $2$ matrix, where each row is one subject and each column is one quantitative trait. $X$ is a $2n$ by $2f$ design matrix containing $n$ by $f$ allele probabilities matrices for each of two (possibly identical) markers. Thus, $X$ is a block-diagonal matrix, with exactly two $n$ by $f$ blocks on the diagonal. $B$ is a $f$ by 2 matrix. "vec" refers to the vectorization operator. "vec(B)", where $B$ is a $f$ by $2$ matrix, is, thus, a (column) vector of length $2f$ that is formed by stacking the second column of $B$ beneath the first column of $B$.
 
-$G$ is a matrix of random effects. We specify its distribution as matrix-variate normal with mean being a $n$ by $2$ matrix of zeros, covariance among row vectors a $n$ by $n$ kinship matrix, $K$, and covariance among column vectors a $2$ by $2$ genetic covariance matrix, $V_g$. 
+$G$ is a matrix of random effects. We specify its distribution as matrix-variate normal with mean being a $n$ by $2$ matrix of zeros, covariance among row vectors a $n$ by $n$ kinship matrix, $K$, and covariance among column vectors a $2$ by $2$ genetic covariance matrix, $V_g$.
 
 In mathematical notation, we write:
 
@@ -133,7 +133,7 @@ $$E \sim MN_{\text{n by 2}}(0, I_n, V_e)$$
 
 
 
-In practice, we typically observe the phenotype matrix $Y$. We also treat as known the design matrix $X$ and the kinship matrix $K$. We then infer the values of $B$, $V_g$, and $V_e$. 
+In practice, we typically observe the phenotype matrix $Y$. We also treat as known the design matrix $X$ and the kinship matrix $K$. We then infer the values of $B$, $V_g$, and $V_e$.
 
 
 
@@ -182,10 +182,10 @@ find_peaks(s1, map = pm)
 
 
 ```{r}
-out <- scan_pvl(probs = pp, 
-                pheno = Y, 
+out <- scan_pvl(probs = pp,
+                pheno = Y,
                 kinship = kinship[[2]], # 2nd entry in kinship list is Chr 3
-                start_snp = 38, 
+                start_snp = 38,
                 n_snp = 25, n_cores = 1
                 )
 ```
@@ -195,7 +195,7 @@ out <- scan_pvl(probs = pp,
 
 ```{r}
 library(dplyr)
-out %>% 
+out %>%
   tidy_scan_pvl(pm3) %>% # pm3 is physical map for Chr 3
   add_intercepts(intercepts_univariate = c(82.8, 82.8)) %>%
   plot_pvl(phenames = c("tr1", "tr2"))
@@ -213,16 +213,16 @@ We use the function `calc_lrt_tib` to calculate the likelihood ratio test statis
 
 ### Bootstrap analysis to get p-values
 
-The calibration of test statistic values to get p-values uses bootstrap methods because we don't know the theoretical distribution of the test statistic under the null hypothesis. Thus, we use a bootstrap approach to obtain an empirical distribution of test statistic values under the null hypothesis of the presence of one pleiotropic locus. 
+The calibration of test statistic values to get p-values uses bootstrap methods because we don't know the theoretical distribution of the test statistic under the null hypothesis. Thus, we use a bootstrap approach to obtain an empirical distribution of test statistic values under the null hypothesis of the presence of one pleiotropic locus.
 
 We will use the function `boot_pvl` from our package `qtl2pleio`.
 
-We use a parametric bootstrap strategy in which we first use the studied phenotypes to infer the values of model parameters. Once we have the inferred values of the model parameters, we simulate phenotypes from the pleiotropy model (with the inferred parameter values). 
+We use a parametric bootstrap strategy in which we first use the studied phenotypes to infer the values of model parameters. Once we have the inferred values of the model parameters, we simulate phenotypes from the pleiotropy model (with the inferred parameter values).
 
 
 A natural question that arises is "which marker's allele probabilities do we use when simulating phenotypes?" We use the marker that, under the null hypothesis, ie, under the pleiotropy constraint, yields the greatest value of the log-likelihood.
 
-Before we call `boot_pvl`, we need to identify the index (on the chromosome under study) of the marker that maximizes the likelihood under the pleiotropy constraint. To do this, we use the `qtl2pleio` function `find_pleio_peak_tib`. 
+Before we call `boot_pvl`, we need to identify the index (on the chromosome under study) of the marker that maximizes the likelihood under the pleiotropy constraint. To do this, we use the `qtl2pleio` function `find_pleio_peak_tib`.
 
 ```{r}
 (pleio_index <- find_pleio_peak_tib(out, start_snp = 38))
@@ -234,11 +234,11 @@ Before we call `boot_pvl`, we need to identify the index (on the chromosome unde
 ```{r}
 set.seed(2018-11-25)
 system.time(b_out <- boot_pvl(probs = pp,
-         pheno = Y, 
-         pleio_peak_index = pleio_index, 
-         kinship = kinship[[2]], # 2nd element in kinship list is Chr 3 
-         nboot_per_job = 10, 
-         start_snp = 38, 
+         pheno = Y,
+         pleio_peak_index = pleio_index,
+         kinship = kinship[[2]], # 2nd element in kinship list is Chr 3
+         nboot_per_job = 10,
+         start_snp = 38,
          n_snp = 25
          ))
 
@@ -276,7 +276,3 @@ Icon image of mice: https://www.jax.org/~/media/JaxWeb/images/jax-mice-and-servi
 Icon image of Arabidopsis: https://sites.cns.utexas.edu/sites/default/files/styles/os_files_large/public/juenger_lab/files/pp1244cvr001-1.gif
 
 Icon image of Drosophila: https://www.yourgenome.org/sites/default/files/styles/banner/public/banners/stories/fruit-flies-in-the-laboratory/single-fruit-fly-drosophila-melanogaster-on-white-background-cropped.jpg
-
-
-
-
