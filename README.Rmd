@@ -117,7 +117,7 @@ We see that `pr` is a list of 3 three-dimensional arrays - one array for each of
 For our statistical model, we need a kinship matrix. Although we don't have genome-wide data - since we have allele probabilities for only 3 chromosomes - let's calculate a kinship matrix using "leave-one-chromosome-out". In practice, one would want to use allele probabilities from a full genome-wide set of markers.
 
 ```{r}
-calc_kinship(probs = pr, type = "loco") -> kinship
+kinship <- calc_kinship(probs = pr, type = "loco")
 ```
 
 ```{r}
@@ -178,7 +178,7 @@ colnames(Y) <- c("tr1", "tr2")
 Let's perform univariate QTL mapping for each of the two traits in the Y matrix.
 
 ```{r}
-scan1(genoprobs = pr, pheno = Y, kinship = kinship) -> s1
+s1 <- scan1(genoprobs = pr, pheno = Y, kinship = kinship)
 ```
 
 ```{r}
@@ -224,7 +224,7 @@ out %>%
 We use the function `calc_lrt_tib` to calculate the likelihood ratio test statistic value for the specified traits and specified genomic region.
 
 ```{r}
-(calc_lrt_tib(out) -> lrt)
+(lrt <- calc_lrt_tib(out))
 ```
 
 ### Bootstrap analysis to get p-values
