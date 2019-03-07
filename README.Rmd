@@ -181,13 +181,19 @@ Let's perform univariate QTL mapping for each of the two traits in the Y matrix.
 s1 <- scan1(genoprobs = pr, pheno = Y, kinship = kinship)
 ```
 
+Here is a plot of the results.
+
 ```{r}
 plot(s1, pm)
+plot(s1, pm, lod=2, col="violetred", add=TRUE)
+legend("topleft", colnames(s1), lwd=2, col=c("darkslateblue", "violetred"), bg="gray92")
 ```
 
 
+And here are the observed QTL peaks with LOD > 8.
+
 ```{r}
-find_peaks(s1, map = pm)
+find_peaks(s1, map = pm, threshold=8)
 ```
 
 
