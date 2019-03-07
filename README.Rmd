@@ -26,7 +26,16 @@ knitr::opts_chunk$set(
 
 ## Goals
 
-The goal of qtl2pleio is to perform a likelihood ratio test that distinguishes between competing hypotheses of presence of two separate QTL (alternative hypothesis) and pleiotropy (null hypothesis) in QTL studies in multiparental populations, such as the Diversity Outbred mouse population. `qtl2pleio` data structures are those used in the `rqtl/qtl2` package.
+The goal of qtl2pleio is, for a pair of traits that show evidence for
+a QTL in a common region, to distinguish between pleiotropy (the null
+hypothesis, that they are affected by a common QTL) and the
+alternative that they are affected by separate QTL. It extends the
+likelihood ratio test of [Jiang and Zeng
+(1995)](http://www.genetics.org/content/140/3/1111.long) for
+multiparental populations, such as Diversity Outbred mice, including
+the use of a linear mixed model to account for population structure.
+`qtl2pleio` data structures are those used in the
+[`rqtl/qtl2`](https://kbroman.org/qtl2) package.
 
 
 ## Installation
