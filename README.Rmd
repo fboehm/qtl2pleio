@@ -41,37 +41,45 @@ the use of a linear mixed model to account for population structure.
 ## Installation
 
 
+To install qtl2pleio, use `install_github()` from the
+[devtools](https://devtools.r-lib.org) package.
+
+
 ```{r, eval = FALSE}
 install.packages("devtools")
 devtools::install_github("fboehm/qtl2pleio")
 ```
 
+You may also wish to install [R/qtl2](https://kbroman.org/qtl2) and
+the [`qtl2convert`](https://github.com/rqtl/qtl2convert) package. We
+will use both below.
+
+```{r, eval = FALSE}
+install.packages(c("qtl2", "qtl2convert"), repos="http://rqtl.org/qtl2")
+```
 
 
 ## Example
 
-Below, we walk through an example analysis with Diversity Outbred mouse data. We need a number of preliminary steps before we can perform our test of pleiotropy vs. separate QTL. Many procedures rely on the R package `qtl2`.
+Below, we walk through an example analysis with Diversity Outbred
+mouse data. We need a number of preliminary steps before we can
+perform our test of pleiotropy vs. separate QTL. Many procedures rely
+on the R package `qtl2`. We first load the `qtl2`, `qtl2convert`,
+and `qtl2pleio` packages.
 
 ```{r}
+library(qtl2)
+library(qtl2convert)
 library(qtl2pleio)
 ```
 
 
-We'll work with data from the `qtl2data` repository, which is on github. First, we install and load the `qtl2` package.
-
-```{r, eval = FALSE}
-devtools::install_github("rqtl/qtl2")
-```
-
-We use the above line once to install the package on our computer before loading the package with the `library` command.
-
-```{r}
-library(qtl2)
-```
-
 ### Reading data from `qtl2data` repository on github
 
-We read from github.com data from the `qtl2data` repository.
+We'll consider the
+[`DOex`](https://github.com/rqtl/qtl2data/tree/master/DOex) data in
+the [`qtl2data`](https://github.com/rqtl/qtl2data) repository.
+We'll download the pre-calculated allele probabilities.
 
 ```{r}
 tmpfile <- tempfile()
@@ -80,20 +88,19 @@ file <- paste0("https://raw.githubusercontent.com/rqtl/",
 download.file(file, tmpfile)
 pr <- readRDS(tmpfile)
 unlink(tmpfile)
+```
+
+And then we'll download the physical marker map and convert it to a
+R/qtl2 map object.
+
+```{r}
 tmpfile <- tempfile()
 file <- paste0("https://raw.githubusercontent.com/rqtl/",
                "qtl2data/master/DOex/DOex_pmap.csv")
 download.file(file, tmpfile)
 pmap_pre <- read.csv(tmpfile)
 unlink(tmpfile)
-pm2 <- pmap_pre[pmap_pre$chr == 2, 3]
-names(pm2) <- pmap_pre[pmap_pre$chr == 2, 1]
-pm3 <- pmap_pre[pmap_pre$chr == 3, 3]
-names(pm3) <- pmap_pre[pmap_pre$chr == 3, 1]
-pmX <- pmap_pre[pmap_pre$chr == "X", 3]
-names(pmX) <- pmap_pre[pmap_pre$chr == "X", 1]
-list(pm2, pm3, pmX) -> pm
-names(pm) <- c("`2`", "`3`", "X")
+pm <- qtl2convert::map_df_to_list(pmap_pre, pos_column="pos")
 ```
 
 We now have an allele probabilities object stored in `pr`.
