@@ -208,6 +208,8 @@ First, we find the *pleiotropy peak* marker. This is the marker for which the lo
 find_pleio_peak_tib(pvl1022, start_snp = 650)
 ```
 
+We need the *pleiotropy peak* marker in the bootstrap analyses because it is the marker used in drawing bootstrap samples.
+
 
 To save computing time, we read the bootstrap results files from Github. For details of how we performed the bootstrap analyses on the University of Wisconsin-Madison Center for High-Throughput Computing, please see the documentation in the qtl2pleio-manuscript repository: https://github.com/fboehm/qtl2pleio-manuscript.
 
