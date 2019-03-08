@@ -26,10 +26,23 @@ knitr::opts_chunk$set(
 
 ## Goals
 
-The goal of qtl2pleio is to perform a likelihood ratio test that distinguishes between competing hypotheses of presence of two separate QTL (alternative hypothesis) and pleiotropy (null hypothesis) in QTL studies in multiparental populations, such as the Diversity Outbred mouse population. `qtl2pleio` data structures are those used in the `rqtl/qtl2` package. 
+The goal of qtl2pleio is, for a pair of traits that show evidence for
+a QTL in a common region, to distinguish between pleiotropy (the null
+hypothesis, that they are affected by a common QTL) and the
+alternative that they are affected by separate QTL. It extends the
+likelihood ratio test of [Jiang and Zeng
+(1995)](http://www.genetics.org/content/140/3/1111.long) for
+multiparental populations, such as Diversity Outbred mice, including
+the use of a linear mixed model to account for population structure.
+`qtl2pleio` data structures are those used in the
+[`rqtl/qtl2`](https://kbroman.org/qtl2) package.
 
 
 ## Installation
+
+
+To install qtl2pleio, use `install_github()` from the
+[devtools](https://devtools.r-lib.org) package.
 
 
 ```{r, eval = FALSE}
@@ -37,32 +50,36 @@ install.packages("devtools")
 devtools::install_github("fboehm/qtl2pleio")
 ```
 
+You may also wish to install [R/qtl2](https://kbroman.org/qtl2) and
+the [`qtl2convert`](https://github.com/rqtl/qtl2convert) package. We
+will use both below.
+
+```{r, eval = FALSE}
+install.packages(c("qtl2", "qtl2convert"), repos="http://rqtl.org/qtl2")
+```
 
 
 ## Example
 
-Below, we walk through an example analysis with Diversity Outbred mouse data. We need a number of preliminary steps before we can perform our test of pleiotropy vs. separate QTL. Many procedures rely on the R package `qtl2`.
+Below, we walk through an example analysis with Diversity Outbred
+mouse data. We need a number of preliminary steps before we can
+perform our test of pleiotropy vs. separate QTL. Many procedures rely
+on the R package `qtl2`. We first load the `qtl2`, `qtl2convert`,
+and `qtl2pleio` packages.
 
 ```{r}
+library(qtl2)
+library(qtl2convert)
 library(qtl2pleio)
 ```
 
 
-We'll work with data from the `qtl2data` repository, which is on github. First, we install and load the `qtl2` package.
-
-```{r, eval = FALSE}
-devtools::install_github("rqtl/qtl2")
-```
-
-We use the above line once to install the package on our computer before loading the package with the `library` command.
-
-```{r}
-library(qtl2)
-```
-
 ### Reading data from `qtl2data` repository on github
 
-We read from github.com data from the `qtl2data` repository.
+We'll consider the
+[`DOex`](https://github.com/rqtl/qtl2data/tree/master/DOex) data in
+the [`qtl2data`](https://github.com/rqtl/qtl2data) repository.
+We'll download the pre-calculated allele probabilities.
 
 ```{r}
 tmpfile <- tempfile()
@@ -71,20 +88,19 @@ file <- paste0("https://raw.githubusercontent.com/rqtl/",
 download.file(file, tmpfile)
 pr <- readRDS(tmpfile)
 unlink(tmpfile)
+```
+
+And then we'll download the physical marker map and convert it to a
+R/qtl2 map object.
+
+```{r}
 tmpfile <- tempfile()
 file <- paste0("https://raw.githubusercontent.com/rqtl/",
                "qtl2data/master/DOex/DOex_pmap.csv")
 download.file(file, tmpfile)
 pmap_pre <- read.csv(tmpfile)
 unlink(tmpfile)
-pm2 <- pmap_pre[pmap_pre$chr == 2, 3]
-names(pm2) <- pmap_pre[pmap_pre$chr == 2, 1]
-pm3 <- pmap_pre[pmap_pre$chr == 3, 3]
-names(pm3) <- pmap_pre[pmap_pre$chr == 3, 1]
-pmX <- pmap_pre[pmap_pre$chr == "X", 3]
-names(pmX) <- pmap_pre[pmap_pre$chr == "X", 1]
-list(pm2, pm3, pmX) -> pm
-names(pm) <- c("`2`", "`3`", "X")
+pm <- qtl2convert::map_df_to_list(pmap_pre, pos_column="pos")
 ```
 
 We now have an allele probabilities object stored in `pr`.
@@ -101,7 +117,7 @@ We see that `pr` is a list of 3 three-dimensional arrays - one array for each of
 For our statistical model, we need a kinship matrix. Although we don't have genome-wide data - since we have allele probabilities for only 3 chromosomes - let's calculate a kinship matrix using "leave-one-chromosome-out". In practice, one would want to use allele probabilities from a full genome-wide set of markers.
 
 ```{r}
-calc_kinship(probs = pr, type = "loco") -> kinship
+kinship <- calc_kinship(probs = pr, type = "loco")
 ```
 
 ```{r}
@@ -119,9 +135,9 @@ We use the model:
 
 $$vec(Y) = X vec(B) + vec(G) + vec(E)$$
 
-where $Y$ is a $n$ by $2$ matrix, where each row is one subject and each column is one quantitative trait. $X$ is a $2n$ by $2f$ design matrix containing $n$ by $f$ allele probabilities matrices for each of two (possibly identical) markers. Thus, $X$ is a block-diagonal matrix, with exactly two $n$ by $f$ blocks on the diagonal. $B$ is a $f$ by 2 matrix. "vec" refers to the vectorization operator. "vec(B)", where $B$ is a $f$ by $2$ matrix, is, thus, a (column) vector of length $2f$ that is formed by stacking the second column of $B$ beneath the first column of $B$. 
+where $Y$ is a $n$ by $2$ matrix, where each row is one subject and each column is one quantitative trait. $X$ is a $2n$ by $2f$ design matrix containing $n$ by $f$ allele probabilities matrices for each of two (possibly identical) markers. Thus, $X$ is a block-diagonal matrix, with exactly two $n$ by $f$ blocks on the diagonal. $B$ is a $f$ by 2 matrix. "vec" refers to the vectorization operator. "vec(B)", where $B$ is a $f$ by $2$ matrix, is, thus, a (column) vector of length $2f$ that is formed by stacking the second column of $B$ beneath the first column of $B$.
 
-$G$ is a matrix of random effects. We specify its distribution as matrix-variate normal with mean being a $n$ by $2$ matrix of zeros, covariance among row vectors a $n$ by $n$ kinship matrix, $K$, and covariance among column vectors a $2$ by $2$ genetic covariance matrix, $V_g$. 
+$G$ is a matrix of random effects. We specify its distribution as matrix-variate normal with mean being a $n$ by $2$ matrix of zeros, covariance among row vectors a $n$ by $n$ kinship matrix, $K$, and covariance among column vectors a $2$ by $2$ genetic covariance matrix, $V_g$.
 
 In mathematical notation, we write:
 
@@ -133,7 +149,7 @@ $$E \sim MN_{\text{n by 2}}(0, I_n, V_e)$$
 
 
 
-In practice, we typically observe the phenotype matrix $Y$. We also treat as known the design matrix $X$ and the kinship matrix $K$. We then infer the values of $B$, $V_g$, and $V_e$. 
+In practice, we typically observe the phenotype matrix $Y$. We also treat as known the design matrix $X$ and the kinship matrix $K$. We then infer the values of $B$, $V_g$, and $V_e$.
 
 
 
@@ -162,16 +178,22 @@ colnames(Y) <- c("tr1", "tr2")
 Let's perform univariate QTL mapping for each of the two traits in the Y matrix.
 
 ```{r}
-scan1(genoprobs = pr, pheno = Y, kinship = kinship) -> s1
+s1 <- scan1(genoprobs = pr, pheno = Y, kinship = kinship)
 ```
+
+Here is a plot of the results.
 
 ```{r}
 plot(s1, pm)
+plot(s1, pm, lod=2, col="violetred", add=TRUE)
+legend("topleft", colnames(s1), lwd=2, col=c("darkslateblue", "violetred"), bg="gray92")
 ```
 
 
+And here are the observed QTL peaks with LOD > 8.
+
 ```{r}
-find_peaks(s1, map = pm)
+find_peaks(s1, map = pm, threshold=8)
 ```
 
 
@@ -182,10 +204,10 @@ find_peaks(s1, map = pm)
 
 
 ```{r}
-out <- scan_pvl(probs = pp, 
-                pheno = Y, 
+out <- scan_pvl(probs = pp,
+                pheno = Y,
                 kinship = kinship[[2]], # 2nd entry in kinship list is Chr 3
-                start_snp = 38, 
+                start_snp = 38,
                 n_snp = 25, n_cores = 1
                 )
 ```
@@ -195,7 +217,7 @@ out <- scan_pvl(probs = pp,
 
 ```{r}
 library(dplyr)
-out %>% 
+out %>%
   tidy_scan_pvl(pm3) %>% # pm3 is physical map for Chr 3
   add_intercepts(intercepts_univariate = c(82.8, 82.8)) %>%
   plot_pvl(phenames = c("tr1", "tr2"))
@@ -208,21 +230,21 @@ out %>%
 We use the function `calc_lrt_tib` to calculate the likelihood ratio test statistic value for the specified traits and specified genomic region.
 
 ```{r}
-(calc_lrt_tib(out) -> lrt)
+(lrt <- calc_lrt_tib(out))
 ```
 
 ### Bootstrap analysis to get p-values
 
-The calibration of test statistic values to get p-values uses bootstrap methods because we don't know the theoretical distribution of the test statistic under the null hypothesis. Thus, we use a bootstrap approach to obtain an empirical distribution of test statistic values under the null hypothesis of the presence of one pleiotropic locus. 
+The calibration of test statistic values to get p-values uses bootstrap methods because we don't know the theoretical distribution of the test statistic under the null hypothesis. Thus, we use a bootstrap approach to obtain an empirical distribution of test statistic values under the null hypothesis of the presence of one pleiotropic locus.
 
 We will use the function `boot_pvl` from our package `qtl2pleio`.
 
-We use a parametric bootstrap strategy in which we first use the studied phenotypes to infer the values of model parameters. Once we have the inferred values of the model parameters, we simulate phenotypes from the pleiotropy model (with the inferred parameter values). 
+We use a parametric bootstrap strategy in which we first use the studied phenotypes to infer the values of model parameters. Once we have the inferred values of the model parameters, we simulate phenotypes from the pleiotropy model (with the inferred parameter values).
 
 
 A natural question that arises is "which marker's allele probabilities do we use when simulating phenotypes?" We use the marker that, under the null hypothesis, ie, under the pleiotropy constraint, yields the greatest value of the log-likelihood.
 
-Before we call `boot_pvl`, we need to identify the index (on the chromosome under study) of the marker that maximizes the likelihood under the pleiotropy constraint. To do this, we use the `qtl2pleio` function `find_pleio_peak_tib`. 
+Before we call `boot_pvl`, we need to identify the index (on the chromosome under study) of the marker that maximizes the likelihood under the pleiotropy constraint. To do this, we use the `qtl2pleio` function `find_pleio_peak_tib`.
 
 ```{r}
 (pleio_index <- find_pleio_peak_tib(out, start_snp = 38))
@@ -234,11 +256,11 @@ Before we call `boot_pvl`, we need to identify the index (on the chromosome unde
 ```{r}
 set.seed(2018-11-25)
 system.time(b_out <- boot_pvl(probs = pp,
-         pheno = Y, 
-         pleio_peak_index = pleio_index, 
-         kinship = kinship[[2]], # 2nd element in kinship list is Chr 3 
-         nboot_per_job = 10, 
-         start_snp = 38, 
+         pheno = Y,
+         pleio_peak_index = pleio_index,
+         kinship = kinship[[2]], # 2nd element in kinship list is Chr 3
+         nboot_per_job = 10,
+         start_snp = 38,
          n_snp = 25
          ))
 
@@ -276,7 +298,3 @@ Icon image of mice: https://www.jax.org/~/media/JaxWeb/images/jax-mice-and-servi
 Icon image of Arabidopsis: https://sites.cns.utexas.edu/sites/default/files/styles/os_files_large/public/juenger_lab/files/pp1244cvr001-1.gif
 
 Icon image of Drosophila: https://www.yourgenome.org/sites/default/files/styles/banner/public/banners/stories/fruit-flies-in-the-laboratory/single-fruit-fly-drosophila-melanogaster-on-white-background-cropped.jpg
-
-
-
-
