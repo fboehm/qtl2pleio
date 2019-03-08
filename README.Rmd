@@ -215,6 +215,9 @@ out <- scan_pvl(probs = pp,
 
 #### Create a profile LOD plot to visualize results of two-dimensional scan
 
+
+
+
 ```{r}
 library(dplyr)
 out %>%
