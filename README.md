@@ -14,18 +14,33 @@ public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostat
 
 ## Goals
 
-The goal of qtl2pleio is to perform a likelihood ratio test that
-distinguishes between competing hypotheses of presence of two separate
-QTL (alternative hypothesis) and pleiotropy (null hypothesis) in QTL
-studies in multiparental populations, such as the Diversity Outbred
-mouse population. `qtl2pleio` data structures are those used in the
-`rqtl/qtl2` package.
+The goal of qtl2pleio is, for a pair of traits that show evidence for a
+QTL in a common region, to distinguish between pleiotropy (the null
+hypothesis, that they are affected by a common QTL) and the alternative
+that they are affected by separate QTL. It extends the likelihood ratio
+test of [Jiang and Zeng
+(1995)](http://www.genetics.org/content/140/3/1111.long) for
+multiparental populations, such as Diversity Outbred mice, including the
+use of a linear mixed model to account for population structure.
+`qtl2pleio` data structures are those used in the
+[`rqtl/qtl2`](https://kbroman.org/qtl2) package.
 
 ## Installation
+
+To install qtl2pleio, use `install_github()` from the
+[devtools](https://devtools.r-lib.org) package.
 
 ``` r
 install.packages("devtools")
 devtools::install_github("fboehm/qtl2pleio")
+```
+
+You may also wish to install [R/qtl2](https://kbroman.org/qtl2) and the
+[`qtl2convert`](https://github.com/rqtl/qtl2convert) package. We will
+use both below.
+
+``` r
+install.packages(c("qtl2", "qtl2convert"), repos="http://rqtl.org/qtl2")
 ```
 
 ## Example
@@ -33,29 +48,21 @@ devtools::install_github("fboehm/qtl2pleio")
 Below, we walk through an example analysis with Diversity Outbred mouse
 data. We need a number of preliminary steps before we can perform our
 test of pleiotropy vs. separate QTL. Many procedures rely on the R
-package `qtl2`.
-
-``` r
-library(qtl2pleio)
-```
-
-We’ll work with data from the `qtl2data` repository, which is on github.
-First, we install and load the `qtl2` package.
-
-``` r
-devtools::install_github("rqtl/qtl2")
-```
-
-We use the above line once to install the package on our computer before
-loading the package with the `library` command.
+package `qtl2`. We first load the `qtl2`, `qtl2convert`, and `qtl2pleio`
+packages.
 
 ``` r
 library(qtl2)
+library(qtl2convert)
+library(qtl2pleio)
 ```
 
 ### Reading data from `qtl2data` repository on github
 
-We read from github.com data from the `qtl2data` repository.
+We’ll consider the
+[`DOex`](https://github.com/rqtl/qtl2data/tree/master/DOex) data in the
+[`qtl2data`](https://github.com/rqtl/qtl2data) repository. We’ll
+download the pre-calculated allele probabilities.
 
 ``` r
 tmpfile <- tempfile()
@@ -64,20 +71,19 @@ file <- paste0("https://raw.githubusercontent.com/rqtl/",
 download.file(file, tmpfile)
 pr <- readRDS(tmpfile)
 unlink(tmpfile)
+```
+
+And then we’ll download the physical marker map and convert it to a
+R/qtl2 map object.
+
+``` r
 tmpfile <- tempfile()
 file <- paste0("https://raw.githubusercontent.com/rqtl/",
                "qtl2data/master/DOex/DOex_pmap.csv")
 download.file(file, tmpfile)
 pmap_pre <- read.csv(tmpfile)
 unlink(tmpfile)
-pm2 <- pmap_pre[pmap_pre$chr == 2, 3]
-names(pm2) <- pmap_pre[pmap_pre$chr == 2, 1]
-pm3 <- pmap_pre[pmap_pre$chr == 3, 3]
-names(pm3) <- pmap_pre[pmap_pre$chr == 3, 1]
-pmX <- pmap_pre[pmap_pre$chr == "X", 3]
-names(pmX) <- pmap_pre[pmap_pre$chr == "X", 1]
-list(pm2, pm3, pmX) -> pm
-names(pm) <- c("`2`", "`3`", "X")
+pm <- qtl2convert::map_df_to_list(pmap_pre, pos_column="pos")
 ```
 
 We now have an allele probabilities object stored in `pr`.
@@ -101,7 +107,7 @@ chromosomes - let’s calculate a kinship matrix using
 probabilities from a full genome-wide set of markers.
 
 ``` r
-calc_kinship(probs = pr, type = "loco") -> kinship
+kinship <- calc_kinship(probs = pr, type = "loco")
 ```
 
 ``` r
@@ -206,33 +212,37 @@ Let’s perform univariate QTL mapping for each of the two traits in the Y
 matrix.
 
 ``` r
-scan1(genoprobs = pr, pheno = Y, kinship = kinship) -> s1
+s1 <- scan1(genoprobs = pr, pheno = Y, kinship = kinship)
 ```
+
+Here is a plot of the results.
 
 ``` r
 plot(s1, pm)
+plot(s1, pm, lod=2, col="violetred", add=TRUE)
+legend("topleft", colnames(s1), lwd=2, col=c("darkslateblue", "violetred"), bg="gray92")
 ```
 
 <img src="man/figures/README-unnamed-chunk-11-1.png" width="100%" />
 
+And here are the observed QTL peaks with LOD \> 8.
+
 ``` r
-find_peaks(s1, map = pm)
+find_peaks(s1, map = pm, threshold=8)
 #>   lodindex lodcolumn chr       pos       lod
-#> 1        1       tr1 `2` 75.562440  3.636498
-#> 2        1       tr1 `3` 82.778059 24.552172
-#> 3        1       tr1   X 13.406552  3.585519
-#> 4        2       tr2 `2`  3.164247  8.195879
-#> 5        2       tr2 `3` 82.778059 17.454825
-#> 6        2       tr2   X 95.069663 14.110670
+#> 1        1       tr1   3 82.778059 24.552172
+#> 2        2       tr2   2  3.164247  8.195879
+#> 3        2       tr2   3 82.778059 17.454825
+#> 4        2       tr2   X 95.069663 14.110670
 ```
 
 ### Perform two-dimensional scan as first step in pleiotropy v separate QTL hypothesis test
 
 ``` r
-out <- scan_pvl(probs = pp, 
-                pheno = Y, 
+out <- scan_pvl(probs = pp,
+                pheno = Y,
                 kinship = kinship[[2]], # 2nd entry in kinship list is Chr 3
-                start_snp = 38, 
+                start_snp = 38,
                 n_snp = 25, n_cores = 1
                 )
 #> starting covariance matrices estimation with data from 261 subjects.
@@ -251,8 +261,8 @@ library(dplyr)
 #> The following objects are masked from 'package:base':
 #> 
 #>     intersect, setdiff, setequal, union
-out %>% 
-  tidy_scan_pvl(pm3) %>% # pm3 is physical map for Chr 3
+out %>%
+  tidy_scan_pvl(pm[[2]]) %>% # pm[[2]] is physical map for Chr 3
   add_intercepts(intercepts_univariate = c(82.8, 82.8)) %>%
   plot_pvl(phenames = c("tr1", "tr2"))
 #> Warning: Removed 50 rows containing missing values (geom_path).
@@ -267,7 +277,7 @@ test statistic value for the specified traits and specified genomic
 region.
 
 ``` r
-(calc_lrt_tib(out) -> lrt)
+(lrt <- calc_lrt_tib(out))
 #> [1] 0.7730965
 ```
 
@@ -305,11 +315,11 @@ function `find_pleio_peak_tib`.
 ``` r
 set.seed(2018-11-25)
 system.time(b_out <- boot_pvl(probs = pp,
-         pheno = Y, 
-         pleio_peak_index = pleio_index, 
-         kinship = kinship[[2]], # 2nd element in kinship list is Chr 3 
-         nboot_per_job = 10, 
-         start_snp = 38, 
+         pheno = Y,
+         pleio_peak_index = pleio_index,
+         kinship = kinship[[2]], # 2nd element in kinship list is Chr 3
+         nboot_per_job = 10,
+         start_snp = 38,
          n_snp = 25
          ))
 #> starting covariance matrices estimation with data from 261 subjects.
@@ -333,7 +343,7 @@ system.time(b_out <- boot_pvl(probs = pp,
 #> starting covariance matrices estimation with data from 261 subjects.
 #> covariance matrices estimation completed.
 #>    user  system elapsed 
-#> 194.531   3.017 197.971
+#> 194.094   2.673 197.223
 ```
 
 The argument `nboot_per_job` indicates the number of bootstrap samples

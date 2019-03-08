@@ -45,7 +45,7 @@ To install qtl2pleio, use `install_github()` from the
 [devtools](https://devtools.r-lib.org) package.
 
 
-```{r, eval = FALSE}
+```{r install-qtl2pleio, eval = FALSE}
 install.packages("devtools")
 devtools::install_github("fboehm/qtl2pleio")
 ```
@@ -54,7 +54,7 @@ You may also wish to install [R/qtl2](https://kbroman.org/qtl2) and
 the [`qtl2convert`](https://github.com/rqtl/qtl2convert) package. We
 will use both below.
 
-```{r, eval = FALSE}
+```{r install-qtl2convert, eval = FALSE}
 install.packages(c("qtl2", "qtl2convert"), repos="http://rqtl.org/qtl2")
 ```
 
@@ -67,7 +67,7 @@ perform our test of pleiotropy vs. separate QTL. Many procedures rely
 on the R package `qtl2`. We first load the `qtl2`, `qtl2convert`,
 and `qtl2pleio` packages.
 
-```{r}
+```{r pkgs}
 library(qtl2)
 library(qtl2convert)
 library(qtl2pleio)
@@ -81,7 +81,7 @@ We'll consider the
 the [`qtl2data`](https://github.com/rqtl/qtl2data) repository.
 We'll download the pre-calculated allele probabilities.
 
-```{r}
+```{r download-allele-probs}
 tmpfile <- tempfile()
 file <- paste0("https://raw.githubusercontent.com/rqtl/",
                "qtl2data/master/DOex/DOex_alleleprobs.rds")
@@ -93,7 +93,7 @@ unlink(tmpfile)
 And then we'll download the physical marker map and convert it to a
 R/qtl2 map object.
 
-```{r}
+```{r download-pmap}
 tmpfile <- tempfile()
 file <- paste0("https://raw.githubusercontent.com/rqtl/",
                "qtl2data/master/DOex/DOex_pmap.csv")
@@ -105,7 +105,7 @@ pm <- qtl2convert::map_df_to_list(pmap_pre, pos_column="pos")
 
 We now have an allele probabilities object stored in `pr`.
 
-```{r}
+```{r check-pr}
 names(pr)
 dim(pr$`2`)
 ```
@@ -116,11 +116,11 @@ We see that `pr` is a list of 3 three-dimensional arrays - one array for each of
 
 For our statistical model, we need a kinship matrix. Although we don't have genome-wide data - since we have allele probabilities for only 3 chromosomes - let's calculate a kinship matrix using "leave-one-chromosome-out". In practice, one would want to use allele probabilities from a full genome-wide set of markers.
 
-```{r}
+```{r calc-kinship}
 kinship <- calc_kinship(probs = pr, type = "loco")
 ```
 
-```{r}
+```{r check-kinship}
 str(kinship)
 ```
 
@@ -158,10 +158,23 @@ In practice, we typically observe the phenotype matrix $Y$. We also treat as kno
 
 The function to simulate phenotypes in `qtl2pleio` is `sim1`. By examining its help page, we see that it takes five arguments. The help page also gives the dimensions of the inputs.
 
-```{r}
+```{r pp-def}
 # set up the design matrix, X
-pp <- pr[[2]]
+pp <- pr[[2]] #we'll with Chr 3's genotype data
+dim(pp)
+```
+
+We prepare a block-diagonal design matrix X that contains two nonzero blocks on the diagonal, one for each trait. We use here a function from the `gemma2` R package to set up the needed matrix.
+
+
+
+```{r X-def}
+#Next, we prepare a design matrix X
 X <- gemma2::stagger_mats(pp[ , , 50], pp[ , , 50])
+dim(X)
+```
+
+```{r B-def}
 # assemble B matrix of allele effects
 B <- matrix(data = c(-1, -1, -1, -1, 1, 1, 1, 1, -1, -1, -1, -1, 1, 1, 1, 1), nrow = 8, ncol = 2, byrow = FALSE)
 # verify that B is what we want:
@@ -221,7 +234,7 @@ out <- scan_pvl(probs = pp,
 ```{r}
 library(dplyr)
 out %>%
-  tidy_scan_pvl(pm3) %>% # pm3 is physical map for Chr 3
+  tidy_scan_pvl(pm[[2]]) %>% # pm[[2]] is physical map for Chr 3
   add_intercepts(intercepts_univariate = c(82.8, 82.8)) %>%
   plot_pvl(phenames = c("tr1", "tr2"))
 
