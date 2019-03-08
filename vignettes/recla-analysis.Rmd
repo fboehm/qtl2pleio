@@ -9,7 +9,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r}
+```{r pkgs}
 library(dplyr)
 library(ggplot2)
 library(qtl2pleio)
@@ -23,7 +23,7 @@ knitr::opts_chunk$set(tidy = TRUE,
 
 ## Load Recla data from `qtl2data` github repository
 
-```{r}
+```{r load-recla}
 file <- paste0("https://raw.githubusercontent.com/rqtl/",
                "qtl2data/master/DO_Recla/recla.zip")
 recla <- read_cross2(file)
@@ -34,33 +34,38 @@ insert_pseudomarkers(recla, step = 0.10) -> pseudomap
 gm <- pseudomap$`8`
 ```
 
-```{r}
-probs <- calc_genoprob(recla, map = pseudomap)
+
+We use the hidden Markov model from Broman (2012) to calculate 36-state genotype probabilities for autosomal markers.
+
+```{r calc-genoprobs-code, cache = TRUE}
+probs <- calc_genoprob(recla, map = pseudomap, cores = 0)
 ```
 
 We now convert the genotype probabilities to haplotype dosages.
 
-```{r}
+```{r calc-aprobs}
 aprobs <- genoprob_to_alleleprob(probs)
 ```
 
 We now calculate kinship matrices, by the "leave one chromosome out (loco)" method.
 
-```{r}
+```{r calc-kinship}
 kinship <- calc_kinship(aprobs, "loco")
 ```
 
 
-```{r}
+Before performing our QTL mapping, we transform the phenotypes. 
+
+```{r log-phenos}
 recla$pheno -> ph
 log(ph) -> lph
 apply(FUN = broman::winsorize, X = lph, MARGIN = 2) -> wlph
 as_tibble(wlph) -> wlph_tib
 ```
 
-We next perform the univariate QTL scan for our phenotypes.
+We next perform the univariate QTL scan for all phenotypes.
 
-```{r, eval = TRUE}
+```{r scan1, eval = TRUE}
 sex2 <- matrix(as.numeric(sex == "female"), ncol = 1)
 colnames(sex2) <- "female"
 rownames(sex2) <- rownames(aprobs[[1]])
@@ -77,7 +82,7 @@ Let's find the univariate QTL peaks for all phenotypes.
 We want to look closely at those peaks on Chromosome 8. We'll save the positions of peaks for our two traits of interest.
 
 
-```{r, eval = TRUE}
+```{r get-peaks, eval = TRUE}
 (peaks <- find_peaks(out, pseudomap, threshold = 5) %>%
   arrange(chr, pos) %>%
    select(- lodindex))
@@ -95,7 +100,7 @@ pos_HP_latency <- peaks8 %>%
 
 Given that the two traits "percent time in light" and "distance traveled in light" share a peak, we want to ask how correlated they are.
 
-```{r}
+```{r cors}
 cor(wlph[ , 7], wlph[ , 10], use = "complete.obs")
 cor(wlph[ , 22], wlph[ , 10], use = "complete.obs")
 cor(wlph[ , 7], wlph[ , 22], use = "complete.obs")
@@ -108,29 +113,27 @@ Since "percent time in light" and "distance traveled in light" are very highly c
 
 We create a scatter plot for the two phenotypes, "hot plate latency" and "percent time in light".
 
-```{r}
-scatter1022 <- ggplot() + 
+```{r scatter}
+ggplot() + 
   geom_point(data = wlph_tib, aes(y = HP_latency, x = LD_light_pct)) +
-  labs(x = "Percent time in light", y = "Hot plate latency") +
-  ggtitle("Scatterplot of hot plate latency vs. percent time in light")
-scatter1022
+  labs(x = "Percent time in light", y = "Hot plate latency")
 ```
 
 ## Genome-wide LOD plots for the traits from Recla
 
 Let's plot the results of the univariate QTL scans for our two traits.
 
-```{r}
+```{r lod10-plot}
 plot(out, map = pseudomap, 
      lodcolumn = 10, 
-     main = "Genome-wide LOD for percent time in light"
+     main = "percent time in light"
      )
 ```
 
-```{r}
+```{r lod22-plot}
 plot(out, map = pseudomap, 
      lodcolumn = 22, 
-     main = "Genome-wide LOD for hot plate latency"
+     main = "hot plate latency"
      )
 ```
 
@@ -139,7 +142,7 @@ plot(out, map = pseudomap,
 
 We examine the allele effects plots for our two traits, in the region of interest on Chromosome 8.
 
-```{r}
+```{r coefs-calc}
 scan1coef(aprobs[ , 8], pheno = wlph[, 10], kinship = kinship$`8`, 
           reml = TRUE,
           addcovar = sex2) -> s1c_10
@@ -148,7 +151,7 @@ scan1coef(aprobs[ , 8], pheno = wlph[, 22], kinship = kinship$`8`,
           addcovar = sex2) -> s1c_22
 ```
 
-```{r}
+```{r coefs-subset}
 # subset scan1output objects
 s1c_10s <- s1c_10[650:999, ] 
 # 650:999 is the same as the interval for the two-dimensional scan.
@@ -156,9 +159,9 @@ s1c_22s <- s1c_22[650:999, ]
 ```
 
 
-```{r}
-plot_coefCC(s1c_10s, map = pseudomap, main = "Allele effects for percent time in light")
-plot_coefCC(s1c_22s, map = pseudomap, main = "Allele effects for hot plate latency")
+```{r plot-coefs}
+plot_coefCC(s1c_10s, scan1_output = out[ , 10, drop = FALSE], map = pseudomap, main = "percent time in light")
+plot_coefCC(s1c_22s, scan1_output = out[ , 22, drop = FALSE], map = pseudomap, main = "hot plate latency")
 ```
 
 
@@ -166,20 +169,20 @@ plot_coefCC(s1c_22s, map = pseudomap, main = "Allele effects for hot plate laten
 
 We present the code that we ran to perform the two-dimensional scan.
 
-```{r, eval = FALSE}
+```{r 2d-scan, eval = FALSE}
 scan_pvl(probs = pp, pheno = wlph[, c(10, 22)], covariates = sex2, kinship = kinship$`8`, start_snp1 = 650, n_snp = 350) -> pvl1022
 write.table(x = pvl1022, file = "recla-10-22.txt")
 ```
 
 To save computing time, we read the two-dimensional scan results from Github.
 
-```{r}
+```{r 2d-scan-results}
 as_tibble(read.table("https://raw.githubusercontent.com/fboehm/qtl2pleio-manuscript/master/Rmd/recla-10-22.txt")) -> pvl1022
 ```
 
 We then calculate the likelihood ratio test statistic.
 
-```{r}
+```{r lrt-calc}
 (mylrt <- calc_lrt_tib(pvl1022))
 ```
 
@@ -188,11 +191,11 @@ We then calculate the likelihood ratio test statistic.
 
 We create a profile LOD plot.
 
-```{r}
+```{r profile-plot}
 colnames(recla$pheno)[c(10, 22)] <- c("Percent time in light", "Hot plate latency")
 p1022 <- tidy_scan_pvl(pvl1022, pmap = gm) %>%
   add_intercepts(c(as.numeric(pos_LD_light_pct), as.numeric(pos_HP_latency))) %>%
-  plot_pvl(phenames = colnames(recla$pheno)[c(10, 22)]) + ggtitle("Chromosome 8 profile LOD for percent time in light and hot plate latency") 
+  plot_pvl(phenames = colnames(recla$pheno)[c(10, 22)]) + ggtitle("percent time in light and hot plate latency") 
 ```
 
 
@@ -201,7 +204,7 @@ p1022 <- tidy_scan_pvl(pvl1022, pmap = gm) %>%
 First, we find the *pleiotropy peak* marker. This is the marker for which the log likelihood is maximized under the constraint of pleiotropy.
 
 
-```{r}
+```{r get-pleio-peak}
 find_pleio_peak_tib(pvl1022, start_snp = 650)
 ```
 
@@ -213,7 +216,7 @@ The code below creates a temporary directory "tmp" in the user's working directo
 
 
 
-```{r}
+```{r download-boot}
 gz_file <- "https://raw.githubusercontent.com/fboehm/qtl2pleio-manuscript/master/chtc/Recla-bootstrap/submit_files/recla-boot-run561.tar.gz"
 tmp_dir <- file.path(getwd(), "tmp")
 dir.create(tmp_dir)
@@ -234,7 +237,7 @@ unlink(tmp_dir, recursive = TRUE)
 
 We get a bootstrap p-value by comparing the above vector's values to `mylrt`, the test statistic for the observed data.
 
-```{r}
+```{r pval}
 sum(boot_lrt >= mylrt) / length(boot_lrt)
 ```
 
@@ -242,7 +245,7 @@ sum(boot_lrt >= mylrt) / length(boot_lrt)
 
 ## Session info
 
-```{r}
+```{r session-info}
 devtools::session_info()
 ```
 
