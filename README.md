@@ -184,8 +184,23 @@ page also gives the dimensions of the inputs.
 
 ``` r
 # set up the design matrix, X
-pp <- pr[[2]]
+pp <- pr[[2]] #we'll with Chr 3's genotype data
+dim(pp)
+#> [1] 261   8 102
+```
+
+We prepare a block-diagonal design matrix X that contains two nonzero
+blocks on the diagonal, one for each trait. We use here a function from
+the `gemma2` R package to set up the needed matrix.
+
+``` r
+#Next, we prepare a design matrix X
 X <- gemma2::stagger_mats(pp[ , , 50], pp[ , , 50])
+dim(X)
+#> [1] 522  16
+```
+
+``` r
 # assemble B matrix of allele effects
 B <- matrix(data = c(-1, -1, -1, -1, 1, 1, 1, 1, -1, -1, -1, -1, 1, 1, 1, 1), nrow = 8, ncol = 2, byrow = FALSE)
 # verify that B is what we want:
@@ -223,7 +238,7 @@ plot(s1, pm, lod=2, col="violetred", add=TRUE)
 legend("topleft", colnames(s1), lwd=2, col=c("darkslateblue", "violetred"), bg="gray92")
 ```
 
-<img src="man/figures/README-unnamed-chunk-11-1.png" width="100%" />
+<img src="man/figures/README-1d-lod-plots-1.png" width="100%" />
 
 And here are the observed QTL peaks with LOD \> 8.
 
@@ -236,7 +251,24 @@ find_peaks(s1, map = pm, threshold=8)
 #> 4        2       tr2   X 95.069663 14.110670
 ```
 
-### Perform two-dimensional scan as first step in pleiotropy v separate QTL hypothesis test
+### Perform two-dimensional scan as first step in pleiotropy vs. separate QTL hypothesis test
+
+We now have the inputs that we need to do a pleiotropy vs. separate QTL
+test. We have the founder allele dosages for one chromosome in the R
+object `pp`, the matrix of two trait measurements in `Y`, and a
+LOCO-derived kinship matrix, `kinship[[2]]`. We also specify, via the
+`start_snp` argument, the starting point for the two-dimensional scan
+within the array of founder allele dosages. Here, we choose the 38th
+marker in the array as the starting point. Via the `n_snp` argument, we
+specify the number of markers to include in the two-dimensional scan.
+Here, we input 25, so that we fit the bivariate linear mixed effects
+model at 25\*25 = 625 ordered pairs of markers. In practice, we usually
+use between 100 and 300 markers for most two-dimensional scans.
+
+Lastly, we specify the number of cores to use, with the `n_cores`
+argument. We set it to 1 here, to ensure that the vignette can be run by
+CRAN. However, in practice, you may wish to increase the number of cores
+to accelerate computing.
 
 ``` r
 out <- scan_pvl(probs = pp,
@@ -245,30 +277,34 @@ out <- scan_pvl(probs = pp,
                 start_snp = 38,
                 n_snp = 25, n_cores = 1
                 )
-#> starting covariance matrices estimation with data from 261 subjects.
-#> covariance matrices estimation completed.
+```
+
+The number of cores available will vary by computer. For example, on my
+Macbook pro computer, with 16GB RAM, I have access to 8 cores. If I use
+all 8, I can’t do other computing tasks, so I often set `n_cores` to 7.
+
+To check how many cores are available on your computer, run this
+code.
+
+``` r
+parallel::detectCores()
 ```
 
 #### Create a profile LOD plot to visualize results of two-dimensional scan
 
+To visualize results from our two-dimensional scan, we calculate profile
+LOD for each trait. The code below makes use of the R package `ggplot2`
+to plot profile LODs over the scan region.
+
 ``` r
 library(dplyr)
-#> 
-#> Attaching package: 'dplyr'
-#> The following objects are masked from 'package:stats':
-#> 
-#>     filter, lag
-#> The following objects are masked from 'package:base':
-#> 
-#>     intersect, setdiff, setequal, union
 out %>%
   tidy_scan_pvl(pm[[2]]) %>% # pm[[2]] is physical map for Chr 3
   add_intercepts(intercepts_univariate = c(82.8, 82.8)) %>%
   plot_pvl(phenames = c("tr1", "tr2"))
-#> Warning: Removed 50 rows containing missing values (geom_path).
 ```
 
-<img src="man/figures/README-unnamed-chunk-14-1.png" width="100%" />
+<img src="man/figures/README-profile-plot-1.png" width="100%" />
 
 #### Calculate the likelihood ratio test statistic for pleiotropy v separate QTL
 
@@ -298,7 +334,7 @@ pleiotropy model (with the inferred parameter values).
 
 A natural question that arises is “which marker’s allele probabilities
 do we use when simulating phenotypes?” We use the marker that, under the
-null hypothesis, ie, under the pleiotropy constraint, yields the
+null hypothesis, *i.e.*, under the pleiotropy constraint, yields the
 greatest value of the log-likelihood.
 
 Before we call `boot_pvl`, we need to identify the index (on the
@@ -322,28 +358,8 @@ system.time(b_out <- boot_pvl(probs = pp,
          start_snp = 38,
          n_snp = 25
          ))
-#> starting covariance matrices estimation with data from 261 subjects.
-#> covariance matrices estimation completed.
-#> starting covariance matrices estimation with data from 261 subjects.
-#> covariance matrices estimation completed.
-#> starting covariance matrices estimation with data from 261 subjects.
-#> covariance matrices estimation completed.
-#> starting covariance matrices estimation with data from 261 subjects.
-#> covariance matrices estimation completed.
-#> starting covariance matrices estimation with data from 261 subjects.
-#> covariance matrices estimation completed.
-#> starting covariance matrices estimation with data from 261 subjects.
-#> covariance matrices estimation completed.
-#> starting covariance matrices estimation with data from 261 subjects.
-#> covariance matrices estimation completed.
-#> starting covariance matrices estimation with data from 261 subjects.
-#> covariance matrices estimation completed.
-#> starting covariance matrices estimation with data from 261 subjects.
-#> covariance matrices estimation completed.
-#> starting covariance matrices estimation with data from 261 subjects.
-#> covariance matrices estimation completed.
 #>    user  system elapsed 
-#> 194.094   2.673 197.223
+#> 200.857   2.729 204.001
 ```
 
 The argument `nboot_per_job` indicates the number of bootstrap samples
