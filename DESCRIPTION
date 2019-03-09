@@ -38,7 +38,8 @@ Imports:
     qtl2,
     parallel,
     broman,
-    devtools
+    devtools,
+    qtl2convert
 Suggests:
     covr,
     knitr,
