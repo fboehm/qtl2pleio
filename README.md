@@ -240,6 +240,8 @@ legend("topleft", colnames(s1), lwd=2, col=c("darkslateblue", "violetred"), bg="
 
 <img src="man/figures/README-1d-lod-plots-1.png" width="100%" />
 
+We see that the two traits share a peak on Chr 3.
+
 And here are the observed QTL peaks with LOD \> 8.
 
 ``` r
@@ -254,16 +256,17 @@ find_peaks(s1, map = pm, threshold=8)
 ### Perform two-dimensional scan as first step in pleiotropy vs. separate QTL hypothesis test
 
 We now have the inputs that we need to do a pleiotropy vs. separate QTL
-test. We have the founder allele dosages for one chromosome in the R
-object `pp`, the matrix of two trait measurements in `Y`, and a
-LOCO-derived kinship matrix, `kinship[[2]]`. We also specify, via the
-`start_snp` argument, the starting point for the two-dimensional scan
-within the array of founder allele dosages. Here, we choose the 38th
-marker in the array as the starting point. Via the `n_snp` argument, we
-specify the number of markers to include in the two-dimensional scan.
-Here, we input 25, so that we fit the bivariate linear mixed effects
-model at 25\*25 = 625 ordered pairs of markers. In practice, we usually
-use between 100 and 300 markers for most two-dimensional scans.
+test. We have the founder allele dosages for one chromosome, *i.e.*, Chr
+3, in the R object `pp`, the matrix of two trait measurements in `Y`,
+and a LOCO-derived kinship matrix, `kinship[[2]]`. We also specify, via
+the `start_snp` argument, the starting point for the two-dimensional
+scan within the array of founder allele dosages. Here, we choose the
+38th marker in the array as the starting point. Via the `n_snp`
+argument, we specify the number of markers to include in the
+two-dimensional scan. Here, we input 25, so that we fit the bivariate
+linear mixed effects model at 25\*25 = 625 ordered pairs of markers. In
+practice, we usually use between 100 and 300 markers for most
+two-dimensional scans.
 
 Lastly, we specify the number of cores to use, with the `n_cores`
 argument. We set it to 1 here, to ensure that the vignette can be run by
@@ -359,7 +362,7 @@ system.time(b_out <- boot_pvl(probs = pp,
          n_snp = 25
          ))
 #>    user  system elapsed 
-#> 200.857   2.729 204.001
+#> 203.594   2.811 207.543
 ```
 
 The argument `nboot_per_job` indicates the number of bootstrap samples
