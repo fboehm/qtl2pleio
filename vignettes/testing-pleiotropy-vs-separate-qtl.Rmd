@@ -27,18 +27,23 @@ Our setting involves a pair of traits, $Y_1$ and $Y_2$, each of which individual
 
 We install `qtl2pleio` from github via the `devtools` R package, which is available from CRAN. 
 
-If you haven't installed `devtools` R package, you can do so with this line of code:
+To install qtl2pleio, use `install_github()` from the
+[devtools](https://devtools.r-lib.org) package.
 
-```{r, eval = FALSE}
+
+```{r install-qtl2pleio, eval = FALSE}
 install.packages("devtools")
-```
-
-Now that you have installed `devtools`, you can install `qtl2pleio` from its Github repository with this line of code:
-
-
-```{r, eval = FALSE}
 devtools::install_github("fboehm/qtl2pleio")
 ```
+
+You may also wish to install [R/qtl2](https://kbroman.org/qtl2) and
+the [`qtl2convert`](https://github.com/rqtl/qtl2convert) package. We
+will use both below.
+
+```{r install-qtl2convert, eval = FALSE}
+install.packages(c("qtl2", "qtl2convert"), repos="http://rqtl.org/qtl2")
+```
+
 
 The above line only needs to be run once on a given computer (unless you wish to install a newer version of the package). 
 
@@ -63,36 +68,39 @@ library(qtl2)
 
 ## Reading data from `qtl2data` repository on github
 
-We read from github.com data from the `qtl2data` repository.
+We'll consider the
+[`DOex`](https://github.com/rqtl/qtl2data/tree/master/DOex) data in
+the [`qtl2data`](https://github.com/rqtl/qtl2data) repository.
+We'll download the DOex.zip file before calculating founder allele dosages.
+
+```{r download-allele-probs}
+file <- paste0("https://raw.githubusercontent.com/rqtl/",
+               "qtl2data/master/DOex/DOex.zip")
+DOex <- read_cross2(file)
+```
+
+Let's calculate the founder allele dosages from the 36-state genotype probabilities.
 
 ```{r}
-tmpfile <- tempfile()
-file <- paste0("https://raw.githubusercontent.com/rqtl/",
-               "qtl2data/master/DOex/DOex_alleleprobs.rds")
-download.file(file, tmpfile)
-pr <- readRDS(tmpfile)
-unlink(tmpfile)
-tmpfile <- tempfile()
-file <- paste0("https://raw.githubusercontent.com/rqtl/",
-               "qtl2data/master/DOex/DOex_pmap.csv")
-download.file(file, tmpfile)
-pmap_pre <- read.csv(tmpfile)
-unlink(tmpfile)
-pm2 <- pmap_pre[pmap_pre$chr == 2, 3]
-names(pm2) <- pmap_pre[pmap_pre$chr == 2, 1]
-pm3 <- pmap_pre[pmap_pre$chr == 3, 3]
-names(pm3) <- pmap_pre[pmap_pre$chr == 3, 1]
-pmX <- pmap_pre[pmap_pre$chr == "X", 3]
-names(pmX) <- pmap_pre[pmap_pre$chr == "X", 1]
-list(pm2, pm3, pmX) -> pm
-names(pm) <- c("`2`", "`3`", "X")
+probs <- calc_genoprob(DOex)
+pr <- genoprob_to_alleleprob(probs)
 ```
+
+
+We now have an allele probabilities object stored in `pr`.
+
+```{r check-pr}
+names(pr)
+dim(pr$`3`)
+```
+
+We see that `pr` is a list of 3 three-dimensional arrays - one array for each of 3 chromosomes.
 
 We now have an allele probabilities object stored in `pr`.
 
 ```{r}
 names(pr)
-dim(pr$`2`)
+dim(pr$`3`)
 ```
 
 We see that `pr` is a list of 3 three-dimensional arrays - one array for each of 3 chromosomes.
@@ -109,10 +117,9 @@ calc_kinship(probs = pr, type = "loco") -> kinship
 str(kinship)
 ```
 
-We see that `kinship` is a list containing 3 matrices. Each matrix is 261 by 261 - where the number of subjects is 261 - and symmetric. The $(i, j)$ cell in the matrix contains the estimate of identity-by-state (IBS) probability for randomly chosen alleles at a single locus for those two subjects.
+We see that `kinship` is a list containing 3 matrices. Each matrix is 261 by 261 - where the number of subjects is 261 - and symmetric. 
 
-
-
+## Statistical model
 
 Before we simulate phenotype data, we first specify our statistical model.
 
@@ -134,7 +141,7 @@ $$E \sim MN_{\text{n by 2}}(0, I_n, V_e)$$
 
 
 
-In practice, we typically observe the phenotype matrix $Y$. We also treat as known the design matrix $X$ and the kinship matrix $K$. We then infer the values of $B$, $V_g$, and $V_e$. 
+In practice, we typically measure the phenotype matrix $Y$. We also treat as known the design matrix $X$ and the kinship matrix $K$. We then infer the values of $B$, $V_g$, and $V_e$. 
 
 
 
@@ -143,10 +150,23 @@ In practice, we typically observe the phenotype matrix $Y$. We also treat as kno
 
 The function to simulate phenotypes in `qtl2pleio` is `sim1`. By examining its help page, we see that it takes five arguments. The help page also gives the dimensions of the inputs.
 
-```{r}
+```{r pp-def}
 # set up the design matrix, X
-pp <- pr[[2]]
+pp <- pr[[2]] #we'll work with Chr 3's genotype data
+dim(pp)
+```
+
+We prepare a block-diagonal design matrix X that contains two nonzero blocks on the diagonal, one for each trait. We use here a function from the `gemma2` R package to set up the needed matrix.
+
+
+
+```{r X-def}
+#Next, we prepare a design matrix X
 X <- gemma2::stagger_mats(pp[ , , 50], pp[ , , 50])
+dim(X)
+```
+
+```{r B-def}
 # assemble B matrix of allele effects
 B <- matrix(data = c(-1, -1, -1, -1, 1, 1, 1, 1, -1, -1, -1, -1, 1, 1, 1, 1), nrow = 8, ncol = 2, byrow = FALSE)
 # verify that B is what we want:
@@ -162,85 +182,117 @@ colnames(Y) <- c("tr1", "tr2")
 
 Let's perform univariate QTL mapping for each of the two traits in the Y matrix.
 
-```{r}
-scan1(genoprobs = pr, pheno = Y, kinship = kinship) -> s1
+```{r 1d-scans}
+s1 <- scan1(genoprobs = pr, pheno = Y, kinship = kinship)
 ```
 
-```{r}
-plot(s1, pm)
+Here is a plot of the results.
+
+```{r 1d-lod-plots}
+plot(s1, DOex$pmap$`3`)
+plot(s1, DOex$pmap$`3`, lod=2, col="violetred", add=TRUE)
+legend("topleft", colnames(s1), lwd=2, col=c("darkslateblue", "violetred"), bg="gray92")
 ```
 
+We see that the two traits share a peak on Chr 3. 
 
-```{r}
-find_peaks(s1, map = pm)
+And here are the observed QTL peaks with LOD > 8. In practice, we could do a permutation test to determine a threshold for family-wise error rate control.
+
+```{r find-peaks}
+find_peaks(s1, map = DOex$pmap, threshold=8)
 ```
-
-
 
 
 
 # Perform two-dimensional scan as first step in pleiotropy v separate QTL hypothesis test
 
+We now have the inputs that we need to do a pleiotropy vs. separate QTL test. We have the founder allele dosages for one chromosome, *i.e.*, Chr 3, in the R object `pp`, the matrix of two trait measurements in `Y`, and a LOCO-derived kinship matrix. We also specify, via the `start_snp` argument, the starting point for the two-dimensional scan within the array of founder allele dosages. Here, we choose the 38th marker in the array as the starting point. Via the `n_snp` argument, we specify the number of markers to include in the two-dimensional scan. Here, we input 25, so that we fit the bivariate linear mixed effects model at 25*25 = 625 ordered pairs of markers. In practice, we usually use between 100 and 300 markers for most two-dimensional scans.
 
-```{r}
-out <- scan_pvl(probs = pp, 
-                pheno = Y, 
-                kinship = kinship[[2]], # 2nd entry in kinship list is Chr 3
-                start_snp = 38, 
+Lastly, we specify the number of cores to use, with the `n_cores` argument. We set it to 1 here, to ensure that the vignette can be run by CRAN. However, in practice, you may wish to increase the number of cores to accelerate computing.
+
+
+
+```{r 2d-scan}
+out <- scan_pvl(probs = pp,
+                pheno = Y,
+                kinship = kinship$`3`, 
+                start_snp = 38,
                 n_snp = 25, n_cores = 1
                 )
 ```
 
+The number of cores available will vary by computer. For example, on my Macbook pro computer, with 16GB RAM, I have access to 8 cores. If I use all 8, I can't do other computing tasks, so I often set `n_cores` to 7. 
 
-### Create a profile LOD plot to visualize results of two-dimensional scan
+To check how many cores are available on your computer, run this code.
 
-```{r}
-library(dplyr)
-out %>% 
-  tidy_scan_pvl(pm3) %>% # pm3 is physical map for Chr 3
-  add_intercepts(intercepts_univariate = c(82.8, 82.8)) %>%
-  plot_pvl(phenames = c("tr1", "tr2"))
-
+```{r detect-cores, eval = FALSE}
+parallel::detectCores()
 ```
 
 
-### Calculate the likelihood ratio test statistic for pleiotropy v separate QTL
+
+
+#### Create a profile LOD plot to visualize results of two-dimensional scan
+
+To visualize results from our two-dimensional scan, we calculate profile LOD for each trait. The code below makes use of the R package `ggplot2` to plot profile LODs over the scan region. 
+
+```{r check-out}
+out
+```
+
+We see that `out` is a 625 by 3 tibble, as expected. The first two columns contain the marker ids for each ordered pair of markers. The third column contains the log-likelihood values.
+
+
+```{r profile-plot}
+library(dplyr)
+out %>%
+  tidy_scan_pvl(DOex$pmap$`3`) %>% 
+  add_intercepts(intercepts_univariate = c(82.8, 82.8)) %>%
+  plot_pvl(phenames = c("tr1", "tr2"))
+```
+
+We first pass the `scan_pvl` output, \emph{i.e.}, `out`, to the function `tidy_scan_pvl` to add the physical map coordinates to the `out` tibble. We pipe that output to the `add_intercepts` function. This function adds columns for the univariate peak positions. Note that we need to specify the univariate peak positions by hand. In the current case, the two traits have identical peak positions.
+
+Finally, the output of `add_intercepts` is piped to `plot_pvl`. This function uses `ggplot2` functions to create a profile LOD plot with three "traces": one for each trait and a third for all ordered pairs under the pleiotropy hypothesis.
+
+
+#### Calculate the likelihood ratio test statistic for pleiotropy v separate QTL
 
 We use the function `calc_lrt_tib` to calculate the likelihood ratio test statistic value for the specified traits and specified genomic region.
 
-```{r}
-(calc_lrt_tib(out) -> lrt)
+```{r lrt-calc}
+(lrt <- calc_lrt_tib(out))
 ```
 
-## Bootstrap analysis to get p-values
+### Bootstrap analysis to get p-values
 
-The calibration of test statistic values to get p-values uses bootstrap methods because we don't know the theoretical distribution of the test statistic under the null hypothesis. Thus, we use a bootstrap approach to obtain an empirical distribution of test statistic values under the null hypothesis of the presence of one pleiotropic locus. 
+The calibration of test statistic values to get p-values uses bootstrap methods because we don't know the theoretical distribution of the test statistic under the null hypothesis. Thus, we use a bootstrap approach to obtain an empirical distribution of test statistic values under the null hypothesis of the presence of one pleiotropic locus.
 
 We will use the function `boot_pvl` from our package `qtl2pleio`.
 
-We use a parametric bootstrap strategy in which we first use the studied phenotypes to infer the values of model parameters. Once we have the inferred values of the model parameters, we simulate phenotypes from the pleiotropy model (with the inferred parameter values). 
+We use a parametric bootstrap strategy in which we first use the studied phenotypes to infer the values of model parameters. Once we have the inferred values of the model parameters, we simulate phenotypes from the pleiotropy model (with the inferred parameter values).
 
 
-A natural question that arises is "which marker's allele probabilities do we use when simulating phenotypes?" We use the marker that, under the null hypothesis, ie, under the pleiotropy constraint, yields the greatest value of the log-likelihood.
+A natural question that arises is "which marker's allele probabilities do we use when simulating phenotypes?" We use the marker that, under the null hypothesis, *i.e.*, under the pleiotropy constraint, yields the greatest value of the log-likelihood.
 
-Before we call `boot_pvl`, we need to identify the index (on the chromosome under study) of the marker that maximizes the likelihood under the pleiotropy constraint. To do this, we use the `qtl2pleio` function `find_pleio_peak_tib`. 
+Before we call `boot_pvl`, we need to identify the index (on the chromosome under study) of the marker that maximizes the likelihood under the pleiotropy constraint. To do this, we use the `qtl2pleio` function `find_pleio_peak_tib`.
 
-```{r}
+```{r get-pleio-index}
 (pleio_index <- find_pleio_peak_tib(out, start_snp = 38))
 ```
 
 
 
 
-```{r}
-set.seed(2018-10-03)
+```{r boot}
+set.seed(2018-11-25)
 system.time(b_out <- boot_pvl(probs = pp,
-         pheno = Y, 
-         pleio_peak_index = pleio_index, 
-         kinship = kinship[[2]], # 2nd element in kinship list is Chr 3 
-         nboot_per_job = 10, 
-         start_snp = 38, 
-         n_snp = 10
+         pheno = Y,
+         pleio_peak_index = pleio_index,
+         kinship = kinship$`3`, 
+         nboot_per_job = 10,
+         start_snp = 38,
+         n_snp = 25
          ))
 
 ```
@@ -250,17 +302,15 @@ The argument `nboot_per_job` indicates the number of bootstrap samples that will
 
 Finally, we determine a bootstrap p-value in the usual method. We treat the bootstrap samples' test statistics as an empirical distribution of the test statistic under the null hypothesis of pleiotropy. Thus, to get a p-value, we want to ask "What is the probability, under the null hypothesis, of observing a test statistic value that is at least as extreme as that which we observed?"
 
-```{r}
+```{r pval}
+b_out
 (pvalue <- mean(b_out >= lrt))
 ```
 
-Typically, one would want to conduct the two-dimensional scan over a larger grid (ie, with more markers). We abbreviated the scan above to reduce computing time.
+In practice, one would want to use many more bootstrap samples to achieve an empirical distribution that is closer to the theoretical distribution of the test statistic under the null hypothesis.
 
-In practice, one would want to use many more bootstrap samples to achieve an empirical distribution that is closer to the theoretical distribution of the test statistic under the null hypothesis. 
+However, if one wants to perform analyses with a reasonable number - say 400 - bootstrap samples, this will take a very long time - many days - on a single laptop computer. We have used a series of computer clusters that are coordinated by the University of Wisconsin-Madison's Center for High-throughput Computing (http://chtc.cs.wisc.edu). We typically are able to analyze 1000 bootstrap samples in less than 24 hours with this service.
 
-However, if one wants to perform analyses with a reasonable number - say 400 - bootstrap samples, this will take a very long time - several days - on a single laptop computer. We have used a series of computer clusters that are coordinated by the University of Wisconsin-Madison's Center for High-throughput Computing (http://chtc.cs.wisc.edu). We typically are able to analyze 1000 bootstrap samples in less than 24 hours with this service.
-
-We recently added parallel computing capacity with `boot_pvl` and `scan_pvl`. The user may specify `n_cores` when calling each function. 
 
 
 

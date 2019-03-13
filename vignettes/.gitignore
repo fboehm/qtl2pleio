@@ -1,2 +1,7 @@
 *_cache
 *.R
+.build.timestamp
+bootstrap-cluster.html
+recla-analysis.html
+recla-analysis_files
+testing-pleiotropy-vs-separate-qtl_files
