@@ -3,7 +3,7 @@
 ## Major changes
 
 * added a vignette for HTCondor & bootstrap analysis
-* updated README.Rmd and README.md
+* updated README.Rmd and README.md (per suggestions & PR of @kbroman)
 
 
 # qtl2pleio 0.1.2.9000
