@@ -2,7 +2,8 @@
 
 ## Major changes
 
-* added a vignette for Condor & bootstrap analysis
+* added a vignette for HTCondor & bootstrap analysis
+* updated README.Rmd and README.md
 
 
 # qtl2pleio 0.1.2.9000
