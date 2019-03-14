@@ -3,7 +3,7 @@
 
 # qtl2pleio <img src="https://raw.githubusercontent.com/fboehm/qtl2pleio/master/man/figures/logo.png" align="right" />
 
-[![Binder](http://mybinder.org/badge_logo.svg)](http://mybinder.org/v2/gh/fboehm/qtl2pleio/master?urlpath=rstudio)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/fboehm/qtl2pleio/master?urlpath=rstudio)
 [![Travis-CI Build
 Status](https://travis-ci.org/fboehm/qtl2pleio.svg?branch=master)](https://travis-ci.org/fboehm/qtl2pleio)
 [![Coverage
@@ -253,7 +253,7 @@ system.time(b_out <- boot_pvl(probs = pp,
          n_snp = 25
          ))
 #>    user  system elapsed 
-#>  82.724   1.953  84.852
+#>  89.511   2.283  92.240
 ```
 
 ``` r
@@ -276,7 +276,7 @@ citation("qtl2pleio")
 #> 
 #>   Frederick Boehm (2019). qtl2pleio: Testing pleiotropy vs.
 #>   separate QTL in multiparental populations. R package version
-#>   0.1.2.9000. URL https://github.com/fboehm/qtl2pleio
+#>   0.1.2.9001. URL https://github.com/fboehm/qtl2pleio
 #> 
 #> A BibTeX entry for LaTeX users is
 #> 
@@ -284,7 +284,7 @@ citation("qtl2pleio")
 #>     title = {qtl2pleio: Testing pleiotropy vs. separate QTL in multiparental populations},
 #>     author = {Frederick Boehm},
 #>     year = {2019},
-#>     note = {R package version 0.1.2.9000},
+#>     note = {R package version 0.1.2.9001},
 #>     url = {https://github.com/fboehm/qtl2pleio},
 #>   }
 ```
