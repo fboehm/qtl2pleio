@@ -16,8 +16,6 @@
 * added literature references to both `boot_pvl` and `scan_pvl`    
 
 
-
-
 ## Bug fixes
 
 * corrected typo in vignette  
@@ -25,6 +23,8 @@
 
 
 # qtl2pleio 0.1.2
+
+## Major changes
 
 * added tests & examples for `scan_pvl`  
 * changed output of `scan_pvl` to a tibble  
@@ -36,8 +36,12 @@
 
 # qtl2pleio 0.1.1
 
+## Major changes
+
 * restructured `scan_pvl` to allow for more than two phenotypes. Now output is a dataframe.
 
 # qtl2pleio 0.1.0
+
+## Major changes
 
 * Added a `NEWS.md` file to track changes to the package.

@@ -5,3 +5,6 @@ home:
   links:
   - text: Frederick Boehm's Website
     href: https://fboehm.us
+
+news:
+  - one_page: false

@@ -53,14 +53,7 @@ We then load the library into our R session with the `library` command:
 library(qtl2pleio)
 ```
 
-
-We'll work with data from the `qtl2data` repository, which is on github. First, we install and load the `qtl2` package.
-
-```{r, eval = FALSE}
-devtools::install_github("rqtl/qtl2")
-```
-
-We use the above line once to install the package on our computer before loading the package with the `library` command.
+We also load the `qtl2` package with the `library` command.
 
 ```{r}
 library(qtl2)
