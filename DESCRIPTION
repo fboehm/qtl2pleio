@@ -29,7 +29,6 @@ Imports:
     microbenchmark,
     mvtnorm,
     progress,
-    qtl2,
     Rcpp,
     RcppEigen,
     readr,
