@@ -35,7 +35,6 @@ Imports:
     rlang,
     stringr,
     tibble,
-    qtl2,
     parallel,
     broman,
     devtools
