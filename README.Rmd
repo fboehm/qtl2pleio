@@ -56,7 +56,7 @@ You may also wish to install [R/qtl2](https://kbroman.org/qtl2) and
 the [`qtl2convert`](https://github.com/rqtl/qtl2convert) package. We
 will use both below.
 
-```{r install-qtl2convert, eval = FALSE}
+```{r install-qtl2convert, eval = TRUE}
 install.packages(c("qtl2", "qtl2convert"), repos="http://rqtl.org/qtl2")
 ```
 

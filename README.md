@@ -253,7 +253,7 @@ system.time(b_out <- boot_pvl(probs = pp,
          n_snp = 25
          ))
 #>    user  system elapsed 
-#>  89.511   2.283  92.240
+#>  78.076   2.055  80.309
 ```
 
 ``` r
