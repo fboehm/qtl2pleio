@@ -7,6 +7,10 @@ cache: packages
 r_packages:
  - devtools
 
+repos:
+  CRAN: https://cloud.r-project.org
+  rqtl: http://rqtl.org/qtl2cran
+
 warnings_are_errors: true
 
 notifications:
