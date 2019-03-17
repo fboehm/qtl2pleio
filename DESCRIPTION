@@ -29,6 +29,7 @@ Imports:
     microbenchmark,
     mvtnorm,
     progress,
+    qtl2,
     Rcpp,
     RcppEigen,
     readr,
@@ -51,14 +52,6 @@ VignetteBuilder:
     knitr
 Remotes:
     fboehm/gemma2,
-    r-lib/rlang,
-    r-lib/devtools,
-    tidyverse/dplyr,
-    tidyverse/ggplot2,
-    tidyverse/stringr,
-    tidyverse/tibble,
-    RcppCore/Rcpp,
-    RcppCore/RcppEigen
 Encoding: UTF-8
 Language: en-US
 LazyData: true
