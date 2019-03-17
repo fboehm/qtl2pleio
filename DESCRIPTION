@@ -54,7 +54,7 @@ Remotes:
     fboehm/gemma2,
     rqtl/qtl2,
     r-lib/rlang,
-    r-lib/devtools
+    r-lib/devtools,
     tidyverse/dplyr,
     tidyverse/ggplot2,
     tidyverse/stringr,
