@@ -11,3 +11,5 @@
 vignettes/*cache/*
 ^codecov\.yml$
 ^CONDUCT\.md$
+runtime.txt
+install.R
