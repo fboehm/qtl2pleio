@@ -37,7 +37,8 @@ Imports:
     tibble,
     parallel,
     broman,
-    devtools
+    devtools,
+    qtl2
 Suggests:
     covr,
     knitr,
