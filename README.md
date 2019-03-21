@@ -12,17 +12,31 @@ Status](https://img.shields.io/codecov/c/github/fboehm/qtl2pleio/master.svg)](ht
 has not yet been a stable, usable release suitable for the
 public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
 
+## Overview
+
+`qtl2pleio` is a software package for use with the [R statistical
+computing environment](https://cran.r-project.org/). `qtl2pleio` is
+freely available for download and use. I share it under the [MIT
+license](https://opensource.org/licenses/mit-license.php). The user will
+also want to download and install the [`qtl2` R
+package](https://kbroman.org/qtl2/).
+
+Click
+[here](https://mybinder.org/v2/gh/fboehm/qtl2pleio/master?urlpath=rstudio)
+to explore `qtl2pleio` within a live [Rstudio](https://www.rstudio.com/)
+session in “the cloud”.
+
 ## Goals
 
-The goal of qtl2pleio is, for a pair of traits that show evidence for a
-QTL in a common region, to distinguish between pleiotropy (the null
+The goal of `qtl2pleio` is, for a pair of traits that show evidence for
+a QTL in a common region, to distinguish between pleiotropy (the null
 hypothesis, that they are affected by a common QTL) and the alternative
 that they are affected by separate QTL. It extends the likelihood ratio
 test of [Jiang and Zeng
 (1995)](http://www.genetics.org/content/140/3/1111.long) for
 multiparental populations, such as Diversity Outbred mice, including the
-use of a linear mixed model to account for population structure.
-`qtl2pleio` data structures are those used in the
+use of multivariate polygenic random effects to account for population
+structure. `qtl2pleio` data structures are those used in the
 [`rqtl/qtl2`](https://kbroman.org/qtl2) package.
 
 ## Installation
@@ -253,7 +267,7 @@ system.time(b_out <- boot_pvl(probs = pp,
          n_snp = 25
          ))
 #>    user  system elapsed 
-#>  78.076   2.055  80.309
+#>  77.357   1.996  79.458
 ```
 
 ``` r
