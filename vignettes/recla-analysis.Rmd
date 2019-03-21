@@ -170,7 +170,7 @@ plot_coefCC(s1c_22s, scan1_output = out[ , 22, drop = FALSE], map = pseudomap, m
 We present the code that we ran to perform the two-dimensional scan.
 
 ```{r 2d-scan, eval = FALSE}
-scan_pvl(probs = pp, pheno = wlph[, c(10, 22)], covariates = sex2, kinship = kinship$`8`, start_snp1 = 650, n_snp = 350) -> pvl1022
+scan_pvl(probs = aprobs$`8`, pheno = wlph[, c(10, 22)], addcovar = sex2, kinship = kinship$`8`, start_snp = 650, n_snp = 350) -> pvl1022
 write.table(x = pvl1022, file = "recla-10-22.txt")
 ```
 
