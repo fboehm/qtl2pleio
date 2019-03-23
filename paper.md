@@ -32,7 +32,10 @@ Additionally, the test statistic distribution, under the null hypothesis of plei
 
 We addressed the first two challenges by adding a fixed effect for every founder line and incorporating a multivariate polygenic random effect into the linear model, which resulted in a multivariate linear mixed effects model [@kang2008efficient;@zhou2014efficient]. We implemented a parametric bootstrap procedure to determine p-values for test statistics [@efron1979bootstrap;@tian2016dissection]. We describe details of our statistical methods elsewhere [@boehm2019testing]. 
 
-`qtl2pleio` offers a convenient interface for those already analyzing data with [`qtl2`](https://kbroman.org/qtl2/). The primary functions in `qtl2pleio` are `scan_pvl`, to perform the multivariate multi-QTL scan, and `boot_pvl`, to obtain bootstrap samples. We also include functions for visualizing results. `qtl2pleio` features three R package vignettes that demonstrate these and other `qtl2pleio` functions. One vignette also provides examples for performing bootstrap analysis with a computing cluster. 
+`qtl2pleio` offers a convenient interface for those already analyzing data with [`qtl2`](https://kbroman.org/qtl2/). The primary functions in `qtl2pleio` are `scan_pvl`, to perform the multivariate multi-QTL scan, and `boot_pvl`, to obtain bootstrap samples. We also include functions for visualizing results. `qtl2pleio` features three R package vignettes that demonstrate these and other `qtl2pleio` functions. One vignette provides examples for performing bootstrap analysis with a computing cluster. For quality assurance purposes, we incorporated unit tests into `qtl2pleio` via the R package `testthat` [@wickham2011testthat]. 
+
+`qtl2pleio` uses `C++` code for model fitting via generalized least squares. We use the R package `Rcpp` to interface with our `C++` code [@eddelbuettel2011rcpp]. We also make use of the `C++` library `Eigen` via the R package `RcppEigen` [@bates2013fast].
+
 
 
 # References
