@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit README.Rmd -->
 
-# qtl2pleio <img src="https://raw.githubusercontent.com/fboehm/qtl2pleio/master/man/figures/logo.png" align="right" />
+# qtl2pleio
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/fboehm/qtl2pleio/master?urlpath=rstudio)
 [![Travis-CI Build
@@ -258,16 +258,14 @@ function `find_pleio_peak_tib`.
 
 ``` r
 set.seed(2018-11-25) # set for reproducibility purposes.
-system.time(b_out <- boot_pvl(probs = pp,
+b_out <- boot_pvl(probs = pp,
          pheno = Y,
          pleio_peak_index = pleio_index,
          kinship = kinship[[2]], # 2nd element in kinship list is Chr 3
          nboot_per_job = 10,
          start_snp = 38,
          n_snp = 25
-         ))
-#>    user  system elapsed 
-#>  77.357   1.996  79.458
+         )
 ```
 
 ``` r
@@ -288,9 +286,9 @@ citation("qtl2pleio")
 #> 
 #> To cite qtl2pleio in publications use:
 #> 
-#>   Frederick Boehm (2019). qtl2pleio: Testing pleiotropy vs.
-#>   separate QTL in multiparental populations. R package version
-#>   0.1.2.9001. URL https://github.com/fboehm/qtl2pleio
+#>   Frederick Boehm (2019). qtl2pleio: Testing pleiotropy vs. separate
+#>   QTL in multiparental populations. R package version 0.1.2.9001. URL
+#>   https://github.com/fboehm/qtl2pleio
 #> 
 #> A BibTeX entry for LaTeX users is
 #> 

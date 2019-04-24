@@ -16,7 +16,8 @@ knitr::opts_chunk$set(
   warning = FALSE
 )
 ```
-# qtl2pleio <img src="https://raw.githubusercontent.com/fboehm/qtl2pleio/master/man/figures/logo.png" align="right" />
+
+# qtl2pleio 
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/fboehm/qtl2pleio/master?urlpath=rstudio)
 [![Travis-CI Build Status](https://travis-ci.org/fboehm/qtl2pleio.svg?branch=master)](https://travis-ci.org/fboehm/qtl2pleio)
@@ -197,12 +198,12 @@ We now have the inputs that we need to do a pleiotropy vs. separate QTL test. We
 
 
 ```{r 2d-scan}
-out <- scan_pvl(probs = pp,
+out <- suppressMessages(scan_pvl(probs = pp,
                 pheno = Y,
                 kinship = kinship[[2]], # 2nd entry in kinship list is Chr 3
                 start_snp = 38,
                 n_snp = 25, n_cores = 1
-                )
+                ))
 ```
 
 
@@ -241,7 +242,7 @@ Before we call `boot_pvl`, we need to identify the index (on the chromosome unde
 
 ```{r boot}
 set.seed(2018-11-25) # set for reproducibility purposes.
-system.time(b_out <- boot_pvl(probs = pp,
+b_out <- suppressMessages(boot_pvl(probs = pp,
          pheno = Y,
          pleio_peak_index = pleio_index,
          kinship = kinship[[2]], # 2nd element in kinship list is Chr 3
