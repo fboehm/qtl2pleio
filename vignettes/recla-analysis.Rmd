@@ -193,9 +193,8 @@ We create a profile LOD plot.
 
 ```{r profile-plot}
 colnames(recla$pheno)[c(10, 22)] <- c("Percent time in light", "Hot plate latency")
-p1022 <- tidy_scan_pvl(pvl1022, pmap = gm) %>%
-  add_intercepts(c(as.numeric(pos_LD_light_pct), as.numeric(pos_HP_latency))) %>%
-  plot_pvl(phenames = colnames(recla$pheno)[c(10, 22)]) + ggtitle("percent time in light and hot plate latency") 
+p1022 <- tidy_scan_pvl(pvl1022, pmap = gm, phenames = colnames(recla$pheno)[c(10, 22)]) %>%
+  plot_pvl(units = "cM") + ggtitle("percent time in light and hot plate latency") 
 ```
 
 

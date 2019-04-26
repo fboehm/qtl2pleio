@@ -240,8 +240,7 @@ We see that `out` is a 625 by 3 tibble, as expected. The first two columns conta
 library(dplyr)
 out %>%
   tidy_scan_pvl(DOex$pmap$`3`) %>% 
-  add_intercepts(intercepts_univariate = c(82.8, 82.8)) %>%
-  plot_pvl(phenames = c("tr1", "tr2"))
+  plot_pvl()
 ```
 
 We first pass the `scan_pvl` output, \emph{i.e.}, `out`, to the function `tidy_scan_pvl` to add the physical map coordinates to the `out` tibble. We pipe that output to the `add_intercepts` function. This function adds columns for the univariate peak positions. Note that we need to specify the univariate peak positions by hand. In the current case, the two traits have identical peak positions.
