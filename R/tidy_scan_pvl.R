@@ -87,6 +87,7 @@ assemble_profile_tib <- function(tib, trace = "profile1") {
 #' @family profile log-likelihood tibble functions
 #' @param mytib outputted tibble from scan_pvl
 #' @param pmap physical map (in Mb) or genetic map (in cM) for exactly one chromosome
+#' @param phenames vector of length 2 containing two trait names
 #' @export
 #' @importFrom rlang .data
 #' @examples
@@ -110,14 +111,14 @@ assemble_profile_tib <- function(tib, trace = "profile1") {
 #' tidy_scan_pvl(ss, pm = map)
 
 
-tidy_scan_pvl <- function(mytib, pmap) {
+tidy_scan_pvl <- function(mytib, pmap, phenames = c("trait1", "trait2")) {
     dat <- mytib %>%
         dplyr::rename(marker1 = .data$Var1, marker2 = .data$Var2, ll = .data$loglik) %>%
         add_pmap(pmap)
     pl2 <- dat %>%
         dplyr::filter(.data$marker1 == .data$marker2) %>%
         dplyr::rename(marker_position = .data$marker1_position)
-    pl2$trace <- "pleio"
+    pl2$trace <- "pleiotropy"
     pleio_ll <- dplyr::select(pl2, .data$marker_position, .data$ll, .data$trace)
     # assemble pro1_ll
     pro1 <- assemble_profile_tib(dat, "profile1")
@@ -125,7 +126,9 @@ tidy_scan_pvl <- function(mytib, pmap) {
     # bind 3 tibbles
     foo <- dplyr::bind_rows(pleio_ll, pro1, pro2)
     foo$lod <- (foo$ll - max(pleio_ll$ll)) / log(10)  # convert from base e to base 10
-    dat <- dplyr::select(foo, .data$marker_position, .data$lod, .data$trace)
+    dat <- dplyr::select(foo, .data$marker_position, .data$lod, .data$trace) %>%
+        dplyr::select(marker_position, lod, trace) %>%
+        dplyr::mutate(Trace = add_phenames(trace, phenames[1], phenames[2]))
     return(dat)
 }
 
@@ -180,3 +183,15 @@ add_intercepts <- function(tib, intercepts_univariate) {
     return(tib)
 }
 
+#' Replace old (default) trait names with true trait names
+#'
+#' @param charvec a character vector containing entries like "profile1" and "profile2"
+#' @param phe1 character vector of length 1 that is the true trait name for the first trait
+#' @param phe2 character vector of length 1 that is the true trait name for the second trait
+#' @export
+#'
+add_phenames <- function(charvec, phe1, phe2){
+    charvec %>%
+        stringr::str_replace(pattern = "profile1", replacement = phe1) %>%
+        stringr::str_replace(pattern = "profile2", replacement = phe2)
+}

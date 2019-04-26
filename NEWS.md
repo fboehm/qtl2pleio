@@ -1,3 +1,23 @@
+# qtl2pleio 0.1.2.9002
+
+## Major changes
+
+* changed default behavior of `plot_pvl` to not indicate univariate peak positions. 
+* fixed CITATION file to tell users to cite Biorxiv preprint (following CITATION file format of rqtl/qtl2)
+
+## Minor changes
+
+* Removed hex logo file from repo and deleted it from README
+* revised paper.md in preparation for JOSS submission
+
+
+## Bug fixes
+
+* Re-created profile LOD plots for vignettes and README without indicating univariate peak positions.
+
+* Added line type arguments to `plot_pvl`.
+
+
 # qtl2pleio 0.1.2.9001
 
 ## Major changes

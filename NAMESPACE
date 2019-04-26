@@ -2,6 +2,7 @@
 
 export("%>%")
 export(add_intercepts)
+export(add_phenames)
 export(add_pmap)
 export(assemble_profile_tib)
 export(boot_pvl)

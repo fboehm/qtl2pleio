@@ -216,8 +216,7 @@ To visualize results from our two-dimensional scan, we calculate profile LOD for
 library(dplyr)
 out %>%
   tidy_scan_pvl(DOex$pmap[[2]]) %>% # pmap[[2]] is physical map for Chr 3
-  add_intercepts(intercepts_univariate = c(82.8, 82.8)) %>%
-  plot_pvl(phenames = c("tr1", "tr2"))
+  plot_pvl()
 ```
 
 
@@ -270,8 +269,3 @@ Please note that this project is released with a [Contributor Code of Conduct](C
 citation("qtl2pleio")
 ```
 
-Icon image of mice: https://www.jax.org/~/media/JaxWeb/images/jax-mice-and-services/mice/datasheets/002468
-
-Icon image of Arabidopsis: https://sites.cns.utexas.edu/sites/default/files/styles/os_files_large/public/juenger_lab/files/pp1244cvr001-1.gif
-
-Icon image of Drosophila: https://www.yourgenome.org/sites/default/files/styles/banner/public/banners/stories/fruit-flies-in-the-laboratory/single-fruit-fly-drosophila-melanogaster-on-white-background-cropped.jpg

@@ -208,12 +208,12 @@ test. We have the founder allele dosages for one chromosome, *i.e.*, Chr
 and a LOCO-derived kinship matrix, `kinship[[2]]`.
 
 ``` r
-out <- scan_pvl(probs = pp,
+out <- suppressMessages(scan_pvl(probs = pp,
                 pheno = Y,
                 kinship = kinship[[2]], # 2nd entry in kinship list is Chr 3
                 start_snp = 38,
                 n_snp = 25, n_cores = 1
-                )
+                ))
 ```
 
 ### Create a profile LOD plot to visualize results of two-dimensional scan
@@ -226,8 +226,7 @@ to plot profile LODs over the scan region.
 library(dplyr)
 out %>%
   tidy_scan_pvl(DOex$pmap[[2]]) %>% # pmap[[2]] is physical map for Chr 3
-  add_intercepts(intercepts_univariate = c(82.8, 82.8)) %>%
-  plot_pvl(phenames = c("tr1", "tr2"))
+  plot_pvl()
 ```
 
 <img src="man/figures/README-profile-plot-1.png" width="100%" />
@@ -258,14 +257,14 @@ function `find_pleio_peak_tib`.
 
 ``` r
 set.seed(2018-11-25) # set for reproducibility purposes.
-b_out <- boot_pvl(probs = pp,
+b_out <- suppressMessages(boot_pvl(probs = pp,
          pheno = Y,
          pleio_peak_index = pleio_index,
          kinship = kinship[[2]], # 2nd element in kinship list is Chr 3
          nboot_per_job = 10,
          start_snp = 38,
          n_snp = 25
-         )
+         ))
 ```
 
 ``` r
@@ -286,26 +285,18 @@ citation("qtl2pleio")
 #> 
 #> To cite qtl2pleio in publications use:
 #> 
-#>   Frederick Boehm (2019). qtl2pleio: Testing pleiotropy vs. separate
-#>   QTL in multiparental populations. R package version 0.1.2.9001. URL
-#>   https://github.com/fboehm/qtl2pleio
+#>   Boehm FJ, Chesler EJ, Yandell BS, Broman KW (2019) Testing
+#>   pleiotropy vs. separate QTL in multiparental populations Biorxiv
+#>   https://www.biorxiv.org/content/10.1101/550939v1
 #> 
 #> A BibTeX entry for LaTeX users is
 #> 
-#>   @Manual{,
-#>     title = {qtl2pleio: Testing pleiotropy vs. separate QTL in multiparental populations},
-#>     author = {Frederick Boehm},
+#>   @Article{Boehm2019testing,
+#>     title = {Testing pleiotropy vs. separate QTL in multiparental populations},
+#>     author = {Frederick J. Boehm and Elissa J. Chesler and Brian S. Yandell and Karl W. Broman},
+#>     journal = {Biorxiv},
 #>     year = {2019},
-#>     note = {R package version 0.1.2.9001},
-#>     url = {https://github.com/fboehm/qtl2pleio},
+#>     url = {https://www.biorxiv.org/content/10.1101/550939v1},
+#>     eprint = {https://www.biorxiv.org/content/early/2019/02/15/550939.full.pdf},
 #>   }
 ```
-
-Icon image of mice:
-<https://www.jax.org/~/media/JaxWeb/images/jax-mice-and-services/mice/datasheets/002468>
-
-Icon image of Arabidopsis:
-<https://sites.cns.utexas.edu/sites/default/files/styles/os_files_large/public/juenger_lab/files/pp1244cvr001-1.gif>
-
-Icon image of Drosophila:
-<https://www.yourgenome.org/sites/default/files/styles/banner/public/banners/stories/fruit-flies-in-the-laboratory/single-fruit-fly-drosophila-melanogaster-on-white-background-cropped.jpg>

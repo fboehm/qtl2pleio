@@ -4,24 +4,17 @@
 \alias{plot_pvl}
 \title{Plot tidied results of a pvl scan}
 \usage{
-plot_pvl(dat, phenames, size = 3, shape_uni = 17, shape_pleio = 16,
-  shape_biv = 18, palette = c("#999999", "#E69F00", "#56B4E9",
-  "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7"))
+plot_pvl(dat, units = "Mb", palette = c("#999999", "#E69F00",
+  "#56B4E9"), linetype = c("solid", "longdash", "dotted"))
 }
 \arguments{
 \item{dat}{a tibble that is the tidied output of a pvl scan}
 
-\item{phenames}{vector of names of the two ordered phenotypes}
+\item{units}{a character vector of length one to indicate units for physical or genetic map}
 
-\item{size}{number indicating the plot size for plot characters}
+\item{palette}{a character vector of length 3 containing strings for colors}
 
-\item{shape_uni}{number indicating the pch for univariate peaks}
-
-\item{shape_pleio}{number indicating the pch for pleiotropy peak}
-
-\item{shape_biv}{number indicating the pch for bivariate peaks}
-
-\item{palette}{a vector containing strings for colors}
+\item{linetype}{a character vector of length 3 specifying the linetype values for the 3 traces}
 }
 \description{
 Plot tidied results of a pvl scan

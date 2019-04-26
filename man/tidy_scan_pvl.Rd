@@ -4,12 +4,14 @@
 \alias{tidy_scan_pvl}
 \title{Tidy the data frame outputted by scan_pvl for further analysis & plotting}
 \usage{
-tidy_scan_pvl(mytib, pmap)
+tidy_scan_pvl(mytib, pmap, phenames = c("trait1", "trait2"))
 }
 \arguments{
 \item{mytib}{outputted tibble from scan_pvl}
 
 \item{pmap}{physical map (in Mb) or genetic map (in cM) for exactly one chromosome}
+
+\item{phenames}{vector of length 2 containing two trait names}
 }
 \description{
 Tidy the data frame outputted by scan_pvl for further analysis & plotting
