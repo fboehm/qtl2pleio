@@ -12,20 +12,20 @@ vignette: >
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>", 
-  tidy = TRUE, 
+  comment = "#>",
+  tidy = TRUE,
   tidy.opts = list(width.cutoff = 60)
   )
 
 ```
 
-## Setting for pleiotropy vs. two separate QTL 
+## Setting for pleiotropy vs. two separate QTL
 
 Our setting involves a pair of traits, $Y_1$ and $Y_2$, each of which individually (univariately) maps to a single genomic region. $Y_1$ and $Y_2$ are both measured on the same subjects. The exact definition of a genomic region is imprecise; in practice, it may be as large as 4 or 5 Mb. We seek to distinguish whether $Y_1$ and $Y_2$ associations (in the genomic region of interest) arise due to a single QTL or whether there are two two distinct loci, each of which associates with exactly one of the two traits. We recognize that more complicated association patterns are possible, but we neglect them in this test.
 
 ## Installing `qtl2pleio`
 
-We install `qtl2pleio` from github via the `devtools` R package, which is available from CRAN. 
+We install `qtl2pleio` from github via the `devtools` R package, which is available from CRAN.
 
 To install qtl2pleio, use `install_github()` from the
 [devtools](https://devtools.r-lib.org) package.
@@ -41,11 +41,11 @@ the [`qtl2convert`](https://github.com/rqtl/qtl2convert) package. We
 will use both below.
 
 ```{r install-qtl2convert, eval = FALSE}
-install.packages(c("qtl2"), repos="http://rqtl.org/qtl2")
+install.packages(c("qtl2"), repos="http://rqtl.org/qtl2cran")
 ```
 
 
-The above line only needs to be run once on a given computer (unless you wish to install a newer version of the package). 
+The above line only needs to be run once on a given computer (unless you wish to install a newer version of the package).
 
 We then load the library into our R session with the `library` command:
 
@@ -110,7 +110,7 @@ calc_kinship(probs = pr, type = "loco") -> kinship
 str(kinship)
 ```
 
-We see that `kinship` is a list containing 3 matrices. Each matrix is 261 by 261 - where the number of subjects is 261 - and symmetric. 
+We see that `kinship` is a list containing 3 matrices. Each matrix is 261 by 261 - where the number of subjects is 261 - and symmetric.
 
 ## Statistical model
 
@@ -120,9 +120,9 @@ We use the model:
 
 $$vec(Y) = X vec(B) + vec(G) + vec(E)$$
 
-where $Y$ is a $n$ by $2$ matrix, where each row is one subject and each column is one quantitative trait. $X$ is a $2n$ by $2f$ design matrix containing $n$ by $f$ allele probabilities matrices for each of two (possibly identical) markers. Thus, $X$ is a block-diagonal matrix, with exactly two $n$ by $f$ blocks on the diagonal. $B$ is a $f$ by 2 matrix. "vec" refers to the vectorization operator. "vec(B)", where $B$ is a $f$ by $2$ matrix, is, thus, a (column) vector of length $2f$ that is formed by stacking the second column of $B$ beneath the first column of $B$. 
+where $Y$ is a $n$ by $2$ matrix, where each row is one subject and each column is one quantitative trait. $X$ is a $2n$ by $2f$ design matrix containing $n$ by $f$ allele probabilities matrices for each of two (possibly identical) markers. Thus, $X$ is a block-diagonal matrix, with exactly two $n$ by $f$ blocks on the diagonal. $B$ is a $f$ by 2 matrix. "vec" refers to the vectorization operator. "vec(B)", where $B$ is a $f$ by $2$ matrix, is, thus, a (column) vector of length $2f$ that is formed by stacking the second column of $B$ beneath the first column of $B$.
 
-$G$ is a matrix of random effects. We specify its distribution as matrix-variate normal with mean being a $n$ by $2$ matrix of zeros, covariance among row vectors a $n$ by $n$ kinship matrix, $K$, and covariance among column vectors a $2$ by $2$ genetic covariance matrix, $V_g$. 
+$G$ is a matrix of random effects. We specify its distribution as matrix-variate normal with mean being a $n$ by $2$ matrix of zeros, covariance among row vectors a $n$ by $n$ kinship matrix, $K$, and covariance among column vectors a $2$ by $2$ genetic covariance matrix, $V_g$.
 
 In mathematical notation, we write:
 
@@ -134,7 +134,7 @@ $$E \sim MN_{\text{n by 2}}(0, I_n, V_e)$$
 
 
 
-In practice, we typically measure the phenotype matrix $Y$. We also treat as known the design matrix $X$ and the kinship matrix $K$. We then infer the values of $B$, $V_g$, and $V_e$. 
+In practice, we typically measure the phenotype matrix $Y$. We also treat as known the design matrix $X$ and the kinship matrix $K$. We then infer the values of $B$, $V_g$, and $V_e$.
 
 
 
@@ -187,7 +187,7 @@ plot(s1, DOex$pmap$`3`, lod=2, col="violetred", add=TRUE)
 legend("topleft", colnames(s1), lwd=2, col=c("darkslateblue", "violetred"), bg="gray92")
 ```
 
-We see that the two traits share a peak on Chr 3. 
+We see that the two traits share a peak on Chr 3.
 
 And here are the observed QTL peaks with LOD > 8. In practice, we could do a permutation test to determine a threshold for family-wise error rate control.
 
@@ -208,13 +208,13 @@ Lastly, we specify the number of cores to use, with the `n_cores` argument. We s
 ```{r 2d-scan}
 out <- scan_pvl(probs = pp,
                 pheno = Y,
-                kinship = kinship$`3`, 
+                kinship = kinship$`3`,
                 start_snp = 38,
                 n_snp = 25, n_cores = 1
                 )
 ```
 
-The number of cores available will vary by computer. For example, on my Macbook pro computer, with 16GB RAM, I have access to 8 cores. If I use all 8, I can't do other computing tasks, so I often set `n_cores` to 7. 
+The number of cores available will vary by computer. For example, on my Macbook pro computer, with 16GB RAM, I have access to 8 cores. If I use all 8, I can't do other computing tasks, so I often set `n_cores` to 7.
 
 To check how many cores are available on your computer, run this code.
 
@@ -227,7 +227,7 @@ parallel::detectCores()
 
 #### Create a profile LOD plot to visualize results of two-dimensional scan
 
-To visualize results from our two-dimensional scan, we calculate profile LOD for each trait. The code below makes use of the R package `ggplot2` to plot profile LODs over the scan region. 
+To visualize results from our two-dimensional scan, we calculate profile LOD for each trait. The code below makes use of the R package `ggplot2` to plot profile LODs over the scan region.
 
 ```{r check-out}
 out
@@ -239,7 +239,7 @@ We see that `out` is a 625 by 3 tibble, as expected. The first two columns conta
 ```{r profile-plot}
 library(dplyr)
 out %>%
-  tidy_scan_pvl(DOex$pmap$`3`) %>% 
+  tidy_scan_pvl(DOex$pmap$`3`) %>%
   plot_pvl()
 ```
 
@@ -313,5 +313,3 @@ However, if one wants to perform analyses with a reasonable number - say 400 - b
 ```{r}
 devtools::session_info()
 ```
-
-
