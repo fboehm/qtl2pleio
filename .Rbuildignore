@@ -13,3 +13,8 @@ vignettes/*cache/*
 ^CONDUCT\.md$
 runtime.txt
 install.R
+^vignettes/recla-analysis_cache$
+^paper\.md$
+^paper\.bib$
+^install\.R$
+^runtime\.txt$
