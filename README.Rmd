@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# qtl2pleio 
+# qtl2pleio
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/fboehm/qtl2pleio/master?urlpath=rstudio)
 [![Travis-CI Build Status](https://travis-ci.org/fboehm/qtl2pleio.svg?branch=master)](https://travis-ci.org/fboehm/qtl2pleio)
@@ -62,7 +62,7 @@ the [`qtl2convert`](https://github.com/rqtl/qtl2convert) package. We
 will use both below.
 
 ```{r install-qtl2convert, eval = TRUE}
-install.packages(c("qtl2", "qtl2convert"), repos="http://rqtl.org/qtl2")
+install.packages(c("qtl2", "qtl2convert"), repos="http://rqtl.org/qtl2cran")
 ```
 
 
@@ -118,7 +118,7 @@ We see that `pr` is a list of 3 three-dimensional arrays - one array for each of
 
 ### Kinship calculations
 
-For our statistical model, we need a kinship matrix. We get one with the `calc_kinship` function in the `rqtl/qtl2` package. 
+For our statistical model, we need a kinship matrix. We get one with the `calc_kinship` function in the `rqtl/qtl2` package.
 
 
 ```{r calc-kinship}
@@ -135,14 +135,14 @@ We use the multivariate linear mixed effects model:
 
 $$vec(Y) = X vec(B) + vec(G) + vec(E)$$
 
-where $Y$ contains phenotypes, X contains founder allele probabilities and covariates, and B contains founder allele effects. G is the polygenic random effects, while E is the random errors. We provide more details in the vignette. 
+where $Y$ contains phenotypes, X contains founder allele probabilities and covariates, and B contains founder allele effects. G is the polygenic random effects, while E is the random errors. We provide more details in the vignette.
 
 
 
 ### Simulating phenotypes with `qtl2pleio::sim1`
 
 
-The function to simulate phenotypes in `qtl2pleio` is `sim1`. 
+The function to simulate phenotypes in `qtl2pleio` is `sim1`.
 
 ```{r pp-def}
 # set up the design matrix, X
@@ -194,7 +194,7 @@ find_peaks(s1, map = DOex$pmap, threshold=8)
 ### Perform two-dimensional scan as first step in pleiotropy vs. separate QTL hypothesis test
 
 
-We now have the inputs that we need to do a pleiotropy vs. separate QTL test. We have the founder allele dosages for one chromosome, *i.e.*, Chr 3, in the R object `pp`, the matrix of two trait measurements in `Y`, and a LOCO-derived kinship matrix, `kinship[[2]]`. 
+We now have the inputs that we need to do a pleiotropy vs. separate QTL test. We have the founder allele dosages for one chromosome, *i.e.*, Chr 3, in the R object `pp`, the matrix of two trait measurements in `Y`, and a LOCO-derived kinship matrix, `kinship[[2]]`.
 
 
 ```{r 2d-scan}
@@ -209,7 +209,7 @@ out <- suppressMessages(scan_pvl(probs = pp,
 
 ### Create a profile LOD plot to visualize results of two-dimensional scan
 
-To visualize results from our two-dimensional scan, we calculate profile LOD for each trait. The code below makes use of the R package `ggplot2` to plot profile LODs over the scan region. 
+To visualize results from our two-dimensional scan, we calculate profile LOD for each trait. The code below makes use of the R package `ggplot2` to plot profile LODs over the scan region.
 
 
 ```{r profile-plot}
@@ -268,4 +268,3 @@ Please note that this project is released with a [Contributor Code of Conduct](C
 ```{r cite}
 citation("qtl2pleio")
 ```
-

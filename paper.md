@@ -13,7 +13,7 @@ authors:
   - name: Brian Yandell
     orcid: 0000-0002-8774-9377
     affiliation: "1"
-  - name: Karl Broman
+  - name: Karl W. Broman
     orcid: 0000-0002-4914-6671
     affiliation: "2"
 affiliations:
@@ -46,6 +46,6 @@ We addressed the first two challenges by adding a fixed effect for every founder
 
 # Acknowledgments
 
-This work was supported in part by National Institutes of Health grant R01GM070683 (to K.B.).
+This work was supported in part by National Institutes of Health grant R01GM070683 (to K.W.B.).
 
 # References
