@@ -10,10 +10,18 @@ authors:
   - name: Frederick Boehm
     orcid: 0000-0002-1644-5931
     affiliation: "1" # (Multiple affiliations must be quoted)
+  - name: Brian Yandell
+    orcid: 0000-0002-8774-9377
+    affiliation: "1"
+  - name: Karl Broman
+    orcid: 0000-0002-4914-6671
+    affiliation: "2"
 affiliations:
- - name: Department of Statistics, University of Wisconsin-Madison
-   index: 1
-date: 22 March 2019
+  - name: Department of Statistics, University of Wisconsin-Madison
+    index: 1
+  - name: Department of Biostatistics and Medical Informatics, University of Wisconsin-Madison
+    index: 2
+date: 26 April 2019
 bibliography: paper.bib
 ---
 
@@ -36,6 +44,8 @@ We addressed the first two challenges by adding a fixed effect for every founder
 
 `qtl2pleio` uses `C++` code for model fitting via generalized least squares. We use the R package `Rcpp` to interface with our `C++` code [@eddelbuettel2011rcpp]. We also make use of the `C++` library `Eigen` via the R package `RcppEigen` [@bates2013fast].
 
+# Acknowledgments
 
+This work was supported in part by National Institutes of Health grant R01GM070683 (to K.B.).
 
 # References
