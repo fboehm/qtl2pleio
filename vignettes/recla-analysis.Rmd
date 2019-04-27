@@ -35,23 +35,41 @@ gm <- pseudomap$`8`
 ```
 
 
-We use the hidden Markov model from Broman (2012) to calculate 36-state genotype probabilities for autosomal markers.
+Typically, we would use the hidden Markov model from Broman (2012) to calculate 36-state genotype probabilities for autosomal markers. We would use the following line of code to do that.
 
-```{r calc-genoprobs-code, cache = TRUE}
+```{r calc-genoprobs-code, eval = FALSE}
 probs <- calc_genoprob(recla, map = pseudomap, cores = 1)
 ```
 
-We now convert the genotype probabilities to haplotype dosages.
+We would then convert the genotype probabilities to haplotype dosages.
 
-```{r calc-aprobs}
+```{r calc-aprobs, eval = FALSE}
 aprobs <- genoprob_to_alleleprob(probs)
 ```
 
-We now calculate kinship matrices, by the "leave one chromosome out (loco)" method.
+However, to save computing time when creating vignettes, we instead read pre-calculated 8-state founder allele dosages from Zenodo.
 
-```{r calc-kinship}
+```{r}
+url <- "https://zenodo.org/record/2652931/files/recla-aprobs.rds?download=1"
+dir.create("tmp") #create a directory that we'll delete later
+download.file(url, destfile = "tmp/recla-aprobs.rds")
+```
+
+After downloading the rds file, we read it into our R session.
+
+```{r}
+aprobs <- readRDS("tmp/recla-aprobs.rds")
+unlink("tmp", recursive = TRUE) # delete the tmp directory
+```
+
+
+We then calculate kinship matrices, by the "leave one chromosome out (loco)" method.
+
+```{r calc-kinship, eval = TRUE}
 kinship <- calc_kinship(aprobs, "loco")
 ```
+
+
 
 
 Before performing our QTL mapping, we transform the phenotypes. 

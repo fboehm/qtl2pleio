@@ -278,11 +278,11 @@ Before we call `boot_pvl`, we need to identify the index (on the chromosome unde
 
 ```{r boot}
 set.seed(2018-11-25)
-system.time(b_out <- boot_pvl(probs = pp,
+suppressMessages(b_out <- boot_pvl(probs = pp,
          pheno = Y,
          pleio_peak_index = pleio_index,
          kinship = kinship$`3`, 
-         nboot_per_job = 10,
+         nboot_per_job = 1,
          start_snp = 38,
          n_snp = 25
          ))
