@@ -1,3 +1,14 @@
+# qtl2pleio 0.1.3
+
+## Major changes
+
+* Submitted paper.md to JOSS
+
+## Minor changes
+
+* Minor updates to recla vignette to download precalculated founder allele dosages
+
+
 # qtl2pleio 0.1.2.9002
 
 ## Major changes
