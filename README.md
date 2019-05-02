@@ -58,7 +58,7 @@ below.
 install.packages(c("qtl2", "qtl2convert"), repos="http://rqtl.org/qtl2cran")
 #> 
 #> The downloaded binary packages are in
-#>  /var/folders/wd/lxmyvz590xb81c5z1j88b3800000gn/T//RtmpQMynXh/downloaded_packages
+#>  /var/folders/wd/lxmyvz590xb81c5z1j88b3800000gn/T//RtmpPxw0qF/downloaded_packages
 ```
 
 ## Example
@@ -184,15 +184,10 @@ matrix.
 s1 <- scan1(genoprobs = pr, pheno = Y, kinship = kinship)
 ```
 
-Here is a plot of the results.
+Here is a plot of the
+results.
 
-``` r
-plot(s1, DOex$pmap)
-plot(s1, DOex$pmap, lod=2, col="violetred", add=TRUE)
-legend("topleft", colnames(s1), lwd=2, col=c("darkslateblue", "violetred"), bg="gray92")
-```
-
-<img src="man/figures/README-1d-lod-plots-1.png" width="100%" />
+<img src="https://raw.githubusercontent.com/fboehm/qtl2pleio/master/man/figures/README-1d-lod-plots-1.png" width="100%" />
 
 And here are the observed QTL peaks with LOD \> 8.
 
@@ -224,16 +219,10 @@ out <- suppressMessages(scan_pvl(probs = pp,
 
 To visualize results from our two-dimensional scan, we calculate profile
 LOD for each trait. The code below makes use of the R package `ggplot2`
-to plot profile LODs over the scan region.
+to plot profile LODs over the scan
+region.
 
-``` r
-library(dplyr)
-out %>%
-  tidy_scan_pvl(DOex$pmap[[2]]) %>% # pmap[[2]] is physical map for Chr 3
-  plot_pvl()
-```
-
-<img src="man/figures/README-profile-plot-1.png" width="100%" />
+<img src="https://raw.githubusercontent.com/fboehm/qtl2pleio/master/man/figures/README-profile-plot-1.png" width="100%" />
 
 ### Calculate the likelihood ratio test statistic for pleiotropy v separate QTL
 

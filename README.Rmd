@@ -175,10 +175,14 @@ s1 <- scan1(genoprobs = pr, pheno = Y, kinship = kinship)
 
 Here is a plot of the results.
 
-```{r 1d-lod-plots}
+```{r 1d-lod-plots, include=FALSE}
 plot(s1, DOex$pmap)
 plot(s1, DOex$pmap, lod=2, col="violetred", add=TRUE)
 legend("topleft", colnames(s1), lwd=2, col=c("darkslateblue", "violetred"), bg="gray92")
+```
+
+```{r, echo = FALSE}
+knitr::include_graphics("https://raw.githubusercontent.com/fboehm/qtl2pleio/master/man/figures/README-1d-lod-plots-1.png")
 ```
 
 And here are the observed QTL peaks with LOD > 8.
@@ -212,12 +216,17 @@ out <- suppressMessages(scan_pvl(probs = pp,
 To visualize results from our two-dimensional scan, we calculate profile LOD for each trait. The code below makes use of the R package `ggplot2` to plot profile LODs over the scan region.
 
 
-```{r profile-plot}
+```{r profile-plot, include = FALSE}
 library(dplyr)
 out %>%
   tidy_scan_pvl(DOex$pmap[[2]]) %>% # pmap[[2]] is physical map for Chr 3
   plot_pvl()
 ```
+
+```{r, echo = FALSE}
+knitr::include_graphics("https://raw.githubusercontent.com/fboehm/qtl2pleio/master/man/figures/README-profile-plot-1.png")
+```
+
 
 
 ### Calculate the likelihood ratio test statistic for pleiotropy v separate QTL
