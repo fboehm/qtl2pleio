@@ -1,3 +1,4 @@
+
 <!-- README.md is generated from README.Rmd. Please edit README.Rmd -->
 
 # qtl2pleio
@@ -7,9 +8,9 @@
 Status](https://travis-ci.org/fboehm/qtl2pleio.svg?branch=master)](https://travis-ci.org/fboehm/qtl2pleio)
 [![Coverage
 Status](https://img.shields.io/codecov/c/github/fboehm/qtl2pleio/master.svg)](https://codecov.io/github/fboehm/qtl2pleio?branch=master)
-[![Project Status: WIP – Initial development is in progress, but there
-has not yet been a stable, usable release suitable for the
-public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
+[![Project Status: Active – The project has reached a stable, usable
+state and is being actively
+developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 
 ## Overview
 
@@ -50,10 +51,14 @@ devtools::install_github("fboehm/qtl2pleio")
 
 You may also wish to install [R/qtl2](https://kbroman.org/qtl2) and the
 [`qtl2convert`](https://github.com/rqtl/qtl2convert) package. We will
-use both below.
+use both
+below.
 
 ``` r
 install.packages(c("qtl2", "qtl2convert"), repos="http://rqtl.org/qtl2cran")
+#> 
+#> The downloaded binary packages are in
+#>  /var/folders/wd/lxmyvz590xb81c5z1j88b3800000gn/T//RtmpQMynXh/downloaded_packages
 ```
 
 ## Example
@@ -250,7 +255,7 @@ function `find_pleio_peak_tib`.
 
 ``` r
 (pleio_index <- find_pleio_peak_tib(out, start_snp = 38))
-#> loglik13
+#> loglik13 
 #>       50
 ```
 
@@ -281,15 +286,15 @@ abide by its terms.
 
 ``` r
 citation("qtl2pleio")
-#>
+#> 
 #> To cite qtl2pleio in publications use:
-#>
+#> 
 #>   Boehm FJ, Chesler EJ, Yandell BS, Broman KW (2019) Testing
 #>   pleiotropy vs. separate QTL in multiparental populations Biorxiv
 #>   https://www.biorxiv.org/content/10.1101/550939v1
-#>
+#> 
 #> A BibTeX entry for LaTeX users is
-#>
+#> 
 #>   @Article{Boehm2019testing,
 #>     title = {Testing pleiotropy vs. separate QTL in multiparental populations},
 #>     author = {Frederick J. Boehm and Elissa J. Chesler and Brian S. Yandell and Karl W. Broman},
