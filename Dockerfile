@@ -1,4 +1,10 @@
-FROM rocker/verse:3.5.3
+FROM rocker/binder:latest
 
-RUN R -e 'devtools::install_dev_deps(".")'
+USER root
+COPY . ${HOME}
+RUN chown -R ${NB_USER} ${HOME}
 
+## Become normal user again
+USER ${NB_USER}
+RUN wget https://github.com/fboehm/qtl2pleio/raw/add-dockerfile-for-mybinder/DESCRIPTION && \
+R -e "devtools::install_deps()"
