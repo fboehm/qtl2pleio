@@ -52,6 +52,7 @@ VignetteBuilder:
     knitr
 Remotes:
     fboehm/gemma2
+    rqtl/qtl2
 Encoding: UTF-8
 Language: en-US
 LazyData: true
