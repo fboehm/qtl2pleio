@@ -49,16 +49,14 @@ install.packages("devtools")
 devtools::install_github("fboehm/qtl2pleio")
 ```
 
-You may also wish to install [R/qtl2](https://kbroman.org/qtl2) and the
-[`qtl2convert`](https://github.com/rqtl/qtl2convert) package. We will
-use both
-below.
+You may also wish to install the [R/qtl2](https://kbroman.org/qtl2). We
+will use it below.
 
 ``` r
-install.packages(c("qtl2", "qtl2convert"), repos="http://rqtl.org/qtl2cran")
+install.packages("qtl2", repos="http://rqtl.org/qtl2cran")
 #> 
 #> The downloaded binary packages are in
-#>  /var/folders/wd/lxmyvz590xb81c5z1j88b3800000gn/T//RtmpPxw0qF/downloaded_packages
+#>  /var/folders/wd/lxmyvz590xb81c5z1j88b3800000gn/T//RtmpJFXIKe/downloaded_packages
 ```
 
 ## Example
@@ -66,12 +64,10 @@ install.packages(c("qtl2", "qtl2convert"), repos="http://rqtl.org/qtl2cran")
 Below, we walk through an example analysis with Diversity Outbred mouse
 data. We need a number of preliminary steps before we can perform our
 test of pleiotropy vs. separate QTL. Many procedures rely on the R
-package `qtl2`. We first load the `qtl2`, `qtl2convert`, and `qtl2pleio`
-packages.
+package `qtl2`. We first load the `qtl2` and `qtl2pleio` packages.
 
 ``` r
 library(qtl2)
-library(qtl2convert)
 library(qtl2pleio)
 ```
 

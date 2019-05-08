@@ -36,9 +36,8 @@ install.packages("devtools")
 devtools::install_github("fboehm/qtl2pleio")
 ```
 
-You may also wish to install [R/qtl2](https://kbroman.org/qtl2) and
-the [`qtl2convert`](https://github.com/rqtl/qtl2convert) package. We
-will use both below.
+You may also wish to install [R/qtl2](https://kbroman.org/qtl2). We
+will use it below.
 
 ```{r install-qtl2convert, eval = FALSE}
 install.packages(c("qtl2"), repos="http://rqtl.org/qtl2cran")
@@ -66,7 +65,7 @@ We'll consider the
 the [`qtl2data`](https://github.com/rqtl/qtl2data) repository.
 We'll download the DOex.zip file before calculating founder allele dosages.
 
-```{r download-allele-probs}
+```{r download-DOex}
 file <- paste0("https://raw.githubusercontent.com/rqtl/",
                "qtl2data/master/DOex/DOex.zip")
 DOex <- read_cross2(file)
