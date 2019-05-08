@@ -18,3 +18,4 @@ install.R
 ^paper\.bib$
 ^install\.R$
 ^runtime\.txt$
+^LICENSE\.md$
