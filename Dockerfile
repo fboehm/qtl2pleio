@@ -6,5 +6,5 @@ RUN chown -R ${NB_USER} ${HOME}
 
 ## Become normal user again
 USER ${NB_USER}
-RUN wget https://github.com/fboehm/qtl2pleio/raw/add-dockerfile-for-mybinder/DESCRIPTION && \
+RUN wget https://github.com/fboehm/qtl2pleio/raw/master/DESCRIPTION && \
 R -e "devtools::install_deps()"
