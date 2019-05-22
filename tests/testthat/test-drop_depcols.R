@@ -2,6 +2,8 @@
 ## https://github.com/rqtl/qtl2/blob/68883790388f996639f81b1bb2b7c244f5492164/tests/testthat/test-drop_depcols.R
 ## I edited the qtl2 test file to remove tests for functions that I don't use in qtl2pleio
 
+library(qtl2pleio)
+
 context("drop linearly dependent columns")
 
 test_that("find_lin_indep_cols works", {
