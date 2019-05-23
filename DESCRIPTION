@@ -1,7 +1,7 @@
 Type: Package
 Package: qtl2pleio
 Title: Testing pleiotropy vs. separate QTL in multiparental populations
-Version: 0.1.3.9000
+Version: 0.1.3.9001
 Authors@R:
     person(given = "Frederick J",
            family = "Boehm",
@@ -26,24 +26,22 @@ Imports:
     ggplot2,
     magrittr,
     MASS,
-    mvtnorm,
     Rcpp,
-    RcppEigen,
     rlang,
     stringr,
     tibble,
-    parallel,
+    parallel
+Suggests:
+    covr,
+    mvtnorm,
+    knitr,
+    rmarkdown,
+    testthat,
     broman,
     devtools,
     qtl2
-Suggests:
-    covr,
-    knitr,
-    rmarkdown,
-    testthat
 LinkingTo:
     Rcpp,
-    RcppEigen,
     testthat
 VignetteBuilder:
     knitr
