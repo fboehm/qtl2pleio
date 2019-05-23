@@ -1,4 +1,6 @@
 Meta
+*.Rcheck
+*.tar.gz
 doc
 .Rproj.user
 .Rhistory
