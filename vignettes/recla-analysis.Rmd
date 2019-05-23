@@ -188,7 +188,7 @@ write.table(x = pvl1022, file = "recla-10-22.txt")
 To save computing time, we read the two-dimensional scan results from Github.
 
 ```{r 2d-scan-results}
-as_tibble(read.table("https://raw.githubusercontent.com/fboehm/qtl2pleio-manuscript/master/Rmd/recla-10-22.txt")) -> pvl1022
+as_tibble(read.table("https://zenodo.org/record/3210710/files/recla-10-22.txt?download=1")) -> pvl1022
 ```
 
 We then calculate the likelihood ratio test statistic.
