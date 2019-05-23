@@ -19,3 +19,4 @@ install.R
 ^install\.R$
 ^runtime\.txt$
 ^LICENSE\.md$
+Dockerfile
