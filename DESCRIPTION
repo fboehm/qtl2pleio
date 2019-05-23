@@ -42,7 +42,8 @@ Suggests:
     qtl2
 LinkingTo:
     Rcpp,
-    testthat
+    testthat,
+    RcppEigen
 VignetteBuilder:
     knitr
 Remotes:
