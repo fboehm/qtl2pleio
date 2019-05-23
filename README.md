@@ -11,6 +11,7 @@ Status](https://img.shields.io/codecov/c/github/fboehm/qtl2pleio/master.svg)](ht
 [![Project Status: Active – The project has reached a stable, usable
 state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![status](http://joss.theoj.org/papers/66bca5dc3d2e72b6259159bad07aafaf/status.svg)](http://joss.theoj.org/papers/66bca5dc3d2e72b6259159bad07aafaf)
 
 ## Overview
 
@@ -56,7 +57,7 @@ will use it below.
 install.packages("qtl2", repos="http://rqtl.org/qtl2cran")
 #> 
 #> The downloaded binary packages are in
-#>  /var/folders/wd/lxmyvz590xb81c5z1j88b3800000gn/T//RtmpJFXIKe/downloaded_packages
+#>  /var/folders/wd/lxmyvz590xb81c5z1j88b3800000gn/T//RtmpHygPPI/downloaded_packages
 ```
 
 ## Example
