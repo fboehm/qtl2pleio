@@ -29,7 +29,7 @@ bibliography: paper.bib
 
 Modern quantitative trait locus (QTL) studies in multiparental populations offer opportunities to identify causal genes for thousands of clinical and molecular traits. Traditional analyses examine each trait by itself. However, to fully leverage this vast number of measured traits, the systems genetics community needs statistical tools to analyze multiple traits simultaneously [@jiang1995multiple;@korol1995interval]. A test of pleiotropy vs. separate QTL is one such tool that will aid dissection of complex trait genetics and enhance understanding of genetic architecture.
 
-@jiang1995multiple developed a pleiotropy test for two-parent crosses. For a pair of traits that map to a single genomic region, they formulated the test with the null hypothesis being pleiotropy (the two traits are affected by a single QTL) against the alternative hypothesis of two separate QTL, with each affecting exactly one trait in the pair.
+@jiang1995multiple developed a pleiotropy test for two-parent crosses. For a pair of traits that map to a single genomic region, they formulated the test with the null hypothesis being pleiotropy (the two traits are affected by a single QTL) against the alternative hypothesis of two separate QTL, with each QTL affecting exactly one trait in the pair.
 
 The test of @jiang1995multiple doesn't directly apply to multiparental populations because
 
