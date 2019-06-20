@@ -34,6 +34,12 @@ be considered. Features requests and bug reports may be filed as Github
 issues. All contributors must abide by the [code of
 conduct](CONDUCT.md).
 
+## Technical support
+
+For technical support, please open a Github issue. If you’re just
+getting started with `qtl2pleio`, please examine the vignettes. You can
+also email <frederick.boehm@gmail.com> for assistance.
+
 ## Goals
 
 The goal of `qtl2pleio` is, for a pair of traits that show evidence for
@@ -64,7 +70,7 @@ will use it below.
 install.packages("qtl2", repos="http://rqtl.org/qtl2cran")
 #> 
 #> The downloaded binary packages are in
-#>  /var/folders/wd/lxmyvz590xb81c5z1j88b3800000gn/T//RtmpNNw6OA/downloaded_packages
+#>  /var/folders/wd/lxmyvz590xb81c5z1j88b3800000gn/T//Rtmp50R6jQ/downloaded_packages
 ```
 
 ## Example

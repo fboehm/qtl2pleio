@@ -36,7 +36,13 @@ Click [here](https://mybinder.org/v2/gh/fboehm/qtl2pleio/master?urlpath=rstudio)
 
 ## Contributor guidelines
 
-We eagerly welcome contributions to `qtl2pleio`. All pull requests will be considered. Features requests and bug reports may be filed as Github issues. All contributors must abide by the [code of conduct](CONDUCT.md).
+We eagerly welcome contributions to `qtl2pleio`. All pull requests will be considered. Features requests and bug reports may be filed as Github issues. All contributors must abide by the [code of conduct](CONDUCT.md). 
+
+## Technical support 
+
+For technical support, please open a Github issue. If you're just getting started with `qtl2pleio`, please examine the vignettes. You can also email <frederick.boehm@gmail.com> for assistance. 
+
+
 
 
 ## Goals
