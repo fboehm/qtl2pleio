@@ -70,7 +70,7 @@ will use it below.
 install.packages("qtl2", repos="http://rqtl.org/qtl2cran")
 #> 
 #> The downloaded binary packages are in
-#>  /var/folders/wd/lxmyvz590xb81c5z1j88b3800000gn/T//Rtmp50R6jQ/downloaded_packages
+#>  /var/folders/wd/lxmyvz590xb81c5z1j88b3800000gn/T//RtmpRsh3vT/downloaded_packages
 ```
 
 ## Example
