@@ -27,6 +27,13 @@ Click
 to explore `qtl2pleio` within a live [Rstudio](https://www.rstudio.com/)
 session in “the cloud”.
 
+## Contributor guidelines
+
+We eagerly welcome contributions to `qtl2pleio`. All pull requests will
+be considered. Features requests and bug reports may be filed as Github
+issues. All contributors must abide by the [code of
+conduct](CONDUCT.md).
+
 ## Goals
 
 The goal of `qtl2pleio` is, for a pair of traits that show evidence for
@@ -57,7 +64,7 @@ will use it below.
 install.packages("qtl2", repos="http://rqtl.org/qtl2cran")
 #> 
 #> The downloaded binary packages are in
-#>  /var/folders/wd/lxmyvz590xb81c5z1j88b3800000gn/T//RtmpHygPPI/downloaded_packages
+#>  /var/folders/wd/lxmyvz590xb81c5z1j88b3800000gn/T//RtmpNNw6OA/downloaded_packages
 ```
 
 ## Example

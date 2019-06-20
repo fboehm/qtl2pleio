@@ -34,6 +34,10 @@ knitr::opts_chunk$set(
 
 Click [here](https://mybinder.org/v2/gh/fboehm/qtl2pleio/master?urlpath=rstudio) to explore `qtl2pleio` within a live [Rstudio](https://www.rstudio.com/) session in "the cloud".
 
+## Contributor guidelines
+
+We eagerly welcome contributions to `qtl2pleio`. All pull requests will be considered. Features requests and bug reports may be filed as Github issues. All contributors must abide by the [code of conduct](CONDUCT.md).
+
 
 ## Goals
 
