@@ -107,6 +107,7 @@ scan_pvl <- function(probs,
                   )
     }
     d_size <- ncol(pheno)  # d_size is the number of univariate phenotypes
+    if (d_size != Matrix::rankMatrix(pheno)) stop("Phenotypes matrix is not full rank. Input only full-rank phenotypes matrices.")
     # force things to be matrices
     if(!is.matrix(pheno)) {
         pheno <- as.matrix(pheno)

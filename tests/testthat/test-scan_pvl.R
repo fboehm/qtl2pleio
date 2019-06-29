@@ -58,3 +58,16 @@ test_that("scan_pvl handles missing values in covariates appropriately", {
 test_that("scan_pvl handles kinship = NULL", {
   expect_true(is.data.frame(foo))
 })
+
+
+
+test_that("scan_pvl throws error when phenotypes matrix is not full rank",{
+  pheno_singular <- cbind(pheno[ , 1], 2 * pheno[ , 1])
+  expect_error(scan_pvl(probs = probs,
+                        pheno = pheno_singular,
+                        kinship = NULL,
+                        start_snp = 1,
+                        n_snp = 10
+  ),
+  regexp = "Phenotypes matrix is not full rank")
+})
