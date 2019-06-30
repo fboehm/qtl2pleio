@@ -12,6 +12,7 @@ Status](https://img.shields.io/codecov/c/github/fboehm/qtl2pleio/master.svg)](ht
 state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![status](http://joss.theoj.org/papers/66bca5dc3d2e72b6259159bad07aafaf/status.svg)](http://joss.theoj.org/papers/66bca5dc3d2e72b6259159bad07aafaf)
+[![DOI](https://zenodo.org/badge/104493705.svg)](https://zenodo.org/badge/latestdoi/104493705)
 
 ## Overview
 
@@ -70,7 +71,7 @@ will use it below.
 install.packages("qtl2", repos="http://rqtl.org/qtl2cran")
 #> 
 #> The downloaded binary packages are in
-#>  /var/folders/wd/lxmyvz590xb81c5z1j88b3800000gn/T//RtmpRsh3vT/downloaded_packages
+#>  /var/folders/wd/lxmyvz590xb81c5z1j88b3800000gn/T//RtmpHCrKan/downloaded_packages
 ```
 
 ## Example
@@ -289,17 +290,17 @@ citation("qtl2pleio")
 #> To cite qtl2pleio in publications use:
 #> 
 #>   Boehm FJ, Chesler EJ, Yandell BS, Broman KW (2019) Testing
-#>   pleiotropy vs. separate QTL in multiparental populations Biorxiv
-#>   https://www.biorxiv.org/content/10.1101/550939v1
+#>   pleiotropy vs. separate QTL in multiparental populations G3
+#>   https://www.g3journal.org/content/ggg/early/2019/05/15/g3.119.400098
 #> 
 #> A BibTeX entry for LaTeX users is
 #> 
 #>   @Article{Boehm2019testing,
 #>     title = {Testing pleiotropy vs. separate QTL in multiparental populations},
 #>     author = {Frederick J. Boehm and Elissa J. Chesler and Brian S. Yandell and Karl W. Broman},
-#>     journal = {Biorxiv},
+#>     journal = {G3},
 #>     year = {2019},
-#>     url = {https://www.biorxiv.org/content/10.1101/550939v1},
-#>     eprint = {https://www.biorxiv.org/content/early/2019/02/15/550939.full.pdf},
+#>     url = {https://www.g3journal.org/content/early/2019/05/15/g3.119.400098},
+#>     eprint = {https://www.g3journal.org/content/ggg/early/2019/05/15/g3.119.400098.full.pdf},
 #>   }
 ```
