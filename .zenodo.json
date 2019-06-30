@@ -1,0 +1,48 @@
+{
+    "description": "<p>This is the v1.0.0, which corresponds to the version that will be published by JOSS. We've implemented all revisions per peer review at JOSS.</p>",
+    "license": "MIT",
+    "title": "`qtl2pleio`: Testing pleiotropy vs. separate QTL in multiparental populations",
+    "version": "v1.0.0",
+    "upload_type": "software",
+    "publication_date": "2019-06-30",
+    "authors": [
+      {
+        "name": "Frederick J. Boehm",
+        "affiliation": "University of Wisconsin-Madison"
+      },
+      {
+        "name": "Brian S. Yandell",
+        "affiliation": "University of Wisconsin-Madison"
+      },
+      {
+        "name": "Karl W. Broman",
+        "affiliation": "University of Wisconsin-Madison"
+      }
+    ],
+    "contributors": [
+        {
+            "name": "Frederick Boehm"
+        },
+        {
+            "affiliation": "University of Wisconsin-Madison",
+            "name": "Karl Broman"
+        },
+        {
+            "affiliation": "Oregon State University",
+            "name": "Kyle Niemeyer"
+        }
+    ],
+    "access_right": "open",
+    "related_identifiers": [
+        {
+            "scheme": "url",
+            "identifier": "https://github.com/fboehm/qtl2pleio/tree/v1.0.0",
+            "relation": "isSupplementTo"
+        },
+        {
+            "scheme": "doi",
+            "identifier": "10.5281/zenodo.3263916",
+            "relation": "isVersionOf"
+        }
+    ]
+}
