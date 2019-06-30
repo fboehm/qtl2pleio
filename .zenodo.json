@@ -5,7 +5,7 @@
     "version": "v1.0.0",
     "upload_type": "software",
     "publication_date": "2019-06-30",
-    "authors": [
+    "creators": [
       {
         "name": "Frederick J. Boehm",
         "affiliation": "University of Wisconsin-Madison"
@@ -18,19 +18,6 @@
         "name": "Karl W. Broman",
         "affiliation": "University of Wisconsin-Madison"
       }
-    ],
-    "contributors": [
-        {
-            "name": "Frederick Boehm"
-        },
-        {
-            "affiliation": "University of Wisconsin-Madison",
-            "name": "Karl Broman"
-        },
-        {
-            "affiliation": "Oregon State University",
-            "name": "Kyle Niemeyer"
-        }
     ],
     "access_right": "open",
     "related_identifiers": [
