@@ -41,7 +41,7 @@ We eagerly welcome contributions to `qtl2pleio`. All pull requests will be consi
 
 ## Technical support 
 
-For technical support, please open a Github issue. If you're just getting started with `qtl2pleio`, please examine the vignettes. You can also email <frederick.boehm@gmail.com> for assistance. 
+For technical support, please open a Github issue. If you're just getting started with `qtl2pleio`, please examine the vignettes and the [qtl2pleio package website](https://fboehm.us/static/software/qtl2pleio). You can also email <frederick.boehm@gmail.com> for assistance. 
 
 
 

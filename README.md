@@ -38,8 +38,10 @@ conduct](CONDUCT.md).
 ## Technical support
 
 For technical support, please open a Github issue. If you’re just
-getting started with `qtl2pleio`, please examine the vignettes. You can
-also email <frederick.boehm@gmail.com> for assistance.
+getting started with `qtl2pleio`, please examine the vignettes and the
+[qtl2pleio package
+website](https://fboehm.us/static/software/qtl2pleio). You can also
+email <frederick.boehm@gmail.com> for assistance.
 
 ## Goals
 
@@ -71,7 +73,7 @@ will use it below.
 install.packages("qtl2", repos="http://rqtl.org/qtl2cran")
 #> 
 #> The downloaded binary packages are in
-#>  /var/folders/wd/lxmyvz590xb81c5z1j88b3800000gn/T//RtmpHCrKan/downloaded_packages
+#>  /var/folders/wd/lxmyvz590xb81c5z1j88b3800000gn/T//RtmpGobKDn/downloaded_packages
 ```
 
 ## Example
