@@ -23,7 +23,7 @@ knitr::opts_chunk$set(
 [![Travis-CI Build Status](https://travis-ci.org/fboehm/qtl2pleio.svg?branch=master)](https://travis-ci.org/fboehm/qtl2pleio)
 [![Coverage Status](https://img.shields.io/codecov/c/github/fboehm/qtl2pleio/master.svg)](https://codecov.io/github/fboehm/qtl2pleio?branch=master)
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-[![status](http://joss.theoj.org/papers/66bca5dc3d2e72b6259159bad07aafaf/status.svg)](http://joss.theoj.org/papers/66bca5dc3d2e72b6259159bad07aafaf)
+[![status](https://joss.theoj.org/papers/66bca5dc3d2e72b6259159bad07aafaf/status.svg)](https://joss.theoj.org/papers/66bca5dc3d2e72b6259159bad07aafaf)
 [![DOI](https://zenodo.org/badge/104493705.svg)](https://zenodo.org/badge/latestdoi/104493705)
 
 
