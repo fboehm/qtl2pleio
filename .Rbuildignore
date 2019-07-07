@@ -20,3 +20,4 @@ install.R
 ^runtime\.txt$
 ^LICENSE\.md$
 Dockerfile
+.zenodo.json
