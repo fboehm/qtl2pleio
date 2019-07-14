@@ -43,7 +43,6 @@ Suggests:
     qtl2
 LinkingTo:
     Rcpp,
-    testthat,
     RcppEigen
 VignetteBuilder:
     knitr
