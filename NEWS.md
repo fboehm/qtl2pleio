@@ -1,3 +1,24 @@
+# qtl2pleio 1.0.4
+
+## Major changes
+
+* None
+
+## Minor changes
+
+* Added Additional_repositories field to DESCRIPTION file per https://cran.r-project.org/submit.html in preparation for CRAN submission.  
+* Added url for Jiang and Zeng 1995 GENETICS article, per https://cran.r-project.org/submit.html.
+
+# qtl2pleio 1.0.3
+
+## Major changes
+
+* Revisions per peer review at Journal of Open Source Software
+
+## Minor changes
+
+* None
+
 # qtl2pleio 0.1.3
 
 ## Major changes
