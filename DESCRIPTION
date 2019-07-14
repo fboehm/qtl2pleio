@@ -1,7 +1,7 @@
 Type: Package
 Package: qtl2pleio
 Title: Testing pleiotropy vs. separate QTL in multiparental populations
-Version: 1.0.5
+Version: 1.0.6
 Authors@R:
     person(given = "Frederick J",
            family = "Boehm",
@@ -50,9 +50,6 @@ VignetteBuilder:
 Remotes:
     fboehm/gemma2,
     rqtl/qtl2
-Additional_repositories:
-    https://github.com/fboehm/gemma2,
-    https://github.com/rqtl/qtl2
 Encoding: UTF-8
 Language: en-US
 LazyData: true

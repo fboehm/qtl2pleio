@@ -1,3 +1,14 @@
+# qtl2pleio 1.0.6
+
+## Major changes
+
+* None
+
+## Minor changes
+
+* removed Additional_repositories field from DESCRIPTION
+
+
 # qtl2pleio 1.0.5
 
 ## Major changes
