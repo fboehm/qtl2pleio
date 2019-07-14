@@ -1,3 +1,13 @@
+# qtl2pleio 1.0.5
+
+## Major changes
+
+* None
+
+## Minor changes
+
+* added cran-comments.md file via devtools & added it to .Rbuildignore
+
 # qtl2pleio 1.0.4
 
 ## Major changes

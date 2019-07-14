@@ -21,3 +21,4 @@ install.R
 ^LICENSE\.md$
 Dockerfile
 .zenodo.json
+^cran-comments\.md$
