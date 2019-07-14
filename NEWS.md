@@ -1,3 +1,13 @@
+# qtl2pleio 1.0.7
+
+## Major changes
+
+* None
+
+## Minor changes
+
+* fixed Description field of DESCRIPTION file per feedback from CRAN
+
 # qtl2pleio 1.0.6
 
 ## Major changes
