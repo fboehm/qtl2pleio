@@ -1,6 +1,6 @@
 Type: Package
 Package: qtl2pleio
-Title: Testing pleiotropy vs. separate QTL in multiparental populations
+Title: Testing Pleiotropy vs. Separate QTL in Multiparental Populations
 Version: 1.0.7
 Authors@R:
     person(given = "Frederick J",
