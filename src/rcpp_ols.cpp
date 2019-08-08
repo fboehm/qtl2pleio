@@ -33,7 +33,6 @@ Eigen::MatrixXd rcpp_gls(const Eigen::Map<Eigen::MatrixXd> & X, const Eigen::Map
 
 // All test files should include the <testthat.h>
 // header file.
-#include <testthat.h>
 
 // Normally this would be a function from your package's
 // compiled library -- you might instead just include a header
