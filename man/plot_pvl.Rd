@@ -4,8 +4,8 @@
 \alias{plot_pvl}
 \title{Plot tidied results of a pvl scan}
 \usage{
-plot_pvl(dat, units = "Mb", palette = c("#999999", "#E69F00",
-  "#56B4E9"), linetype = c("solid", "longdash", "dotted"))
+plot_pvl(dat, units = "Mb", palette = c("#999999", "#E69F00", "#56B4E9"),
+  linetype = c("solid", "longdash", "dotted"))
 }
 \arguments{
 \item{dat}{a tibble that is the tidied output of a pvl scan}

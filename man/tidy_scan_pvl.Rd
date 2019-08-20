@@ -42,4 +42,3 @@ Other profile log-likelihood tibble functions: \code{\link{add_intercepts}},
   \code{\link{assemble_profile_tib}},
   \code{\link{transform_loglik_mat}}
 }
-\concept{profile log-likelihood tibble functions}
