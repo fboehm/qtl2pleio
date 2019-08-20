@@ -19,3 +19,7 @@ calc_invsqrt_mat <- function(A) {
 
 
 
+
+.onUnload <- function(libpath) {
+    library.dynam.unload("qtl2pleio", libpath)
+}
