@@ -7,13 +7,13 @@
 sim1(X, B, Vg, Ve, kinship)
 }
 \arguments{
-\item{X}{design matrix (incorporating genotype probabilities from two loci), 2n by 2f}
+\item{X}{design matrix (incorporating genotype probabilities from two loci), dn by df}
 
-\item{B}{a matrix of allele effects, f rows by 2 columns}
+\item{B}{a matrix of allele effects, f rows by d columns}
 
-\item{Vg}{a genetic covariance matrix, 2 by 2}
+\item{Vg}{a genetic covariance matrix, d by d}
 
-\item{Ve}{an error covariance matrix, 2 by 2}
+\item{Ve}{an error covariance matrix, d by d}
 
 \item{kinship}{a chromosome-specific kinship matrix, n by n}
 }
