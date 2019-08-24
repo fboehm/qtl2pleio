@@ -166,11 +166,11 @@ We see that `out` is a tibble, as expected. The first three columns contain the 
 
 ```{r profile-plot}
 library(dplyr)
+library(ggplot2)
 out %>%
-  calc_profile_likelihoods() %>%
-  
-  
-  plot_pvl()
+  calc_profile_lods() %>%
+  add_pmap(pmap = DOex$pmap$`3`) %>%
+  ggplot() + geom_line(aes(x = marker_position, y = profile_lod, colour = trait))
 ```
 
 We first pass the `scan_pvl` output, \emph{i.e.}, `out`, to the function `tidy_scan_pvl` to add the physical map coordinates to the `out` tibble. We pipe that output to the `add_intercepts` function. This function adds columns for the univariate peak positions. Note that we need to specify the univariate peak positions by hand. In the current case, the two traits have identical peak positions.

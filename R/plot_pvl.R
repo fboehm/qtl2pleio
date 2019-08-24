@@ -1,6 +1,6 @@
 #' Plot tidied results of a pvl scan
 #'
-#' @param dat a tibble that is the tidied output of a pvl scan
+#' @param dat a profile lod tibble
 #' @param units a character vector of length one to indicate units for physical or genetic map
 #' @param palette a character vector of length 3 containing strings for colors
 #' @param linetype a character vector of length 3 specifying the linetype values for the 3 traces
