@@ -194,3 +194,23 @@ add_phenames <- function(charvec, phe1, phe2){
         stringr::str_replace(pattern = "profile1", replacement = phe1) %>%
         stringr::str_replace(pattern = "profile2", replacement = phe2)
 }
+
+
+#' Calculate profile likelihoods for all traits
+#'
+#' @param scan_pvl_out
+#' @export
+
+calc_profile_likelihoods <- function(scan_pvl_out){
+    nc <- ncol(scan_pvl_out)
+    out <- list()
+    for (i in 1:(nc - 1)){
+        out[[i]] <- scan_pvl_out %>%
+            dplyr::group_by_at(i) %>%
+            dplyr::summarise(profile = max(loglik)) %>%
+            dplyr::mutate(trait = paste0("tr", i)) %>%
+            dplyr::rename(marker = paste0("Var", i))
+    }
+    out %>%
+        dplyr::bind_rows()
+}
