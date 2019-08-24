@@ -8,14 +8,16 @@ citEntry(entry="article",
                              person(c("Karl", "W."), "Broman")),
          journal = "G3",
          year = 2019,
-         url = "https://www.g3journal.org/content/early/2019/05/15/g3.119.400098",
-         eprint = "https://www.g3journal.org/content/ggg/early/2019/05/15/g3.119.400098.full.pdf",
+         volume = 9,
+         issue = 7,
+         url = "https://www.g3journal.org/content/9/7/2317",
+         eprint = "https://www.g3journal.org/content/ggg/9/7/2317.full.pdf",
          key = "Boehm2019testing",
 
          textVersion =
              paste("Boehm FJ, Chesler EJ, Yandell BS, Broman KW",
                    "(2019) Testing pleiotropy vs. separate QTL in multiparental populations", " G3 ",
-                   "https://www.g3journal.org/content/ggg/early/2019/05/15/g3.119.400098")
+                   "https://www.g3journal.org/content/9/7/2317")
          )
 
 
