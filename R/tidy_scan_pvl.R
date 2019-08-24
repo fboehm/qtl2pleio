@@ -87,7 +87,6 @@ assemble_profile_tib <- function(tib, trace = "profile1") {
 #' @family profile log-likelihood tibble functions
 #' @param mytib outputted tibble from scan_pvl
 #' @param pmap physical map (in Mb) or genetic map (in cM) for exactly one chromosome
-#' @param phenames vector of length 2 containing two trait names
 #' @export
 #' @importFrom rlang .data
 #' @examples
@@ -111,7 +110,7 @@ assemble_profile_tib <- function(tib, trace = "profile1") {
 #' tidy_scan_pvl(ss, pm = map)
 
 
-tidy_scan_pvl <- function(mytib, pmap, phenames = c("trait1", "trait2")) {
+tidy_scan_pvl <- function(mytib, pmap) {
     dat <- mytib %>%
         dplyr::rename(marker1 = .data$Var1, marker2 = .data$Var2, ll = .data$loglik) %>%
         add_pmap(pmap)

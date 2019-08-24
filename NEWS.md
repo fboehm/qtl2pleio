@@ -1,3 +1,13 @@
+# qtl2pleio 1.1.0
+
+## Major changes 
+
+
+
+## Minor changes
+
+* fixed CITATION after G3 publication
+
 # qtl2pleio 1.0.7
 
 ## Major changes
