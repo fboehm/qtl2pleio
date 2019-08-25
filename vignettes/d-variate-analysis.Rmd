@@ -1,5 +1,5 @@
 ---
-title: "Multivariate analysis for more than two traits"
+title: "Multivariate analysis for two or more traits"
 author: "Frederick Boehm"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -45,7 +45,7 @@ DOex <- read_cross2(file)
 
 Let's calculate the founder allele dosages from the 36-state genotype probabilities.
 
-```{r}
+```{r calc_pr}
 probs <- calc_genoprob(DOex)
 pr <- genoprob_to_alleleprob(probs)
 ```
@@ -58,7 +58,7 @@ We now have an allele probabilities object stored in `pr`.
 
 For our statistical model, we need a kinship matrix. Although we don't have genome-wide data - since we have allele probabilities for only 3 chromosomes - let's calculate a kinship matrix using "leave-one-chromosome-out". In practice, one would want to use allele probabilities from a full genome-wide set of markers.
 
-```{r}
+```{r calc-K}
 calc_kinship(probs = pr, type = "loco") -> kinship
 ```
 
@@ -112,15 +112,15 @@ Here is a plot of the results.
 
 ```{r 1d-lod-plots}
 plot(s1, DOex$pmap$`3`)
-plot(s1, DOex$pmap$`3`, lod=2, col="violetred", add=TRUE)
-plot(s1, DOex$pmap$`3`, lod=3, col="green", add=TRUE)
-legend("topleft", colnames(s1), lwd=2, col=c("darkslateblue", "violetred", "green"), bg="gray92")
+plot(s1, DOex$pmap$`3`, lod = 2, col ="violetred", add=TRUE)
+plot(s1, DOex$pmap$`3`, lod = 3, col ="green", add=TRUE)
+legend("topleft", colnames(s1), lwd = 2, col=c("darkslateblue", "violetred", "green"), bg="gray92")
 
 ```
 
 
 ```{r find-peaks}
-find_peaks(s1, map = DOex$pmap, threshold=8)
+find_peaks(s1, map = DOex$pmap, threshold = 8)
 ```
 
 
@@ -133,11 +133,12 @@ Lastly, we specify the number of cores to use, with the `n_cores` argument. We s
 
 
 
-```{r 2d-scan}
+```{r scan}
+start_index <- 43
 out <- scan_pvl(probs = pp,
                 pheno = Y,
                 kinship = kinship$`3`,
-                start_snp = 43,
+                start_snp = start_index,
                 n_snp = 15, n_cores = 1
                 )
 ```
@@ -167,9 +168,10 @@ We see that `out` is a tibble, as expected. The first three columns contain the 
 ```{r profile-plot}
 library(dplyr)
 library(ggplot2)
-out %>%
+out_lods <- out %>%
   calc_profile_lods() %>%
-  add_pmap(pmap = DOex$pmap$`3`) %>%
+  add_pmap(pmap = DOex$pmap$`3`)
+out_lods %>% 
   ggplot() + geom_line(aes(x = marker_position, y = profile_lod, colour = trait))
 ```
 
@@ -183,7 +185,7 @@ Finally, the output of `add_intercepts` is piped to `plot_pvl`. This function us
 We use the function `calc_lrt_tib` to calculate the likelihood ratio test statistic value for the specified traits and specified genomic region.
 
 ```{r lrt-calc}
-(lrt <- calc_lrt_tib(out))
+(lrt <- max(out_lods$profile_lod))
 ```
 
 ### Bootstrap analysis to get p-values
@@ -200,7 +202,7 @@ A natural question that arises is "which marker's allele probabilities do we use
 Before we call `boot_pvl`, we need to identify the index (on the chromosome under study) of the marker that maximizes the likelihood under the pleiotropy constraint. To do this, we use the `qtl2pleio` function `find_pleio_peak_tib`.
 
 ```{r get-pleio-index}
-(pleio_index <- find_pleio_peak_tib(out, start_snp = 38))
+(pleio_index <- find_pleio_peak_tib(out, start_snp = start_index))
 ```
 
 
@@ -213,8 +215,8 @@ suppressMessages(b_out <- boot_pvl(probs = pp,
          pleio_peak_index = pleio_index,
          kinship = kinship$`3`, 
          nboot_per_job = 1,
-         start_snp = 38,
-         n_snp = 25
+         start_snp = start_index,
+         n_snp = 15
          ))
 
 ```
