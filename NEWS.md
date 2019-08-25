@@ -2,7 +2,8 @@
 
 ## Major changes 
 
-
+* rewrites (and deletions) of tibble helper functions
+* major revisions to code in main vignette
 
 ## Minor changes
 

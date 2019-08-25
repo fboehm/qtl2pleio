@@ -6,6 +6,9 @@
 \usage{
 calc_profile_lods(scan_pvl_out)
 }
+\arguments{
+\item{scan_pvl_out}{tibble outputted from scan_pvl}
+}
 \description{
 Calculate profile lods for all traits
 }

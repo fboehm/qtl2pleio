@@ -95,16 +95,17 @@ boot_pvl <- function(probs,
         )
     }
     d_size <- ncol(pheno)  # d_size is the number of univariate phenotypes
+    f_size <- ncol(probs)
     # force things to be matrices
-    if(!is.matrix(pheno)) {
+    if (!is.matrix(pheno)) {
         pheno <- as.matrix(pheno)
-        if(!is.numeric(pheno)) stop("pheno is not numeric")
+        if (!is.numeric(pheno)) stop("pheno is not numeric")
     }
-    if(is.null(colnames(pheno))) # force column names
+    if (is.null(colnames(pheno))) # force column names
         colnames(pheno) <- paste0("pheno", seq_len(ncol(pheno)))
-    if(!is.null(addcovar)) {
-        if(!is.matrix(addcovar)) addcovar <- as.matrix(addcovar)
-        if(!is.numeric(addcovar)) stop("addcovar is not numeric")
+    if (!is.null(addcovar)) {
+        if (!is.matrix(addcovar)) addcovar <- as.matrix(addcovar)
+        if (!is.numeric(addcovar)) stop("addcovar is not numeric")
     }
 
     # find individuals in common across all arguments
@@ -125,8 +126,8 @@ boot_pvl <- function(probs,
         id2keep <- intersect(id2keep, subjects_cov)
     }
     # Send messages if there are two or fewer subjects
-    if (length(id2keep) == 0){stop("no individuals common to all inputs")}
-    if (length(id2keep) <= 2){
+    if (length(id2keep) == 0) {stop("no individuals common to all inputs")}
+    if (length(id2keep) <= 2) {
         stop(paste0("only ", length(id2keep),
                     " common individual(s): ",
                     paste(id2keep, collapse = ": ")))
@@ -144,8 +145,10 @@ boot_pvl <- function(probs,
     } else {
         Xpre <- X1
     }
-    X <- gemma2::stagger_mats(Xpre, Xpre)
-    if (!is.null(kinship)){
+    Xlist <- vector(length = d_size)
+    Xlist <- lapply(Xlist, FUN = function(x){x <- Xpre; return(x)})
+    X <- gemma2::stagger_mats(Xlist)
+    if (!is.null(kinship)) {
         # covariance matrix estimation
         # first, run gemma2::MphEM(), by way of calc_covs(), to get Vg and Ve
         cc_out <- calc_covs(pheno, kinship, max_iter = max_iter, max_prec = max_prec, covariates = addcovar)
@@ -154,24 +157,25 @@ boot_pvl <- function(probs,
         # define Sigma
         Sigma <- calc_Sigma(Vg, Ve, kinship)
     }
-    if (is.null(kinship)){
+    if (is.null(kinship)) {
         # get Sigma for Haley Knott regression without random effect
         Ve <- var(pheno) # get d by d covar matrix
         Sigma <- calc_Sigma(Vg = NULL, Ve = Ve)
     }
     Sigma_inv <- solve(Sigma)
     # calc Bhat
-    B <- rcpp_calc_Bhat2(X = X,
+    Bcol <- rcpp_calc_Bhat2(X = X,
                          Sigma_inv = Sigma_inv,
                          Y = as.vector(as.matrix(pheno))
     )
+    B <- matrix(data = Bcol, nrow = f_size, ncol = d_size, byrow = FALSE)
     # Start loop
     lrt <- numeric()
     for (i in 1:nboot_per_job) {
         foo <- sim1(X = X, B = B, Vg = Vg, Ve = Ve, kinship = kinship)
-        Ysim <- matrix(foo, ncol = 2, byrow = FALSE)
+        Ysim <- matrix(foo, ncol = d_size, byrow = FALSE)
         rownames(Ysim) <- rownames(pheno)
-        colnames(Ysim) <- c("t1", "t2")
+        colnames(Ysim) <- paste0("t", 1:d_size)
         loglik <- scan_pvl(probs = probs,
                            pheno = Ysim,
                            addcovar = addcovar,
@@ -182,7 +186,11 @@ boot_pvl <- function(probs,
                            max_prec = max_prec,
                            n_cores = n_cores
                            )
-        lrt[i] <- calc_lrt_tib(loglik)
+        lrt[i] <- loglik %>%
+            calc_profile_lods() %>%
+            dplyr::select(profile_lod) %>%
+            max()
+
     }
     return(lrt)
 }

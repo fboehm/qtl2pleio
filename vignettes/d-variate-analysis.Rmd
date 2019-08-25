@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 
 ```
 
-
+The goal of this vignette is to introduce the functions that enable d-variate (for $d \ge 2$) QTL analysis for d traits that each univariately map to a shared region of the genome. One may then ask whether the d traits share a single, pleiotropic QTL. The alternative hypothesis is that there is more than one QTL giving rise to the phenotype-genotype associations.
 
 
 ```{r load-qtl2pleio}
@@ -209,15 +209,16 @@ Before we call `boot_pvl`, we need to identify the index (on the chromosome unde
 
 
 ```{r boot}
-set.seed(2018-11-25)
+set.seed(2018 - 11 - 25)
 suppressMessages(b_out <- boot_pvl(probs = pp,
-         pheno = Y,
-         pleio_peak_index = pleio_index,
-         kinship = kinship$`3`, 
-         nboot_per_job = 1,
-         start_snp = start_index,
-         n_snp = 15
-         ))
+                                   pheno = Y,
+                                   pleio_peak_index = pleio_index,
+                                   kinship = kinship$`3`, 
+                                   nboot_per_job = 2,
+                                   start_snp = start_index,
+                                   n_snp = 15
+                                   )
+                 )
 
 ```
 

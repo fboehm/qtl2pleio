@@ -26,7 +26,7 @@ add_pmap <- function(tib, pmap) {
 
 #' Calculate profile lods for all traits
 #'
-#' @param scan_pvl_out
+#' @param scan_pvl_out tibble outputted from scan_pvl
 #' @export
 
 calc_profile_lods <- function(scan_pvl_out){
