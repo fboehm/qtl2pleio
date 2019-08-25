@@ -107,7 +107,6 @@ scan_pvl <- function(probs,
                   )
     }
     d_size <- ncol(pheno)  # d_size is the number of univariate phenotypes
-    if (d_size != Matrix::rankMatrix(pheno)) stop("Phenotypes matrix is not full rank. Input only full-rank phenotypes matrices.")
     # force things to be matrices
     if(!is.matrix(pheno)) {
         pheno <- as.matrix(pheno)
@@ -132,6 +131,7 @@ scan_pvl <- function(probs,
     pheno <- subset_input(input = pheno, id2keep = id2keep)
     subjects_phe <- check_missingness(pheno)
     id2keep <- intersect(id2keep, subjects_phe)
+
     if (!is.null(addcovar)) {
         addcovar <- subset_input(input = addcovar, id2keep = id2keep)
         subjects_cov <- check_missingness(addcovar)
@@ -150,6 +150,8 @@ scan_pvl <- function(probs,
     # subset inputs to get all without missingness
     probs <- subset_input(input = probs, id2keep = id2keep)
     pheno <- subset_input(input = pheno, id2keep = id2keep)
+    if (d_size != Matrix::rankMatrix(pheno)) stop("Phenotypes matrix is not full rank. Input only full-rank phenotypes matrices.")
+
     if (!is.null(kinship)) {
         kinship <- subset_kinship(kinship = kinship, id2keep = id2keep)
     }
