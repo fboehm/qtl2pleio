@@ -4,6 +4,7 @@
 #' @name qtl2pleio
 #' @docType package
 #' @importFrom Rcpp sourceCpp
+#' @importFrom stats profile
 NULL
 
 .onUnload <- function (libpath) {
@@ -11,4 +12,4 @@ NULL
 }
 
 ## quiets concerns of R CMD check re: the .'s that appear in pipelines
-if(getRversion() >= "2.15.1")  utils::globalVariables(c(".", "lod", "marker_position"))
+if(getRversion() >= "2.15.1")  utils::globalVariables(c(".", "lod", "marker_position", "profile_lod", "loglik", "Var1", "profile", "pleio_max", "marker", "trait"))
