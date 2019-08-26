@@ -91,6 +91,7 @@ and `qtl2pleio` packages.
 ```{r pkgs}
 library(qtl2)
 library(qtl2pleio)
+library(ggplot2)
 ```
 
 
@@ -136,10 +137,6 @@ For our statistical model, we need a kinship matrix. We get one with the `calc_k
 
 ```{r calc-kinship}
 kinship <- calc_kinship(probs = pr, type = "loco")
-```
-
-```{r check-kinship}
-str(kinship)
 ```
 
 ### Statistical model specification
@@ -229,16 +226,14 @@ out <- suppressMessages(scan_pvl(probs = pp,
 To visualize results from our two-dimensional scan, we calculate profile LOD for each trait. The code below makes use of the R package `ggplot2` to plot profile LODs over the scan region.
 
 
-```{r profile-plot, include = FALSE}
+```{r profile-plot, include = TRUE}
 library(dplyr)
 out %>%
-  tidy_scan_pvl(DOex$pmap[[2]]) %>% # pmap[[2]] is physical map for Chr 3
-  plot_pvl()
+  calc_profile_lods() %>%
+  add_pmap(pmap = DOex$pmap$`3`) %>%
+  ggplot() + geom_line(aes(x = marker_position, y = profile_lod, colour = trait))
 ```
 
-```{r, echo = FALSE}
-knitr::include_graphics("https://raw.githubusercontent.com/fboehm/qtl2pleio/master/man/figures/README-profile-plot-1.png")
-```
 
 
 

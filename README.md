@@ -73,7 +73,7 @@ will use it below.
 install.packages("qtl2", repos="http://rqtl.org/qtl2cran")
 #> 
 #> The downloaded binary packages are in
-#>  /var/folders/wd/lxmyvz590xb81c5z1j88b3800000gn/T//RtmpXXPyK7/downloaded_packages
+#>  /var/folders/wd/lxmyvz590xb81c5z1j88b3800000gn/T//RtmpYUxLVk/downloaded_packages
 ```
 
 ## Example
@@ -86,6 +86,7 @@ package `qtl2`. We first load the `qtl2` and `qtl2pleio` packages.
 ``` r
 library(qtl2)
 library(qtl2pleio)
+library(ggplot2)
 ```
 
 ### Reading data from `qtl2data` repository on github
@@ -133,26 +134,6 @@ For our statistical model, we need a kinship matrix. We get one with the
 kinship <- calc_kinship(probs = pr, type = "loco")
 ```
 
-``` r
-str(kinship)
-#> List of 3
-#>  $ 2: num [1:261, 1:261] 0.6934 0.0705 0.2356 0.0558 0.0513 ...
-#>   ..- attr(*, "n_pos")= int 195
-#>   ..- attr(*, "dimnames")=List of 2
-#>   .. ..$ : chr [1:261] "1" "4" "5" "6" ...
-#>   .. ..$ : chr [1:261] "1" "4" "5" "6" ...
-#>  $ 3: num [1:261, 1:261] 0.6662 0.0647 0.2024 0.1129 0.0772 ...
-#>   ..- attr(*, "n_pos")= int 220
-#>   ..- attr(*, "dimnames")=List of 2
-#>   .. ..$ : chr [1:261] "1" "4" "5" "6" ...
-#>   .. ..$ : chr [1:261] "1" "4" "5" "6" ...
-#>  $ X: num [1:261, 1:261] 0.4871 0.0831 0.1953 0.1043 0.1125 ...
-#>   ..- attr(*, "n_pos")= int 229
-#>   ..- attr(*, "dimnames")=List of 2
-#>   .. ..$ : chr [1:261] "1" "4" "5" "6" ...
-#>   .. ..$ : chr [1:261] "1" "4" "5" "6" ...
-```
-
 ### Statistical model specification
 
 We use the multivariate linear mixed effects model:
@@ -197,8 +178,7 @@ matrix.
 s1 <- scan1(genoprobs = pr, pheno = Y, kinship = kinship)
 ```
 
-Here is a plot of the
-results.
+Here is a plot of the results.
 
 <img src="https://raw.githubusercontent.com/fboehm/qtl2pleio/master/man/figures/README-1d-lod-plots-1.png" width="100%" />
 
@@ -232,10 +212,17 @@ out <- suppressMessages(scan_pvl(probs = pp,
 
 To visualize results from our two-dimensional scan, we calculate profile
 LOD for each trait. The code below makes use of the R package `ggplot2`
-to plot profile LODs over the scan
-region.
+to plot profile LODs over the scan region.
 
-<img src="https://raw.githubusercontent.com/fboehm/qtl2pleio/master/man/figures/README-profile-plot-1.png" width="100%" />
+``` r
+library(dplyr)
+out %>%
+  calc_profile_lods() %>%
+  add_pmap(pmap = DOex$pmap$`3`) %>%
+  ggplot() + geom_line(aes(x = marker_position, y = profile_lod, colour = trait))
+```
+
+<img src="man/figures/README-profile-plot-1.png" width="100%" />
 
 ### Calculate the likelihood ratio test statistic for pleiotropy v separate QTL
 
@@ -293,7 +280,7 @@ citation("qtl2pleio")
 #> 
 #>   Boehm FJ, Chesler EJ, Yandell BS, Broman KW (2019) Testing
 #>   pleiotropy vs. separate QTL in multiparental populations G3
-#>   https://www.g3journal.org/content/ggg/early/2019/05/15/g3.119.400098
+#>   https://www.g3journal.org/content/9/7/2317
 #> 
 #> A BibTeX entry for LaTeX users is
 #> 
@@ -302,7 +289,9 @@ citation("qtl2pleio")
 #>     author = {Frederick J. Boehm and Elissa J. Chesler and Brian S. Yandell and Karl W. Broman},
 #>     journal = {G3},
 #>     year = {2019},
-#>     url = {https://www.g3journal.org/content/early/2019/05/15/g3.119.400098},
-#>     eprint = {https://www.g3journal.org/content/ggg/early/2019/05/15/g3.119.400098.full.pdf},
+#>     volume = {9},
+#>     issue = {7},
+#>     url = {https://www.g3journal.org/content/9/7/2317},
+#>     eprint = {https://www.g3journal.org/content/ggg/9/7/2317.full.pdf},
 #>   }
 ```
