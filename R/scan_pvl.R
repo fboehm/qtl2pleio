@@ -77,7 +77,7 @@
 #' scan_pvl(probs = probs, pheno = pheno, kinship = kinship, addcovar = ac,
 #' start_snp = 1, n_snp = 80, n_cores = 1)
 #' @importFrom rlang .data
-#' @return a tibble with d + 1 columns. First d columns indicate the genetic data (by listing the marker ids) used in the design matrix; last is log likelihood
+#' @return a tibble with d + 1 columns. First d columns indicate the genetic data (by listing the marker ids) used in the design matrix; last is log10 likelihood
 
 scan_pvl <- function(probs,
                      pheno,
@@ -194,6 +194,6 @@ scan_pvl <- function(probs,
     mytab$loglik <- unlist(list_result)
     marker_id <- dimnames(probs)[[3]][start_snp:(start_snp + n_snp - 1)]
     mytab2 <- tibble::as_tibble(apply(FUN = function(x) marker_id[x], X = mytab[, -ncol(mytab)], MARGIN = 2))
-    mytab2$loglik <- mytab$loglik
+    mytab2$log10lik <- mytab$loglik / log(10)
     return(mytab2)
 }

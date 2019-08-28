@@ -1,8 +1,8 @@
 
 #' Add physical map contents to tibble
 #'
-#' @family profile log-likelihood tibble functions
-#' @param tib a tibble with 3 columns: marker1 name, marker2 name and log-likelihood values
+#' @family profile lod tibble functions
+#' @param tib a tibble with 3 columns: marker, trace, and profile lod values, typically outputted by calc_profile_lods()
 #' @param pmap a physical map for a single chromosome
 #' @return a tibble with 4 columns: marker, trait, profile_lod, marker_position
 #' @examples
@@ -10,7 +10,7 @@
 #' names(pm) <- as.character(paste0('m', 1:3))
 #' expand.grid(paste0('m', 1:3), paste0('m', 1:3)) -> foo
 #' tib <- tibble::tibble(marker = as.character(foo[ , 1]))
-#' tib$ll <- rgamma(9, 5)
+#' tib <- rgamma(9, 5)
 #' add_pmap(tib, pm)
 #' @export
 #' @importFrom rlang .data
@@ -28,6 +28,7 @@ add_pmap <- function(tib, pmap) {
 #'
 #' @param scan_pvl_out tibble outputted from scan_pvl
 #' @export
+#' @return a tibble with 3 columns, indicating 'marker identity, trace (pleiotropy or profile1, profile2, etc.), and value of the profile lod (base 10) for that trace at that marker.
 
 calc_profile_lods <- function(scan_pvl_out){
     nc <- ncol(scan_pvl_out)
@@ -35,14 +36,14 @@ calc_profile_lods <- function(scan_pvl_out){
     for (i in 1:(nc - 1)) {
         out[[i]] <- scan_pvl_out %>%
             dplyr::group_by_at(i) %>%
-            dplyr::summarise(profile = max(loglik)) %>%
+            dplyr::summarise(profile = max(log10lik)) %>%
             dplyr::mutate(trait = paste0("tr", i)) %>%
             dplyr::rename(marker = paste0("Var", i))
     }
     # Calculate the "pleiotropy" trace
     pleio_trace <- scan_pvl_out %>%
         dplyr::filter_all(dplyr::all_vars(. == Var1 | is.numeric(.))) %>%
-        dplyr::rename(profile = loglik) %>%
+        dplyr::rename(profile = log10lik) %>%
         dplyr::select(Var1, profile) %>%
         dplyr::rename(marker = Var1) %>%
         dplyr::mutate(trait = "pleiotropy")

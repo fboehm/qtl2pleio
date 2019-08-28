@@ -4,9 +4,9 @@
 \alias{boot_pvl}
 \title{Perform bootstrap sampling and calculate test statistics for each bootstrap sample}
 \usage{
-boot_pvl(probs, pheno, addcovar = NULL, kinship = NULL, start_snp = 1,
-  n_snp, pleio_peak_index, nboot_per_job = 1, max_iter = 10000,
-  max_prec = 1/1e+08, n_cores = 1)
+boot_pvl(probs, pheno, addcovar = NULL, kinship = NULL,
+  start_snp = 1, n_snp, pleio_peak_index, nboot_per_job = 1,
+  max_iter = 10000, max_prec = 1/1e+08, n_cores = 1)
 }
 \arguments{
 \item{probs}{founder allele probabilities three-dimensional array for one chromosome only (not a list)}

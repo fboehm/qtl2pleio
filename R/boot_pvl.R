@@ -176,7 +176,7 @@ boot_pvl <- function(probs,
         Ysim <- matrix(foo, ncol = d_size, byrow = FALSE)
         rownames(Ysim) <- rownames(pheno)
         colnames(Ysim) <- paste0("t", 1:d_size)
-        loglik <- scan_pvl(probs = probs,
+        scan_out <- scan_pvl(probs = probs,
                            pheno = Ysim,
                            addcovar = addcovar,
                            kinship = kinship,
@@ -186,7 +186,7 @@ boot_pvl <- function(probs,
                            max_prec = max_prec,
                            n_cores = n_cores
                            )
-        lrt[i] <- loglik %>%
+        lrt[i] <- scan_out %>%
             calc_profile_lods() %>%
             dplyr::select(profile_lod) %>%
             max()

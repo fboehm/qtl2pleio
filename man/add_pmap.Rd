@@ -7,7 +7,7 @@
 add_pmap(tib, pmap)
 }
 \arguments{
-\item{tib}{a tibble with 3 columns: marker1 name, marker2 name and log-likelihood values}
+\item{tib}{a tibble with 3 columns: marker, trace, and profile lod values, typically outputted by calc_profile_lods()}
 
 \item{pmap}{a physical map for a single chromosome}
 }
@@ -22,6 +22,7 @@ pm <- 1:3
 names(pm) <- as.character(paste0('m', 1:3))
 expand.grid(paste0('m', 1:3), paste0('m', 1:3)) -> foo
 tib <- tibble::tibble(marker = as.character(foo[ , 1]))
-tib$ll <- rgamma(9, 5)
+tib <- rgamma(9, 5)
 add_pmap(tib, pm)
 }
+\concept{profile lod tibble functions}

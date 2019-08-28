@@ -4,8 +4,9 @@
 \alias{scan_pvl}
 \title{Perform model fitting for all ordered pairs of markers in a genomic region of interest}
 \usage{
-scan_pvl(probs, pheno, kinship = NULL, addcovar = NULL, start_snp = 1,
-  n_snp, max_iter = 10000, max_prec = 1/1e+08, n_cores = 1)
+scan_pvl(probs, pheno, kinship = NULL, addcovar = NULL,
+  start_snp = 1, n_snp, max_iter = 10000, max_prec = 1/1e+08,
+  n_cores = 1)
 }
 \arguments{
 \item{probs}{an array of founder allele probabilities for a single chromosome}
@@ -27,7 +28,7 @@ scan_pvl(probs, pheno, kinship = NULL, addcovar = NULL, start_snp = 1,
 \item{n_cores}{number of cores to use for calculations}
 }
 \value{
-a tibble with d + 1 columns. First d columns indicate the genetic data (by listing the marker ids) used in the design matrix; last is log likelihood
+a tibble with d + 1 columns. First d columns indicate the genetic data (by listing the marker ids) used in the design matrix; last is log10 likelihood
 }
 \description{
 `scan_pvl` calculates log likelihood for d-variate phenotype model fits. Inputted parameter `start_snp` indicates where in the `probs` object to start the scan.

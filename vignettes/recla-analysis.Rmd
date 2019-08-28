@@ -191,9 +191,9 @@ write.table(x = pvl1022,
             file = "recla-10-22.txt")
 ```
 
-To save computing time, we read the two-dimensional scan results from Github.
+To save computing time, we read the two-dimensional scan results from Zenodo. Because the Zenodo file was created with an older version of `scan_pvl`, it contains the log (natural base) likelihoods, rather than log10 likelihoods. Thus, we'll want to rectify this, which we do with code below.
 
-```{r 2d-scan-results}
+```{r 2d-scan-results, echo = TRUE}
 as_tibble(read.table("https://zenodo.org/record/3210710/files/recla-10-22.txt?download=1", stringsAsFactors = FALSE)) -> pvl1022
 ```
 
@@ -211,6 +211,8 @@ We create a profile LOD plot.
 ```{r profile-plot}
 colnames(recla$pheno)[c(10, 22)] <- c("Percent time in light", "Hot plate latency")
 pvl1022 %>%
+  mutate(log10lik = loglik / log(10)) %>%
+  dplyr::select(- loglik) %>%
   calc_profile_lods() %>%
   add_pmap(pmap = recla$pmap$`8`) %>%
   ggplot() + geom_line(aes(x = marker_position, y = profile_lod, colour = trait))

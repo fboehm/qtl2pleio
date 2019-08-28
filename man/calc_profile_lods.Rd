@@ -9,6 +9,9 @@ calc_profile_lods(scan_pvl_out)
 \arguments{
 \item{scan_pvl_out}{tibble outputted from scan_pvl}
 }
+\value{
+a tibble with 3 columns, indicating 'marker identity, trace (pleiotropy or profile1, profile2, etc.), and value of the profile lod (base 10) for that trace at that marker.
+}
 \description{
 Calculate profile lods for all traits
 }
