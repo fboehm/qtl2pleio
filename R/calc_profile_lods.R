@@ -8,10 +8,11 @@
 #' @examples
 #' pm <- 1:3
 #' names(pm) <- as.character(paste0('m', 1:3))
-#' expand.grid(paste0('m', 1:3), paste0('m', 1:3)) -> foo
-#' tib <- tibble::tibble(marker = as.character(foo[ , 1]))
-#' tib <- rgamma(9, 5)
-#' add_pmap(tib, pm)
+#' expand.grid(paste0('m', 1:3), paste0('m', 1:3)) %>%
+#'     tibble::as_tibble() %>%
+#'     dplyr::mutate(log10lik = rgamma(9, 5)) %>%
+#'     calc_profile_lods() %>%
+#'     add_pmap(pm)
 #' @export
 #' @importFrom rlang .data
 
