@@ -1,3 +1,15 @@
+# qtl2pleio 1.2.0
+ 
+## Major changes
+
+* changed output of scan_pvl to be log10 likelihood, not log (natural base) likelihood. Thank you to @HongHe0123 for suggesting this.
+
+## Minor changes
+
+* changed column name for tibble outputs to reflect log base 10 instead of log natural base. 
+
+
+
 # qtl2pleio 1.1.0
 
 ## Major changes 
