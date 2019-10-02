@@ -38,10 +38,8 @@ conduct](CONDUCT.md).
 ## Technical support
 
 For technical support, please open a Github issue. If you’re just
-getting started with `qtl2pleio`, please examine the vignettes and the
-[qtl2pleio package
-website](https://fboehm.us/static/software/qtl2pleio). You can also
-email <frederick.boehm@gmail.com> for assistance.
+getting started with `qtl2pleio`, please examine the vignettes. You can
+also email <frederick.boehm@gmail.com> for assistance.
 
 ## Goals
 
@@ -71,9 +69,6 @@ will use it below.
 
 ``` r
 install.packages("qtl2", repos="http://rqtl.org/qtl2cran")
-#> 
-#> The downloaded binary packages are in
-#>  /var/folders/wd/lxmyvz590xb81c5z1j88b3800000gn/T//RtmpYUxLVk/downloaded_packages
 ```
 
 ## Example
@@ -178,7 +173,8 @@ matrix.
 s1 <- scan1(genoprobs = pr, pheno = Y, kinship = kinship)
 ```
 
-Here is a plot of the results.
+Here is a plot of the
+results.
 
 <img src="https://raw.githubusercontent.com/fboehm/qtl2pleio/master/man/figures/README-1d-lod-plots-1.png" width="100%" />
 
@@ -186,10 +182,10 @@ And here are the observed QTL peaks with LOD \> 8.
 
 ``` r
 find_peaks(s1, map = DOex$pmap, threshold=8)
-#>   lodindex lodcolumn chr       pos      lod
-#> 1        1       tr1   3  82.77806 16.19704
-#> 2        2       tr2   3  82.77806 18.26406
-#> 3        2       tr2   X 103.79061 16.19708
+#>   lodindex lodcolumn chr      pos      lod
+#> 1        1       tr1   3 82.77806 13.39312
+#> 2        1       tr1   X 97.07206  9.18941
+#> 3        2       tr2   3 82.77806 23.57570
 ```
 
 ### Perform two-dimensional scan as first step in pleiotropy vs. separate QTL hypothesis test
@@ -244,8 +240,8 @@ function `find_pleio_peak_tib`.
 
 ``` r
 (pleio_index <- find_pleio_peak_tib(out, start_snp = 38))
-#> loglik13 
-#>       50
+#> log10lik13 
+#>         50
 ```
 
 ``` r
