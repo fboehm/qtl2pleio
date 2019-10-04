@@ -264,8 +264,8 @@ b_out <- suppressMessages(boot_pvl(probs = pp,
 ## Code of Conduct
 
 Please note that this project is released with a [Contributor Code of
-Conduct](CONDUCT.md). By participating in this project you agree to
-abide by its terms.
+Conduct](https://github.com/fboehm/qtl2pleio/blob/master/CONDUCT.md). By
+participating in this project you agree to abide by its terms.
 
 ## Citation information
 
