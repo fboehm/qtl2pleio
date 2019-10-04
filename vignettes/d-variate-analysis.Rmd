@@ -9,15 +9,6 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r setup, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  tidy = TRUE,
-  tidy.opts = list(width.cutoff = 60)
-  )
-
-```
 
 The goal of this vignette is to introduce the functions that enable d-variate (for $d \ge 2$) QTL analysis for d traits that each univariately map to a shared region of the genome. One may then ask whether the d traits share a single, pleiotropic QTL. The alternative hypothesis is that there is more than one QTL giving rise to the phenotype-genotype associations.
 

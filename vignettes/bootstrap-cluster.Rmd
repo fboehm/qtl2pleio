@@ -9,14 +9,6 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r setup, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>", 
-  tidy = TRUE, 
-  tidy.opts = list(width.cutoff = 60)
-  )
-```
 
 
 ## Overview
