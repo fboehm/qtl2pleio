@@ -1,3 +1,14 @@
+# qtl2pleio 1.2.1
+
+## Major changes
+
+* none
+
+## Minor changes
+
+* removed examples' and vignettes' dependencies on qtl2 R package.
+
+
 # qtl2pleio 1.2.0
  
 ## Major changes
