@@ -9,6 +9,15 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+```{r setup2}
+is_inst <- function(pkg) {
+    nzchar(system.file(package = pkg))
+}
+qtl2_indic <- is_inst("qtl2")
+knitr::opts_chunk$set(eval = qtl2_indic)
+```
+
+
 ```{r pkgs}
 library(dplyr)
 library(ggplot2)
@@ -55,7 +64,7 @@ unlink("tmp", recursive = TRUE) # delete the tmp directory
 
 We then calculate kinship matrices, by the "leave one chromosome out (loco)" method.
 
-```{r calc-kinship, eval = TRUE}
+```{r calc-kinship}
 kinship <- calc_kinship(aprobs, "loco")
 ```
 
@@ -73,7 +82,7 @@ as_tibble(wlph) -> wlph_tib
 
 We next perform the univariate QTL scan for all phenotypes.
 
-```{r scan1, eval = TRUE}
+```{r scan1}
 sex2 <- matrix(as.numeric(sex == "female"), ncol = 1)
 colnames(sex2) <- "female"
 rownames(sex2) <- rownames(aprobs[[1]])
@@ -90,7 +99,7 @@ Let's find the univariate QTL peaks for all phenotypes.
 We want to look closely at those peaks on Chromosome 8. We'll save the positions of peaks for our two traits of interest.
 
 
-```{r get-peaks, eval = TRUE}
+```{r get-peaks}
 (peaks <- find_peaks(out, pseudomap, threshold = 5) %>%
   dplyr::arrange(chr, pos) %>%
    dplyr::select(- lodindex))
