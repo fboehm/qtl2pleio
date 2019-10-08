@@ -273,7 +273,7 @@ sum(boot_lrt >= mylrt) / length(boot_lrt)
 
 ## Session info
 
-```{r session-info}
+```{r session-info, eval = TRUE}
 devtools::session_info()
 ```
 
