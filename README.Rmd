@@ -37,7 +37,7 @@ Click [here](https://mybinder.org/v2/gh/fboehm/qtl2pleio/master?urlpath=rstudio)
 
 ## Contributor guidelines
 
-We eagerly welcome contributions to `qtl2pleio`. All pull requests will be considered. Features requests and bug reports may be filed as Github issues. All contributors must abide by the [code of conduct](CONDUCT.md). 
+We eagerly welcome contributions to `qtl2pleio`. All pull requests will be considered. Features requests and bug reports may be filed as Github issues. All contributors must abide by the [code of conduct](https://github.com/fboehm/qtl2pleio/blob/master/CONDUCT.md). 
 
 ## Technical support 
 
@@ -277,8 +277,6 @@ b_out <- suppressMessages(boot_pvl(probs = pp,
 
 
 
-## Code of Conduct
-Please note that this project is released with a [Contributor Code of Conduct](https://github.com/fboehm/qtl2pleio/blob/master/CONDUCT.md). By participating in this project you agree to abide by its terms.
 
 ## Citation information
 

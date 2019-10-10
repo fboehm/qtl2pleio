@@ -33,7 +33,7 @@ session in “the cloud”.
 We eagerly welcome contributions to `qtl2pleio`. All pull requests will
 be considered. Features requests and bug reports may be filed as Github
 issues. All contributors must abide by the [code of
-conduct](CONDUCT.md).
+conduct](https://github.com/fboehm/qtl2pleio/blob/master/CONDUCT.md).
 
 ## Technical support
 
@@ -260,12 +260,6 @@ b_out <- suppressMessages(boot_pvl(probs = pp,
 (pvalue <- mean(b_out >= lrt))
 #> [1] 1
 ```
-
-## Code of Conduct
-
-Please note that this project is released with a [Contributor Code of
-Conduct](https://github.com/fboehm/qtl2pleio/blob/master/CONDUCT.md). By
-participating in this project you agree to abide by its terms.
 
 ## Citation information
 
