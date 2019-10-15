@@ -14,8 +14,7 @@ Description: We implement an
     the null hypothesis of pleiotropy against the alternative hypothesis,
     two separate QTL. The test differs from that in Jiang & Zeng (1995) <https://www.genetics.org/content/140/3/1111> 
     and that in Tian et al. (2016) <doi:10.1534/genetics.115.183624> in
-    that our test accommodates multiparental populations, such as the Diversity 
-    Outbred mouse population.
+    that our test accommodates multiparental populations.
 License: MIT + file LICENSE
 URL: https://github.com/fboehm/qtl2pleio
 BugReports: https://github.com/fboehm/qtl2pleio/issues
