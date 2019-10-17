@@ -49,18 +49,9 @@ probs <- calc_genoprob(recla, map = pseudomap, cores = 1)
 
 We then convert the genotype probabilities to haplotype dosages.
 
-```{r calc-aprobs, eval = FALSE}
+```{r calc-aprobs, eval = TRUE}
 aprobs <- genoprob_to_alleleprob(probs)
 ```
-
-```{r, echo = FALSE}
-url <- "https://zenodo.org/record/2652931/files/recla-aprobs.rds?download=1"
-dir.create("tmp") #create a directory that we'll delete later
-download.file(url, destfile = "tmp/recla-aprobs.rds")
-aprobs <- readRDS("tmp/recla-aprobs.rds")
-unlink("tmp", recursive = TRUE) # delete the tmp directory
-```
-
 
 We then calculate kinship matrices, by the "leave one chromosome out (loco)" method.
 
@@ -193,8 +184,6 @@ scan_pvl(probs = aprobs$`8`,
          kinship = kinship$`8`, 
          start_snp = 650, 
          n_snp = 350) -> pvl1022
-write.table(x = pvl1022, 
-            file = "recla-10-22.txt")
 ```
 
 To save computing time, we read the two-dimensional scan results from Zenodo. Because the Zenodo file was created with an older version of `scan_pvl`, it contains the log (natural base) likelihoods, rather than log10 likelihoods. Thus, we'll want to rectify this, which we do with code below.
@@ -245,11 +234,6 @@ The code below creates a temporary directory "tmp" in the user's working directo
 
 
 ```{r download-boot}
-gz_file <- "https://raw.githubusercontent.com/fboehm/qtl2pleio-manuscript/master/chtc/Recla-bootstrap/submit_files/recla-boot-run561.tar.gz"
-tmp_dir <- file.path(getwd(), "tmp")
-dir.create(tmp_dir)
-download.file(gz_file, destfile = file.path(tmp_dir, "recla-boot-run561.tar.gz"))
-untar(file.path(tmp_dir, "recla-boot-run561.tar.gz"), exdir = tmp_dir)
 ## read boot lrt files
 boot_lrt <- list()
 for (i in 1:1000){
@@ -259,8 +243,6 @@ for (i in 1:1000){
 }
 # convert list to numeric vector
 boot_lrt <- unlist(boot_lrt)
-# delete tmp_dir and its contents
-unlink(tmp_dir, recursive = TRUE)
 ```
 
 We get a bootstrap p-value by comparing the above vector's values to `mylrt`, the test statistic for the observed data.
