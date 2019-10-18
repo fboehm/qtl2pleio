@@ -2,6 +2,7 @@
 title: "Recla Analysis"
 author: "Frederick Boehm"
 date: "`r Sys.Date()`"
+bibliography: "qtl2pleio.bib"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Recla Analysis}
@@ -258,4 +259,6 @@ sum(boot_lrt >= mylrt) / length(boot_lrt)
 ```{r session-info, eval = TRUE}
 devtools::session_info()
 ```
+
+## References
 
