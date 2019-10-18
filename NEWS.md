@@ -1,3 +1,16 @@
+# qtl2pleio 1.2.2
+
+## Major changes
+
+* I added data to package to enable vignettes, examples, and tests.
+
+## Minor changes
+
+* Per CRAN submission feedback, I spelled out QTL in DESCRIPTION file and upon first use in vignettes.
+
+* Added citations with references to vignettes.
+
+
 # qtl2pleio 1.2.1
 
 ## Major changes

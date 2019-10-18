@@ -1,18 +1,18 @@
 Type: Package
 Package: qtl2pleio
-Title: Testing Pleiotropy vs. Separate QTL in Multiparental Populations
-Version: 1.2.1
+Title: Testing Pleiotropy vs. Separate Quantitative Trait Loci in Multiparental Populations
+Version: 1.2.2
 Authors@R:
     person(given = "Frederick J",
            family = "Boehm",
-           role = c("aut", "cre", "cph"),
+           role = c("aut", "cre"),
            email = "frederick.boehm@gmail.com",
            comment = c(ORCID = "0000-0002-1644-5931"))
 Maintainer: Frederick J Boehm <frederick.boehm@gmail.com>
 Description: We implement an
     adaptation of Jiang & Zeng's (1995) <https://www.genetics.org/content/140/3/1111> likelihood ratio test for testing
     the null hypothesis of pleiotropy against the alternative hypothesis,
-    two separate QTL. The test differs from that in Jiang & Zeng (1995) <https://www.genetics.org/content/140/3/1111> 
+    two separate quantitative trait loci. The test differs from that in Jiang & Zeng (1995) <https://www.genetics.org/content/140/3/1111> 
     and that in Tian et al. (2016) <doi:10.1534/genetics.115.183624> in
     that our test accommodates multiparental populations.
 License: MIT + file LICENSE

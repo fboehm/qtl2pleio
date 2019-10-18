@@ -30,6 +30,8 @@ library(qtl2)
 
 ## Load Recla data from `qtl2data` github repository
 
+We illustrate functions from `qtl2pleio` by analyzing data from 261 Diversity Outbred mice [@recla2014precise,@logan2013high].
+
 ```{r load-recla}
 file <- paste0("https://raw.githubusercontent.com/rqtl/",
                "qtl2data/master/DO_Recla/recla.zip")
@@ -42,7 +44,7 @@ gm <- pseudomap$`8`
 ```
 
 
-We use the hidden Markov model from Broman (2012) to calculate 36-state genotype probabilities for autosomal markers. We use the following line of code to do that.
+We use the hidden Markov model from @broman2012genotype and @broman2012haplotype (as implemented in @broman2019rqlt2) to calculate 36-state genotype probabilities for autosomal markers. 
 
 ```{r calc-genoprobs-code, eval = FALSE}
 probs <- calc_genoprob(recla, map = pseudomap, cores = 1)
@@ -54,7 +56,7 @@ We then convert the genotype probabilities to haplotype dosages.
 aprobs <- genoprob_to_alleleprob(probs)
 ```
 
-We then calculate kinship matrices, by the "leave one chromosome out (loco)" method.
+We calculate kinship matrices, by the "leave one chromosome out (loco)" method.
 
 ```{r calc-kinship}
 kinship <- calc_kinship(aprobs, "loco")
@@ -85,8 +87,6 @@ out <- scan1(genoprobs = aprobs,
              reml = TRUE
              )
 ```
-
-Let's find the univariate QTL peaks for all phenotypes.
 
 We want to look closely at those peaks on Chromosome 8. We'll save the positions of peaks for our two traits of interest.
 
