@@ -46,7 +46,7 @@ gm <- pseudomap$`8`
 
 We use the hidden Markov model from @broman2012genotype and @broman2012haplotype (as implemented in @broman2019rqlt2) to calculate 36-state genotype probabilities for autosomal markers. 
 
-```{r calc-genoprobs-code, eval = FALSE}
+```{r calc-genoprobs-code, eval = TRUE}
 probs <- calc_genoprob(recla, map = pseudomap, cores = 1)
 ```
 
@@ -234,13 +234,13 @@ The code below creates a temporary directory "tmp" in the user's working directo
 
 
 
-```{r download-boot}
+```{r read-boot}
 ## read boot lrt files
 boot_lrt <- list()
 for (i in 1:1000){
   n <- i - 1
-  fn <- paste0("recla-boot-run561_", n, ".txt")
-  boot_lrt[i] <- read.table(file.path(tmp_dir, fn))
+  fn <- paste0("https://raw.githubusercontent.com/fboehm/qtl2pleio-manuscript-chtc/master/Recla-bootstrap/results/recla-boot-run561_", n, ".txt")
+  boot_lrt[i] <- read.table(fn)
 }
 # convert list to numeric vector
 boot_lrt <- unlist(boot_lrt)
