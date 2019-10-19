@@ -152,10 +152,10 @@ plot(out, map = pseudomap,
 We examine the allele effects plots for our two traits, in the region of interest on Chromosome 8.
 
 ```{r coefs-calc}
-scan1coef(aprobs[ , 8], pheno = wlph[, 10], kinship = kinship$`8`, 
+scan1coef(aprobs[ , 8], pheno = wlph[ , 10], kinship = kinship$`8`, 
           reml = TRUE,
           addcovar = sex2) -> s1c_10
-scan1coef(aprobs[ , 8], pheno = wlph[, 22], kinship = kinship$`8`, 
+scan1coef(aprobs[ , 8], pheno = wlph[ , 22], kinship = kinship$`8`, 
           reml = TRUE,
           addcovar = sex2) -> s1c_22
 ```
