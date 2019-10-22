@@ -152,10 +152,10 @@ plot(out, map = pseudomap,
 We examine the allele effects plots for our two traits, in the region of interest on Chromosome 8.
 
 ```{r coefs-calc}
-scan1coef(aprobs[ , 8], pheno = wlph[, 10], kinship = kinship$`8`, 
+scan1coef(aprobs[ , 8], pheno = wlph[ , 10], kinship = kinship$`8`, 
           reml = TRUE,
           addcovar = sex2) -> s1c_10
-scan1coef(aprobs[ , 8], pheno = wlph[, 22], kinship = kinship$`8`, 
+scan1coef(aprobs[ , 8], pheno = wlph[ , 22], kinship = kinship$`8`, 
           reml = TRUE,
           addcovar = sex2) -> s1c_22
 ```
@@ -234,13 +234,13 @@ The code below creates a temporary directory "tmp" in the user's working directo
 
 
 
-```{r download-boot}
+```{r read-boot}
 ## read boot lrt files
 boot_lrt <- list()
 for (i in 1:1000){
   n <- i - 1
-  fn <- paste0("recla-boot-run561_", n, ".txt")
-  boot_lrt[i] <- read.table(file.path(tmp_dir, fn))
+  fn <- paste0("https://raw.githubusercontent.com/fboehm/qtl2pleio-manuscript-chtc/master/Recla-bootstrap/results/recla-boot-run561_", n, ".txt")
+  boot_lrt[i] <- read.table(fn)
 }
 # convert list to numeric vector
 boot_lrt <- unlist(boot_lrt)
