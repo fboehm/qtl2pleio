@@ -48,7 +48,7 @@ LinkingTo:
 VignetteBuilder:
     knitr
 Encoding: UTF-8
-Language: en-US
+Language: en-US 
 LazyData: true
 NeedsCompilation: yes
 RoxygenNote: 6.1.1
