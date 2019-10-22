@@ -11,6 +11,6 @@
 
 ## Replies to previous CRAN concerns
 
-* This is a resubmission of an initially rejected package. I erroneously included code that downloaded files to a new directory. I've since deleted those pieces of code.
+* This is a resubmission of an initially rejected package. I mistakenly included code that downloaded files to a new directory. I've since deleted those pieces of code.
 
 * 
