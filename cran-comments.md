@@ -9,8 +9,12 @@
 
 * This is a new release.
 
+* The package qtl2 is available through a non-CRAN repository.
+
 ## Replies to previous CRAN concerns
 
 * This is a resubmission of an initially rejected package. I mistakenly included code that downloaded files to a new directory. I've since deleted those pieces of code.
 
-* 
+* I omitted the abbreviation QTL in the DESCRIPTION file.
+
+
