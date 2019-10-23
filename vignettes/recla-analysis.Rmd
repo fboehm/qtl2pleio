@@ -46,13 +46,13 @@ gm <- pseudomap$`8`
 
 We use the hidden Markov model from @broman2012genotype and @broman2012haplotype (as implemented in @broman2019rqlt2) to calculate 36-state genotype probabilities for autosomal markers. 
 
-```{r calc-genoprobs-code, eval = TRUE}
+```{r calc-genoprobs-code}
 probs <- calc_genoprob(recla, map = pseudomap, cores = 1)
 ```
 
 We then convert the genotype probabilities to haplotype dosages.
 
-```{r calc-aprobs, eval = TRUE}
+```{r calc-aprobs}
 aprobs <- genoprob_to_alleleprob(probs)
 ```
 
