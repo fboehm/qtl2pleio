@@ -1,24 +1,27 @@
 {
-  "@context": ["https://doi.org/10.5063/schema/codemeta-2.0", "http://schema.org"],
+  "@context": [
+    "https://doi.org/10.5063/schema/codemeta-2.0",
+    "http://schema.org"
+  ],
   "@type": "SoftwareSourceCode",
   "identifier": "qtl2pleio",
-  "description": "The package contains code that implements an adaptation of Jiang & Zeng's (1995) likelihood ratio test for testing the null hypothesis of pleiotropy against the alternative hypothesis, close linkage. The test differs from that in Jiang & Zeng (1995) in that our test accommodates multiparental populations.",
-  "name": "qtl2pleio: Hypothesis test of close linkage vs pleiotropy in multiparental populations",
+  "description": "We implement an\n    adaptation of Jiang & Zeng's (1995) <https://www.genetics.org/content/140/3/1111> likelihood ratio test for testing\n    the null hypothesis of pleiotropy against the alternative hypothesis,\n    two separate quantitative trait loci. The test differs from that in Jiang & Zeng (1995) <https://www.genetics.org/content/140/3/1111> \n    and that in Tian et al. (2016) <doi:10.1534/genetics.115.183624> in\n    that our test accommodates multiparental populations.",
+  "name": "qtl2pleio: Testing Pleiotropy vs. Separate Quantitative Trait Loci in Multiparental Populations",
   "codeRepository": "https://github.com/fboehm/qtl2pleio",
   "issueTracker": "https://github.com/fboehm/qtl2pleio/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "0.1.2.9000",
+  "version": "1.2.2",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
-    "version": "3.5.1",
+    "version": "3.6.1",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 3.5.1 (2018-07-02)",
+  "runtimePlatform": "R version 3.6.1 (2019-07-05)",
   "author": [
     {
       "@type": "Person",
-      "givenName": "Frederick",
+      "givenName": "Frederick J",
       "familyName": "Boehm",
       "email": "frederick.boehm@gmail.com",
       "@id": "https://orcid.org/0000-0002-1644-5931"
@@ -27,7 +30,7 @@
   "maintainer": [
     {
       "@type": "Person",
-      "givenName": "Frederick",
+      "givenName": "Frederick J",
       "familyName": "Boehm",
       "email": "frederick.boehm@gmail.com",
       "@id": "https://orcid.org/0000-0002-1644-5931"
@@ -36,15 +39,27 @@
   "softwareSuggestions": [
     {
       "@type": "SoftwareApplication",
-      "identifier": "testthat",
-      "name": "testthat",
+      "identifier": "covr",
+      "name": "covr",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
         "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
       },
-      "sameAs": "https://CRAN.R-project.org/package=testthat"
+      "sameAs": "https://CRAN.R-project.org/package=covr"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "mvtnorm",
+      "name": "mvtnorm",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=mvtnorm"
     },
     {
       "@type": "SoftwareApplication",
@@ -72,65 +87,76 @@
     },
     {
       "@type": "SoftwareApplication",
-      "identifier": "qtl2",
-      "name": "qtl2",
-      "sameAs": "https://github.com/rqtl/qtl2"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "covr",
-      "name": "covr",
+      "identifier": "testthat",
+      "name": "testthat",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
         "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
       },
-      "sameAs": "https://CRAN.R-project.org/package=covr"
+      "sameAs": "https://CRAN.R-project.org/package=testthat"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "broman",
+      "name": "broman",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=broman"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "devtools",
+      "name": "devtools",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=devtools"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "qtl2",
+      "name": "qtl2"
     }
   ],
   "softwareRequirements": [
     {
       "@type": "SoftwareApplication",
+      "identifier": "R",
+      "name": "R",
+      "version": ">= 3.1"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "dplyr",
+      "name": "dplyr",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=dplyr"
+    },
+    {
+      "@type": "SoftwareApplication",
       "identifier": "gemma2",
       "name": "gemma2",
-      "sameAs": "https://github.com/fboehm/gemma2"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "mvtnorm",
-      "name": "mvtnorm",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
         "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
       },
-      "sameAs": "https://CRAN.R-project.org/package=mvtnorm"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "tibble",
-      "name": "tibble",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=tibble"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "MASS",
-      "name": "MASS",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=MASS"
+      "sameAs": "https://CRAN.R-project.org/package=gemma2"
     },
     {
       "@type": "SoftwareApplication",
@@ -146,15 +172,39 @@
     },
     {
       "@type": "SoftwareApplication",
-      "identifier": "dplyr",
-      "name": "dplyr",
+      "identifier": "magrittr",
+      "name": "magrittr",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
         "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
       },
-      "sameAs": "https://CRAN.R-project.org/package=dplyr"
+      "sameAs": "https://CRAN.R-project.org/package=magrittr"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "MASS",
+      "name": "MASS",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=MASS"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "Rcpp",
+      "name": "Rcpp",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=Rcpp"
     },
     {
       "@type": "SoftwareApplication",
@@ -182,74 +232,87 @@
     },
     {
       "@type": "SoftwareApplication",
-      "identifier": "readr",
-      "name": "readr",
+      "identifier": "tibble",
+      "name": "tibble",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
         "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
       },
-      "sameAs": "https://CRAN.R-project.org/package=readr"
+      "sameAs": "https://CRAN.R-project.org/package=tibble"
     },
     {
       "@type": "SoftwareApplication",
-      "identifier": "progress",
-      "name": "progress",
+      "identifier": "parallel",
+      "name": "parallel"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "Matrix",
+      "name": "Matrix",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
         "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
       },
-      "sameAs": "https://CRAN.R-project.org/package=progress"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "Rcpp",
-      "name": "Rcpp",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=Rcpp"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "limmbo2",
-      "name": "limmbo2",
-      "sameAs": "https://github.com/fboehm/limmbo2"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "RcppEigen",
-      "name": "RcppEigen",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=RcppEigen"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "microbenchmark",
-      "name": "microbenchmark",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=microbenchmark"
+      "sameAs": "https://CRAN.R-project.org/package=Matrix"
     }
   ],
   "releaseNotes": "https://github.com/fboehm/qtl2pleio/blob/master/NEWS.md",
   "readme": "https://github.com/fboehm/qtl2pleio/blob/master/README.md",
-  "fileSize": "194.12KB",
-  "contIntegration": ["https://travis-ci.org/fboehm/qtl2pleio", "https://codecov.io/github/fboehm/qtl2pleio?branch=master"],
-  "keywords": ["quantitative-trait", "quantitative-genetics", "multiparental-populations"]
+  "fileSize": "132.145KB",
+  "contIntegration": [
+    "https://travis-ci.org/fboehm/qtl2pleio",
+    "https://codecov.io/github/fboehm/qtl2pleio?branch=master"
+  ],
+  "keywords": [
+    "quantitative-trait",
+    "quantitative-genetics",
+    "multiparental-populations"
+  ],
+  "contributor": {},
+  "copyrightHolder": {},
+  "funder": {},
+  "developmentStatus": "https://www.repostatus.org/#active",
+  "citation": [
+    {
+      "@type": "ScholarlyArticle",
+      "datePublished": "2019",
+      "author": [
+        {
+          "@type": "Person",
+          "givenName": ["Frederick", "J."],
+          "familyName": "Boehm"
+        },
+        {
+          "@type": "Person",
+          "givenName": ["Elissa", "J."],
+          "familyName": "Chesler"
+        },
+        {
+          "@type": "Person",
+          "givenName": ["Brian", "S."],
+          "familyName": "Yandell"
+        },
+        {
+          "@type": "Person",
+          "givenName": ["Karl", "W."],
+          "familyName": "Broman"
+        }
+      ],
+      "name": "Testing pleiotropy vs. separate QTL in multiparental populations",
+      "url": "https://www.g3journal.org/content/9/7/2317",
+      "isPartOf": {
+        "@type": "PublicationIssue",
+        "datePublished": "2019",
+        "isPartOf": {
+          "@type": ["PublicationVolume", "Periodical"],
+          "volumeNumber": "9",
+          "name": "G3"
+        }
+      }
+    }
+  ]
 }
