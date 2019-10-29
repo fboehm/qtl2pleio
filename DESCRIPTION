@@ -1,6 +1,6 @@
 Type: Package
 Package: qtl2pleio
-Title: Testing Pleiotropy vs. Separate Quantitative Trait Loci in Multiparental Populations
+Title: Testing Pleiotropy in Multiparental Populations
 Version: 1.2.2
 Authors@R:
     person(given = "Frederick J",
