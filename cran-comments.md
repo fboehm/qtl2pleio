@@ -13,13 +13,13 @@
 
 ## Replies to previous CRAN concerns
 
+* This is a resubmission of an initially rejected package. 
+
 * I shortened the title in the file DESCRIPTION
 
-* I stopped exporting some functions that are not needed directly by the user.
+* I removed export tags for some functions that are not needed directly by the user.
 
-
-* This is a resubmission of an initially rejected package. I mistakenly included code that downloaded files to a new directory. I've since deleted those pieces of code.
+* I mistakenly included code that downloaded files to a new directory. I've since deleted those pieces of code.
 
 * I omitted the abbreviation QTL in the DESCRIPTION file.
-
 
