@@ -1,3 +1,16 @@
+# qtl2pleio 1.2.3
+
+## Major changes
+
+* None
+
+## Minor changes
+
+* I shortened title per CRAN recommendation
+
+* I removed export tags from helper functions that user doesn't need
+
+
 # qtl2pleio 1.2.2
 
 ## Major changes
