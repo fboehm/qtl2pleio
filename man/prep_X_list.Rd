@@ -15,6 +15,9 @@ prep_X_list(indices, start_snp, probs, covariates)
 
 \item{covariates}{a matrix of covariates}
 }
+\value{
+a list of design matrices, ultimately useful when constructing the (multi-locus) design matrix
+}
 \description{
 Create a list of component X matrices for input to stagger_mats, to ultimately create design matrix
 }

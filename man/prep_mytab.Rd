@@ -11,6 +11,9 @@ prep_mytab(d_size, n_snp)
 
 \item{n_snp}{an integer, the number of markers}
 }
+\value{
+a data.frame with d_size + 1 columns and (n_snp)^d_size rows. Last column is NA and named loglik.
+}
 \description{
 Prepare mytab object for use within scan_pvl R code
 }

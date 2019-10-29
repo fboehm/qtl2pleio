@@ -5,6 +5,7 @@
 #' @param palette a character vector of length 3 containing strings for colors
 #' @param linetype a character vector of length 3 specifying the linetype values for the 3 traces
 #' @export
+#' @return a ggplot object with profile LODs
 
 plot_pvl <- function(dat, units = "Mb",
                      palette = c("#999999", "#E69F00", "#56B4E9"),
