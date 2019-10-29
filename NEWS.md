@@ -8,7 +8,7 @@
 
 * I shortened title per CRAN recommendation
 
-* I removed export tags from helper functions that user doesn't need
+* I added \value tags to document functions' outputs
 
 
 # qtl2pleio 1.2.2
