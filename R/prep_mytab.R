@@ -2,7 +2,7 @@
 #'
 #' @param d_size an integer, the number of traits
 #' @param n_snp an integer, the number of markers
-#' @export
+
 prep_mytab <- function(d_size, n_snp) {
     mytab <- expand.grid(rep(list(1:n_snp), d_size))
     mytab$loglik <- NA
@@ -16,7 +16,6 @@ prep_mytab <- function(d_size, n_snp) {
 #' @param start_snp an integer denoting the index (within genotype probabilities array) where the scan should start
 #' @param probs a three-dimensional array of genotype probabilities for a single chromosome
 #' @param covariates a matrix of covariates
-#' @export
 
 prep_X_list <- function(indices, start_snp, probs, covariates) {
     if (!is.null(covariates)) {
