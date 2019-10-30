@@ -17,3 +17,6 @@ a data.frame with d_size + 1 columns and (n_snp)^d_size rows. Last column is NA 
 \description{
 Prepare mytab object for use within scan_pvl R code
 }
+\examples{
+prep_mytab(2, 10)
+}
