@@ -1,0 +1,245 @@
+---
+title: "Multivariate analysis for two or more traits"
+author: "Frederick Boehm"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Testing pleiotropy v separate QTL in multiparental populations}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+The goal of this vignette is to introduce the functions that enable d-variate (for $d \ge 2$) QTL analysis for d traits that each univariately map to a shared region of the genome. One may then ask whether the d traits share a single, pleiotropic QTL. The alternative hypothesis is that there is more than one QTL giving rise to the phenotype-genotype associations.
+
+```{r setup2}
+is_inst <- function(pkg) {
+    nzchar(system.file(package = pkg))
+}
+qtl2_indic <- is_inst("qtl2")
+```
+
+
+
+```{r load-qtl2pleio, eval = qtl2_indic}
+library(qtl2pleio)
+library(qtl2)
+```
+
+We also load the `qtl2` package with the `library` command.
+
+
+## Reading data from `qtl2data` repository on github
+
+We'll consider the
+[`DOex`](https://github.com/rqtl/qtl2data/tree/master/DOex) data in
+the [`qtl2data`](https://github.com/rqtl/qtl2data) repository.
+We'll download the DOex.zip file before calculating founder allele dosages.
+
+```{r download-DOex, eval = qtl2_indic}
+file <- paste0("https://raw.githubusercontent.com/rqtl/",
+               "qtl2data/master/DOex/DOex.zip")
+DOex <- read_cross2(file)
+```
+
+Let's calculate the founder allele dosages from the 36-state genotype probabilities.
+
+```{r calc_pr, eval = qtl2_indic}
+probs <- calc_genoprob(DOex)
+pr <- genoprob_to_alleleprob(probs)
+```
+
+
+We now have an allele probabilities object stored in `pr`.
+
+
+## Kinship calculations
+
+For our statistical model, we need a kinship matrix. Although we don't have genome-wide data - since we have allele probabilities for only 3 chromosomes - let's calculate a kinship matrix using "leave-one-chromosome-out". In practice, one would want to use allele probabilities from a full genome-wide set of markers.
+
+```{r calc-K, eval = qtl2_indic}
+calc_kinship(probs = pr, type = "loco") -> kinship
+```
+
+
+
+## Simulating phenotypes with `qtl2pleio::sim1`
+
+
+The function to simulate phenotypes in `qtl2pleio` is `sim1`. By examining its help page, we see that it takes five arguments. The help page also gives the dimensions of the inputs.
+
+```{r pp-def, eval = qtl2_indic}
+# set up the design matrix, X
+pp <- pr[[2]] #we'll work with Chr 3's genotype data
+dim(pp)
+```
+
+We prepare a block-diagonal design matrix X that contains two nonzero blocks on the diagonal, one for each trait. We use here a function from the `gemma2` R package to set up the needed matrix.
+
+
+
+```{r X-def, eval = qtl2_indic}
+#Next, we prepare a design matrix X
+X <- gemma2::stagger_mats(pp[ , , 50], pp[ , , 50], pp[ , , 50])
+dim(X)
+```
+
+$X$ is a block-diagonal matrix, with 3 diagonal blocks of equal dimension.
+
+
+```{r B-def, eval = qtl2_indic}
+# assemble B matrix of allele effects
+B <- matrix(data = rep(rep(c(-1, 1), each = 4), times = 3), nrow = 8, ncol = 3, byrow = FALSE)
+# verify that B is what we want:
+B
+# set.seed to ensure reproducibility
+set.seed(2018-01-30)
+# call to sim1
+Ypre <- sim1(X = X, B = B, Vg = diag(3), Ve = diag(3), kinship = kinship[[2]])
+Y <- matrix(Ypre, nrow = 261, ncol = 3, byrow = FALSE)
+rownames(Y) <- rownames(pp)
+colnames(Y) <- c("tr1", "tr2", "tr3")
+```
+
+Let's perform univariate QTL mapping for each trait (ie, each column) in the Y matrix.
+
+```{r 1d-scans, eval = qtl2_indic}
+s1 <- scan1(genoprobs = pr, pheno = Y, kinship = kinship)
+```
+
+Here is a plot of the results.
+
+```{r 1d-lod-plots, eval = qtl2_indic}
+plot(s1, DOex$pmap$`3`)
+plot(s1, DOex$pmap$`3`, lod = 2, col ="violetred", add=TRUE)
+plot(s1, DOex$pmap$`3`, lod = 3, col ="green", add=TRUE)
+legend("topleft", colnames(s1), lwd = 2, col=c("darkslateblue", "violetred", "green"), bg="gray92")
+
+```
+
+
+```{r find-peaks, eval = qtl2_indic}
+find_peaks(s1, map = DOex$pmap, threshold = 8)
+```
+
+
+
+# Perform three-dimensional scan as first step in pleiotropy v separate QTL hypothesis test
+
+We now have the inputs that we need to do a pleiotropy vs. separate QTL test. We have the founder allele dosages for one chromosome, *i.e.*, Chr 3, in the R object `pp`, the matrix of two trait measurements in `Y`, and a LOCO-derived kinship matrix. We also specify, via the `start_snp` argument, the starting point for the two-dimensional scan within the array of founder allele dosages. Here, we choose the 38th marker in the array as the starting point. Via the `n_snp` argument, we specify the number of markers to include in the two-dimensional scan. Here, we input 15, so that we fit the trivariate linear mixed effects model at 15*15*15 = 3375 ordered triples of markers. In practice, we usually use between 100 and 300 markers for most bivariate scans.
+
+Lastly, we specify the number of cores to use, with the `n_cores` argument. We set it to 1 here, to ensure that the vignette can be run by CRAN. However, in practice, you may wish to increase the number of cores to accelerate computing.
+
+
+
+```{r scan, eval = qtl2_indic}
+start_index <- 43
+out <- scan_pvl(probs = pp,
+                pheno = Y,
+                kinship = kinship$`3`,
+                start_snp = start_index,
+                n_snp = 15, n_cores = 1
+                )
+```
+
+The number of cores available will vary by computer. For example, on my Macbook pro computer, with 16GB RAM, I have access to 8 cores. If I use all 8, I can't do other computing tasks, so I often set `n_cores` to 7.
+
+To check how many cores are available on your computer, if you're using a Mac or linux operating system, run this code.
+
+```{r detect-cores, eval = FALSE}
+parallel::detectCores()
+```
+
+
+
+
+#### Create a profile LOD plot to visualize results of two-dimensional scan
+
+To visualize results from our two-dimensional scan, we calculate profile LOD for each trait. The code below makes use of the R package `ggplot2` to plot profile LODs over the scan region.
+
+```{r check-out, eval = qtl2_indic}
+out
+```
+
+We see that `out` is a tibble, as expected. The first three columns contain the marker ids for each ordered triple of markers. The last column contains the log-likelihood values.
+
+
+```{r profile-plot, eval = qtl2_indic}
+library(dplyr)
+library(ggplot2)
+out_lods <- out %>%
+  calc_profile_lods() %>%
+  add_pmap(pmap = DOex$pmap$`3`)
+out_lods %>% 
+  ggplot() + geom_line(aes(x = marker_position, y = profile_lod, colour = trait))
+```
+
+
+
+
+#### Calculate the likelihood ratio test statistic for pleiotropy v separate QTL
+
+We use the function `calc_lrt_tib` to calculate the likelihood ratio test statistic value for the specified traits and specified genomic region.
+
+```{r lrt-calc, eval = qtl2_indic}
+(lrt <- max(out_lods$profile_lod))
+```
+
+### Bootstrap analysis to get p-values
+
+The calibration of test statistic values to get p-values uses bootstrap methods because we don't know the theoretical distribution of the test statistic under the null hypothesis. Thus, we use a bootstrap approach to obtain an empirical distribution of test statistic values under the null hypothesis of the presence of one pleiotropic locus.
+
+We will use the function `boot_pvl` from our package `qtl2pleio`.
+
+We use a parametric bootstrap strategy in which we first use the studied phenotypes to infer the values of model parameters. Once we have the inferred values of the model parameters, we simulate phenotypes from the pleiotropy model (with the inferred parameter values).
+
+
+A natural question that arises is "which marker's allele probabilities do we use when simulating phenotypes?" We use the marker that, under the null hypothesis, *i.e.*, under the pleiotropy constraint, yields the greatest value of the log-likelihood.
+
+Before we call `boot_pvl`, we need to identify the index (on the chromosome under study) of the marker that maximizes the likelihood under the pleiotropy constraint. To do this, we use the `qtl2pleio` function `find_pleio_peak_tib`.
+
+```{r get-pleio-index, eval = qtl2_indic}
+(pleio_index <- find_pleio_peak_tib(out, start_snp = start_index))
+```
+
+
+
+
+```{r boot, eval = qtl2_indic}
+set.seed(2018 - 11 - 25)
+suppressMessages(b_out <- boot_pvl(probs = pp,
+                                   pheno = Y,
+                                   pleio_peak_index = pleio_index,
+                                   kinship = kinship$`3`, 
+                                   nboot_per_job = 2,
+                                   start_snp = start_index,
+                                   n_snp = 15
+                                   )
+                 )
+
+```
+
+
+The argument `nboot_per_job` indicates the number of bootstrap samples that will be created and analyzed. Here, we set `nboot_per_job = 10`, so we expect to see returned a numeric vector of length 10, where each entry is a LRT statistic value from a distinct bootstrap sample.
+
+Finally, we determine a bootstrap p-value in the usual method. We treat the bootstrap samples' test statistics as an empirical distribution of the test statistic under the null hypothesis of pleiotropy. Thus, to get a p-value, we want to ask "What is the probability, under the null hypothesis, of observing a test statistic value that is at least as extreme as that which we observed?"
+
+```{r pval, eval = qtl2_indic}
+b_out
+(pvalue <- mean(b_out >= lrt))
+```
+
+In practice, one would want to use many more bootstrap samples to achieve an empirical distribution that is closer to the theoretical distribution of the test statistic under the null hypothesis.
+
+However, if one wants to perform analyses with a reasonable number - say 400 - bootstrap samples, this will take a very long time - many days - on a single laptop computer. We have used a series of computer clusters that are coordinated by the University of Wisconsin-Madison's Center for High-throughput Computing (http://chtc.cs.wisc.edu). We typically are able to analyze 1000 bootstrap samples in less than 24 hours with this service.
+
+
+
+
+
+
+## Session info
+
+```{r}
+devtools::session_info()
+```
