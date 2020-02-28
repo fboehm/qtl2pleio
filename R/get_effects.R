@@ -5,6 +5,7 @@
 #' @param map a map object for the chromosome of interest
 #' @param columns which columns to choose within the `allele_effects_matrix`. Default is 1:8 to reflect 8 founder alleles of Diversity Outbred mice
 #' @export
+#' @return a vector of 8 founder allele effects at a single marker
 #' @examples
 #' # set up allele effects matrix
 #' ae <- matrix(dat = rnorm(100 * 8), ncol = 8, nrow = 100)

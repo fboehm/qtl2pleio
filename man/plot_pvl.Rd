@@ -16,6 +16,9 @@ plot_pvl(dat, units = "Mb", palette = c("#999999", "#E69F00",
 
 \item{linetype}{a character vector of length 3 specifying the linetype values for the 3 traces}
 }
+\value{
+a ggplot object with profile LODs
+}
 \description{
 Plot tidied results of a pvl scan
 }

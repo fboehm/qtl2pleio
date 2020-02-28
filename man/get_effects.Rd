@@ -16,6 +16,8 @@ get_effects(marker_index, allele_effects_matrix, map, columns = 1:8)
 \item{columns}{which columns to choose within the `allele_effects_matrix`. Default is 1:8 to reflect 8 founder alleles of Diversity Outbred mice}
 }
 \value{
+a vector of 8 founder allele effects at a single marker
+
 a vector of founder allele effects at a single marker
 }
 \description{

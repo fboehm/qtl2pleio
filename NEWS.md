@@ -1,3 +1,16 @@
+# qtl2pleio 1.2.3
+
+## Major changes
+
+* None
+
+## Minor changes
+
+* I shortened title per CRAN recommendation
+
+* I added \value tags to document functions' outputs
+
+
 # qtl2pleio 1.2.2
 
 ## Major changes

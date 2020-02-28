@@ -15,6 +15,13 @@ prep_X_list(indices, start_snp, probs, covariates)
 
 \item{covariates}{a matrix of covariates}
 }
+\value{
+a list of design matrices, ultimately useful when constructing the (multi-locus) design matrix
+}
 \description{
 Create a list of component X matrices for input to stagger_mats, to ultimately create design matrix
+}
+\examples{
+pp <- array(rbinom(n = 200, size = 1, prob = 0.5), dim = c(10, 2, 10))
+prep_X_list(1:3, 1, probs = pp, covariates = NULL)
 }
