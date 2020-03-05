@@ -4,8 +4,14 @@
 \alias{calc_covs}
 \title{Calculate Vg and Ve from d-variate phenotype and kinship}
 \usage{
-calc_covs(pheno, kinship, X1pre = rep(1, nrow(kinship)),
-  max_iter = 1e+06, max_prec = 1/1e+08, covariates = NULL)
+calc_covs(
+  pheno,
+  kinship,
+  X1pre = rep(1, nrow(kinship)),
+  max_iter = 1e+06,
+  max_prec = 1/1e+08,
+  covariates = NULL
+)
 }
 \arguments{
 \item{pheno}{n by d matrix of phenotypes}

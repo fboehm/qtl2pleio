@@ -1,3 +1,14 @@
+# qtl2pleio 1.2.4
+
+## Major changes 
+
+* None
+
+## Minor changes
+
+* Updated `calc_lrt_tib` function to accommodate d-dimensional, d-variate scans
+
+
 # qtl2pleio 1.2.3
 
 ## Major changes

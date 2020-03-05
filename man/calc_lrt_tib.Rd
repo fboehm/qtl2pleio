@@ -4,10 +4,10 @@
 \alias{calc_lrt_tib}
 \title{Calculate a likelihood ratio test statistic from the output of scan_pvl()}
 \usage{
-calc_lrt_tib(tib)
+calc_lrt_tib(scan_pvl_out)
 }
 \arguments{
-\item{tib}{outputted tibble from scan_pvl}
+\item{scan_pvl_out}{outputted tibble from scan_pvl}
 }
 \value{
 a number, the (log) likelihood ratio test statistic
