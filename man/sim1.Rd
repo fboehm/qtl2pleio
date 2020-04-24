@@ -20,3 +20,12 @@ sim1(X, B, Vg, Ve, kinship)
 \description{
 Simulate a single data set consisting of n subjects and 2 phenotypes for each
 }
+\examples{
+n_mouse <- 20
+geno <- rbinom(n = n_mouse, size = 1, prob = 1 / 2)
+X <- gemma2::stagger_mats(geno, geno)
+B <- matrix(c(1, 2), ncol = 2, nrow = 1)
+Vg <- diag(2)
+Ve <- diag(2)
+sim1(X, B, Vg, Ve, kinship = diag(n_mouse))
+}
