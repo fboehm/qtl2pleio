@@ -168,7 +168,7 @@ boot_pvl <- function(probs,
                          Sigma_inv = Sigma_inv,
                          Y = as.vector(as.matrix(pheno))
     )
-    B <- matrix(data = Bcol, nrow = f_size, ncol = d_size, byrow = FALSE)
+    B <- matrix(data = Bcol, nrow = ncol(Xpre), ncol = d_size, byrow = FALSE)
     # Start loop
     lrt <- numeric()
     for (i in 1:nboot_per_job) {
