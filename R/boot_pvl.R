@@ -160,7 +160,7 @@ boot_pvl <- function(probs,
     # Start loop
     lrt <- numeric()
     for (i in 1:nboot_per_job) {
-        foo <- sim1(X = X, B = B, Vg = Vg, Ve = Ve, kinship = kinship)
+        foo <- sim1(X = X, B = B, Sigma = Sigma)
         Ysim <- matrix(foo, ncol = d_size, byrow = FALSE)
         rownames(Ysim) <- rownames(pheno)
         colnames(Ysim) <- paste0("t", 1:d_size)

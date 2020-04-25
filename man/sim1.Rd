@@ -2,30 +2,27 @@
 % Please edit documentation in R/sim1.R
 \name{sim1}
 \alias{sim1}
-\title{Simulate a single data set consisting of n subjects and 2 phenotypes for each}
+\title{Simulate a single multivariate data set consisting of n subjects and d phenotypes for each}
 \usage{
-sim1(X, B, Vg, Ve, kinship)
+sim1(X, B, Sigma)
 }
 \arguments{
 \item{X}{design matrix (incorporating genotype probabilities from two loci), dn by df}
 
 \item{B}{a matrix of allele effects, f rows by d columns}
 
-\item{Vg}{a genetic covariance matrix, d by d}
-
-\item{Ve}{an error covariance matrix, d by d}
-
-\item{kinship}{a chromosome-specific kinship matrix, n by n}
+\item{Sigma}{dn by dn covariance matrix}
+}
+\value{
+a vector of length dn. The first n entries are for trait 1, the second n for trait 2, etc.
 }
 \description{
-Simulate a single data set consisting of n subjects and 2 phenotypes for each
+Simulate a single multivariate data set consisting of n subjects and d phenotypes for each
 }
 \examples{
 n_mouse <- 20
 geno <- rbinom(n = n_mouse, size = 1, prob = 1 / 2)
 X <- gemma2::stagger_mats(geno, geno)
 B <- matrix(c(1, 2), ncol = 2, nrow = 1)
-Vg <- diag(2)
-Ve <- diag(2)
-sim1(X, B, Vg, Ve, kinship = diag(n_mouse))
+sim1(X, B, Sigma = diag(2 * n_mouse))
 }
