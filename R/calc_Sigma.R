@@ -11,7 +11,7 @@ calc_Sigma <- function(Vg, Ve, kinship = NULL, n_mouse = nrow(kinship)) {
       out <- Vg %x% kinship + Ve %x% diag(n_mouse)
     }
     if (is.null(kinship)){
-      out <- Ve %x% diag(n_mouse)
+      out <- Ve %x% diag(n_mouse) # n_mouse must be specified when kinship = NULL
     }
     return(out)
 }

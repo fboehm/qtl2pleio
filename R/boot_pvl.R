@@ -46,8 +46,8 @@
 #' rownames(probs) <- paste0("s", 1:n)
 #' colnames(probs) <- LETTERS[1:2]
 #' dimnames(probs)[[3]] <- paste0("m", 1:5)
-#'boot_pvl(probs = probs, pheno = Y, kinship = kin,
-#'         start_snp = 1, n_snp = 10, pleio_peak_index = 5, nboot_per_job = 1)
+#' boot_pvl(probs = probs, pheno = Y,
+#'         start_snp = 1, n_snp = 5, pleio_peak_index = 3, nboot_per_job = 1)
 #'
 #'
 #' @return numeric vector of (log) likelihood ratio test statistics from `nboot_per_job` bootstrap samples
@@ -143,12 +143,12 @@ boot_pvl <- function(probs,
         Vg <- cc_out$Vg
         Ve <- cc_out$Ve
         # define Sigma
-        Sigma <- calc_Sigma(Vg, Ve, kinship)
+        Sigma <- calc_Sigma(Vg = Vg, Ve = Ve, kinship = kinship)
     }
     if (is.null(kinship)) {
         # get Sigma for Haley Knott regression without random effect
         Ve <- var(pheno) # get d by d covar matrix
-        Sigma <- calc_Sigma(Vg = NULL, Ve = Ve)
+        Sigma <- calc_Sigma(Vg = NULL, Ve = Ve, kinship = kinship, n_mouse = nrow(pheno))
     }
     Sigma_inv <- solve(Sigma)
     # calc Bhat
