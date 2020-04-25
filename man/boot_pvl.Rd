@@ -62,7 +62,6 @@ statistics from `nboot_per_job` distinct bootstrap samples.
 }
 \examples{
 
-# read data
 n <- 50
 pheno <- matrix(rnorm(2 * n), ncol = 2)
 rownames(pheno) <- paste0("s", 1:n)

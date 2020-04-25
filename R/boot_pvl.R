@@ -36,7 +36,6 @@
 #' Genet. Res. 71: 171–180.
 #' @examples
 #'
-#' # read data
 #' n <- 50
 #' pheno <- matrix(rnorm(2 * n), ncol = 2)
 #' rownames(pheno) <- paste0("s", 1:n)
