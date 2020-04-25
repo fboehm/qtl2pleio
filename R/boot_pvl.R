@@ -124,6 +124,7 @@ boot_pvl <- function(probs,
         addcovar <- subset_input(input = addcovar, id2keep = id2keep)
         subjects_cov <- check_missingness(addcovar)
         id2keep <- intersect(id2keep, subjects_cov)
+        addcovar <- subset_input(addcovar, id2keep)
     }
     # Send messages if there are two or fewer subjects
     if (length(id2keep) == 0) {stop("no individuals common to all inputs")}

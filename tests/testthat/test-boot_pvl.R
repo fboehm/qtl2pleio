@@ -25,9 +25,15 @@ Y2[1, 2] <- NA
 set.seed(2018-10-22)
 
 test_that("output is vector of length nboot_per_job", {
-  expect_length(boot_pvl(probs = probs, pheno = Y, kinship = kin,
-           start_snp = 1, n_snp = 10, pleio_peak_index = 5,
-           nboot_per_job = 1), 1)
+  expect_length(boot_pvl(probs = probs,
+                         pheno = Y,
+                         kinship = kin,
+                         start_snp = 1,
+                         n_snp = 10,
+                         pleio_peak_index = 5,
+                         nboot_per_job = 1),
+                1
+                )
   expect_length(boot_pvl(probs = probs, pheno = Y, kinship = kin,
                          start_snp = 1, n_snp = 10, pleio_peak_index = 5,
                          nboot_per_job = 4), 4)
