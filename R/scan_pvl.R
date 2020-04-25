@@ -132,6 +132,7 @@ scan_pvl <- function(probs,
         addcovar <- subset_input(input = addcovar, id2keep = id2keep)
         subjects_cov <- check_missingness(addcovar)
         id2keep <- intersect(id2keep, subjects_cov)
+        addcovar <- subset_input(input = addcovar, id2keep = id2keep)
     }
     if (!is.null(addcovar)) {
         addcovar <- drop_depcols(addcovar)

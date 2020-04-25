@@ -4,6 +4,3 @@
 \name{qtl2pleio}
 \alias{qtl2pleio}
 \title{qtl2pleio.}
-\description{
-qtl2pleio.
-}

@@ -2,50 +2,32 @@ library(qtl2pleio)
 library(testthat)
 context("testing boot_pvl")
 
-## define probs
-probs_pre <- rbinom(n = 100 * 10, size = 1, prob = 1 / 2)
-probs <- array(data = probs_pre, dim = c(100, 1, 10))
-s_id <- paste0('s', 1:100)
-rownames(probs) <- s_id
-colnames(probs) <- 'A'
-dimnames(probs)[[3]] <- paste0('Marker', 1:10)
-# define Y
-Y_pre <- runif(200)
-Y <- matrix(data = Y_pre, nrow = 100)
-rownames(Y) <- s_id
-colnames(Y) <- paste0('t', 1:2)
-addcovar <- matrix(c(runif(99), NA), nrow = 100, ncol = 1)
-rownames(addcovar) <- s_id
-colnames(addcovar) <- 'c1'
-kin <- diag(100)
-rownames(kin) <- s_id
-colnames(kin) <- s_id
-Y2 <- Y
-Y2[1, 2] <- NA
+iron <- qtl2::read_cross2(system.file("extdata", "iron.zip", package="qtl2"))
+# insert pseudomarkers into map
+map <- qtl2::insert_pseudomarkers(iron$gmap, step=1)
+# calculate genotype probabilities
+probs <- qtl2::calc_genoprob(iron, map, error_prob=0.002)
+# grab phenotypes and covariates; ensure that covariates have names attribute
+pheno <- iron$pheno
+# leave-one-chromosome-out kinship matrices
+kinship <- qtl2::calc_kinship(probs, "loco")$`1`
+# get founder allele probabilites
+probs <- qtl2::genoprob_to_alleleprob(probs)$`1`
+ac <- matrix(as.numeric(iron$covar$sex == "m", ncol = 1))
+colnames(ac) <- "sex"
+rownames(ac) <- rownames(probs)
+
 set.seed(2018-10-22)
 
 test_that("output is vector of length nboot_per_job", {
   expect_length(boot_pvl(probs = probs,
-                         pheno = Y,
-                         kinship = kin,
+                         pheno = pheno,
+                         kinship = kinship,
                          start_snp = 1,
                          n_snp = 10,
                          pleio_peak_index = 5,
                          nboot_per_job = 1),
                 1
                 )
-  expect_length(boot_pvl(probs = probs, pheno = Y, kinship = kin,
-                         start_snp = 1, n_snp = 10, pleio_peak_index = 5,
-                         nboot_per_job = 4), 4)
 
 })
-
-test_that("output is numeric vector", {
-  expect_true(is.numeric(boot_pvl(probs = probs, pheno = Y, kinship = kin,
-                         start_snp = 1, n_snp = 10, pleio_peak_index = 5,
-                         nboot_per_job = 1)))
-  expect_true(is.numeric(boot_pvl(probs = probs, pheno = Y, kinship = kin,
-                                  start_snp = 1, n_snp = 10, pleio_peak_index = 5,
-                                  nboot_per_job = 4)))
-})
-

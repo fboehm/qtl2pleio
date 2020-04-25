@@ -36,31 +36,19 @@
 #' Genet. Res. 71: 171–180.
 #' @examples
 #'
-## define probs
-#'probs_pre <- rbinom(n = 100 * 10, size = 1, prob = 1 / 2)
-#'probs <- array(data = probs_pre, dim = c(100, 1, 10))
-#'s_id <- paste0('s', 1:100)
-#'rownames(probs) <- s_id
-#'colnames(probs) <- 'A'
-#'dimnames(probs)[[3]] <- paste0('Marker', 1:10)
-#'# define Y
-#'set.seed(2018-12-29)
-#'Y_pre <- runif(200)
-#'Y <- matrix(data = Y_pre, nrow = 100)
-#'rownames(Y) <- s_id
-#'colnames(Y) <- paste0('t', 1:2)
-#'addcovar <- matrix(c(runif(99), NA), nrow = 100, ncol = 1)
-#'rownames(addcovar) <- s_id
-#'colnames(addcovar) <- 'c1'
-#'kin <- diag(100)
-#'rownames(kin) <- s_id
-#'colnames(kin) <- s_id
-#'Y2 <- Y
-#'Y2[1, 2] <- NA
+#' # read data
+#' n <- 50
+#' pheno <- matrix(rnorm(2 * n), ncol = 2)
+#' rownames(pheno) <- paste0("s", 1:n)
+#' colnames(pheno) <- paste0("tr", 1:2)
+#' probs <- array(dim = c(n, 2, 5))
+#' probs[ , 1, ] <- rbinom(n * 5, size = 1, prob = 0.2)
+#' probs[ , 2, ] <- 1 - probs[ , 1, ]
+#' rownames(probs) <- paste0("s", 1:n)
+#' colnames(probs) <- LETTERS[1:2]
+#' dimnames(probs)[[3]] <- paste0("m", 1:5)
 #'boot_pvl(probs = probs, pheno = Y, kinship = kin,
-#'         start_snp = 1, n_snp = 10, pleio_peak_index = 10, nboot_per_job = 1)
-#'boot_pvl(probs = probs, pheno = Y2, kinship = kin,
-#'         start_snp = 1, n_snp = 10, pleio_peak_index = 10, nboot_per_job = 2)
+#'         start_snp = 1, n_snp = 10, pleio_peak_index = 5, nboot_per_job = 1)
 #'
 #'
 #' @return numeric vector of (log) likelihood ratio test statistics from `nboot_per_job` bootstrap samples
