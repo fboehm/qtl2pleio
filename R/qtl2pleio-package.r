@@ -1,5 +1,7 @@
 #' qtl2pleio.
 #'
+#' Testing pleiotropy vs. separate QTL in multiparental populations
+#'
 #' @useDynLib qtl2pleio, .registration = TRUE
 #' @name qtl2pleio
 #' @docType package
