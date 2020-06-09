@@ -6,7 +6,7 @@
 
 ## Minor changes
 
-* None
+* Fixed argument name in boot_pvl, changing `nboot_per_job` to `nboot`.
 
 
 # qtl2pleio 1.2.4
