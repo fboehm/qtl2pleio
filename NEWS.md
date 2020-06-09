@@ -1,3 +1,14 @@
+# qtl2pleio 1.3.0
+
+## Major changes
+
+* Replaced `parallel` package use with `future` and `furrr`. This led to removal of the argument `n_cores` from both `boot_pvl` and `scan_pvl`.
+
+## Minor changes
+
+* None
+
+
 # qtl2pleio 1.2.4
 
 ## Major changes 
