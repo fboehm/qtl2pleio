@@ -139,22 +139,15 @@ out <- scan_pvl(probs = pp,
                 pheno = Y,
                 kinship = kinship$`3`,
                 start_snp = start_index,
-                n_snp = 15, n_cores = 1
+                n_snp = 15
                 )
 ```
 
-The number of cores available will vary by computer. For example, on my Macbook pro computer, with 16GB RAM, I have access to 8 cores. If I use all 8, I can't do other computing tasks, so I often set `n_cores` to 7.
-
-To check how many cores are available on your computer, if you're using a Mac or linux operating system, run this code.
-
-```{r detect-cores, eval = FALSE}
-parallel::detectCores()
-```
 
 
 
 
-#### Create a profile LOD plot to visualize results of two-dimensional scan
+#### Create a profile LOD plot to visualize results of three-dimensional scan
 
 To visualize results from our two-dimensional scan, we calculate profile LOD for each trait. The code below makes use of the R package `ggplot2` to plot profile LODs over the scan region.
 
@@ -212,7 +205,7 @@ suppressMessages(b_out <- boot_pvl(probs = pp,
                                    pheno = Y,
                                    pleio_peak_index = pleio_index,
                                    kinship = kinship$`3`, 
-                                   nboot_per_job = 2,
+                                   nboot = 2,
                                    start_snp = start_index,
                                    n_snp = 15
                                    )
@@ -221,7 +214,7 @@ suppressMessages(b_out <- boot_pvl(probs = pp,
 ```
 
 
-The argument `nboot_per_job` indicates the number of bootstrap samples that will be created and analyzed. Here, we set `nboot_per_job = 10`, so we expect to see returned a numeric vector of length 10, where each entry is a LRT statistic value from a distinct bootstrap sample.
+The argument `nboot` indicates the number of bootstrap samples that will be created and analyzed. Here, we set `nboot = 2`, so we expect to see returned a numeric vector of length 2, where each entry is a LRT statistic value from a distinct bootstrap sample.
 
 Finally, we determine a bootstrap p-value in the usual method. We treat the bootstrap samples' test statistics as an empirical distribution of the test statistic under the null hypothesis of pleiotropy. Thus, to get a p-value, we want to ask "What is the probability, under the null hypothesis, of observing a test statistic value that is at least as extreme as that which we observed?"
 
