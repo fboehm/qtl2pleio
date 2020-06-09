@@ -52,9 +52,9 @@
 #' mixed model algorithms for genome-wide association studies.
 #' Nature methods 11:407-409.
 #'
-#' Broman KW, Gatti DM, Simecek P, Furlotte NA, Prins P, Sen S, Yandell BS, Churchill GA (2018)
+#' Broman KW, Gatti DM, Simecek P, Furlotte NA, Prins P, Sen S, Yandell BS, Churchill GA (2019)
 #' R/qtl2: software for mapping quantitative trait loci with high-dimensional data and
-#' multi-parent populations. Biorxiv https://www.biorxiv.org/content/early/2018/09/12/414748.
+#' multi-parent populations. GENETICS https://www.genetics.org/content/211/2/495.
 #'
 #'
 #' @examples
