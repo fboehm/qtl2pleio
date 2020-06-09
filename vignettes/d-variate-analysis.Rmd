@@ -96,7 +96,7 @@ B
 set.seed(2018-01-30)
 Sigma <- calc_Sigma(Vg = diag(3), Ve = diag(3), kinship = kinship[[2]])
 # call to sim1
-Ypre <- sim1(X = X, B = B, Vg = diag(3), Ve = diag(3), kinship = kinship[[2]])
+Ypre <- sim1(X = X, B = B, Sigma = Sigma)
 Y <- matrix(Ypre, nrow = 261, ncol = 3, byrow = FALSE)
 rownames(Y) <- rownames(pp)
 colnames(Y) <- c("tr1", "tr2", "tr3")
