@@ -175,7 +175,8 @@ boot_pvl <- function(probs,
                                    Sigma_inv = Sigma_inv,
                                    Sigma = Sigma,
                                    start_snp = start_snp,
-                                   mytab = mytab
+                                   mytab = mytab,
+                                   n_snp = n_snp
                                    )
     lrt <- furrr::future_map_dbl(.x = scan_out, .f = function(x){
         x %>%

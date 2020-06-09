@@ -37,8 +37,9 @@ B <- matrix(data = rep(rep(c(-1, 1), each = 4), times = 3), nrow = 8, ncol = 3, 
 B
 # set.seed to ensure reproducibility
 set.seed(2018-01-30)
+Sigma <- calc_Sigma(Vg = diag(3), Ve = diag(3), kinship = kinship[[2]])
 # call to sim1
-Ypre <- sim1(X = X, B = B, Vg = diag(3), Ve = diag(3), kinship = kinship[[2]])
+Ypre <- sim1(X = X, B = B, Sigma = Sigma)
 Y <- matrix(Ypre, nrow = 261, ncol = 3, byrow = FALSE)
 rownames(Y) <- rownames(pp)
 colnames(Y) <- c("tr1", "tr2", "tr3")
@@ -62,11 +63,8 @@ out <- scan_pvl(probs = pp,
                 pheno = Y,
                 kinship = kinship$`3`,
                 start_snp = start_index,
-                n_snp = 15, n_cores = 1
+                n_snp = 15
                 )
-
-## ----detect-cores, eval = FALSE-----------------------------------------------
-#  parallel::detectCores()
 
 ## ----check-out, eval = qtl2_indic---------------------------------------------
 out
@@ -92,7 +90,7 @@ suppressMessages(b_out <- boot_pvl(probs = pp,
                                    pheno = Y,
                                    pleio_peak_index = pleio_index,
                                    kinship = kinship$`3`, 
-                                   nboot_per_job = 2,
+                                   nboot = 2,
                                    start_snp = start_index,
                                    n_snp = 15
                                    )

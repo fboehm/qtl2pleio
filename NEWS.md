@@ -7,7 +7,7 @@
 ## Minor changes
 
 * Fixed argument name in `boot_pvl`, changing `nboot_per_job` to `nboot`.
-
+* Created function `scan_pvl_clean` to be called in both `scan_pvl` and `boot_pvl`. This change shouldn't affect most users' experiences.
 
 # qtl2pleio 1.2.4
 

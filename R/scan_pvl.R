@@ -181,7 +181,8 @@ scan_pvl <- function(probs,
                           Sigma_inv = Sigma_inv,
                           Sigma = Sigma,
                           start_snp = start_snp,
-                          pheno = pheno
+                          pheno = pheno,
+                          n_snp = n_snp
                           )
     return(out)
 }
@@ -194,7 +195,8 @@ scan_pvl_clean <- function(pheno,
                            Sigma_inv,
                            Sigma,
                            start_snp,
-                           mytab){
+                           mytab,
+                           n_snp){
     # set up parallel analysis
     future::plan("multiprocess")
     list_result <- furrr::future_map(.x = as.data.frame(t(mytab)),
