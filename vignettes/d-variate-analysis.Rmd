@@ -4,7 +4,7 @@ author: "Frederick Boehm"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Testing pleiotropy v separate QTL in multiparental populations}
+  %\VignetteIndexEntry{Multivariate analysis for two or more traits}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
