@@ -4,3 +4,6 @@
 \name{qtl2pleio}
 \alias{qtl2pleio}
 \title{qtl2pleio.}
+\description{
+Testing pleiotropy vs. separate QTL in multiparental populations
+}

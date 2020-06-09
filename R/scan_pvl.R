@@ -38,7 +38,6 @@
 #' @param n_snp the number of (consecutive) markers to include in the scan
 #' @param max_iter maximum number of iterations for EM algorithm
 #' @param max_prec stepwise precision for EM algorithm. EM stops once incremental difference in log likelihood is less than max_prec
-#' @param n_cores number of cores to use for calculations
 #' @export
 #' @importFrom stats var
 #' @references Knott SA, Haley CS (2000) Multitrait
@@ -71,7 +70,7 @@
 #' colnames(probs) <- LETTERS[1:2]
 #' dimnames(probs)[[3]] <- paste0("m", 1:5)
 #' scan_pvl(probs = probs, pheno = pheno, kinship = NULL,
-#' start_snp = 1, n_snp = 5, n_cores = 1)
+#' start_snp = 1, n_snp = 5)
 #' @importFrom rlang .data
 #' @return a tibble with d + 1 columns. First d columns indicate the genetic data (by listing the marker ids) used in the design matrix; last is log10 likelihood
 
@@ -82,8 +81,7 @@ scan_pvl <- function(probs,
                      start_snp = 1,
                      n_snp,
                      max_iter = 1e+04,
-                     max_prec = 1 / 1e+08,
-                     n_cores = 1
+                     max_prec = 1 / 1e+08
                      )
     {
     if (is.null(probs)) stop("probs is NULL")
@@ -177,17 +175,37 @@ scan_pvl <- function(probs,
     # prepare table of marker indices for each call of scan_pvl
     mytab <- prep_mytab(d_size = d_size, n_snp = n_snp)
     # set up parallel analysis
-    list_result <- parallel::mclapply(
-                                X = as.data.frame(t(mytab)),
-                                FUN = fit1_pvl,
-                                addcovar = addcovar,
-                                probs = probs,
-                                inv_S = Sigma_inv,
-                                S = Sigma,
-                                start_snp = start_snp,
-                                pheno = pheno,
-                                mc.cores = n_cores
-                                )
+    out <- scan_pvl_clean(mytab = mytab,
+                          addcovar = addcovar,
+                          probs = probs,
+                          Sigma_inv = Sigma_inv,
+                          Sigma = Sigma,
+                          start_snp = start_snp,
+                          pheno = pheno
+                          )
+    return(out)
+}
+
+
+
+scan_pvl_clean <- function(pheno,
+                           probs,
+                           addcovar,
+                           Sigma_inv,
+                           Sigma,
+                           start_snp,
+                           mytab){
+    # set up parallel analysis
+    future::plan("multiprocess")
+    list_result <- furrr::future_map(.x = as.data.frame(t(mytab)),
+                                     .f = fit1_pvl,
+                                     addcovar = addcovar,
+                                     probs = probs,
+                                     inv_S = Sigma_inv,
+                                     S = Sigma,
+                                     start_snp = start_snp,
+                                     pheno = pheno
+                                     )
     mytab$loglik <- unlist(list_result)
     marker_id <- dimnames(probs)[[3]][start_snp:(start_snp + n_snp - 1)]
     mytab2 <- tibble::as_tibble(apply(FUN = function(x) marker_id[x], X = mytab[, -ncol(mytab)], MARGIN = 2))

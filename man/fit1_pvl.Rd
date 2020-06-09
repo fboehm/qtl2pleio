@@ -17,7 +17,7 @@ fit1_pvl(indices, start_snp, probs, addcovar, inv_S, S, pheno)
 
 \item{inv_S}{inverse covariance matrix for the vectorized phenotype}
 
-\item{S}{covariance matrix for the vectorized phenotype, ie, the inverse of inv_S}
+\item{S}{covariance matrix for the vectorized phenotype, ie, the inverse of inv_S. By making this a function input, we avoid inverting the matrix many many times.}
 
 \item{pheno}{a n by d phenotypes matrix}
 }

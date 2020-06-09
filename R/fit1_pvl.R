@@ -10,7 +10,7 @@
 #' @param probs founder allele probabilities array
 #' @param addcovar additive covariates matrix
 #' @param inv_S inverse covariance matrix for the vectorized phenotype
-#' @param S covariance matrix for the vectorized phenotype, ie, the inverse of inv_S
+#' @param S covariance matrix for the vectorized phenotype, ie, the inverse of inv_S. By making this a function input, we avoid inverting the matrix many many times.
 #' @param pheno a n by d phenotypes matrix
 #' @export
 #' @return a number, the log-likelihood for the specified model

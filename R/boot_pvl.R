@@ -21,7 +21,7 @@
 #' @param start_snp positive integer indicating index within probs for start of scan
 #' @param n_snp number of (consecutive) markers to use in scan
 #' @param pleio_peak_index positive integer index indicating genotype matrix for bootstrap sampling. Typically acquired by using `find_pleio_peak_tib`.
-#' @param nboot_per_job number of bootstrap samples to acquire per function invocation
+#' @param nboot number of bootstrap samples to acquire and scan
 #' @param max_iter maximum number of iterations for EM algorithm
 #' @param max_prec stepwise precision for EM algorithm. EM stops once incremental difference in log likelihood is less than max_prec
 #' @param n_cores number of cores to use when calling `scan_pvl`
@@ -47,7 +47,7 @@
 #' colnames(probs) <- LETTERS[1:2]
 #' dimnames(probs)[[3]] <- paste0("m", 1:5)
 #' boot_pvl(probs = probs, pheno = pheno,
-#'         start_snp = 1, n_snp = 5, pleio_peak_index = 3, nboot_per_job = 1)
+#'         start_snp = 1, n_snp = 5, pleio_peak_index = 3, nboot = 1)
 #'
 #'
 #' @return numeric vector of (log) likelihood ratio test statistics from `nboot_per_job` bootstrap samples
@@ -59,10 +59,9 @@ boot_pvl <- function(probs,
                      start_snp = 1,
                      n_snp,
                      pleio_peak_index,
-                     nboot_per_job = 1,
+                     nboot = 1,
                      max_iter = 1e+04,
-                     max_prec = 1 / 1e+08,
-                     n_cores = 1
+                     max_prec = 1 / 1e+08
                      )
     {
     if (is.null(probs)) stop("probs is NULL")
@@ -148,7 +147,7 @@ boot_pvl <- function(probs,
     if (is.null(kinship)) {
         # get Sigma for Haley Knott regression without random effect
         Ve <- var(pheno) # get d by d covar matrix
-        Sigma <- calc_Sigma(Vg = NULL, Ve = Ve, kinship = kinship, n_mouse = nrow(pheno))
+        Sigma <- calc_Sigma(Vg = NULL, Ve = Ve, kinship = NULL, n_mouse = nrow(pheno))
     }
     Sigma_inv <- solve(Sigma)
     # calc Bhat
@@ -157,28 +156,33 @@ boot_pvl <- function(probs,
                          Y = as.vector(as.matrix(pheno))
     )
     B <- matrix(data = Bcol, nrow = ncol(Xpre), ncol = d_size, byrow = FALSE)
-    # Start loop
-    lrt <- numeric()
-    for (i in 1:nboot_per_job) {
+    # Start loop to get Ysim matrices
+    Ysimlist <- list()
+    for (i in 1:nboot) {
         foo <- sim1(X = X, B = B, Sigma = Sigma)
         Ysim <- matrix(foo, ncol = d_size, byrow = FALSE)
         rownames(Ysim) <- rownames(pheno)
         colnames(Ysim) <- paste0("t", 1:d_size)
-        scan_out <- scan_pvl(probs = probs,
-                           pheno = Ysim,
-                           addcovar = addcovar,
-                           kinship = kinship,
-                           start_snp = start_snp,
-                           n_snp = n_snp,
-                           max_iter = max_iter,
-                           max_prec = max_prec,
-                           n_cores = n_cores
-                           )
-        lrt[i] <- scan_out %>%
+        Ysimlist[[i]] <- Ysim
+    }
+    # prepare table of marker indices for each call of scan_pvl_clean
+    mytab <- prep_mytab(d_size = d_size, n_snp = n_snp)
+    future::plan("multiprocess")
+
+    scan_out <- furrr::future_map(.x = Ysimlist,
+                                   .f = scan_pvl_clean,
+                                   probs = probs,
+                                   addcovar = addcovar,
+                                   Sigma_inv = Sigma_inv,
+                                   Sigma = Sigma,
+                                   start_snp = start_snp,
+                                   mytab = mytab
+                                   )
+    lrt <- furrr::future_map_dbl(.x = scan_out, .f = function(x){
+        x %>%
             calc_profile_lods() %>%
             dplyr::select(profile_lod) %>%
             max()
-
-    }
+    })
     return(lrt)
 }

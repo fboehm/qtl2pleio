@@ -12,8 +12,7 @@ scan_pvl(
   start_snp = 1,
   n_snp,
   max_iter = 10000,
-  max_prec = 1/1e+08,
-  n_cores = 1
+  max_prec = 1/1e+08
 )
 }
 \arguments{
@@ -32,8 +31,6 @@ scan_pvl(
 \item{max_iter}{maximum number of iterations for EM algorithm}
 
 \item{max_prec}{stepwise precision for EM algorithm. EM stops once incremental difference in log likelihood is less than max_prec}
-
-\item{n_cores}{number of cores to use for calculations}
 }
 \value{
 a tibble with d + 1 columns. First d columns indicate the genetic data (by listing the marker ids) used in the design matrix; last is log10 likelihood
@@ -83,7 +80,7 @@ rownames(probs) <- paste0("s", 1:n)
 colnames(probs) <- LETTERS[1:2]
 dimnames(probs)[[3]] <- paste0("m", 1:5)
 scan_pvl(probs = probs, pheno = pheno, kinship = NULL,
-start_snp = 1, n_snp = 5, n_cores = 1)
+start_snp = 1, n_snp = 5)
 }
 \references{
 Knott SA, Haley CS (2000) Multitrait

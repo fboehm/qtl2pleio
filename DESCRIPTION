@@ -30,8 +30,9 @@ Imports:
     rlang,
     stringr,
     tibble,
-    parallel,
-    Matrix
+    Matrix,
+    furrr,
+    future
 Suggests:
     covr,
     mvtnorm,

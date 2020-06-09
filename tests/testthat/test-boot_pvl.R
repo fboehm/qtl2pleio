@@ -26,7 +26,7 @@ test_that("output is vector of length nboot_per_job", {
                          start_snp = 1,
                          n_snp = 10,
                          pleio_peak_index = 5,
-                         nboot_per_job = 1),
+                         nboot = 1),
                 1
                 )
 

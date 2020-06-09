@@ -12,10 +12,9 @@ boot_pvl(
   start_snp = 1,
   n_snp,
   pleio_peak_index,
-  nboot_per_job = 1,
+  nboot = 1,
   max_iter = 10000,
-  max_prec = 1/1e+08,
-  n_cores = 1
+  max_prec = 1/1e+08
 )
 }
 \arguments{
@@ -33,7 +32,7 @@ boot_pvl(
 
 \item{pleio_peak_index}{positive integer index indicating genotype matrix for bootstrap sampling. Typically acquired by using `find_pleio_peak_tib`.}
 
-\item{nboot_per_job}{number of bootstrap samples to acquire per function invocation}
+\item{nboot}{number of bootstrap samples to acquire and scan}
 
 \item{max_iter}{maximum number of iterations for EM algorithm}
 
@@ -73,7 +72,7 @@ rownames(probs) <- paste0("s", 1:n)
 colnames(probs) <- LETTERS[1:2]
 dimnames(probs)[[3]] <- paste0("m", 1:5)
 boot_pvl(probs = probs, pheno = pheno,
-        start_snp = 1, n_snp = 5, pleio_peak_index = 3, nboot_per_job = 1)
+        start_snp = 1, n_snp = 5, pleio_peak_index = 3, nboot = 1)
 
 
 }
