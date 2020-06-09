@@ -37,27 +37,25 @@ boot_pvl(
 \item{max_iter}{maximum number of iterations for EM algorithm}
 
 \item{max_prec}{stepwise precision for EM algorithm. EM stops once incremental difference in log likelihood is less than max_prec}
-
-\item{n_cores}{number of cores to use when calling `scan_pvl`}
 }
 \value{
 numeric vector of (log) likelihood ratio test statistics from `nboot_per_job` bootstrap samples
 }
 \description{
-Create a bootstrap sample, perform multivariate QTL scan, and calculate LRT statistic
+Create a bootstrap sample, perform multivariate QTL scan, and calculate log10 LRT statistic
 }
 \details{
 Performs a parametric bootstrap method to calibrate test statistic values in the test of
 pleiotropy vs. separate QTL. It begins by inferring parameter values at
 the `pleio_peak_index` index value in the object `probs`. It then uses
 these inferred parameter values in sampling from a multivariate normal
-distribution. For each of the `nboot_per_job` sampled phenotype vectors, a two-dimensional QTL
+distribution. For each of the `nboot` sampled phenotype vectors, a two-dimensional QTL
 scan, starting at the marker indexed by `start_snp` within the object
 `probs` and extending for a total of `n_snp` consecutive markers. The
-two-dimensional scan is performed via the function `scan_pvl`. For each
-two-dimensional scan, a likelihood ratio test statistic is calculated. The
-outputted object is a vector of `nboot_per_job` likelihood ratio test
-statistics from `nboot_per_job` distinct bootstrap samples.
+two-dimensional scan is performed via the function `scan_pvl_clean`. For each
+two-dimensional scan, a log10 likelihood ratio test statistic is calculated. The
+outputted object is a vector of `nboot` log10 likelihood ratio test
+statistics from `nboot` distinct bootstrap samples.
 }
 \examples{
 
