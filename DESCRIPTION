@@ -28,7 +28,6 @@ Imports:
     MASS,
     Rcpp,
     rlang,
-    stringr,
     tibble,
     Matrix,
     furrr,
