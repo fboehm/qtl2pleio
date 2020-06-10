@@ -12,7 +12,7 @@ vignettes/*cache/*
 ^codecov\.yml$
 ^CONDUCT\.md$
 runtime.txt
-install.R
+^install.R
 ^vignettes/recla-analysis_cache$
 ^paper\.md$
 ^paper\.bib$

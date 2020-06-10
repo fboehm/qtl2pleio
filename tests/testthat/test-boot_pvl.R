@@ -19,7 +19,7 @@ rownames(ac) <- rownames(probs)
 
 set.seed(2018-10-22)
 
-test_that("output is vector of length nboot_per_job", {
+test_that("output is vector of length nboot", {
   expect_length(boot_pvl(probs = probs,
                          pheno = pheno,
                          kinship = kinship,
