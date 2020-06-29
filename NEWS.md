@@ -2,7 +2,9 @@
 
 ## Major changes
 
-* Replaced `parallel` package use with `future` and `furrr`. This led to removal of the argument `n_cores` from both `boot_pvl` and `scan_pvl`.
+* Replaced `parallel` package use with `furrr`. This led to removal of the argument 
+`n_cores` from both `boot_pvl` and `scan_pvl`. A user may now use `future::plan` to 
+run in parallel.
 
 ## Minor changes
 

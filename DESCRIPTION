@@ -30,10 +30,10 @@ Imports:
     rlang,
     tibble,
     Matrix,
-    furrr,
-    future
+    furrr
 Suggests:
     covr,
+    future,
     mvtnorm,
     knitr,
     rmarkdown,
