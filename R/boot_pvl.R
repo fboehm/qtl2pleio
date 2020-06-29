@@ -166,7 +166,6 @@ boot_pvl <- function(probs,
     }
     # prepare table of marker indices for each call of scan_pvl_clean
     mytab <- prep_mytab(d_size = d_size, n_snp = n_snp)
-    future::plan("multiprocess")
 
     scan_out <- furrr::future_map(.x = Ysimlist,
                                    .f = scan_pvl_clean,

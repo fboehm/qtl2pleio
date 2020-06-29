@@ -197,8 +197,6 @@ scan_pvl_clean <- function(pheno,
                            start_snp,
                            mytab,
                            n_snp){
-    # set up parallel analysis
-    future::plan("multiprocess")
     list_result <- furrr::future_map(.x = as.data.frame(t(mytab)),
                                      .f = fit1_pvl,
                                      addcovar = addcovar,

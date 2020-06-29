@@ -76,7 +76,7 @@ install.packages("qtl2pleio")
 You may also wish to install the [R/qtl2](https://kbroman.org/qtl2). We
 will use it below.
 
-```{r install-qtl2, eval = TRUE}
+```{r install-qtl2, eval = FALSE}
 install.packages("qtl2")
 ```
 
