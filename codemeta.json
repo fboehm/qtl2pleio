@@ -10,14 +10,14 @@
   "codeRepository": "https://github.com/fboehm/qtl2pleio",
   "issueTracker": "https://github.com/fboehm/qtl2pleio/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "1.2.3",
+  "version": "1.3.0",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
-    "version": "3.6.1",
+    "version": "4.0.0",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 3.6.1 (2019-07-05)",
+  "runtimePlatform": "R version 4.0.0 (2020-04-24)",
   "author": [
     {
       "@type": "Person",
@@ -124,7 +124,14 @@
     {
       "@type": "SoftwareApplication",
       "identifier": "qtl2",
-      "name": "qtl2"
+      "name": "qtl2",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=qtl2"
     }
   ],
   "softwareRequirements": [
@@ -220,18 +227,6 @@
     },
     {
       "@type": "SoftwareApplication",
-      "identifier": "stringr",
-      "name": "stringr",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=stringr"
-    },
-    {
-      "@type": "SoftwareApplication",
       "identifier": "tibble",
       "name": "tibble",
       "provider": {
@@ -244,11 +239,6 @@
     },
     {
       "@type": "SoftwareApplication",
-      "identifier": "parallel",
-      "name": "parallel"
-    },
-    {
-      "@type": "SoftwareApplication",
       "identifier": "Matrix",
       "name": "Matrix",
       "provider": {
@@ -258,11 +248,34 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=Matrix"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "furrr",
+      "name": "furrr",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=furrr"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "future",
+      "name": "future",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=future"
     }
   ],
   "releaseNotes": "https://github.com/fboehm/qtl2pleio/blob/master/NEWS.md",
   "readme": "https://github.com/fboehm/qtl2pleio/blob/master/README.md",
-  "fileSize": "132.497KB",
   "contIntegration": [
     "https://travis-ci.org/fboehm/qtl2pleio",
     "https://codecov.io/github/fboehm/qtl2pleio?branch=master"
@@ -314,5 +327,11 @@
         }
       }
     }
-  ]
+  ],
+  "provider": {
+    "@id": "https://cran.r-project.org",
+    "@type": "Organization",
+    "name": "Comprehensive R Archive Network (CRAN)",
+    "url": "https://cran.r-project.org"
+  }
 }

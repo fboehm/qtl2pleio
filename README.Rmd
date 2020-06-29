@@ -19,7 +19,9 @@ knitr::opts_chunk$set(
 
 # qtl2pleio
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/fboehm/qtl2pleio/master?urlpath=rstudio)
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/qtl2pleio)](https://cran.r-project.org/package=qtl2pleio)
+
+[![Binder](https://static.mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/fboehm/qtl2pleio/master?urlpath=rstudio)
 [![Travis-CI Build Status](https://travis-ci.org/fboehm/qtl2pleio.svg?branch=master)](https://travis-ci.org/fboehm/qtl2pleio)
 [![Coverage Status](https://img.shields.io/codecov/c/github/fboehm/qtl2pleio/master.svg)](https://codecov.io/github/fboehm/qtl2pleio?branch=master)
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
@@ -41,7 +43,7 @@ We eagerly welcome contributions to `qtl2pleio`. All pull requests will be consi
 
 ## Technical support 
 
-For technical support, please open a Github issue. If you're just getting started with `qtl2pleio`, please examine the vignettes. You can also email <frederick.boehm@gmail.com> for assistance. 
+For technical support, please open a Github issue. If you're just getting started with `qtl2pleio`, please examine the [vignettes](https://fboehm.us/software/qtl2pleio) on the [package's web site](https://fboehm.us/software/qtl2pleio). You can also email <frederick.boehm@gmail.com> for assistance. 
 
 
 
@@ -68,15 +70,14 @@ To install qtl2pleio, use `install_github()` from the
 
 
 ```{r install-qtl2pleio, eval = FALSE}
-install.packages("devtools")
-devtools::install_github("fboehm/qtl2pleio")
+install.packages("qtl2pleio")
 ```
 
 You may also wish to install the [R/qtl2](https://kbroman.org/qtl2). We
 will use it below.
 
 ```{r install-qtl2, eval = TRUE}
-install.packages("qtl2", repos="http://rqtl.org/qtl2cran")
+install.packages("qtl2")
 ```
 
 
@@ -170,8 +171,9 @@ X <- gemma2::stagger_mats(pp[ , , 50], pp[ , , 50])
 B <- matrix(data = c(-1, -1, -1, -1, 1, 1, 1, 1, -1, -1, -1, -1, 1, 1, 1, 1), nrow = 8, ncol = 2, byrow = FALSE)
 # set.seed to ensure reproducibility
 set.seed(2018-01-30)
+Sig <- calc_Sigma(Vg = diag(2), Ve = diag(2), kinship = kinship[[2]])
 # call to sim1
-Ypre <- sim1(X = X, B = B, Vg = diag(2), Ve = diag(2), kinship = kinship[[2]])
+Ypre <- sim1(X = X, B = B, Sigma = Sig)
 Y <- matrix(Ypre, nrow = 261, ncol = 2, byrow = FALSE)
 rownames(Y) <- rownames(pp)
 colnames(Y) <- c("tr1", "tr2")
@@ -216,7 +218,7 @@ out <- suppressMessages(scan_pvl(probs = pp,
                 pheno = Y,
                 kinship = kinship[[2]], # 2nd entry in kinship list is Chr 3
                 start_snp = 38,
-                n_snp = 25, n_cores = 1
+                n_snp = 25
                 ))
 ```
 
@@ -262,7 +264,7 @@ b_out <- suppressMessages(boot_pvl(probs = pp,
          pheno = Y,
          pleio_peak_index = pleio_index,
          kinship = kinship[[2]], # 2nd element in kinship list is Chr 3
-         nboot_per_job = 10,
+         nboot = 10,
          start_snp = 38,
          n_snp = 25
          ))
@@ -272,9 +274,6 @@ b_out <- suppressMessages(boot_pvl(probs = pp,
 ```{r pval}
 (pvalue <- mean(b_out >= lrt))
 ```
-
-
-
 
 
 

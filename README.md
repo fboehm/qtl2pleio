@@ -3,7 +3,9 @@
 
 # qtl2pleio
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/fboehm/qtl2pleio/master?urlpath=rstudio)
+[![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/qtl2pleio)](https://cran.r-project.org/package=qtl2pleio)
+
+[![Binder](https://static.mybinder.org/badge_logo.svg)](https://static.mybinder.org/v2/gh/fboehm/qtl2pleio/master?urlpath=rstudio)
 [![Travis-CI Build
 Status](https://travis-ci.org/fboehm/qtl2pleio.svg?branch=master)](https://travis-ci.org/fboehm/qtl2pleio)
 [![Coverage
@@ -38,8 +40,10 @@ conduct](https://github.com/fboehm/qtl2pleio/blob/master/CONDUCT.md).
 ## Technical support
 
 For technical support, please open a Github issue. If you’re just
-getting started with `qtl2pleio`, please examine the vignettes. You can
-also email <frederick.boehm@gmail.com> for assistance.
+getting started with `qtl2pleio`, please examine the
+[vignettes](https://fboehm.us/software/qtl2pleio) on the [package’s web
+site](https://fboehm.us/software/qtl2pleio). You can also email
+<frederick.boehm@gmail.com> for assistance.
 
 ## Goals
 
@@ -60,15 +64,14 @@ To install qtl2pleio, use `install_github()` from the
 [devtools](https://devtools.r-lib.org) package.
 
 ``` r
-install.packages("devtools")
-devtools::install_github("fboehm/qtl2pleio")
+install.packages("qtl2pleio")
 ```
 
 You may also wish to install the [R/qtl2](https://kbroman.org/qtl2). We
 will use it below.
 
 ``` r
-install.packages("qtl2", repos="http://rqtl.org/qtl2cran")
+install.packages("qtl2")
 ```
 
 ## Example
@@ -159,8 +162,9 @@ X <- gemma2::stagger_mats(pp[ , , 50], pp[ , , 50])
 B <- matrix(data = c(-1, -1, -1, -1, 1, 1, 1, 1, -1, -1, -1, -1, 1, 1, 1, 1), nrow = 8, ncol = 2, byrow = FALSE)
 # set.seed to ensure reproducibility
 set.seed(2018-01-30)
+Sig <- calc_Sigma(Vg = diag(2), Ve = diag(2), kinship = kinship[[2]])
 # call to sim1
-Ypre <- sim1(X = X, B = B, Vg = diag(2), Ve = diag(2), kinship = kinship[[2]])
+Ypre <- sim1(X = X, B = B, Sigma = Sig)
 Y <- matrix(Ypre, nrow = 261, ncol = 2, byrow = FALSE)
 rownames(Y) <- rownames(pp)
 colnames(Y) <- c("tr1", "tr2")
@@ -173,8 +177,7 @@ matrix.
 s1 <- scan1(genoprobs = pr, pheno = Y, kinship = kinship)
 ```
 
-Here is a plot of the
-results.
+Here is a plot of the results.
 
 <img src="https://raw.githubusercontent.com/fboehm/qtl2pleio/master/man/figures/README-1d-lod-plots-1.png" width="100%" />
 
@@ -182,10 +185,10 @@ And here are the observed QTL peaks with LOD \> 8.
 
 ``` r
 find_peaks(s1, map = DOex$pmap, threshold=8)
-#>   lodindex lodcolumn chr      pos      lod
-#> 1        1       tr1   3 82.77806 13.39312
-#> 2        1       tr1   X 97.07206  9.18941
-#> 3        2       tr2   3 82.77806 23.57570
+#>   lodindex lodcolumn chr      pos       lod
+#> 1        1       tr1   3 82.77806 20.703383
+#> 2        2       tr2   3 82.77806 14.417924
+#> 3        2       tr2   X 48.10040  8.231551
 ```
 
 ### Perform two-dimensional scan as first step in pleiotropy vs. separate QTL hypothesis test
@@ -200,7 +203,7 @@ out <- suppressMessages(scan_pvl(probs = pp,
                 pheno = Y,
                 kinship = kinship[[2]], # 2nd entry in kinship list is Chr 3
                 start_snp = 38,
-                n_snp = 25, n_cores = 1
+                n_snp = 25
                 ))
 ```
 
@@ -250,7 +253,7 @@ b_out <- suppressMessages(boot_pvl(probs = pp,
          pheno = Y,
          pleio_peak_index = pleio_index,
          kinship = kinship[[2]], # 2nd element in kinship list is Chr 3
-         nboot_per_job = 10,
+         nboot = 10,
          start_snp = 38,
          n_snp = 25
          ))
@@ -268,8 +271,8 @@ citation("qtl2pleio")
 #> 
 #> To cite qtl2pleio in publications use:
 #> 
-#>   Boehm FJ, Chesler EJ, Yandell BS, Broman KW (2019) Testing
-#>   pleiotropy vs. separate QTL in multiparental populations G3
+#>   Boehm FJ, Chesler EJ, Yandell BS, Broman KW (2019) Testing pleiotropy
+#>   vs. separate QTL in multiparental populations G3
 #>   https://www.g3journal.org/content/9/7/2317
 #> 
 #> A BibTeX entry for LaTeX users is

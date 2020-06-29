@@ -1,25 +1,14 @@
 ## Test environments
-* local OS X install, R 3.6.1
-* ubuntu 14.04 (on travis-ci), R 3.5.3
+* local ubuntu 20.04 install, R 4.0.0
 * win-builder (devel and release)
 
 ## R CMD check results  
 
-0 errors | 0 warnings | 2 notes
+0 errors | 0 warnings | 1 note
 
-* This is a new release.
+* One note states that "libs" directory is 32.1 Mb in size.
 
-* The package qtl2 is available through a non-CRAN repository.
+* This release updates the CRAN package qtl2pleio.
 
-## Replies to previous CRAN concerns
-
-* This is a resubmission of an initially rejected package. 
-
-* I shortened the title in the file DESCRIPTION
-
-* I removed export tags for some functions that are not needed directly by the user.
-
-* I mistakenly included code that downloaded files to a new directory. I've since deleted those pieces of code.
-
-* I omitted the abbreviation QTL in the DESCRIPTION file.
+* The package qtl2, suggested by qtl2pleio, is newly available through CRAN.
 
