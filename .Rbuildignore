@@ -8,10 +8,10 @@
 ^README\.Rmd$
 ^README-.*\.png$
 ^\.travis\.yml$
-vignettes/*cache/*
+^vignettes/*cache/*
 ^codecov\.yml$
 ^CONDUCT\.md$
-runtime.txt
+^runtime.txt
 ^install.R
 ^vignettes/recla-analysis_cache$
 ^paper\.md$
@@ -19,7 +19,8 @@ runtime.txt
 ^install\.R$
 ^runtime\.txt$
 ^LICENSE\.md$
-Dockerfile
-.zenodo.json
+^Dockerfile
+^.zenodo.json
 ^cran-comments\.md$
 ^CRAN-RELEASE$
+^vignettes
