@@ -6,4 +6,7 @@
 \usage{
 lhs \%>\% rhs
 }
+\description{
+Pipe operator
+}
 \keyword{internal}
