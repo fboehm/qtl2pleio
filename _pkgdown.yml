@@ -1,6 +1,8 @@
-destination: ~/work/professional-development/fboehm.us/static/software/qtl2pleio
+destination: ~/work/professional-development/fboehm.us/content/software/qtl2pleio
 url: https://fboehm.us/software/qtl2pleio
-
+template:
+  params:
+    ganalytics: UA-46757486-5
 home:
   links:
   - text: Frederick Boehm's Website
