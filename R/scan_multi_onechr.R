@@ -165,8 +165,8 @@ scan_multi_oneqtl <- function(probs_list,
                            )
   n <- nrow(inputs$pheno)
   d_size <- ncol(inputs$pheno)
-  Xlist <- lapply(X = 1:d_size,
-                  FUN = function(){return(matrix(data = rep(1, n),
+  Xlist <- lapply(X = as.list(1:d_size),
+                  FUN = function(x){return(matrix(data = rep(1, n),
                                                                nrow = n,
                                                                ncol = 1))})
   X <- gemma2::stagger_mats(Xlist)
