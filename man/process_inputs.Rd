@@ -4,7 +4,16 @@
 \alias{process_inputs}
 \title{Process inputs}
 \usage{
-process_inputs(probs, pheno, addcovar, kinship)
+process_inputs(
+  probs,
+  pheno,
+  addcovar,
+  kinship,
+  n_snp = dim(probs)[3],
+  start_snp = 1,
+  max_iter,
+  max_prec
+)
 }
 \arguments{
 \item{probs}{a three-dimensional array of founder allele probabilities}
@@ -14,6 +23,14 @@ process_inputs(probs, pheno, addcovar, kinship)
 \item{addcovar}{a matrix of covariates}
 
 \item{kinship}{a kinship matrix}
+
+\item{n_snp}{number of markers}
+
+\item{start_snp}{index number of start position in the probs object.}
+
+\item{max_iter}{max number of iterations for EM}
+
+\item{max_prec}{max precision for stopping EM}
 }
 \description{
 Process inputs

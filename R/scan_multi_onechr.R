@@ -150,10 +150,10 @@ scan_multi_oneqtl <- function(probs_list,
 ){
   out_list <- furrr::future_map2(.x = probs_list,
                                  .y = kinship_list,
-                                 .f = function(x){
+                                 .f = function(x, y){
                                                   scan_multi_onechr(probs = x,
                                                                     pheno = pheno,
-                                                                    kinship = kinship,
+                                                                    kinship = y,
                                                                     addcovar = addcovar
                                                   )
                                                 })
@@ -161,7 +161,7 @@ scan_multi_oneqtl <- function(probs_list,
   inputs <- process_inputs(probs = probs_list[[1]], # arbitrary choice of which array
                            pheno = pheno,
                            addcovar = addcovar,
-                           kinship = kinship[[1]]
+                           kinship = kinship_list[[1]] #arbitrary choice of which kin matrix
                            )
   n <- nrow(inputs$pheno)
   d_size <- ncol(inputs$pheno)

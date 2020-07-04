@@ -84,8 +84,12 @@ scan_pvl <- function(probs,
                      max_prec = 1 / 1e+08
                      )
     {
-    inputs <- process_inputs(probs = probs, pheno = pheno, addcovar = addcovar, kinship = kinship)
-    # define Sigma_inv
+    inputs <- process_inputs(probs = probs,
+                             pheno = pheno,
+                             addcovar = addcovar,
+                             kinship = kinship,
+                             max_iter = max_iter,
+                             max_prec = max_prec)
     # prepare table of marker indices for each call of scan_pvl
     d_size <- ncol(inputs$pheno)
     mytab <- prep_mytab(d_size = d_size, n_snp = n_snp)
@@ -123,7 +127,9 @@ scan_pvl_clean <- function(pheno,
                                      )
     mytab$loglik <- unlist(list_result)
     marker_id <- dimnames(probs)[[3]][start_snp:(start_snp + n_snp - 1)]
-    mytab2 <- tibble::as_tibble(apply(FUN = function(x) marker_id[x], X = mytab[, -ncol(mytab)], MARGIN = 2))
+    mytab2 <- tibble::as_tibble(apply(FUN = function(x) marker_id[x],
+                                      X = mytab[, -ncol(mytab)],
+                                      MARGIN = 2))
     mytab2$log10lik <- mytab$loglik / log(10)
     return(mytab2)
 }

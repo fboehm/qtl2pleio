@@ -1,3 +1,11 @@
+# qtl2pleio 1.4.0
+
+## Major changes
+
+* Refactored `scan_pvl` and `boot_pvl` to reduce duplicated code
+* Added functions for genomewide, multivariate, one-QTL scan
+
+
 # qtl2pleio 1.3.0
 
 ## Major changes
@@ -5,6 +13,7 @@
 * Replaced `parallel` package use with `furrr`. This led to removal of the argument 
 `n_cores` from both `boot_pvl` and `scan_pvl`. A user may now use `future::plan` to 
 run in parallel.
+* Moved vignettes to website: https://fboehm.us/software/qtl2pleio
 
 ## Minor changes
 

@@ -4,8 +4,19 @@
 #' @param pheno a matrix of d trait values
 #' @param addcovar a matrix of covariates
 #' @param kinship a kinship matrix
+#' @param n_snp number of markers
+#' @param start_snp index number of start position in the probs object.
+#' @param max_iter max number of iterations for EM
+#' @param max_prec max precision for stopping EM
 
-process_inputs <- function(probs, pheno, addcovar, kinship){
+process_inputs <- function(probs,
+                           pheno,
+                           addcovar,
+                           kinship,
+                           n_snp = dim(probs)[3],
+                           start_snp = 1,
+                           max_iter,
+                           max_prec){
   if (is.null(probs)) stop("probs is NULL")
   if (is.null(pheno)) stop("pheno is NULL")
   stopifnot(!is.null(rownames(probs)),
@@ -67,7 +78,7 @@ process_inputs <- function(probs, pheno, addcovar, kinship){
   # subset inputs to get all without missingness
   probs <- subset_input(input = probs, id2keep = id2keep)
   pheno <- subset_input(input = pheno, id2keep = id2keep)
-  if (d_size != Matrix::rankMatrix(pheno)) stop("Phenotypes matrix is not full rank. Input only full-rank phenotypes matrices.")
+  if (d_size != qr(pheno)$rank) stop("Phenotypes matrix is not full rank. Input only full-rank phenotypes matrices.")
 
   if (!is.null(kinship)) {
     kinship <- subset_kinship(kinship = kinship, id2keep = id2keep)
