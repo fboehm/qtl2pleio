@@ -77,6 +77,7 @@ boot_pvl <- function(probs,
     } else {
         Xpre <- X1
     }
+    d_size <- ncol(inputs$pheno)
     Xlist <- vector(length = d_size)
     Xlist <- lapply(Xlist, FUN = function(x){x <- Xpre; return(x)})
     X <- gemma2::stagger_mats(Xlist)
