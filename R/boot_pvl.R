@@ -1,4 +1,4 @@
-#' Perform bootstrap sampling and calculate test statistics for each bootstrap sample
+#' Perform bootstrap sampling and calculate test statistic for each bootstrap sample
 #'
 #' Create a bootstrap sample, perform multivariate QTL scan, and calculate log10 LRT statistic
 #'

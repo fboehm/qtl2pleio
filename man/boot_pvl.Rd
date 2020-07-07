@@ -2,7 +2,7 @@
 % Please edit documentation in R/boot_pvl.R
 \name{boot_pvl}
 \alias{boot_pvl}
-\title{Perform bootstrap sampling and calculate test statistics for each bootstrap sample}
+\title{Perform bootstrap sampling and calculate test statistic for each bootstrap sample}
 \usage{
 boot_pvl(
   probs,
