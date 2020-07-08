@@ -20,7 +20,6 @@ knitr::opts_chunk$set(
 # qtl2pleio
 
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/qtl2pleio)](https://cran.r-project.org/package=qtl2pleio)
-
 [![Binder](https://static.mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/fboehm/qtl2pleio/master?urlpath=rstudio)
 [![Travis-CI Build Status](https://travis-ci.org/fboehm/qtl2pleio.svg?branch=master)](https://travis-ci.org/fboehm/qtl2pleio)
 [![Coverage Status](https://img.shields.io/codecov/c/github/fboehm/qtl2pleio/master.svg)](https://codecov.io/github/fboehm/qtl2pleio?branch=master)
