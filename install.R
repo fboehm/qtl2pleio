@@ -8,8 +8,6 @@ cran_pkgs<- c("MASS",
 "parallel",
 "broman",
 "devtools",
-"rmarkdown")
+"rmarkdown", "qtl2", "gemma2")
 install.packages("versions")
-versions::install.dates(cran_pkgs, dates = "2019-03-01")
-devtools::install_github("rqtl/qtl2@b5785d5")
-devtools::install_github("fboehm/gemma2@2872396")
+versions::install.dates(cran_pkgs, dates = "2020-07-06")
