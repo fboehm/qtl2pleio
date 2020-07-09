@@ -15,7 +15,6 @@ find_pleio_peak_tib <- function(tib, start_snp) {
     nc <- ncol(tib)
     if (nc < 3){stop("tib must have at least 3 columns")}
     if (!is.numeric(unlist(tib[, nc]))){stop("last column of tib must be numeric")}
-    if (sum(tib[, nc] >= 0) > 0){stop("last column of tib must have log likelihood values, which are all negative.")}
     smat <- as.matrix(tib[, -nc])
     # define an indicator vector for which rows to keep when making pleio_tib
     pleio_ind <- apply(FUN = function(x) {
