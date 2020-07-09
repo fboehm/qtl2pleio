@@ -8,6 +8,6 @@ cran_pkgs<- c("MASS",
 "parallel",
 "broman",
 "devtools",
-"rmarkdown", "qtl2", "gemma2")
+"rmarkdown", "qtl2", "gemma2", "furrr")
 install.packages("versions")
 versions::install.dates(cran_pkgs, dates = "2020-07-06")
