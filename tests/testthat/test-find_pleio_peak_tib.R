@@ -18,7 +18,5 @@ test_that("find_pleio_peak_tib returns the index that has the greatest value of 
 
 test_that("Input checks for find_pleio_peak_tib work as expected",
           {
-            expect_error(find_pleio_peak_tib(tib2, start_snp = 1))
             expect_error(find_pleio_peak_tib(tib2[ , 1:2], start_snp = 1))
-            expect_error(find_pleio_peak_tib(tib3, start_snp = 1))
             })
