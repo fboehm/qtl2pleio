@@ -1,3 +1,14 @@
+# qtl2pleio 1.3.0.9000
+
+## Major changes
+
+None
+
+## Minor changes
+
+* fixed erroneous check on log likelihood values in `find_pleio_peak_tib`.
+
+
 # qtl2pleio 1.3.0
 
 ## Major changes
