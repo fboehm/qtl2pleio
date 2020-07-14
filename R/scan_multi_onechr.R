@@ -202,7 +202,7 @@ scan_multi_oneqtl <- function(probs_list,
   out_list <- furrr::future_map(.x = out_list,
                     .f = function(x){
                       x %>%
-                        dplyr::mutate(null_log10lik = out)
+                        dplyr::mutate(null_log10lik = as.numeric(out))
 
   })
 
