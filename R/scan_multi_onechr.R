@@ -148,7 +148,8 @@ scan_multi_oneqtl <- function(probs_list,
                               kinship_list = NULL,
                               addcovar = NULL
 ){
-  out_list <- furrr::future_map2(.x = probs_list,
+  if (!is.null(kinship)) {
+    out_list <- furrr::future_map2(.x = probs_list,
                                  .y = kinship_list,
                                  .f = function(x, y){
                                                   scan_multi_onechr(probs = x,
@@ -156,17 +157,35 @@ scan_multi_oneqtl <- function(probs_list,
                                                                     kinship = y,
                                                                     addcovar = addcovar
                                                   )
-                                                })
+                                 })}
+  else {
+    out_list <- furrr::future_map(.x = probs_list,
+                                   .f = function(x){
+                                     scan_multi_onechr(probs = x,
+                                                       pheno = pheno,
+                                                       kinship = kinship_list,
+                                                       addcovar = addcovar
+                                     )
+                                   })
+    }
   # calculate log10lik for "null" model without genotypes
-  inputs <- process_inputs(probs = probs_list[[1]], # arbitrary choice of which array
+  if (!is.null(kinship_list)){
+    inputs <- process_inputs(probs = probs_list[[1]], # arbitrary choice of which array
                            pheno = pheno,
                            addcovar = addcovar,
                            kinship = kinship_list[[1]] #arbitrary choice of which kin matrix
                            )
+  } else {
+    inputs <- process_inputs(probs = probs_list[[1]], # arbitrary choice of which array
+                             pheno = pheno,
+                             addcovar = addcovar,
+                             kinship = kinship_list #arbitrary choice of which kin matrix
+    )
+  }
   n <- nrow(inputs$pheno)
   d_size <- ncol(inputs$pheno)
   Xlist <- lapply(X = 1:d_size,
-                  FUN = function(){return(matrix(data = rep(1, n),
+                  FUN = function(x){return(matrix(data = rep(1, n),
                                                                nrow = n,
                                                                ncol = 1))})
   X <- gemma2::stagger_mats(Xlist)
