@@ -63,104 +63,36 @@ boot_pvl <- function(probs,
                      max_prec = 1 / 1e+08
                      )
     {
-    if (is.null(probs)) stop("probs is NULL")
-    if (is.null(pheno)) stop("pheno is NULL")
-    stopifnot(!is.null(rownames(probs)),
-              !is.null(colnames(probs)),
-              !is.null(dimnames(probs)[[3]]),
-              !is.null(rownames(pheno)),
-              n_snp > 0,
-              start_snp > 0,
-              start_snp + n_snp - 1 <= dim(probs)[3]
-    )
-    # check additional conditions when addcovar is not NULL
-    if (!is.null(addcovar)) {
-        stopifnot(!is.null(rownames(addcovar)),
-                  !is.null(colnames(addcovar))
-        )
-    }
-    d_size <- ncol(pheno)  # d_size is the number of univariate phenotypes
-    f_size <- ncol(probs)
-    # force things to be matrices
-    if (!is.matrix(pheno)) {
-        pheno <- as.matrix(pheno)
-        if (!is.numeric(pheno)) stop("pheno is not numeric")
-    }
-    if (is.null(colnames(pheno))) # force column names
-        colnames(pheno) <- paste0("pheno", seq_len(ncol(pheno)))
-    if (!is.null(addcovar)) {
-        if (!is.matrix(addcovar)) addcovar <- as.matrix(addcovar)
-        if (!is.numeric(addcovar)) stop("addcovar is not numeric")
-    }
 
-    # find individuals in common across all arguments
-    # and drop individuals with missing covariates or missing *one or more* phenotypes
-    # need to consider presence or absence of different inputs: kinship, addcovar
-    id2keep <- make_id2keep(probs = probs,
-                            pheno = pheno,
-                            addcovar = addcovar,
-                            kinship = kinship
-    )
-    # remove - from id2keep vector - subjects with a missing phenotype or covariate
-    pheno <- subset_input(input = pheno, id2keep = id2keep)
-    subjects_phe <- check_missingness(pheno)
-    id2keep <- intersect(id2keep, subjects_phe)
-    if (!is.null(addcovar)) {
-        addcovar <- subset_input(input = addcovar, id2keep = id2keep)
-        subjects_cov <- check_missingness(addcovar)
-        id2keep <- intersect(id2keep, subjects_cov)
-        addcovar <- subset_input(addcovar, id2keep)
-    }
-    # Send messages if there are two or fewer subjects
-    if (length(id2keep) == 0) {stop("no individuals common to all inputs")}
-    if (length(id2keep) <= 2) {
-        stop(paste0("only ", length(id2keep),
-                    " common individual(s): ",
-                    paste(id2keep, collapse = ": ")))
-    }
-    # subset inputs to get all without missingness
-    probs <- subset_input(input = probs, id2keep = id2keep)
-    pheno <- subset_input(input = pheno, id2keep = id2keep)
-    if (!is.null(kinship)) {
-        kinship <- subset_kinship(kinship = kinship, id2keep = id2keep)
-    }
-## define X1 - a single marker's allele probabilities
-    X1 <- probs[ , , pleio_peak_index]
-    if (!is.null(addcovar)) {
-        Xpre <- cbind(X1, addcovar)
+    inputs <- process_inputs(probs = probs,
+                             pheno = pheno,
+                             addcovar = addcovar,
+                             kinship = kinship,
+                             max_iter = max_iter,
+                             max_prec = max_prec)
+    ## define X1 - a single marker's allele probabilities
+    X1 <- inputs$probs[ , , pleio_peak_index]
+    if (!is.null(inputs$addcovar)) {
+        Xpre <- cbind(X1, inputs$addcovar)
     } else {
         Xpre <- X1
     }
+    d_size <- ncol(inputs$pheno)
     Xlist <- vector(length = d_size)
     Xlist <- lapply(Xlist, FUN = function(x){x <- Xpre; return(x)})
     X <- gemma2::stagger_mats(Xlist)
-    if (!is.null(kinship)) {
-        # covariance matrix estimation
-        # first, run gemma2::MphEM(), by way of calc_covs(), to get Vg and Ve
-        cc_out <- calc_covs(pheno, kinship, max_iter = max_iter, max_prec = max_prec, covariates = addcovar)
-        Vg <- cc_out$Vg
-        Ve <- cc_out$Ve
-        # define Sigma
-        Sigma <- calc_Sigma(Vg = Vg, Ve = Ve, kinship = kinship)
-    }
-    if (is.null(kinship)) {
-        # get Sigma for Haley Knott regression without random effect
-        Ve <- var(pheno) # get d by d covar matrix
-        Sigma <- calc_Sigma(Vg = NULL, Ve = Ve, kinship = NULL, n_mouse = nrow(pheno))
-    }
-    Sigma_inv <- solve(Sigma)
-    # calc Bhat
-    Bcol <- rcpp_calc_Bhat2(X = X,
-                         Sigma_inv = Sigma_inv,
-                         Y = as.vector(as.matrix(pheno))
+
+        Bcol <- rcpp_calc_Bhat2(X = X,
+                         Sigma_inv = inputs$Sigma_inv,
+                         Y = as.vector(as.matrix(inputs$pheno))
     )
     B <- matrix(data = Bcol, nrow = ncol(Xpre), ncol = d_size, byrow = FALSE)
     # Start loop to get Ysim matrices
     Ysimlist <- list()
     for (i in 1:nboot) {
-        foo <- sim1(X = X, B = B, Sigma = Sigma)
+        foo <- sim1(X = X, B = B, Sigma = inputs$Sigma)
         Ysim <- matrix(foo, ncol = d_size, byrow = FALSE)
-        rownames(Ysim) <- rownames(pheno)
+        rownames(Ysim) <- rownames(inputs$pheno)
         colnames(Ysim) <- paste0("t", 1:d_size)
         Ysimlist[[i]] <- Ysim
     }
@@ -169,10 +101,10 @@ boot_pvl <- function(probs,
 
     scan_out <- furrr::future_map(.x = Ysimlist,
                                    .f = scan_pvl_clean,
-                                   probs = probs,
-                                   addcovar = addcovar,
-                                   Sigma_inv = Sigma_inv,
-                                   Sigma = Sigma,
+                                   probs = inputs$probs,
+                                   addcovar = inputs$addcovar,
+                                   Sigma_inv = inputs$Sigma_inv,
+                                   Sigma = inputs$Sigma,
                                    start_snp = start_snp,
                                    mytab = mytab,
                                    n_snp = n_snp
