@@ -56,7 +56,7 @@ scan_multi_onechr <- function(probs,
                      max_prec = 1 / 1e+08
 )
 {
-  inputs <- process_inputs(probs = probs, pheno = pheno, kinship = kinship, addcovar = addcovar)
+  inputs <- process_inputs(probs = probs, pheno = pheno, kinship = kinship, addcovar = addcovar, max_iter = max_iter, max_prec = max_prec)
   # prepare table of marker indices for each call of scan_pvl_clean
   d_size <- ncol(inputs$pheno)
   mytab <- prep_mytab(d_size = d_size, n_snp = n_snp, pvl = FALSE)
@@ -148,15 +148,25 @@ scan_multi_oneqtl <- function(probs_list,
                               kinship_list = NULL,
                               addcovar = NULL
 ){
-  out_list <- furrr::future_map2(.x = probs_list,
-                                 .y = kinship_list,
-                                 .f = function(x, y){
+  if (is.null(kinship_list)) {out_list <- furrr::future_map(.x = probs_list,
+                                # .y = kinship_list,
+                                 .f = function(x){
                                                   scan_multi_onechr(probs = x,
                                                                     pheno = pheno,
-                                                                    kinship = y,
+                                                                    kinship = NULL,
                                                                     addcovar = addcovar
                                                   )
-                                                })
+                                 })} else {
+                                   out_list <- furrr::future_map2(.x = probs_list,
+                                                                  .y = kinship_list,
+                                                                 .f = function(x, y){
+                                                                   scan_multi_onechr(probs = x,
+                                                                                     pheno = pheno,
+                                                                                     kinship = y,
+                                                                                     addcovar = addcovar
+                                                                   )
+                                                                 })
+                                                }
   # calculate log10lik for "null" model without genotypes
   inputs <- process_inputs(probs = probs_list[[1]], # arbitrary choice of which array
                            pheno = pheno,
@@ -165,10 +175,16 @@ scan_multi_oneqtl <- function(probs_list,
                            )
   n <- nrow(inputs$pheno)
   d_size <- ncol(inputs$pheno)
-  Xlist <- lapply(X = as.list(1:d_size),
+  if (is.null(addcovar)) {
+    Xlist <- lapply(X = as.list(1:d_size),
                   FUN = function(x){return(matrix(data = rep(1, n),
                                                                nrow = n,
                                                                ncol = 1))})
+  } else {Xlist <- lapply(X = as.list(1:d_size),
+                          FUN = function(x){return(cbind(addcovar, matrix(data = rep(1, n),
+                                                          nrow = n,
+                                                          ncol = 1)))})
+  }
   X <- gemma2::stagger_mats(Xlist)
   Bhat <- rcpp_calc_Bhat2(X = X,
                           Sigma_inv = inputs$Sigma_inv,

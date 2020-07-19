@@ -1,4 +1,4 @@
-#' Process inputs
+#' Process inputs to scan functions
 #'
 #' @param probs a three-dimensional array of founder allele probabilities
 #' @param pheno a matrix of d trait values
