@@ -15,8 +15,8 @@ process_inputs <- function(probs,
                            kinship,
                            n_snp = dim(probs)[3],
                            start_snp = 1,
-                           max_iter,
-                           max_prec){
+                           max_iter = 10 ^ 4,
+                           max_prec = 1 / 10 ^ 8){
   if (is.null(probs)) stop("probs is NULL")
   if (is.null(pheno)) stop("pheno is NULL")
   stopifnot(!is.null(rownames(probs)),

@@ -168,11 +168,19 @@ scan_multi_oneqtl <- function(probs_list,
                                                                  })
                                                 }
   # calculate log10lik for "null" model without genotypes
-  inputs <- process_inputs(probs = probs_list[[1]], # arbitrary choice of which array
+  if (!is.null(kinship_list)){
+    inputs <- process_inputs(probs = probs_list[[1]], # arbitrary choice of which array
                            pheno = pheno,
                            addcovar = addcovar,
                            kinship = kinship_list[[1]] #arbitrary choice of which kin matrix
                            )
+  } else {
+    inputs <- process_inputs(probs = probs_list[[1]], # arbitrary choice of which array
+                             pheno = pheno,
+                             addcovar = addcovar,
+                             kinship = kinship_list #arbitrary choice of which kin matrix
+    )
+  }
   n <- nrow(inputs$pheno)
   d_size <- ncol(inputs$pheno)
   if (is.null(addcovar)) {
@@ -199,7 +207,7 @@ scan_multi_oneqtl <- function(probs_list,
   out_list <- furrr::future_map(.x = out_list,
                     .f = function(x){
                       x %>%
-                        dplyr::mutate(null_log10lik = out)
+                        dplyr::mutate(null_log10lik = as.numeric(out))
 
   })
 

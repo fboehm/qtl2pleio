@@ -10,7 +10,7 @@
 #' @examples
 #' calc_covs(pheno = matrix(data = rnorm(100), nrow = 50, ncol = 2), kinship = diag(50))
 #' @export
-calc_covs <- function(pheno, kinship, X1pre = rep(1, nrow(kinship)), max_iter = 1e+06, max_prec = 1/1e+08, 
+calc_covs <- function(pheno, kinship, X1pre = rep(1, nrow(kinship)), max_iter = 1e+06, max_prec = 1/1e+08,
     covariates = NULL) {
     e_out <- gemma2::eigen2(kinship)
     U <- e_out$vectors
@@ -25,7 +25,7 @@ calc_covs <- function(pheno, kinship, X1pre = rep(1, nrow(kinship)), max_iter = 
     d <- ncol(pheno)
     # run MphEM with only a design matrix that contains only the intercept term & covariates, if any(and
     # not any genotype info)
-    foo <- gemma2::MphEM(max_iter = max_iter, max_prec = max_prec, X = X1, Y = Y, eval = eval, V_g = diag(d), 
+    foo <- gemma2::MphEM(max_iter = max_iter, max_prec = max_prec, X = X1, Y = Y, eval = eval, V_g = diag(d),
         V_e = diag(d))
     Vg <- foo[[length(foo)]][[2]]
     Ve <- foo[[length(foo)]][[3]]
