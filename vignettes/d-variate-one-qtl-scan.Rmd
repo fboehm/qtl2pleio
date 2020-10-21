@@ -1,0 +1,82 @@
+---
+title: "d-variate, one-QTL scan"
+author: "Frederick J. Boehm"
+date: "7/14/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Load Recla data from `qtl2data` github repository
+
+We illustrate functions from `qtl2pleio` by analyzing data from 261 Diversity Outbred mice [@recla2014precise,@logan2013high].
+
+```{r load-recla}
+library(qtl2)
+file <- paste0("https://raw.githubusercontent.com/rqtl/",
+               "qtl2data/master/DO_Recla/recla.zip")
+recla <- read_cross2(file)
+# make sex a covariate for use in qtl2pleio::scan_pvl
+recla[[6]][ , 1, drop = FALSE] -> sex
+# insert pseudomarkers
+insert_pseudomarkers(recla, step = 0.10) -> pseudomap
+gm <- pseudomap$`8`
+```
+
+
+We use the hidden Markov model from @broman2012genotype and @broman2012haplotype (as implemented in @broman2019rqtl2) to calculate 36-state genotype probabilities for autosomal markers. 
+
+```{r calc-genoprobs-code}
+probs <- calc_genoprob(recla, map = pseudomap, cores = 1)
+```
+
+We then convert the genotype probabilities to haplotype dosages.
+
+```{r calc-aprobs}
+aprobs <- genoprob_to_alleleprob(probs)
+```
+
+We calculate kinship matrices, by the "leave one chromosome out (loco)" method.
+
+```{r calc-kinship}
+kinship <- calc_kinship(aprobs, "loco")
+```
+
+
+
+
+Before performing our QTL mapping, we transform the phenotypes. 
+
+```{r log-phenos}
+recla$pheno -> ph
+log(ph) -> lph
+apply(FUN = broman::winsorize, X = lph, MARGIN = 2) -> wlph
+tibble::as_tibble(wlph) -> wlph_tib
+```
+
+We next perform the univariate QTL scan for all phenotypes.
+
+```{r scan1}
+sex2 <- matrix(as.numeric(sex == "female"), ncol = 1)
+colnames(sex2) <- "female"
+rownames(sex2) <- rownames(aprobs[[1]])
+out <- scan1(genoprobs = aprobs, 
+             pheno = wlph, 
+             kinship = kinship, 
+             addcovar = sex2, 
+             reml = TRUE
+             )
+```
+
+```{r}
+future::plan("multicore")
+sout <- scan_multi_oneqtl(probs_list = list(aprobs$`8`), 
+                  pheno = wlph[, c(7, 10)], 
+                  kinship_list = list(kinship$`8`), 
+                  addcovar = sex2
+                    )
+
+```
+
