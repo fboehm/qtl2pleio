@@ -12,7 +12,8 @@ scan_pvl(
   start_snp = 1,
   n_snp,
   max_iter = 10000,
-  max_prec = 1/1e+08
+  max_prec = 1/1e+08,
+  cores = parallelly::availableCores()
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ scan_pvl(
 \item{max_iter}{maximum number of iterations for EM algorithm}
 
 \item{max_prec}{stepwise precision for EM algorithm. EM stops once incremental difference in log likelihood is less than max_prec}
+
+\item{cores}{number of cores to use when parallelizing via parallel::mclapply. Set to 1 for no parallelization.}
 }
 \value{
 a tibble with d + 1 columns. First d columns indicate the genetic data (by listing the marker ids) used in the design matrix; last is log10 likelihood

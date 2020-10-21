@@ -24,6 +24,7 @@
 #' @param nboot number of bootstrap samples to acquire and scan
 #' @param max_iter maximum number of iterations for EM algorithm
 #' @param max_prec stepwise precision for EM algorithm. EM stops once incremental difference in log likelihood is less than max_prec
+#' @param cores number of cores to use when calling mclapply to parallelize the bootstrap analysis.
 #' @export
 #' @importFrom stats var
 #' @references Knott SA, Haley CS (2000) Multitrait
@@ -60,7 +61,8 @@ boot_pvl <- function(probs,
                      pleio_peak_index,
                      nboot = 1,
                      max_iter = 1e+04,
-                     max_prec = 1 / 1e+08
+                     max_prec = 1 / 1e+08,
+                     cores = parallelly::availableCores()
                      )
     {
 
@@ -99,8 +101,9 @@ boot_pvl <- function(probs,
     # prepare table of marker indices for each call of scan_pvl_clean
     mytab <- prep_mytab(d_size = d_size, n_snp = n_snp)
 
-    scan_out <- furrr::future_map(.x = Ysimlist,
-                                   .f = scan_pvl_clean,
+    scan_out <- parallel::mclapply(X = Ysimlist,
+                                   FUN = scan_pvl_clean,
+                                   mc.cores = cores,
                                    probs = inputs$probs,
                                    addcovar = inputs$addcovar,
                                    Sigma_inv = inputs$Sigma_inv,
@@ -109,7 +112,7 @@ boot_pvl <- function(probs,
                                    mytab = mytab,
                                    n_snp = n_snp
                                    )
-    lrt <- furrr::future_map_dbl(.x = scan_out, .f = function(x){
+    lrt <- parallel::mclapply(X = scan_out, FUN = function(x){
         x %>%
             calc_profile_lods() %>%
             dplyr::select(profile_lod) %>%

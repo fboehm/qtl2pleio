@@ -4,7 +4,13 @@
 \alias{scan_multi_oneqtl}
 \title{Perform multivariate, one-QTL model fitting for markers on all chromosomes}
 \usage{
-scan_multi_oneqtl(probs_list, pheno, kinship_list = NULL, addcovar = NULL)
+scan_multi_oneqtl(
+  probs_list,
+  pheno,
+  kinship_list = NULL,
+  addcovar = NULL,
+  cores = parallelly::availableCores()
+)
 }
 \arguments{
 \item{probs_list}{an list of arrays of founder allele probabilities}
@@ -14,6 +20,8 @@ scan_multi_oneqtl(probs_list, pheno, kinship_list = NULL, addcovar = NULL)
 \item{kinship_list}{a list of kinship matrices, one for each chromosome}
 
 \item{addcovar}{a matrix, n subjects by c additive covariates}
+
+\item{cores}{number of cores for parallelization via parallel::mclapply()}
 }
 \value{
 a tibble with d + 1 columns. First d columns indicate the genetic data (by listing the marker ids) used in the design matrix; last is log10 likelihood

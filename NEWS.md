@@ -5,6 +5,12 @@
 * Refactored `scan_pvl` and `boot_pvl` to reduce duplicated code
 * Added functions for genomewide, multivariate, one-QTL scan
 
+## Minor changes
+
+* Returned to parallelization implemented by R package `parallel`.
+* Set default `cores` value to `parallelly::availableCores()` for compatibility with job schedulers.
+
+
 
 # qtl2pleio 1.3.0
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/process_inputs.R
 \name{process_inputs}
 \alias{process_inputs}
-\title{Process inputs}
+\title{Process inputs to scan functions}
 \usage{
 process_inputs(
   probs,
@@ -11,8 +11,8 @@ process_inputs(
   kinship,
   n_snp = dim(probs)[3],
   start_snp = 1,
-  max_iter,
-  max_prec
+  max_iter = 10^4,
+  max_prec = 1/10^8
 )
 }
 \arguments{
@@ -33,5 +33,5 @@ process_inputs(
 \item{max_prec}{max precision for stopping EM}
 }
 \description{
-Process inputs
+Process inputs to scan functions
 }

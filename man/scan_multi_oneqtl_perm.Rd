@@ -9,7 +9,8 @@ scan_multi_oneqtl_perm(
   pheno,
   kinship_list = NULL,
   addcovar = NULL,
-  n_perm = 1
+  n_perm = 1,
+  cores = parallelly::availableCores()
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ scan_multi_oneqtl_perm(
 \item{addcovar}{a matrix of covariate values}
 
 \item{n_perm}{positive integer for the number of permuted data sets to scan.}
+
+\item{cores}{number of cores for parallelization}
 }
 \value{
 a vector of `n_perm` max lod statistics

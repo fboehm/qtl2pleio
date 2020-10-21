@@ -38,6 +38,7 @@
 #' @param n_snp the number of (consecutive) markers to include in the scan
 #' @param max_iter maximum number of iterations for EM algorithm
 #' @param max_prec stepwise precision for EM algorithm. EM stops once incremental difference in log likelihood is less than max_prec
+#' @param cores number of cores to use when parallelizing via parallel::mclapply. Set to 1 for no parallelization.
 #' @export
 #' @importFrom stats var
 #' @references Knott SA, Haley CS (2000) Multitrait
@@ -81,7 +82,8 @@ scan_pvl <- function(probs,
                      start_snp = 1,
                      n_snp,
                      max_iter = 1e+04,
-                     max_prec = 1 / 1e+08
+                     max_prec = 1 / 1e+08,
+                     cores = parallelly::availableCores()
                      )
     {
     inputs <- process_inputs(probs = probs,
@@ -101,7 +103,8 @@ scan_pvl <- function(probs,
                           Sigma = inputs$Sigma,
                           start_snp = start_snp,
                           pheno = inputs$pheno,
-                          n_snp = n_snp
+                          n_snp = n_snp,
+                          cores = cores
                           )
     return(out)
 }
@@ -115,15 +118,17 @@ scan_pvl_clean <- function(pheno,
                            Sigma,
                            start_snp,
                            mytab,
-                           n_snp){
-    list_result <- furrr::future_map(.x = as.data.frame(t(mytab)),
-                                     .f = fit1_pvl,
+                           n_snp,
+                           cores = parallelly::availableCores()){
+    list_result <- parallel::mclapply(X = as.data.frame(t(mytab)),
+                                     FUN = fit1_pvl,
                                      addcovar = addcovar,
                                      probs = probs,
                                      inv_S = Sigma_inv,
                                      S = Sigma,
                                      start_snp = start_snp,
-                                     pheno = pheno
+                                     pheno = pheno,
+                                     mc.cores = cores
                                      )
     mytab$loglik <- unlist(list_result)
     marker_id <- dimnames(probs)[[3]][start_snp:(start_snp + n_snp - 1)]

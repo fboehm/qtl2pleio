@@ -107,6 +107,7 @@ scan_multi_onechr <- function(probs,
 #' @param pheno a matrix of phenotypes
 #' @param kinship_list a list of kinship matrices, one for each chromosome
 #' @param addcovar a matrix, n subjects by c additive covariates
+#' @param cores number of cores for parallelization via parallel::mclapply()
 #' @export
 #' @importFrom stats var
 #' @references Knott SA, Haley CS (2000) Multitrait
@@ -146,23 +147,24 @@ scan_multi_onechr <- function(probs,
 scan_multi_oneqtl <- function(probs_list,
                               pheno,
                               kinship_list = NULL,
-                              addcovar = NULL
+                              addcovar = NULL,
+                              cores = parallelly::availableCores()
 ){
-  if (is.null(kinship_list)) {out_list <- furrr::future_map(.x = probs_list,
-                                # .y = kinship_list,
-                                 .f = function(x){
+  if (is.null(kinship_list)) {out_list <- parallel::mclapply(X = probs_list,
+                                 mc.cores = cores,
+                                 FUN = function(x){
                                                   scan_multi_onechr(probs = x,
                                                                     pheno = pheno,
                                                                     kinship = NULL,
                                                                     addcovar = addcovar
                                                   )
                                  })} else {
-                                   out_list <- furrr::future_map2(.x = probs_list,
-                                                                  .y = kinship_list,
-                                                                 .f = function(x, y){
+                                   out_list <- parallel::mclapply(X = probs_list,
+                                                                  mc.cores = cores,
+                                                                 FUN = function(x, y){
                                                                    scan_multi_onechr(probs = x,
                                                                                      pheno = pheno,
-                                                                                     kinship = y,
+                                                                                     kinship = kinship_list,
                                                                                      addcovar = addcovar
                                                                    )
                                                                  })
@@ -204,8 +206,8 @@ scan_multi_oneqtl <- function(probs_list,
                            x = as.vector(as.matrix(inputs$pheno)),
                            S = inputs$Sigma
                            ) / log(10)
-  out_list <- furrr::future_map(.x = out_list,
-                    .f = function(x){
+  out_list <- parallel::mclapply(X = out_list, mc.cores = cores,
+                    FUN = function(x){
                       x %>%
                         dplyr::mutate(null_log10lik = as.numeric(out))
 
@@ -221,6 +223,7 @@ scan_multi_oneqtl <- function(probs_list,
 #' @param kinship_list a list of kinship matrices, one per chromosome
 #' @param addcovar a matrix of covariate values
 #' @param n_perm positive integer for the number of permuted data sets to scan.
+#' @param cores number of cores for parallelization
 #' @return a vector of `n_perm` max lod statistics
 #' @export
 
@@ -228,7 +231,8 @@ scan_multi_oneqtl_perm <- function(probs_list,
                               pheno,
                               kinship_list = NULL,
                               addcovar = NULL,
-                              n_perm = 1
+                              n_perm = 1,
+                              cores = parallelly::availableCores()
 ){
   # create a permuted phenotypes matrix
   n <- nrow(pheno)
@@ -238,13 +242,13 @@ scan_multi_oneqtl_perm <- function(probs_list,
     rownames(permuted_pheno) <- rownames(pheno)
     phe[[i]] <- permuted_pheno
   }
-  furrr::future_map(.x = phe, .f = function(x){
+  parallel::mclapply(X = phe, mc.cores = cores, FUN = function(x){
     sout <- scan_multi_oneqtl(probs_list = probs_list,
                       pheno = x,
                       kinship_list = kinship_list,
                       addcovar = addcovar
                       )
-    maxlod_perchr <- furrr::future_map_dbl(.x = sout, .f = function(x){
+    maxlod_perchr <- parallel::mclapply(X = sout, mc.cores = cores, FUN = function(x){
       x %>%
         dplyr::select(lod) %>%
         max()
