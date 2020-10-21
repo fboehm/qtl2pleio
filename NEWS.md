@@ -10,7 +10,6 @@
 * Returned to parallelization implemented by R package `parallel`.
 * Set default `cores` value to `parallelly::availableCores()` for compatibility with job schedulers.
 
->>>>>>> add-parallelly
 
 
 # qtl2pleio 1.3.0
