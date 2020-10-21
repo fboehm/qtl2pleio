@@ -9,6 +9,7 @@ Authors@R:
            email = "frederick.boehm@gmail.com",
            comment = c(ORCID = "0000-0002-1644-5931"))
 Maintainer: Frederick J Boehm <frederick.boehm@gmail.com>
+Author: Frederick J Boehm
 Description: We implement an
     adaptation of Jiang & Zeng's (1995) <https://www.genetics.org/content/140/3/1111> likelihood ratio test for testing
     the null hypothesis of pleiotropy against the alternative hypothesis,
