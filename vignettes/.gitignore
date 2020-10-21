@@ -1,3 +1,4 @@
 *_cache
 *.R
 .build.timestamp
+*.html

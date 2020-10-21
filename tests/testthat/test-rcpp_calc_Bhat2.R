@@ -2,7 +2,7 @@ library(qtl2pleio)
 context("testing rcpp_calc_Bhat2 and rcpp_calc_Bhat against calc_Bhat")
 
 # setup
-X1 <- as.matrix(rbinom(n = 100, size = 1, prob = 1 / 2))
+X1 <- as.matrix(as.numeric(rbinom(n = 100, size = 1, prob = 1 / 2))) # NEED! as.numeric instead of integer for Rcpp!
 X <- gemma2::stagger_mats(X1, X1)
 Sigma_inv <- diag(200)
 Y <- runif(200)

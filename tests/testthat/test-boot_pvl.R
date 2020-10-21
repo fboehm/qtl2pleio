@@ -26,8 +26,8 @@ test_that("output is vector of length nboot", {
                          start_snp = 1,
                          n_snp = 10,
                          pleio_peak_index = 5,
-                         nboot = 1),
-                1
+                         nboot = 2),
+                2
                 )
 
 })

@@ -2,12 +2,17 @@
 #'
 #' @param d_size an integer, the number of traits
 #' @param n_snp an integer, the number of markers
+#' @param pvl logical indicating whether to output dataframe with all d-tuples for a d-QTL scan, or only those models that examine one marker at a time.
 #' @export
 #' @return a data.frame with d_size + 1 columns and (n_snp)^d_size rows. Last column is NA and named loglik.
 #' @examples
 #' prep_mytab(2, 10)
-prep_mytab <- function(d_size, n_snp) {
+prep_mytab <- function(d_size, n_snp, pvl = TRUE) {
     mytab <- expand.grid(rep(list(1:n_snp), d_size))
+    if (!pvl) {
+        mytab <- mytab %>%
+            dplyr::filter_all(dplyr::all_vars(. == Var1))
+    }
     mytab$loglik <- NA
     return(mytab)
 }
@@ -25,6 +30,7 @@ prep_mytab <- function(d_size, n_snp) {
 #' pp <- array(rbinom(n = 200, size = 1, prob = 0.5), dim = c(10, 2, 10))
 #' prep_X_list(1:3, 1, probs = pp, covariates = NULL)
 prep_X_list <- function(indices, start_snp, probs, covariates) {
+    indices <- as.numeric(indices)
     if (!is.null(covariates)) {
         out <- lapply(X = as.list(indices), FUN = function(x) {
             index <- x + start_snp - 1

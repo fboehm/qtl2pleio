@@ -22,8 +22,7 @@ Eigen::MatrixXd rcpp_ols(const Eigen::Map<Eigen::MatrixXd> & X, const Eigen::Map
 
 // [[Rcpp::export]]
 Eigen::MatrixXd rcpp_gls(const Eigen::Map<Eigen::MatrixXd> & X, const Eigen::Map<Eigen::MatrixXd> & Y, const Eigen::Map<Eigen::MatrixXd> & Sigma_inv) {
-  Eigen::MatrixXd pre = X.transpose() * Sigma_inv * X;
-  return (pre.inverse() * X.transpose() * Sigma_inv * Y);
+  return ((X.transpose() * Sigma_inv * X).inverse() * X.transpose() * Sigma_inv * Y);
 }
 
 

@@ -1,0 +1,92 @@
+---
+title: "multivariate-one-QTL-scans"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{multivariate-one-QTL-scans}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(qtl2pleio)
+library(qtl2)
+```
+
+Our goal is to perform a multivariate one-QTL scan across the genome. We'll also do an approximate 
+permutation test to get p-values for any QTL that we find. 
+
+The analysis is multivariate in that we're analyzing three traits simultaneously. The "one-QTL" phrase 
+denotes the fact that we're looking for a single QTL that affects the three traits simultaneously. 
+
+## Load Recla data from `qtl2data` github repository
+
+We illustrate functions from `qtl2pleio` by analyzing data from 261 Diversity Outbred mice [@recla2014precise,@logan2013high].
+
+
+
+```{r load-recla}
+file <- paste0("https://raw.githubusercontent.com/rqtl/",
+               "qtl2data/master/DO_Recla/recla.zip")
+recla <- read_cross2(file)
+# make sex a covariate for use in scans
+recla[[6]][ , 1, drop = FALSE] -> sex
+# insert pseudomarkers
+insert_pseudomarkers(recla, step = 0.10) -> pseudomap
+```
+
+
+We use the hidden Markov model from @broman2012genotype and @broman2012haplotype (as implemented in @broman2019rqtl2) to calculate 36-state genotype probabilities for autosomal markers. 
+
+```{r calc-genoprobs-code}
+probs <- calc_genoprob(recla, map = pseudomap, cores = 1)
+```
+
+We then convert the genotype probabilities to haplotype dosages.
+
+```{r calc-aprobs}
+aprobs <- genoprob_to_alleleprob(probs)
+```
+
+We calculate kinship matrices, by the "leave one chromosome out (loco)" method.
+
+```{r calc-kinship}
+kinship <- calc_kinship(aprobs, "loco")
+```
+
+
+
+
+Before performing our QTL mapping, we transform the phenotypes. 
+
+```{r log-phenos}
+recla$pheno -> ph
+log(ph) -> lph
+apply(FUN = broman::winsorize, X = lph, MARGIN = 2) -> wlph
+tibble::as_tibble(wlph) -> wlph_tib
+```
+
+We next perform the bivariate QTL scan for two correlated traits.
+
+```{r scan}
+sex2 <- matrix(as.numeric(sex == "female"), ncol = 1)
+colnames(sex2) <- "female"
+rownames(sex2) <- rownames(aprobs$`1`)
+system.time(out <- qtl2pleio::scan_multi_onechr(probs = aprobs$`1`, 
+             pheno = wlph[, c(7, 10)], 
+             kinship = NULL, 
+             addcovar = sex2
+             )
+)
+out2 <- qtl2pleio::scan_multi_oneqtl(probs_list = list(aprobs$`1`), pheno = wlph[, c(7, 10)], kinship_list = NULL, addcovar = sex2)
+```
+
+
+
+
