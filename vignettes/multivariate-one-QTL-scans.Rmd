@@ -17,7 +17,6 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(qtl2pleio)
 library(qtl2)
-future::plan("multiprocess")
 ```
 
 Our goal is to perform a multivariate one-QTL scan across the genome. We'll also do an approximate 
