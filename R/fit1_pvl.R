@@ -39,6 +39,7 @@ fit1_pvl <- function(indices,
                      S,
                      pheno
                      ){
+  indices <- as.numeric(indices)
   if (is.na(indices[length(indices)])) indices <- indices[- length(indices)]
   X_list <- prep_X_list(indices = indices,
                         start_snp = start_snp,
@@ -48,13 +49,13 @@ fit1_pvl <- function(indices,
   X <- gemma2::stagger_mats(X_list)
   Bhat <- rcpp_calc_Bhat2(X = X,
                           Sigma_inv = inv_S,
-                          Y = as.vector(as.matrix(pheno))
+                          Y = as.numeric(as.vector(as.matrix(pheno)))
                           )
   mymu <- as.vector(X %*% Bhat)
   out <- rcpp_log_dmvnorm2(inv_S = inv_S,
                            mu = mymu,
-                           x = as.vector(as.matrix(pheno)),
+                           x = as.numeric(as.vector(as.matrix(pheno))),
                            S = S
                            )
-  return(out)
+  return(as.numeric(out))
 }

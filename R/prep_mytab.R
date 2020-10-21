@@ -30,6 +30,7 @@ prep_mytab <- function(d_size, n_snp, pvl = TRUE) {
 #' pp <- array(rbinom(n = 200, size = 1, prob = 0.5), dim = c(10, 2, 10))
 #' prep_X_list(1:3, 1, probs = pp, covariates = NULL)
 prep_X_list <- function(indices, start_snp, probs, covariates) {
+    indices <- as.numeric(indices)
     if (!is.null(covariates)) {
         out <- lapply(X = as.list(indices), FUN = function(x) {
             index <- x + start_snp - 1

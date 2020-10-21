@@ -118,5 +118,5 @@ boot_pvl <- function(probs,
             dplyr::select(profile_lod) %>%
             max()
     })
-    return(lrt)
+    return(unlist(lrt))
 }
