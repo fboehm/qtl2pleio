@@ -71,7 +71,7 @@
 #' colnames(probs) <- LETTERS[1:2]
 #' dimnames(probs)[[3]] <- paste0("m", 1:5)
 #' scan_pvl(probs = probs, pheno = pheno, kinship = NULL,
-#' start_snp = 1, n_snp = 5)
+#' start_snp = 1, n_snp = 5, cores = 1)
 #' @importFrom rlang .data
 #' @return a tibble with d + 1 columns. First d columns indicate the genetic data (by listing the marker ids) used in the design matrix; last is log10 likelihood
 

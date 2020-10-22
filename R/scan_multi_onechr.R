@@ -10,6 +10,7 @@
 #' @param n_snp the number of (consecutive) markers to include in the scan
 #' @param max_iter maximum number of iterations for EM algorithm
 #' @param max_prec stepwise precision for EM algorithm. EM stops once incremental difference in log likelihood is less than max_prec
+#' @param cores number of cores for parallelization
 #' @export
 #' @importFrom stats var
 #' @references Knott SA, Haley CS (2000) Multitrait
@@ -53,7 +54,8 @@ scan_multi_onechr <- function(probs,
                      start_snp = 1,
                      n_snp = dim(probs)[3],
                      max_iter = 1e+04,
-                     max_prec = 1 / 1e+08
+                     max_prec = 1 / 1e+08,
+                     cores = 1
 )
 {
   inputs <- process_inputs(probs = probs, pheno = pheno, kinship = kinship, addcovar = addcovar, max_iter = max_iter, max_prec = max_prec)
@@ -68,7 +70,7 @@ scan_multi_onechr <- function(probs,
                         Sigma = inputs$Sigma,
                         start_snp = start_snp,
                         pheno = inputs$pheno,
-                        n_snp = n_snp
+                        n_snp = n_snp, cores = cores
   )
   return(out)
 }
@@ -139,7 +141,7 @@ scan_multi_onechr <- function(probs,
 #' rownames(probs) <- paste0("s", 1:n)
 #' colnames(probs) <- LETTERS[1:2]
 #' dimnames(probs)[[3]] <- paste0("m", 1:5)
-#' scan_multi_oneqtl(probs_list = list(probs, probs), pheno = pheno)
+#' scan_multi_oneqtl(probs_list = list(probs, probs), pheno = pheno, cores = 1)
 #'
 #' @importFrom rlang .data
 #' @return a tibble with d + 1 columns. First d columns indicate the genetic data (by listing the marker ids) used in the design matrix; last is log10 likelihood
@@ -156,7 +158,7 @@ scan_multi_oneqtl <- function(probs_list,
                                                   scan_multi_onechr(probs = x,
                                                                     pheno = pheno,
                                                                     kinship = NULL,
-                                                                    addcovar = addcovar
+                                                                    addcovar = addcovar, cores = cores
                                                   )
                                  })} else {
                                    out_list <- parallel::mclapply(X = probs_list,
@@ -165,7 +167,7 @@ scan_multi_oneqtl <- function(probs_list,
                                                                    scan_multi_onechr(probs = x,
                                                                                      pheno = pheno,
                                                                                      kinship = kinship_list,
-                                                                                     addcovar = addcovar
+                                                                                     addcovar = addcovar, cores = cores
                                                                    )
                                                                  })
                                                 }

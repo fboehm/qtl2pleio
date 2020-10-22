@@ -67,7 +67,7 @@ probs[ , 2, ] <- 1 - probs[ , 1, ]
 rownames(probs) <- paste0("s", 1:n)
 colnames(probs) <- LETTERS[1:2]
 dimnames(probs)[[3]] <- paste0("m", 1:5)
-scan_multi_oneqtl(probs_list = list(probs, probs), pheno = pheno)
+scan_multi_oneqtl(probs_list = list(probs, probs), pheno = pheno, cores = 1)
 
 }
 \references{

@@ -83,7 +83,7 @@ rownames(probs) <- paste0("s", 1:n)
 colnames(probs) <- LETTERS[1:2]
 dimnames(probs)[[3]] <- paste0("m", 1:5)
 scan_pvl(probs = probs, pheno = pheno, kinship = NULL,
-start_snp = 1, n_snp = 5)
+start_snp = 1, n_snp = 5, cores = 1)
 }
 \references{
 Knott SA, Haley CS (2000) Multitrait

@@ -73,7 +73,7 @@ rownames(probs) <- paste0("s", 1:n)
 colnames(probs) <- LETTERS[1:2]
 dimnames(probs)[[3]] <- paste0("m", 1:5)
 boot_pvl(probs = probs, pheno = pheno,
-        start_snp = 1, n_snp = 5, pleio_peak_index = 3, nboot = 1)
+        start_snp = 1, n_snp = 5, pleio_peak_index = 3, nboot = 1, cores = 1)
 
 
 }
