@@ -30,7 +30,7 @@ if (qtl2_indic) {
                        pheno = pheno,
                        kinship = kinship,
                        start_snp = 1,
-                       n_snp = 10
+                       n_snp = 10, cores = 1
                        )
 
   test_that("scan_pvl returns a dataframe where the last column has numeric entries, all negative", {
@@ -44,7 +44,7 @@ if (qtl2_indic) {
                      addcovar = ac,
                      kinship = kinship,
                      start_snp = 1,
-                     n_snp = 10
+                     n_snp = 10, cores = 1
                      )
 
 
@@ -53,7 +53,7 @@ if (qtl2_indic) {
            pheno = pheno,
            kinship = NULL,
            start_snp = 1,
-           n_snp = 10
+           n_snp = 10, cores = 1
   )
 
   test_that("scan_pvl handles missing values in covariates appropriately", {
@@ -73,7 +73,7 @@ if (qtl2_indic) {
                           pheno = pheno_singular,
                           kinship = NULL,
                           start_snp = 1,
-                          n_snp = 10
+                          n_snp = 10, cores = 1
     ),
     regexp = "Phenotypes matrix is not full rank")
   })
