@@ -1,4 +1,5 @@
 library(qtl2pleio)
+library(testthat)
 context("Simulation of one phenotype vector")
 
 X1 <- as.matrix(rbinom(n = 100, size = 1, prob = 1 / 2))

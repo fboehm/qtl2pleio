@@ -1,5 +1,5 @@
 ---
-title: "multivariate-one-QTL-scans"
+title: "Multivariate, one-QTL scans"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{multivariate-one-QTL-scans}
@@ -72,7 +72,7 @@ apply(FUN = broman::winsorize, X = lph, MARGIN = 2) -> wlph
 tibble::as_tibble(wlph) -> wlph_tib
 ```
 
-We next perform the bivariate QTL scan for two correlated traits.
+We next perform the bivariate, one-QTL scan for two correlated traits.
 
 ```{r scan}
 sex2 <- matrix(as.numeric(sex == "female"), ncol = 1)

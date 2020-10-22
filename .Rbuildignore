@@ -21,6 +21,11 @@
 ^LICENSE\.md$
 ^Dockerfile
 ^.zenodo.json
-^cran-comments\.md$
 ^CRAN-RELEASE$
-^vignettes
+^vignettes$
+^\.Rhistory$
+^\.gitignore$
+^\.zenodo\.json$
+^src/\.gitignore$
+^vignettes/\.gitignore$
+^\.git$
