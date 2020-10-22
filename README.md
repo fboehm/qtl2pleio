@@ -12,7 +12,7 @@ Status](https://img.shields.io/codecov/c/github/fboehm/qtl2pleio/master.svg)](ht
 [![Project Status: Active – The project has reached a stable, usable
 state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-[![status](https://joss.theoj.org/papers/66bca5dc3d2e72b6259159bad07aafaf/status.svg)](https://joss.theoj.org/papers/66bca5dc3d2e72b6259159bad07aafaf)
+[![status](https://joss.theoj.org/papers/66bca5dc3d2e72b6259159bad07aafaf/status.svg)](https://joss.theoj.org/papers/10.21105/joss.01435)
 [![DOI](https://zenodo.org/badge/104493705.svg)](https://zenodo.org/badge/latestdoi/104493705)
 
 ## Overview
@@ -26,7 +26,7 @@ package](https://kbroman.org/qtl2/).
 
 Click
 [here](https://mybinder.org/v2/gh/fboehm/qtl2pleio/master?urlpath=rstudio)
-to explore `qtl2pleio` within a live [Rstudio](https://www.rstudio.com/)
+to explore `qtl2pleio` within a live [Rstudio](https://rstudio.com/)
 session in “the cloud”.
 
 ## Contributor guidelines
@@ -51,11 +51,11 @@ a QTL in a common region, to distinguish between pleiotropy (the null
 hypothesis, that they are affected by a common QTL) and the alternative
 that they are affected by separate QTL. It extends the likelihood ratio
 test of [Jiang and Zeng
-(1995)](http://www.genetics.org/content/140/3/1111.long) for
+(1995)](https://www.genetics.org/content/140/3/1111.long) for
 multiparental populations, such as Diversity Outbred mice, including the
 use of multivariate polygenic random effects to account for population
 structure. `qtl2pleio` data structures are those used in the
-[`rqtl/qtl2`](https://kbroman.org/qtl2) package.
+[`rqtl/qtl2`](https://kbroman.org/qtl2/) package.
 
 ## Installation
 
@@ -66,7 +66,7 @@ To install qtl2pleio, use `install_github()` from the
 install.packages("qtl2pleio")
 ```
 
-You may also wish to install the [R/qtl2](https://kbroman.org/qtl2). We
+You may also wish to install the [R/qtl2](https://kbroman.org/qtl2/). We
 will use it below.
 
 ``` r
@@ -89,8 +89,8 @@ library(ggplot2)
 ### Reading data from `qtl2data` repository on github
 
 We’ll consider the
-[`DOex`](https://github.com/rqtl/qtl2data/tree/master/DOex) data in the
-[`qtl2data`](https://github.com/rqtl/qtl2data) repository. We’ll
+[`DOex`](https://github.com/rqtl/qtl2data/tree/master/DOex/) data in the
+[`qtl2data`](https://github.com/rqtl/qtl2data/) repository. We’ll
 download the DOex.zip file before calculating founder allele dosages.
 
 ``` r
