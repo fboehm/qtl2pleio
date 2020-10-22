@@ -30,7 +30,6 @@ Imports:
     Rcpp,
     rlang,
     tibble,
-    parallelly,
     parallel
 Suggests:
     covr,
@@ -40,7 +39,8 @@ Suggests:
     testthat,
     broman,
     devtools,
-    qtl2
+    qtl2,
+    parallelly
 LinkingTo:
     Rcpp,
     testthat,
