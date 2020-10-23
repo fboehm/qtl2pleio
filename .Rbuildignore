@@ -22,10 +22,11 @@
 ^Dockerfile
 ^.zenodo.json
 ^CRAN-RELEASE$
-^vignettes$
 ^\.Rhistory$
 ^\.gitignore$
 ^\.zenodo\.json$
 ^src/\.gitignore$
 ^vignettes/\.gitignore$
 ^\.git$
+^vignettes/d-variate-analysis\.Rmd$
+^vignettes/multivariate-one-QTL-scans\.Rmd$

@@ -151,7 +151,7 @@ scan_multi_oneqtl <- function(probs_list,
                               kinship_list = NULL,
                               addcovar = NULL,
                               cores = parallelly::availableCores()
-){
+                              ){
   if (is.null(kinship_list)) {out_list <- parallel::mclapply(X = probs_list,
                                  mc.cores = cores,
                                  FUN = function(x){
@@ -192,8 +192,9 @@ scan_multi_oneqtl <- function(probs_list,
                   FUN = function(x){return(matrix(data = rep(1, n),
                                                                nrow = n,
                                                                ncol = 1))})
-  } else {Xlist <- lapply(X = as.list(1:d_size),
-                          FUN = function(x){return(cbind(addcovar, matrix(data = rep(1, n),
+  } else {
+    Xlist <- lapply(X = as.list(1:d_size),
+                          FUN = function(x){return(cbind(inputs$addcovar, matrix(data = rep(1, n),
                                                           nrow = n,
                                                           ncol = 1)))})
   }
