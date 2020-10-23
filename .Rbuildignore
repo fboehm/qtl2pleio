@@ -30,3 +30,4 @@
 ^\.git$
 ^vignettes/d-variate-analysis\.Rmd$
 ^vignettes/multivariate-one-QTL-scans\.Rmd$
+^cran-comments\.md$
