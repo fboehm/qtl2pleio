@@ -18,7 +18,7 @@ colnames(ac) <- "sex"
 rownames(ac) <- rownames(probs)
 
 set.seed(2018-10-22)
-
+nb <- 2
 test_that("output is vector of length nboot", {
   expect_length(boot_pvl(probs = probs,
                          pheno = pheno,
@@ -26,8 +26,8 @@ test_that("output is vector of length nboot", {
                          start_snp = 1,
                          n_snp = 10,
                          pleio_peak_index = 5,
-                         nboot = 2, cores = 1),
-                2
+                         nboot = nb, cores = 1),
+                nb
                 )
 
 })

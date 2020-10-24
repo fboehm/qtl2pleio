@@ -139,7 +139,7 @@ out <- scan_pvl(probs = pp,
                 pheno = Y,
                 kinship = kinship$`3`,
                 start_snp = start_index,
-                n_snp = 15
+                n_snp = 15, cores = parallelly::availableCores()
                 )
 ```
 
@@ -207,7 +207,7 @@ suppressMessages(b_out <- boot_pvl(probs = pp,
                                    kinship = kinship$`3`, 
                                    nboot = 2,
                                    start_snp = start_index,
-                                   n_snp = 15
+                                   n_snp = 15, cores = parallelly::availableCores()
                                    )
                  )
 
