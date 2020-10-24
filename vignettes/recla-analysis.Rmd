@@ -230,7 +230,7 @@ We need the *pleiotropy peak* marker in the bootstrap analyses because it is the
 To save computing time, we read the bootstrap results files from Github. For details of how we performed the bootstrap analyses on the University of Wisconsin-Madison Center for High-Throughput Computing, please see the documentation in the qtl2pleio-manuscript repository: https://github.com/fboehm/qtl2pleio-manuscript.
 
 
-The code below creates a temporary directory "tmp" in the user's working directory. We then read results files from Github. Each text file contains a single likelihood ratio test statistic from a bootstrap sample.
+We then read results files from Github. Each text file contains a single likelihood ratio test statistic from a bootstrap sample.
 
 
 
