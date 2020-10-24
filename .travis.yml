@@ -31,4 +31,4 @@ branches:
 script:
   - |
     travis_wait 60 R CMD build --no-build-vignettes .
-    travis_wait 60 R CMD check --no--vignettes *.tar.gz
+    travis_wait 60 R CMD check --no-vignettes *.tar.gz
