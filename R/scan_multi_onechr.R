@@ -42,7 +42,7 @@
 #' rownames(probs) <- paste0("s", 1:n)
 #' colnames(probs) <- LETTERS[1:2]
 #' dimnames(probs)[[3]] <- paste0("m", 1:5)
-#' scan_multi_onechr(probs = probs, pheno = pheno, kinship = NULL)
+#' scan_multi_onechr(probs = probs, pheno = pheno, kinship = NULL, cores = 1)
 #'
 #' @importFrom rlang .data
 #' @return a tibble with d + 1 columns. First d columns indicate the genetic data (by listing the marker ids) used in the design matrix; last is log10 likelihood
@@ -150,7 +150,7 @@ scan_multi_oneqtl <- function(probs_list,
                               pheno,
                               kinship_list = NULL,
                               addcovar = NULL,
-                              cores = parallelly::availableCores()
+                              cores = 1
                               ){
   if (is.null(kinship_list)) {out_list <- parallel::mclapply(X = probs_list,
                                  mc.cores = cores,
@@ -163,7 +163,7 @@ scan_multi_oneqtl <- function(probs_list,
                                  })} else {
                                    out_list <- parallel::mclapply(X = probs_list,
                                                                   mc.cores = cores,
-                                                                 FUN = function(x, y){
+                                                                 FUN = function(x){
                                                                    scan_multi_onechr(probs = x,
                                                                                      pheno = pheno,
                                                                                      kinship = kinship_list,
@@ -235,7 +235,7 @@ scan_multi_oneqtl_perm <- function(probs_list,
                               kinship_list = NULL,
                               addcovar = NULL,
                               n_perm = 1,
-                              cores = parallelly::availableCores()
+                              cores = 1
 ){
   # create a permuted phenotypes matrix
   n <- nrow(pheno)

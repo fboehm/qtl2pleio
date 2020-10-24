@@ -62,7 +62,7 @@ boot_pvl <- function(probs,
                      nboot = 1,
                      max_iter = 1e+04,
                      max_prec = 1 / 1e+08,
-                     cores = parallelly::availableCores()
+                     cores = 1
                      )
     {
 

@@ -83,7 +83,7 @@ scan_pvl <- function(probs,
                      n_snp,
                      max_iter = 1e+04,
                      max_prec = 1 / 1e+08,
-                     cores = parallelly::availableCores()
+                     cores = 1
                      )
     {
     inputs <- process_inputs(probs = probs,
@@ -119,7 +119,7 @@ scan_pvl_clean <- function(pheno,
                            start_snp,
                            mytab,
                            n_snp,
-                           cores = parallelly::availableCores()){
+                           cores = 1){
     list_result <- parallel::mclapply(X = as.data.frame(t(mytab)),
                                      FUN = fit1_pvl,
                                      addcovar = addcovar,
