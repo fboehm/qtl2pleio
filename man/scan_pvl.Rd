@@ -13,7 +13,7 @@ scan_pvl(
   n_snp,
   max_iter = 10000,
   max_prec = 1/1e+08,
-  cores = parallelly::availableCores()
+  cores = 1
 )
 }
 \arguments{

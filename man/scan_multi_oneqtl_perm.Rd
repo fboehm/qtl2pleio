@@ -10,7 +10,7 @@ scan_multi_oneqtl_perm(
   kinship_list = NULL,
   addcovar = NULL,
   n_perm = 1,
-  cores = parallelly::availableCores()
+  cores = 1
 )
 }
 \arguments{

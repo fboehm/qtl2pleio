@@ -9,7 +9,7 @@ scan_multi_oneqtl(
   pheno,
   kinship_list = NULL,
   addcovar = NULL,
-  cores = parallelly::availableCores()
+  cores = 1
 )
 }
 \arguments{
