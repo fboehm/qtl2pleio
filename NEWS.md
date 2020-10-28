@@ -1,3 +1,14 @@
+# qtl2pleio 1.4.1
+
+## Major changes
+ 
+* None
+
+## Minor changes
+
+* Added vignette to .Rbuildignore to ease CRAN submission.
+
+
 # qtl2pleio 1.4.0
 
 ## Major changes
