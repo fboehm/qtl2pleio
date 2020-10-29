@@ -13,7 +13,7 @@ vignette: >
 
 ## Overview
 
-Performing a bootstrap analysis with `qtl2pleio` requires first sampling a (bivariate) phenotype from the inferred bivariate normal distribution, then a two-dimensional QTL scan over the defined scan region. Often, one wants to include more than 100 markers in a scan region. Each two-dimensional scan can take tens of minutes with a single core. Thus, performing a bootstrap analysis with, say, 1000 bootstrap samples is prohibitively time-consuming on most computers.
+Performing a bootstrap analysis with `qtl2pleio` requires first sampling a (bivariate) phenotype from the inferred bivariate normal distribution, then a two-dimensional, two-QTL QTL scan over the defined scan region. Often, one wants to include more than 100 markers in a scan region. Each two-dimensional scan can take tens of minutes with a single core. Thus, performing a bootstrap analysis with, say, 1000 bootstrap samples is prohibitively time-consuming on most computers.
 For this reason, we used a high-throughput computing cluster at the University of Wisconsin-Madison (where `qtl2pleio` was developed). The UW-Madison Center for High-Throughput Computing (CHTC) is available to all UW-Madison researchers. While we recognize that `qtl2pleio` users may not have access to the CHTC, we anticipate that some will have access to computing clusters. Hopefully this vignette can be adapted to your needs.
 
 ## Directory structure, files & setup for using Condor
@@ -153,7 +153,7 @@ The ordering of the arguments on in the line that starts with `arguments = ` dic
 
 ### Files on `SQUID`
 
-The UW-Madison CHTC provides for each user disk space on a web proxy. More information about `SQUID` can be found here: http://chtc.cs.wisc.edu/file-avail-squid.shtml
+The UW-Madison CHTC provides for each user disk space on a web proxy. More information about `SQUID` is available online.
 
 In practice, we placed files containing founder allele dosages (for chromosomes of interest) and our (compressed) R installation on `SQUID`.
 
