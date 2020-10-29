@@ -11,3 +11,5 @@
 
 * This release updates the CRAN package qtl2pleio.
 
+* We've now removed the URL that was mentioned in a previous submission.
+
