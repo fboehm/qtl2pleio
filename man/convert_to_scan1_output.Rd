@@ -39,6 +39,6 @@ sm_out <- scan_multi_oneqtl(probs = aprobs, pheno = pheno)
 sm_to_s1 <- convert_to_scan1_output(sm_out[[1]], trait_name = "tr1and2")
 
 # 95\% Bayes credible interval for QTL on chr 7, first phenotype
-qtl2::bayes_int(sm_to_s1, map, chr=1)
+qtl2::bayes_int(sm_to_s1, map)
 
 }
