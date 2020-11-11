@@ -8,30 +8,27 @@
 #' @export
 #' @examples
 #' # read data
-#' iron <- read_cross2(system.file("extdata", "iron.zip", package="qtl2"))
+#' iron <- qtl2::read_cross2(system.file("extdata", "iron.zip", package="qtl2"))
 #' \dontshow{iron <- iron[,7]}
 #'
 #' # insert pseudomarkers into map
-#' map <- insert_pseudomarkers(iron$gmap, step=1)
+#' map <- qtl2::insert_pseudomarkers(iron$gmap, step=1)
 #'
 #' # calculate genotype probabilities
-#' probs <- calc_genoprob(iron, map, error_prob=0.002)
+#' probs <- qtl2::calc_genoprob(iron, map, error_prob=0.002)
 #'
 #' # grab phenotypes and covariates; ensure that covariates have names attribute
 #' pheno <- iron$pheno
 #' covar <- match(iron$covar$sex, c("f", "m")) # make numeric
 #' names(covar) <- rownames(iron$covar)
-#' Xcovar <- get_x_covar(iron)
+#' Xcovar <- qtl2::get_x_covar(iron)
 #'
 #' aprobs <- qtl2::genoprob_to_alleleprob(probs)
 #' sm_out <- scan_multi_oneqtl(probs = aprobs, pheno = pheno)
 #' sm_to_s1 <- convert_to_scan1_output(sm_out[[1]], trait_name = "tr1and2")
 #'
-#' # perform genome scan
-#' out <- scan1(probs, pheno, addcovar=covar, Xcovar=Xcovar)
-#'
 #' # 95% Bayes credible interval for QTL on chr 7, first phenotype
-#' bayes_int(sm_to_s1, map, chr=1)
+#' qtl2::bayes_int(sm_to_s1, map, chr=1)
 #'
 convert_to_scan1_output <- function(sm_output, trait_name){
   lods <- sm_output %>%
