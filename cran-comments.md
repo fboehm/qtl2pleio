@@ -9,7 +9,6 @@
 
 * One note states that "libs" directory is 32.3 Mb in size.
 
-* This release updates the CRAN package qtl2pleio.
+* This release updates the CRAN package qtl2pleio and fixes incompatibilities with testthat CRAN package
 
-* We've now removed the URL that was mentioned in a previous submission.
 
