@@ -1,3 +1,17 @@
+# qtl2pleio 1.4.3
+
+## Major changes
+
+* None
+
+## Minor changes
+
+* Updated RcppExports.cpp and tests/testthat/test-cpp.R per https://github.com/r-lib/testthat/issues/1230
+
+
+
+
+
 # qtl2pleio 1.4.2.9000
 
 ## Major changes

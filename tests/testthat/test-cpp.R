@@ -1,4 +1,4 @@
 context("C++")
-test_that("Catch unit tests pass", {
-    expect_cpp_tests_pass("qtl2pleio")
+(function() {
+  .Call("run_testthat_tests", FALSE, PACKAGE = "qtl2pleio")
 })
