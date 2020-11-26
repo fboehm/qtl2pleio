@@ -10,7 +10,7 @@
   "codeRepository": "https://github.com/fboehm/qtl2pleio",
   "issueTracker": "https://github.com/fboehm/qtl2pleio/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "1.4.1",
+  "version": "1.4.3",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -311,6 +311,6 @@
     "name": "Comprehensive R Archive Network (CRAN)",
     "url": "https://cran.r-project.org"
   },
-  "fileSize": "98764.495KB",
+  "fileSize": "97151.449KB",
   "relatedLink": "https://CRAN.R-project.org/package=qtl2pleio"
 }
