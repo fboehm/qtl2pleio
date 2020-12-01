@@ -41,7 +41,6 @@ Suggests:
     parallelly
 LinkingTo:
     Rcpp,
-    testthat,
     RcppEigen
 Encoding: UTF-8
 Language: en-US 

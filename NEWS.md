@@ -6,7 +6,7 @@
 
 ## Minor changes
 
-* Updated RcppExports.cpp and tests/testthat/test-cpp.R per https://github.com/r-lib/testthat/issues/1230
+* Updated RcppExports.cpp and deleted C++ test files that aren't used.
 
 
 

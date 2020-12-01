@@ -242,8 +242,6 @@ BEGIN_RCPP
 END_RCPP
 }
 
-RcppExport SEXP run_testthat_tests();
-
 static const R_CallMethodDef CallEntries[] = {
     {"_qtl2pleio_rcppeigen_sqrt", (DL_FUNC) &_qtl2pleio_rcppeigen_sqrt, 1},
     {"_qtl2pleio_rcppeigen_invsqrt", (DL_FUNC) &_qtl2pleio_rcppeigen_invsqrt, 1},
@@ -265,7 +263,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_qtl2pleio_rcppeigen_get_chol", (DL_FUNC) &_qtl2pleio_rcppeigen_get_chol, 1},
     {"_qtl2pleio_rcppeigen_get_chol_stable", (DL_FUNC) &_qtl2pleio_rcppeigen_get_chol_stable, 1},
     {"_qtl2pleio_rcppeigen_get_chol_diag", (DL_FUNC) &_qtl2pleio_rcppeigen_get_chol_diag, 1},
-    {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 1},
     {NULL, NULL, 0}
 };
 
