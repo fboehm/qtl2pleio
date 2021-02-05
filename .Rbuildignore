@@ -32,3 +32,4 @@
 ^vignettes/multivariate-one-QTL-scans\.Rmd$
 ^cran-comments\.md$
 ^vignettes/recla-analysis\.Rmd$
+^\.github$

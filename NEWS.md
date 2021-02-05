@@ -1,3 +1,17 @@
+# qtl2pleio 1.4.3.9000
+
+## Major changes
+
+* None
+
+## Minor changes
+
+* Started using Github Actions for continuous integration testing.
+
+
+
+
+
 # qtl2pleio 1.4.3
 
 ## Major changes
