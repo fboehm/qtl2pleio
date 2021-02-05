@@ -3,10 +3,8 @@
 
 # qtl2pleio
 
+[![R-CMD-check](https://github.com/fboehm/qtl2pleio/workflows/R-CMD-check/badge.svg)](https://github.com/fboehm/qtl2pleio/actions)
 [![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/qtl2pleio)](https://cran.r-project.org/package=qtl2pleio)
-[![Binder](https://static.mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/fboehm/qtl2pleio/master?urlpath=rstudio)
-[![Travis-CI Build
-Status](https://travis-ci.org/fboehm/qtl2pleio.svg?branch=master)](https://travis-ci.org/fboehm/qtl2pleio)
 [![Coverage
 Status](https://img.shields.io/codecov/c/github/fboehm/qtl2pleio/master.svg)](https://codecov.io/github/fboehm/qtl2pleio?branch=master)
 [![Project Status: Active – The project has reached a stable, usable
@@ -135,9 +133,9 @@ kinship <- calc_kinship(probs = pr, type = "loco")
 
 We use the multivariate linear mixed effects model:
 
-\[vec(Y) = X vec(B) + vec(G) + vec(E)\]
+*v**e**c*(*Y*) = *X**v**e**c*(*B*) + *v**e**c*(*G*) + *v**e**c*(*E*)
 
-where \(Y\) contains phenotypes, X contains founder allele probabilities
+where *Y* contains phenotypes, X contains founder allele probabilities
 and covariates, and B contains founder allele effects. G is the
 polygenic random effects, while E is the random errors. We provide more
 details in the vignette.
@@ -180,7 +178,7 @@ Here is a plot of the results.
 
 <img src="https://raw.githubusercontent.com/fboehm/qtl2pleio/master/man/figures/README-1d-lod-plots-1.png" width="100%" />
 
-And here are the observed QTL peaks with LOD \> 8.
+And here are the observed QTL peaks with LOD &gt; 8.
 
 ``` r
 find_peaks(s1, map = DOex$pmap, threshold=8)
