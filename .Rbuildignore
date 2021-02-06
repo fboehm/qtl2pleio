@@ -33,3 +33,4 @@
 ^cran-comments\.md$
 ^vignettes/recla-analysis\.Rmd$
 ^\.github$
+^vignettes/qtl2pleio\.bib$
