@@ -1,0 +1,63 @@
+---
+title: "dspr"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{dspr}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(qtl2pleio)
+```
+
+
+## Overview
+
+We want to show how to use DSPR genotypes and phenotypes in a test of pleiotropy vs. separate QTL.
+
+We first install and load the packages as in [the DSPRqtl vignette](https://github.com/egking/DSPRqtl/blob/f218dc99c7cfda7152c597663fcdb3b66a7e4344/vignettes/DSPRqtl-intro.Rmd).
+
+
+```{r eval=FALSE}
+install.packages("DSPRqtl", 
+                 repos = "http://wfitch.bio.uci.edu/R/", 
+                 type = "source")
+```
+
+
+```{r eval=FALSE}
+install.packages("DSPRqtlDataA", 
+                 repos = "http://wfitch.bio.uci.edu/R/", 
+                 type = "source")
+```
+
+*and*
+
+```{r eval=FALSE}
+install.packages("DSPRqtlDataB", 
+                 repos = "http://wfitch.bio.uci.edu/R/", 
+                 type = "source")
+```
+
+## Load data from `DSPRqtl`.
+
+```{r}
+library(DSPRqtl)
+```
+
+
+```{r}
+data(ADHdata)
+# a data.frame named ADHdata
+head(ADHdata)
+```
+
+
