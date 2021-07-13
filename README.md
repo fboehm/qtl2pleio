@@ -133,7 +133,7 @@ kinship <- calc_kinship(probs = pr, type = "loco")
 
 We use the multivariate linear mixed effects model:
 
-*v**e**c*(*Y*) = *X**v**e**c*(*B*) + *v**e**c*(*G*) + *v**e**c*(*E*)
+vec(*Y*) = *X*vec(*B*) + vec(*G*) + vec(*E*)
 
 where *Y* contains phenotypes, X contains founder allele probabilities
 and covariates, and B contains founder allele effects. G is the

@@ -142,7 +142,9 @@ kinship <- calc_kinship(probs = pr, type = "loco")
 
 We use the multivariate linear mixed effects model:
 
-$$vec(Y) = X vec(B) + vec(G) + vec(E)$$
+$$
+\text{vec}(Y) = X \text{vec}(B) + \text{vec}(G) + \text{vec}(E)
+$$
 
 where $Y$ contains phenotypes, X contains founder allele probabilities and covariates, and B contains founder allele effects. G is the polygenic random effects, while E is the random errors. We provide more details in the vignette.
 
