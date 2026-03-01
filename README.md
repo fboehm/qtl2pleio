@@ -6,7 +6,7 @@
 [![R-CMD-check](https://github.com/fboehm/qtl2pleio/workflows/R-CMD-check/badge.svg)](https://github.com/fboehm/qtl2pleio/actions)
 [![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/qtl2pleio)](https://cran.r-project.org/package=qtl2pleio)
 [![Coverage
-Status](https://img.shields.io/codecov/c/github/fboehm/qtl2pleio/master.svg)](https://codecov.io/github/fboehm/qtl2pleio?branch=master)
+Status](https://img.shields.io/codecov/c/github/fboehm/qtl2pleio/master.svg)](https://app.codecov.io/github/fboehm/qtl2pleio?branch=master)
 [![Project Status: Active – The project has reached a stable, usable
 state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
@@ -24,7 +24,7 @@ package](https://kbroman.org/qtl2/).
 
 Click
 [here](https://mybinder.org/v2/gh/fboehm/qtl2pleio/master?urlpath=rstudio)
-to explore `qtl2pleio` within a live [Rstudio](https://rstudio.com/)
+to explore `qtl2pleio` within a live [Rstudio](https://posit.co/download/rstudio-desktop/)
 session in “the cloud”.
 
 ## Contributor guidelines
@@ -49,7 +49,7 @@ a QTL in a common region, to distinguish between pleiotropy (the null
 hypothesis, that they are affected by a common QTL) and the alternative
 that they are affected by separate QTL. It extends the likelihood ratio
 test of [Jiang and Zeng
-(1995)](https://www.genetics.org/content/140/3/1111.long) for
+(1995)](https://doi.org/10.1093/genetics/140.3.1111) for
 multiparental populations, such as Diversity Outbred mice, including the
 use of multivariate polygenic random effects to account for population
 structure. `qtl2pleio` data structures are those used in the
