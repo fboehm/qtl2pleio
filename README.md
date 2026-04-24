@@ -4,7 +4,7 @@
 # qtl2pleio
 
 [![R-CMD-check](https://github.com/fboehm/qtl2pleio/workflows/R-CMD-check/badge.svg)](https://github.com/fboehm/qtl2pleio/actions)
-[![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/qtl2pleio)](https://cran.r-project.org/package=qtl2pleio)
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/qtl2pleio)](https://cran.r-project.org/package=qtl2pleio)
 [![Coverage
 Status](https://img.shields.io/codecov/c/github/fboehm/qtl2pleio/master.svg)](https://app.codecov.io/github/fboehm/qtl2pleio?branch=master)
 [![Project Status: Active – The project has reached a stable, usable
@@ -22,11 +22,6 @@ license](https://opensource.org/licenses/mit-license.php). The user will
 also want to download and install the [`qtl2` R
 package](https://kbroman.org/qtl2/).
 
-Click
-[here](https://mybinder.org/v2/gh/fboehm/qtl2pleio/master?urlpath=rstudio)
-to explore `qtl2pleio` within a live [Rstudio](https://posit.co/download/rstudio-desktop/)
-session in “the cloud”.
-
 ## Contributor guidelines
 
 We eagerly welcome contributions to `qtl2pleio`. All pull requests will
@@ -37,10 +32,8 @@ conduct](https://github.com/fboehm/qtl2pleio/blob/master/CONDUCT.md).
 ## Technical support
 
 For technical support, please open a Github issue. If you’re just
-getting started with `qtl2pleio`, please examine the
-[vignettes](https://fboehm.us/software/qtl2pleio) on the [package’s web
-site](https://fboehm.us/software/qtl2pleio). You can also email
-<frederick.boehm@gmail.com> for assistance.
+getting started with `qtl2pleio`, please examine the vignettes. You can
+also email <frederick.boehm@sdstate.edu> for assistance.
 
 ## Goals
 
@@ -49,9 +42,9 @@ a QTL in a common region, to distinguish between pleiotropy (the null
 hypothesis, that they are affected by a common QTL) and the alternative
 that they are affected by separate QTL. It extends the likelihood ratio
 test of [Jiang and Zeng
-(1995)](https://doi.org/10.1093/genetics/140.3.1111) for
-multiparental populations, such as Diversity Outbred mice, including the
-use of multivariate polygenic random effects to account for population
+(1995)](https://doi.org/10.1093/genetics/140.3.1111) for multiparental
+populations, such as Diversity Outbred mice, including the use of
+multivariate polygenic random effects to account for population
 structure. `qtl2pleio` data structures are those used in the
 [`rqtl/qtl2`](https://kbroman.org/qtl2/) package.
 
@@ -133,9 +126,11 @@ kinship <- calc_kinship(probs = pr, type = "loco")
 
 We use the multivariate linear mixed effects model:
 
-vec(*Y*) = *X*vec(*B*) + vec(*G*) + vec(*E*)
+$$
+\text{vec}(Y) = X \text{vec}(B) + \text{vec}(G) + \text{vec}(E)
+$$
 
-where *Y* contains phenotypes, X contains founder allele probabilities
+where $Y$ contains phenotypes, X contains founder allele probabilities
 and covariates, and B contains founder allele effects. G is the
 polygenic random effects, while E is the random errors. We provide more
 details in the vignette.
@@ -176,16 +171,16 @@ s1 <- scan1(genoprobs = pr, pheno = Y, kinship = kinship)
 
 Here is a plot of the results.
 
-<img src="https://raw.githubusercontent.com/fboehm/qtl2pleio/master/man/figures/README-1d-lod-plots-1.png" width="100%" />
+<img src="https://raw.githubusercontent.com/fboehm/qtl2pleio/master/man/figures/README-1d-lod-plots-1.png" alt="" width="100%" />
 
-And here are the observed QTL peaks with LOD &gt; 8.
+And here are the observed QTL peaks with LOD \> 8.
 
 ``` r
 find_peaks(s1, map = DOex$pmap, threshold=8)
-#>   lodindex lodcolumn chr      pos       lod
-#> 1        1       tr1   3 82.77806 20.703383
-#> 2        2       tr2   3 82.77806 14.417924
-#> 3        2       tr2   X 48.10040  8.231551
+#>   lodindex lodcolumn chr       pos       lod
+#> 1        1       tr1   3  82.77806 16.287629
+#> 2        2       tr2   3  82.77806 15.035673
+#> 3        2       tr2   X 128.06510  9.007418
 ```
 
 ### Perform two-dimensional scan as first step in pleiotropy vs. separate QTL hypothesis test
@@ -218,7 +213,7 @@ out %>%
   ggplot() + geom_line(aes(x = marker_position, y = profile_lod, colour = trait))
 ```
 
-<img src="man/figures/README-profile-plot-1.png" width="100%" />
+<img src="man/figures/README-profile-plot-1.png" alt="" width="100%" />
 
 ### Calculate the likelihood ratio test statistic for pleiotropy v separate QTL
 
@@ -265,12 +260,11 @@ b_out <- suppressMessages(boot_pvl(probs = pp,
 
 ``` r
 citation("qtl2pleio")
-#> 
 #> To cite qtl2pleio in publications use:
 #> 
 #>   Boehm FJ, Chesler EJ, Yandell BS, Broman KW (2019) Testing pleiotropy
-#>   vs. separate QTL in multiparental populations G3
-#>   https://www.g3journal.org/content/9/7/2317
+#>   vs. separate QTL in multiparental populations. G3 9:2317-2324
+#>   doi:10.1534/g3.119.400098
 #> 
 #> A BibTeX entry for LaTeX users is
 #> 
@@ -281,7 +275,9 @@ citation("qtl2pleio")
 #>     year = {2019},
 #>     volume = {9},
 #>     issue = {7},
-#>     url = {https://www.g3journal.org/content/9/7/2317},
-#>     eprint = {https://www.g3journal.org/content/ggg/9/7/2317.full.pdf},
+#>     pages = {2317-2324},
+#>     doi = {10.1093/genetics/140.3.1111},
+#>     url = {https://doi.org/10.1534/g3.119.400098},
+#>     eprint = {https://academic.oup.com/g3journal/article-pdf/9/7/2317/40667800/g3journal2317.pdf},
 #>   }
 ```

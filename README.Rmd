@@ -33,7 +33,7 @@ knitr::opts_chunk$set(
 
 `qtl2pleio` is a software package for use with the [R statistical computing environment](https://cran.r-project.org/). `qtl2pleio` is freely available for download and use. I share it under the [MIT license](https://opensource.org/licenses/mit-license.php). The user will also want to download and install the [`qtl2` R package](https://kbroman.org/qtl2/).
 
-Click [here](https://mybinder.org/v2/gh/fboehm/qtl2pleio/master?urlpath=rstudio) to explore `qtl2pleio` within a live [Rstudio](https://posit.co/download/rstudio-desktop/) session in "the cloud".
+
 
 ## Contributor guidelines
 
@@ -41,7 +41,7 @@ We eagerly welcome contributions to `qtl2pleio`. All pull requests will be consi
 
 ## Technical support 
 
-For technical support, please open a Github issue. If you're just getting started with `qtl2pleio`, please examine the [vignettes](https://fboehm.us/software/qtl2pleio) on the [package's web site](https://fboehm.us/software/qtl2pleio). You can also email <frederick.boehm@gmail.com> for assistance. 
+For technical support, please open a Github issue. If you're just getting started with `qtl2pleio`, please examine the vignettes. You can also email <frederick.boehm@sdstate.edu> for assistance. 
 
 
 
