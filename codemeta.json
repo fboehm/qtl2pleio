@@ -1,22 +1,25 @@
 {
-  "@context": [
-    "https://doi.org/10.5063/schema/codemeta-2.0",
-    "http://schema.org"
-  ],
+  "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
   "@type": "SoftwareSourceCode",
   "identifier": "qtl2pleio",
-  "description": "We implement an\n    adaptation of Jiang & Zeng's (1995) <https://www.genetics.org/content/140/3/1111> likelihood ratio test for testing\n    the null hypothesis of pleiotropy against the alternative hypothesis,\n    two separate quantitative trait loci. The test differs from that in Jiang & Zeng (1995) <https://www.genetics.org/content/140/3/1111> \n    and that in Tian et al. (2016) <doi:10.1534/genetics.115.183624> in\n    that our test accommodates multiparental populations.",
+  "description": "We implement an adaptation of Jiang & Zeng's (1995) <doi:10.1093/genetics/140.3.1111> likelihood ratio test for testing the null hypothesis of pleiotropy against the alternative hypothesis, two separate quantitative trait loci. The test differs from that in Jiang & Zeng (1995) and that in Tian et al. (2016) <doi:10.1534/genetics.115.183624> in that our test accommodates multiparental populations.",
   "name": "qtl2pleio: Testing Pleiotropy in Multiparental Populations",
   "codeRepository": "https://github.com/fboehm/qtl2pleio",
   "issueTracker": "https://github.com/fboehm/qtl2pleio/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "1.4.3",
+  "version": "1.4.4",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.0.3 (2020-10-10)",
+  "runtimePlatform": "R version 4.5.2 (2025-10-31)",
+  "provider": {
+    "@id": "https://cran.r-project.org",
+    "@type": "Organization",
+    "name": "Comprehensive R Archive Network (CRAN)",
+    "url": "https://cran.r-project.org"
+  },
   "author": [
     {
       "@type": "Person",
@@ -145,14 +148,14 @@
       "sameAs": "https://CRAN.R-project.org/package=parallelly"
     }
   ],
-  "softwareRequirements": [
-    {
+  "softwareRequirements": {
+    "1": {
       "@type": "SoftwareApplication",
       "identifier": "R",
       "name": "R",
       "version": ">= 3.2"
     },
-    {
+    "2": {
       "@type": "SoftwareApplication",
       "identifier": "dplyr",
       "name": "dplyr",
@@ -164,7 +167,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=dplyr"
     },
-    {
+    "3": {
       "@type": "SoftwareApplication",
       "identifier": "gemma2",
       "name": "gemma2",
@@ -176,7 +179,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=gemma2"
     },
-    {
+    "4": {
       "@type": "SoftwareApplication",
       "identifier": "ggplot2",
       "name": "ggplot2",
@@ -188,7 +191,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=ggplot2"
     },
-    {
+    "5": {
       "@type": "SoftwareApplication",
       "identifier": "magrittr",
       "name": "magrittr",
@@ -200,7 +203,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=magrittr"
     },
-    {
+    "6": {
       "@type": "SoftwareApplication",
       "identifier": "MASS",
       "name": "MASS",
@@ -212,7 +215,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=MASS"
     },
-    {
+    "7": {
       "@type": "SoftwareApplication",
       "identifier": "Rcpp",
       "name": "Rcpp",
@@ -224,7 +227,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=Rcpp"
     },
-    {
+    "8": {
       "@type": "SoftwareApplication",
       "identifier": "rlang",
       "name": "rlang",
@@ -236,7 +239,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=rlang"
     },
-    {
+    "9": {
       "@type": "SoftwareApplication",
       "identifier": "tibble",
       "name": "tibble",
@@ -248,24 +251,14 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=tibble"
     },
-    {
+    "10": {
       "@type": "SoftwareApplication",
       "identifier": "parallel",
       "name": "parallel"
-    }
-  ],
-  "releaseNotes": "https://github.com/fboehm/qtl2pleio/blob/master/NEWS.md",
-  "readme": "https://github.com/fboehm/qtl2pleio/blob/master/README.md",
-  "contIntegration": ["https://travis-ci.org/fboehm/qtl2pleio", "https://codecov.io/github/fboehm/qtl2pleio?branch=master"],
-  "keywords": [
-    "quantitative-trait",
-    "quantitative-genetics",
-    "multiparental-populations"
-  ],
-  "contributor": {},
-  "copyrightHolder": {},
-  "funder": {},
-  "developmentStatus": "https://www.repostatus.org/#active",
+    },
+    "SystemRequirements": null
+  },
+  "fileSize": "99175.901KB",
   "citation": [
     {
       "@type": "ScholarlyArticle",
@@ -293,7 +286,11 @@
         }
       ],
       "name": "Testing pleiotropy vs. separate QTL in multiparental populations",
-      "url": "https://www.g3journal.org/content/9/7/2317",
+      "identifier": "10.1093/genetics/140.3.1111",
+      "url": "https://doi.org/10.1534/g3.119.400098",
+      "pagination": "2317-2324",
+      "@id": "https://doi.org/10.1093/genetics/140.3.1111",
+      "sameAs": "https://doi.org/10.1093/genetics/140.3.1111",
       "isPartOf": {
         "@type": "PublicationIssue",
         "datePublished": "2019",
@@ -305,12 +302,10 @@
       }
     }
   ],
-  "provider": {
-    "@id": "https://cran.r-project.org",
-    "@type": "Organization",
-    "name": "Comprehensive R Archive Network (CRAN)",
-    "url": "https://cran.r-project.org"
-  },
-  "fileSize": "66291.722KB",
+  "releaseNotes": "https://github.com/fboehm/qtl2pleio/blob/main/NEWS.md",
+  "readme": "https://github.com/fboehm/qtl2pleio/blob/master/README.md",
+  "contIntegration": ["https://github.com/fboehm/qtl2pleio/actions", "https://app.codecov.io/github/fboehm/qtl2pleio?branch=master"],
+  "developmentStatus": "https://www.repostatus.org/#active",
+  "keywords": ["quantitative-trait", "quantitative-genetics", "multiparental-populations"],
   "relatedLink": "https://CRAN.R-project.org/package=qtl2pleio"
 }
