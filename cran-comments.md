@@ -1,14 +1,18 @@
 ## Test environments
 
-* local ubuntu 20.04 install, R 4.0.3
+* local Ubuntu 24.04 install, R 4.5.2
+* win-builder (devel and release)
+* R-hub (multiple platforms)
 
+## R CMD check results
 
-## R CMD check results  
+0 errors | 0 warnings | 0 notes
 
-0 errors | 0 warnings | 1 note
+(A local-only NOTE about the non-portable compilation flag
+`-mno-omit-leaf-frame-pointer` is produced by Ubuntu's system R
+configuration in /etc/R/Makeconf.)
 
-* One note states that "libs" directory is 32.3 Mb in size.
+## Resubmission notes
 
-* This release updates the CRAN package qtl2pleio and fixes incompatibilities with testthat CRAN package
-
-
+This release updates the CRAN package qtl2pleio. Changes since the
+previous CRAN version are summarized in NEWS.md.

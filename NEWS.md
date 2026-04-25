@@ -1,3 +1,14 @@
+# qtl2pleio 1.4.4
+
+## Major changes
+
+- None.
+
+## Minor changes
+
+- Resolved Rcpp Rf_error() issue by adding Rcpp::stop() calls.
+
+
 # qtl2pleio 1.4.3.9000
 
 ## Major changes

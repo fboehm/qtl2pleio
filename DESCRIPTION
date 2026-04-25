@@ -1,7 +1,7 @@
 Type: Package
 Package: qtl2pleio
 Title: Testing Pleiotropy in Multiparental Populations
-Version: 1.4.3.9001
+Version: 1.4.4
 Authors@R:
     person(given = "Frederick J",
            family = "Boehm",
@@ -46,5 +46,4 @@ Encoding: UTF-8
 Language: en-US
 LazyData: true
 NeedsCompilation: yes
-RoxygenNote: 7.1.1
-VignetteBuilder: knitr
+RoxygenNote: 7.3.3

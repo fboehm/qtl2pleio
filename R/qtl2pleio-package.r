@@ -3,11 +3,9 @@
 #' Testing pleiotropy vs. separate QTL in multiparental populations
 #'
 #' @useDynLib qtl2pleio, .registration = TRUE
-#' @name qtl2pleio
-#' @docType package
 #' @importFrom Rcpp sourceCpp
 #' @importFrom stats profile
-NULL
+"_PACKAGE"
 
 .onUnload <- function (libpath) {
   library.dynam.unload("qtl2pleio", libpath)
