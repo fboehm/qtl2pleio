@@ -34,3 +34,4 @@
 ^vignettes/recla-analysis\.Rmd$
 ^\.github$
 ^vignettes/qtl2pleio\.bib$
+^CRAN-SUBMISSION$
