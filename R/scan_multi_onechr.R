@@ -253,6 +253,7 @@ scan_multi_oneqtl_perm <- function(probs_list,
                       )
     maxlod_perchr <- parallel::mclapply(X = sout, mc.cores = cores, FUN = function(x){
       x %>%
+        dplyr::mutate(lod = .data$log10lik - .data$null_log10lik) %>%
         dplyr::select(lod) %>%
         max()
     })
