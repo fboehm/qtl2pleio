@@ -212,7 +212,7 @@ scan_multi_oneqtl <- function(probs_list,
   out_list <- parallel::mclapply(X = out_list, mc.cores = cores,
                     FUN = function(x){
                       x %>%
-                        dplyr::mutate(null_log10lik = as.numeric(out), lod=log10lik - null_log10lik))
+                        dplyr::mutate(null_log10lik = as.numeric(out), lod=log10lik - null_log10lik)
 
   })
 
